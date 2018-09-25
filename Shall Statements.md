@@ -2,6 +2,10 @@
 
 * The System shall provide the ability for **Customers** to make car rental orders
 
+* The System shall provide tha ability for **Customer** to Auth. Processing
+
+* The System shall provide tha ability for **Customer** to Payment Processing
+
 * The System shall provide the ability for **Customer** to get all necessary about car
 
 * The System shall provide the ability for users to find the closest **Charging Stations** and available **Plugs**
