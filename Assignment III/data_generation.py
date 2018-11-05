@@ -221,7 +221,7 @@ for _ in range(1000):
                    ' car_license_plate, charging_station_id, plug_id) '
                    'VALUES (%s, %s, %s, %s, %s)',
                    [random_date('1/1/2018 1:00 AM', '3/1/2018 1:00 AM', random.random()), random.randint(30, 60),
-                    random.choice(car_license_plate), random.choice(charging_station_id)], random.choice(plug_id))
+                    random.choice(car_license_plate), random.choice(charging_station_id), random.choice(plug_id)])
 cursor.close()
 connection.commit()
 
