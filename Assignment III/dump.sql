@@ -1,0 +1,10038 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 11.0 (Debian 11.0-1.pgdg90+2)
+-- Dumped by pg_dump version 11.0 (Debian 11.0-1.pgdg90+2)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: car; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.car (
+    car_license_plate character varying(16) NOT NULL,
+    vin character varying(128),
+    color character varying(16),
+    car_type_id integer
+);
+
+
+ALTER TABLE public.car OWNER TO root;
+
+--
+-- Name: car_charging_log; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.car_charging_log (
+    creating_time timestamp without time zone NOT NULL,
+    time_of_charging integer,
+    plug_id integer,
+    car_license_plate character varying(16) NOT NULL,
+    charging_station_id integer
+);
+
+
+ALTER TABLE public.car_charging_log OWNER TO root;
+
+--
+-- Name: car_order; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.car_order (
+    car_order_id integer NOT NULL,
+    creating_time timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    status integer DEFAULT 0,
+    cost_of_ride integer,
+    pick_up_latitide double precision,
+    pick_up_longitude double precision,
+    dist_latitide double precision,
+    dist_longitude double precision,
+    distance double precision,
+    trip_duration integer,
+    car_license_plate character varying(16),
+    customer_username character varying(32),
+    manager_username character varying(32)
+);
+
+
+ALTER TABLE public.car_order OWNER TO root;
+
+--
+-- Name: car_order_car_order_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.car_order_car_order_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.car_order_car_order_id_seq OWNER TO root;
+
+--
+-- Name: car_order_car_order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.car_order_car_order_id_seq OWNED BY public.car_order.car_order_id;
+
+
+--
+-- Name: car_part; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.car_part (
+    car_part_id integer NOT NULL,
+    part_name character varying(128),
+    car_type_id integer
+);
+
+
+ALTER TABLE public.car_part OWNER TO root;
+
+--
+-- Name: car_part_car_part_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.car_part_car_part_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.car_part_car_part_id_seq OWNER TO root;
+
+--
+-- Name: car_part_car_part_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.car_part_car_part_id_seq OWNED BY public.car_part.car_part_id;
+
+
+--
+-- Name: car_parts_order; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.car_parts_order (
+    car_parts_order_id integer NOT NULL,
+    description character varying(512),
+    status integer,
+    creating_time timestamp without time zone,
+    workshop_id integer,
+    car_parts_provider_id integer
+);
+
+
+ALTER TABLE public.car_parts_order OWNER TO root;
+
+--
+-- Name: car_parts_order_car_parts_order_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.car_parts_order_car_parts_order_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.car_parts_order_car_parts_order_id_seq OWNER TO root;
+
+--
+-- Name: car_parts_order_car_parts_order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.car_parts_order_car_parts_order_id_seq OWNED BY public.car_parts_order.car_parts_order_id;
+
+
+--
+-- Name: car_parts_provider; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.car_parts_provider (
+    provider_id integer NOT NULL,
+    name character varying(64),
+    phone_number character varying(16),
+    latitide double precision,
+    longitude double precision
+);
+
+
+ALTER TABLE public.car_parts_provider OWNER TO root;
+
+--
+-- Name: car_parts_provider_provider_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.car_parts_provider_provider_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.car_parts_provider_provider_id_seq OWNER TO root;
+
+--
+-- Name: car_parts_provider_provider_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.car_parts_provider_provider_id_seq OWNED BY public.car_parts_provider.provider_id;
+
+
+--
+-- Name: car_repairing_log; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.car_repairing_log (
+    date date NOT NULL,
+    manager_username character varying(32),
+    workshop_id integer,
+    car_license_plate character varying(16) NOT NULL,
+    broken_car_part_id integer
+);
+
+
+ALTER TABLE public.car_repairing_log OWNER TO root;
+
+--
+-- Name: car_type; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.car_type (
+    car_type_id integer NOT NULL,
+    brand character varying(32),
+    model character varying(32)
+);
+
+
+ALTER TABLE public.car_type OWNER TO root;
+
+--
+-- Name: car_type_car_type_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.car_type_car_type_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.car_type_car_type_id_seq OWNER TO root;
+
+--
+-- Name: car_type_car_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.car_type_car_type_id_seq OWNED BY public.car_type.car_type_id;
+
+
+--
+-- Name: catalogue_provider; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.catalogue_provider (
+    provider_id integer NOT NULL,
+    car_part_id integer NOT NULL,
+    amount_of_available integer,
+    cost double precision
+);
+
+
+ALTER TABLE public.catalogue_provider OWNER TO root;
+
+--
+-- Name: catalogue_workshop; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.catalogue_workshop (
+    workshop_id integer NOT NULL,
+    car_part_id integer NOT NULL,
+    amount_of_available integer,
+    cost double precision
+);
+
+
+ALTER TABLE public.catalogue_workshop OWNER TO root;
+
+--
+-- Name: charging_station; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.charging_station (
+    charging_station_id integer NOT NULL,
+    price double precision,
+    latitide double precision,
+    longitude double precision
+);
+
+
+ALTER TABLE public.charging_station OWNER TO root;
+
+--
+-- Name: charging_station_charging_station_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.charging_station_charging_station_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.charging_station_charging_station_id_seq OWNER TO root;
+
+--
+-- Name: charging_station_charging_station_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.charging_station_charging_station_id_seq OWNED BY public.charging_station.charging_station_id;
+
+
+--
+-- Name: charging_station_plug; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.charging_station_plug (
+    charging_station_id integer NOT NULL,
+    plug_id integer NOT NULL,
+    amount_of_available integer
+);
+
+
+ALTER TABLE public.charging_station_plug OWNER TO root;
+
+--
+-- Name: customer; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.customer (
+    phone_number character varying(16),
+    home_latitide double precision,
+    home_longitude double precision,
+    username character varying(32) NOT NULL
+);
+
+
+ALTER TABLE public.customer OWNER TO root;
+
+--
+-- Name: customer_issues; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.customer_issues (
+    issue_id integer NOT NULL,
+    status integer,
+    creating_time timestamp without time zone,
+    customer_username character varying(32),
+    manager_username character varying(32)
+);
+
+
+ALTER TABLE public.customer_issues OWNER TO root;
+
+--
+-- Name: customer_issues_issue_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.customer_issues_issue_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.customer_issues_issue_id_seq OWNER TO root;
+
+--
+-- Name: customer_issues_issue_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.customer_issues_issue_id_seq OWNED BY public.customer_issues.issue_id;
+
+
+--
+-- Name: location; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.location (
+    latitide double precision NOT NULL,
+    longitude double precision NOT NULL,
+    country character varying(32),
+    city character varying(32),
+    street character varying(64),
+    zip_code character varying(32)
+);
+
+
+ALTER TABLE public.location OWNER TO root;
+
+--
+-- Name: manager; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.manager (
+    username character varying(32) NOT NULL
+);
+
+
+ALTER TABLE public.manager OWNER TO root;
+
+--
+-- Name: payment; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.payment (
+    payment_id integer NOT NULL,
+    car_order_id integer
+);
+
+
+ALTER TABLE public.payment OWNER TO root;
+
+--
+-- Name: payment_payment_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.payment_payment_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.payment_payment_id_seq OWNER TO root;
+
+--
+-- Name: payment_payment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.payment_payment_id_seq OWNED BY public.payment.payment_id;
+
+
+--
+-- Name: plug; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.plug (
+    plug_id integer NOT NULL,
+    size integer,
+    shape character varying(32)
+);
+
+
+ALTER TABLE public.plug OWNER TO root;
+
+--
+-- Name: plug_plug_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.plug_plug_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.plug_plug_id_seq OWNER TO root;
+
+--
+-- Name: plug_plug_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.plug_plug_id_seq OWNED BY public.plug.plug_id;
+
+
+--
+-- Name: user_account; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.user_account (
+    username character varying(32) NOT NULL,
+    email character varying(32),
+    full_name character varying(64)
+);
+
+
+ALTER TABLE public.user_account OWNER TO root;
+
+--
+-- Name: workshop; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.workshop (
+    workshop_id integer NOT NULL,
+    open_time time without time zone,
+    close_time time without time zone,
+    latitide double precision,
+    longitude double precision
+);
+
+
+ALTER TABLE public.workshop OWNER TO root;
+
+--
+-- Name: workshop_workshop_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.workshop_workshop_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.workshop_workshop_id_seq OWNER TO root;
+
+--
+-- Name: workshop_workshop_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.workshop_workshop_id_seq OWNED BY public.workshop.workshop_id;
+
+
+--
+-- Name: car_order car_order_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_order ALTER COLUMN car_order_id SET DEFAULT nextval('public.car_order_car_order_id_seq'::regclass);
+
+
+--
+-- Name: car_part car_part_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_part ALTER COLUMN car_part_id SET DEFAULT nextval('public.car_part_car_part_id_seq'::regclass);
+
+
+--
+-- Name: car_parts_order car_parts_order_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_parts_order ALTER COLUMN car_parts_order_id SET DEFAULT nextval('public.car_parts_order_car_parts_order_id_seq'::regclass);
+
+
+--
+-- Name: car_parts_provider provider_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_parts_provider ALTER COLUMN provider_id SET DEFAULT nextval('public.car_parts_provider_provider_id_seq'::regclass);
+
+
+--
+-- Name: car_type car_type_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_type ALTER COLUMN car_type_id SET DEFAULT nextval('public.car_type_car_type_id_seq'::regclass);
+
+
+--
+-- Name: charging_station charging_station_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.charging_station ALTER COLUMN charging_station_id SET DEFAULT nextval('public.charging_station_charging_station_id_seq'::regclass);
+
+
+--
+-- Name: customer_issues issue_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.customer_issues ALTER COLUMN issue_id SET DEFAULT nextval('public.customer_issues_issue_id_seq'::regclass);
+
+
+--
+-- Name: payment payment_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.payment ALTER COLUMN payment_id SET DEFAULT nextval('public.payment_payment_id_seq'::regclass);
+
+
+--
+-- Name: plug plug_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.plug ALTER COLUMN plug_id SET DEFAULT nextval('public.plug_plug_id_seq'::regclass);
+
+
+--
+-- Name: workshop workshop_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.workshop ALTER COLUMN workshop_id SET DEFAULT nextval('public.workshop_workshop_id_seq'::regclass);
+
+
+--
+-- Data for Name: car; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.car (car_license_plate, vin, color, car_type_id) FROM stdin;
+QP571	TMDTGGBJZ0HRQJQOT	white	9
+UT042	GTAU5V106LN1FF9E1	blue	6
+NU214	C8IGCZHYIJZH8NJ2K	purple	9
+VM615	X9DGJ0094UZ8PCLZP	brown	6
+GM220	C5AX9HH234HR11HMG	green	7
+VS161	CDJQVSJBG0QAJH0QV	yellow	4
+QZ906	CKJWJFHIAGFGWZBOG	purple	2
+TJ597	0FEQP2FCXXSHM3AUD	white	5
+GZ961	4HH7A3Y49KH58H8B8	white	10
+YH116	7QOUMFLY78052OJ2R	brown	7
+WK649	OP2KSB3VKBT8O2W9S	white	4
+GG939	3AZJ7LOL0PD2B4YDW	green	9
+JL276	T3NJJS71AE1BPY2ZN	brown	3
+GF138	UXLMA7ZB8O8ZWGSHP	white	4
+PX851	1F10DCLSNCFKOUTKK	purple	1
+ND592	P52EJT8NMY0WDW186	green	6
+BE981	4XMM5DKMB36IDO3N9	yellow	1
+RL003	9BQ2KGF56PZQFXWAB	purple	10
+AN580	YIWKPYIU8PVL6WZAG	red	6
+AN978	5FYK8MSMVGLMXU2LK	red	4
+\.
+
+
+--
+-- Data for Name: car_charging_log; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.car_charging_log (creating_time, time_of_charging, plug_id, car_license_plate, charging_station_id) FROM stdin;
+2018-01-25 20:42:00	35	9	GZ961	2
+2018-02-27 11:15:00	50	5	QP571	6
+2018-02-08 20:57:00	42	8	GG939	3
+2018-01-21 14:49:00	53	8	VM615	2
+2018-01-27 13:10:00	57	5	PX851	7
+2018-02-05 04:55:00	50	7	JL276	4
+2018-01-12 12:54:00	48	5	GM220	9
+2018-01-26 15:13:00	35	10	RL003	10
+2018-02-20 01:26:00	33	1	RL003	3
+2018-01-04 21:37:00	46	1	QP571	1
+2018-01-30 09:52:00	55	5	NU214	8
+2018-01-18 15:32:00	34	6	TJ597	8
+2018-02-01 11:04:00	39	9	ND592	2
+2018-01-03 02:58:00	55	9	RL003	2
+2018-02-25 17:43:00	47	8	PX851	7
+2018-02-06 07:10:00	56	10	WK649	8
+2018-02-17 18:07:00	50	5	GZ961	3
+2018-01-30 04:42:00	38	10	GF138	7
+2018-01-16 04:42:00	58	6	WK649	2
+2018-02-03 01:51:00	41	9	PX851	6
+2018-02-12 06:27:00	48	4	GG939	6
+2018-02-20 11:05:00	36	7	JL276	9
+2018-01-06 05:05:00	45	7	BE981	7
+2018-01-17 22:08:00	55	4	UT042	7
+2018-02-05 14:45:00	38	7	VM615	3
+2018-01-02 21:18:00	51	5	GM220	5
+2018-02-05 20:15:00	31	8	QP571	2
+2018-02-13 03:07:00	47	3	WK649	5
+2018-01-29 17:36:00	48	6	VM615	7
+2018-02-12 21:47:00	48	9	GF138	8
+2018-02-05 16:52:00	41	5	GF138	9
+2018-02-21 20:10:00	51	7	QP571	9
+2018-01-08 07:52:00	59	8	BE981	3
+2018-02-09 04:40:00	42	9	QP571	8
+2018-01-16 11:06:00	57	5	GM220	10
+2018-01-17 00:47:00	42	8	GM220	7
+2018-01-29 21:52:00	58	9	GF138	7
+2018-01-17 19:37:00	42	8	ND592	9
+2018-01-18 07:42:00	43	10	UT042	8
+2018-01-22 00:43:00	32	8	ND592	10
+2018-01-27 14:02:00	43	10	RL003	9
+2018-02-02 21:33:00	57	9	GZ961	3
+2018-01-02 04:55:00	57	6	VM615	7
+2018-01-19 10:33:00	51	7	GG939	8
+2018-01-31 15:48:00	42	6	ND592	6
+2018-02-25 10:27:00	50	1	PX851	3
+2018-02-02 08:07:00	43	7	VS161	9
+2018-01-11 21:56:00	46	7	GG939	10
+2018-01-31 21:55:00	58	4	YH116	10
+2018-01-23 20:45:00	58	9	VS161	4
+2018-01-17 13:58:00	49	7	VS161	2
+2018-01-14 01:55:00	46	3	GG939	9
+2018-02-23 10:03:00	33	3	UT042	2
+2018-02-26 06:44:00	58	7	QZ906	5
+2018-01-12 14:32:00	33	7	RL003	10
+2018-01-19 02:43:00	46	9	VS161	5
+2018-01-08 15:59:00	52	9	ND592	4
+2018-02-19 01:48:00	35	5	GM220	10
+2018-02-06 15:34:00	31	4	YH116	1
+2018-02-23 04:13:00	30	6	TJ597	6
+2018-01-27 21:53:00	38	9	GF138	1
+2018-01-24 02:32:00	36	1	TJ597	7
+2018-02-12 14:43:00	32	3	BE981	4
+2018-01-18 23:16:00	51	10	GF138	10
+2018-02-21 04:30:00	44	4	VM615	8
+2018-02-22 08:36:00	55	3	GG939	1
+2018-01-08 22:21:00	54	4	JL276	4
+2018-02-04 18:24:00	50	10	BE981	3
+2018-02-16 10:46:00	45	10	NU214	2
+2018-02-01 07:29:00	58	10	PX851	9
+2018-02-22 12:13:00	36	5	JL276	9
+2018-01-01 19:02:00	39	1	GG939	4
+2018-02-14 20:07:00	31	6	GF138	9
+2018-02-23 02:32:00	53	4	PX851	9
+2018-02-26 19:45:00	57	6	BE981	8
+2018-01-12 11:25:00	48	5	GZ961	6
+2018-01-24 01:23:00	60	4	GZ961	10
+2018-01-26 14:08:00	38	1	JL276	3
+2018-01-04 16:23:00	49	9	VS161	8
+2018-02-17 16:02:00	46	7	QP571	7
+2018-01-27 23:27:00	59	9	UT042	2
+2018-01-05 07:02:00	41	4	QP571	4
+2018-01-07 05:58:00	60	10	JL276	7
+2018-01-25 17:43:00	46	6	PX851	5
+2018-01-29 01:14:00	38	7	JL276	4
+2018-01-17 09:09:00	48	9	UT042	9
+2018-02-17 10:19:00	35	7	GG939	7
+2018-01-06 01:00:00	60	10	VM615	1
+2018-02-04 06:06:00	34	7	TJ597	10
+2018-02-01 19:51:00	40	9	NU214	3
+2018-01-01 16:07:00	45	10	PX851	6
+2018-01-08 21:54:00	45	4	GF138	4
+2018-01-02 09:35:00	31	1	GF138	2
+2018-02-19 03:17:00	33	8	ND592	9
+2018-02-16 04:45:00	36	6	BE981	9
+2018-01-03 15:23:00	51	4	RL003	6
+2018-01-31 12:26:00	45	5	GZ961	4
+2018-02-03 21:17:00	51	6	JL276	3
+2018-01-26 03:09:00	51	4	BE981	1
+2018-01-08 10:36:00	56	1	QZ906	1
+2018-01-10 07:05:00	39	5	VS161	7
+2018-01-24 23:00:00	52	6	QP571	6
+2018-02-23 00:56:00	53	4	YH116	2
+2018-02-02 01:58:00	50	6	TJ597	8
+2018-02-12 04:30:00	60	9	WK649	3
+2018-01-13 18:07:00	38	9	GZ961	6
+2018-02-02 18:24:00	53	6	GM220	6
+2018-01-09 15:52:00	30	8	YH116	7
+2018-02-02 19:12:00	36	6	GG939	2
+2018-02-21 03:04:00	56	6	TJ597	5
+2018-01-03 03:23:00	48	6	VS161	1
+2018-02-05 11:08:00	33	4	RL003	5
+2018-02-22 06:02:00	37	9	BE981	3
+2018-02-25 09:45:00	46	4	ND592	1
+2018-01-31 14:58:00	60	9	GZ961	8
+2018-02-09 16:53:00	55	8	QZ906	5
+2018-02-09 00:57:00	36	9	VM615	1
+2018-01-21 19:37:00	47	8	NU214	7
+2018-02-16 16:56:00	53	8	PX851	5
+2018-02-07 22:06:00	58	1	RL003	5
+2018-02-08 15:29:00	31	6	JL276	2
+2018-01-25 11:32:00	55	6	PX851	8
+2018-01-26 23:39:00	44	5	AN978	2
+2018-02-27 22:21:00	50	5	AN978	2
+2018-01-19 16:17:00	35	6	AN978	5
+2018-01-09 00:53:00	52	10	AN978	2
+2018-01-30 02:02:00	30	9	AN978	6
+2018-02-09 08:55:00	49	3	VS161	6
+2018-01-15 04:39:00	43	10	GZ961	1
+2018-02-24 23:00:00	48	8	PX851	1
+2018-02-18 11:19:00	36	1	VS161	1
+2018-01-30 11:18:00	42	1	QP571	1
+2018-01-02 14:59:00	57	8	QZ906	2
+2018-02-01 19:01:00	36	4	GG939	8
+2018-01-18 08:35:00	49	4	GM220	10
+2018-02-27 20:42:00	51	8	YH116	10
+2018-01-11 18:59:00	39	7	TJ597	2
+2018-01-01 08:33:00	36	9	RL003	9
+2018-02-21 03:59:00	34	9	VS161	10
+2018-02-03 01:16:00	43	1	JL276	4
+2018-01-31 12:32:00	51	9	GM220	7
+2018-01-09 01:32:00	32	1	PX851	4
+2018-01-05 21:51:00	35	1	NU214	4
+2018-02-15 02:41:00	56	7	UT042	3
+2018-01-22 14:07:00	30	6	GG939	8
+2018-01-08 09:22:00	41	6	TJ597	7
+2018-02-07 18:24:00	56	10	UT042	3
+2018-01-16 04:29:00	58	5	ND592	10
+2018-02-22 00:25:00	51	9	VM615	5
+2018-02-18 19:44:00	39	5	BE981	1
+2018-02-06 10:12:00	33	8	YH116	4
+2018-02-16 18:50:00	38	7	QZ906	9
+2018-01-14 21:06:00	57	8	QZ906	10
+2018-02-10 22:13:00	51	8	YH116	10
+2018-01-28 06:57:00	45	9	QZ906	1
+2018-01-15 12:34:00	32	6	TJ597	10
+2018-01-12 20:41:00	39	4	TJ597	2
+2018-02-13 22:41:00	49	8	UT042	1
+2018-01-19 01:57:00	39	3	RL003	8
+2018-01-30 22:43:00	58	8	ND592	2
+2018-01-27 18:24:00	46	3	VM615	8
+2018-01-02 22:19:00	41	1	WK649	6
+2018-01-30 17:34:00	54	7	GM220	6
+2018-02-24 08:43:00	50	3	GG939	1
+2018-01-30 02:13:00	56	3	NU214	8
+2018-01-24 15:11:00	57	9	QP571	10
+2018-01-04 19:00:00	58	10	QZ906	5
+2018-02-01 07:01:00	60	1	GZ961	9
+2018-02-21 23:05:00	40	8	UT042	10
+2018-02-06 11:48:00	39	5	VS161	7
+2018-01-25 22:17:00	43	4	GF138	3
+2018-01-17 23:15:00	30	10	PX851	8
+2018-02-10 05:17:00	59	6	QZ906	2
+2018-01-11 03:43:00	35	5	GZ961	1
+2018-01-24 22:26:00	43	8	GZ961	6
+2018-02-24 14:44:00	45	6	VS161	8
+2018-01-29 04:12:00	46	1	VM615	3
+2018-01-03 03:44:00	51	5	ND592	10
+2018-01-18 04:55:00	47	10	GZ961	6
+2018-02-08 09:06:00	39	1	WK649	10
+2018-02-25 09:37:00	31	6	QP571	9
+2018-01-10 21:54:00	45	8	RL003	9
+2018-01-04 19:54:00	40	1	JL276	1
+2018-02-05 08:52:00	47	1	ND592	7
+2018-01-18 07:21:00	59	10	JL276	3
+2018-02-27 13:41:00	56	5	YH116	5
+2018-01-18 07:38:00	44	8	QP571	6
+2018-01-12 18:56:00	56	7	QP571	6
+2018-02-10 00:23:00	30	9	GZ961	1
+2018-02-25 19:26:00	35	1	JL276	3
+2018-01-20 13:41:00	52	10	GG939	3
+2018-02-12 08:03:00	41	3	QZ906	9
+2018-01-09 16:28:00	50	10	WK649	3
+2018-02-06 09:56:00	41	1	GF138	10
+2018-02-22 01:46:00	34	1	BE981	2
+2018-02-26 23:28:00	48	8	PX851	3
+2018-02-05 19:07:00	39	7	GF138	1
+2018-01-13 15:21:00	44	5	TJ597	10
+2018-01-04 07:34:00	39	6	ND592	4
+2018-02-20 00:19:00	36	6	GG939	9
+2018-01-20 06:11:00	49	8	BE981	4
+2018-01-08 21:07:00	46	10	GZ961	7
+2018-02-28 08:55:00	60	7	TJ597	8
+2018-02-19 22:50:00	30	4	RL003	2
+2018-01-14 17:23:00	55	6	GG939	1
+2018-02-12 03:29:00	45	8	PX851	10
+2018-02-07 12:41:00	42	3	QP571	10
+2018-01-13 12:56:00	37	4	GZ961	2
+2018-02-20 17:41:00	44	10	VS161	10
+2018-01-12 06:13:00	34	1	VS161	6
+2018-01-02 16:37:00	36	10	RL003	8
+2018-01-04 11:11:00	41	1	ND592	6
+2018-02-06 00:47:00	47	8	GM220	3
+2018-01-06 20:23:00	43	6	YH116	4
+2018-01-20 00:44:00	44	6	GF138	5
+2018-02-05 12:35:00	60	9	GZ961	6
+2018-02-28 23:58:00	60	7	YH116	7
+2018-01-16 02:53:00	37	1	YH116	6
+2018-01-24 19:02:00	45	3	QP571	4
+2018-02-17 05:33:00	52	10	QP571	2
+2018-01-05 03:00:00	36	7	ND592	10
+2018-02-14 01:43:00	54	8	QZ906	1
+2018-02-22 08:41:00	53	7	QZ906	9
+2018-02-28 00:35:00	55	7	UT042	1
+2018-01-07 21:11:00	51	8	PX851	4
+2018-02-11 15:00:00	47	1	GG939	4
+2018-02-24 19:18:00	55	5	NU214	6
+2018-01-02 08:42:00	53	7	ND592	4
+2018-01-14 19:18:00	36	1	GM220	2
+2018-01-25 01:19:00	55	7	ND592	9
+2018-02-19 19:24:00	41	4	NU214	2
+2018-01-19 22:45:00	42	9	BE981	4
+2018-02-23 03:53:00	47	7	QZ906	5
+2018-02-08 06:51:00	32	8	NU214	5
+2018-01-27 06:27:00	39	8	WK649	6
+2018-02-13 21:32:00	53	10	PX851	6
+2018-01-30 12:31:00	51	6	ND592	9
+2018-01-18 06:43:00	54	10	GZ961	5
+2018-01-19 07:23:00	57	7	NU214	9
+2018-01-10 02:12:00	41	1	GF138	2
+2018-02-02 14:32:00	49	8	QP571	6
+2018-02-03 11:02:00	47	6	GZ961	8
+2018-02-20 16:50:00	30	8	QP571	4
+2018-02-18 06:00:00	54	6	VS161	7
+2018-02-04 19:22:00	54	1	PX851	4
+2018-01-15 23:13:00	53	7	TJ597	8
+2018-02-03 15:23:00	52	5	VS161	5
+2018-01-31 16:30:00	51	10	GG939	9
+2018-02-21 20:38:00	59	4	AN978	7
+2018-02-03 11:25:00	58	8	AN978	8
+2018-01-28 14:21:00	34	7	AN978	1
+2018-02-05 14:12:00	51	5	AN978	10
+2018-02-13 12:15:00	30	5	AN978	4
+2018-01-28 20:46:00	53	3	AN978	5
+2018-01-13 17:26:00	54	9	AN978	2
+2018-01-28 22:24:00	39	10	TJ597	2
+2018-01-01 02:03:00	41	6	GM220	5
+2018-02-11 05:53:00	53	1	PX851	8
+2018-01-11 06:58:00	53	5	YH116	3
+2018-01-26 16:48:00	42	9	GG939	9
+2018-02-24 20:50:00	56	8	GG939	4
+2018-01-22 15:27:00	32	5	JL276	2
+2018-01-24 01:44:00	32	10	GF138	10
+2018-01-05 04:55:00	31	7	RL003	5
+2018-02-05 07:37:00	38	10	GF138	7
+2018-02-02 21:21:00	58	8	VM615	4
+2018-01-18 19:00:00	55	6	BE981	10
+2018-02-09 13:17:00	34	4	PX851	8
+2018-01-11 12:45:00	47	7	WK649	5
+2018-01-27 17:39:00	45	5	WK649	1
+2018-02-23 23:09:00	52	4	QP571	6
+2018-01-05 21:46:00	51	8	YH116	1
+2018-01-04 13:02:00	43	9	UT042	10
+2018-01-23 20:51:00	39	4	YH116	7
+2018-01-19 09:46:00	39	10	QP571	1
+2018-02-12 12:53:00	34	4	YH116	10
+2018-01-13 08:39:00	35	9	VM615	5
+2018-01-08 08:53:00	47	7	NU214	4
+2018-01-06 08:12:00	53	8	JL276	9
+2018-02-27 04:49:00	43	6	YH116	1
+2018-02-07 00:24:00	30	8	QP571	10
+2018-01-24 08:19:00	59	5	QP571	2
+2018-02-18 22:29:00	34	8	GM220	8
+2018-01-03 08:18:00	53	8	JL276	10
+2018-02-19 14:37:00	36	6	VM615	7
+2018-02-15 12:06:00	54	8	TJ597	5
+2018-02-27 23:18:00	54	4	VS161	8
+2018-02-17 18:30:00	40	8	ND592	7
+2018-01-09 14:11:00	47	8	PX851	8
+2018-02-21 23:50:00	39	10	QZ906	6
+2018-01-07 15:34:00	58	4	JL276	8
+2018-02-25 17:44:00	56	7	VM615	1
+2018-02-04 02:22:00	34	4	RL003	10
+2018-01-06 05:17:00	51	6	GM220	1
+2018-01-12 06:28:00	52	6	NU214	8
+2018-01-08 15:47:00	44	1	GM220	6
+2018-01-13 19:47:00	34	6	QZ906	7
+2018-01-21 07:00:00	49	1	GG939	3
+2018-01-20 11:19:00	46	9	VM615	5
+2018-01-26 07:02:00	51	5	BE981	10
+2018-02-25 23:18:00	60	4	VM615	10
+2018-02-23 17:43:00	55	6	BE981	8
+2018-01-20 17:14:00	38	3	GM220	8
+2018-02-02 21:05:00	53	4	UT042	6
+2018-02-10 20:53:00	56	7	UT042	1
+2018-02-02 00:36:00	48	9	GG939	7
+2018-01-17 06:17:00	38	6	ND592	8
+2018-02-07 03:43:00	44	3	QP571	7
+2018-01-10 21:49:00	41	1	QP571	4
+2018-01-23 20:45:00	55	3	WK649	8
+2018-02-04 00:17:00	32	5	RL003	1
+2018-02-03 15:51:00	30	7	ND592	9
+2018-01-13 05:47:00	32	9	GG939	2
+2018-02-02 06:43:00	60	8	YH116	2
+2018-02-21 21:12:00	43	7	JL276	5
+2018-02-05 21:23:00	49	8	YH116	6
+2018-02-01 07:01:00	45	7	GG939	7
+2018-01-17 20:23:00	36	10	VS161	8
+2018-02-07 19:54:00	58	8	WK649	6
+2018-01-04 19:00:00	42	6	VM615	1
+2018-01-21 19:37:00	48	7	RL003	7
+2018-01-08 23:25:00	47	5	GG939	1
+2018-02-05 22:59:00	52	10	PX851	3
+2018-02-09 22:23:00	37	6	GZ961	10
+2018-02-11 15:05:00	53	4	VS161	10
+2018-01-25 11:14:00	34	6	QP571	5
+2018-01-22 08:15:00	31	10	PX851	10
+2018-01-14 19:30:00	56	5	PX851	8
+2018-02-11 09:57:00	60	1	PX851	5
+2018-02-08 15:50:00	59	3	GF138	2
+2018-02-15 05:27:00	47	5	VM615	10
+2018-01-04 20:58:00	32	1	QZ906	6
+2018-01-17 04:13:00	36	3	VS161	9
+2018-02-21 06:11:00	48	6	TJ597	7
+2018-02-26 00:48:00	54	4	TJ597	1
+2018-02-21 07:50:00	37	5	JL276	7
+2018-02-08 07:07:00	58	4	WK649	3
+2018-01-23 22:52:00	46	5	BE981	3
+2018-01-18 13:11:00	37	8	NU214	6
+2018-01-15 22:18:00	53	4	VS161	3
+2018-02-10 12:56:00	51	5	GF138	2
+2018-01-08 13:08:00	30	4	GG939	6
+2018-01-29 01:57:00	31	8	GF138	9
+2018-01-30 23:22:00	41	4	BE981	5
+2018-01-22 08:54:00	53	9	RL003	6
+2018-01-09 04:44:00	48	1	QZ906	4
+2018-01-04 23:52:00	56	8	YH116	3
+2018-02-01 20:07:00	40	6	PX851	4
+2018-01-17 01:13:00	47	7	TJ597	4
+2018-02-18 09:13:00	39	6	JL276	8
+2018-01-20 12:26:00	52	8	TJ597	6
+2018-01-21 08:07:00	30	6	NU214	3
+2018-01-24 02:52:00	43	5	JL276	7
+2018-01-31 18:58:00	53	1	RL003	9
+2018-02-01 05:24:00	46	1	BE981	6
+2018-02-20 23:36:00	44	6	BE981	10
+2018-02-24 11:05:00	46	8	GG939	1
+2018-01-23 19:04:00	60	9	NU214	6
+2018-01-31 22:16:00	53	10	GZ961	4
+2018-01-14 01:09:00	59	4	QZ906	4
+2018-01-13 05:59:00	41	10	BE981	1
+2018-02-19 07:34:00	59	6	VS161	4
+2018-02-04 11:31:00	40	4	GG939	7
+2018-02-25 10:51:00	41	9	GG939	6
+2018-02-13 08:30:00	43	5	QP571	6
+2018-01-20 15:00:00	56	4	VS161	6
+2018-01-04 08:48:00	47	9	GF138	8
+2018-01-19 19:52:00	41	1	VM615	1
+2018-02-12 12:17:00	60	5	GF138	3
+2018-01-11 17:39:00	49	5	VM615	5
+2018-02-10 14:44:00	37	9	PX851	9
+2018-01-10 00:31:00	55	1	PX851	3
+2018-01-28 06:53:00	52	8	RL003	9
+2018-01-16 20:15:00	45	4	JL276	6
+2018-01-29 07:27:00	58	4	VS161	7
+2018-02-14 16:03:00	58	5	JL276	1
+2018-01-19 06:38:00	53	8	JL276	2
+2018-02-23 17:49:00	39	5	AN978	7
+2018-02-02 14:52:00	59	10	AN978	3
+2018-01-25 04:55:00	45	5	AN978	6
+2018-01-17 16:24:00	50	6	AN978	7
+2018-01-02 10:03:00	37	3	AN978	7
+2018-02-25 11:16:00	43	9	AN978	10
+2018-01-05 12:44:00	47	8	VS161	1
+2018-01-03 06:20:00	56	5	VM615	1
+2018-02-07 16:04:00	42	9	WK649	8
+2018-02-17 04:23:00	49	10	TJ597	7
+2018-02-16 03:58:00	59	10	BE981	6
+2018-02-16 15:16:00	32	1	QZ906	1
+2018-01-26 06:52:00	48	4	YH116	10
+2018-01-27 05:43:00	50	9	BE981	1
+2018-02-17 23:14:00	31	3	BE981	3
+2018-01-19 10:32:00	49	8	GM220	3
+2018-01-05 16:05:00	41	5	BE981	6
+2018-01-07 05:55:00	33	4	UT042	10
+2018-01-15 21:41:00	50	1	NU214	8
+2018-01-05 13:58:00	41	5	PX851	2
+2018-01-29 11:12:00	40	9	GZ961	4
+2018-01-24 20:43:00	41	4	VS161	10
+2018-01-07 04:04:00	54	1	YH116	1
+2018-02-03 13:49:00	47	8	GM220	4
+2018-01-20 21:42:00	47	9	VS161	2
+2018-02-03 03:09:00	38	1	BE981	9
+2018-01-08 02:30:00	40	4	GG939	4
+2018-01-23 01:40:00	48	1	RL003	3
+2018-01-04 15:15:00	50	10	GG939	10
+2018-02-17 17:46:00	57	6	VS161	1
+2018-02-02 21:10:00	56	7	VM615	6
+2018-02-03 15:30:00	40	9	VM615	9
+2018-01-24 13:25:00	59	7	BE981	7
+2018-02-09 18:15:00	51	10	GM220	8
+2018-02-16 06:45:00	38	4	RL003	8
+2018-02-02 04:44:00	38	6	QZ906	10
+2018-02-25 12:13:00	45	6	JL276	5
+2018-01-10 03:13:00	31	9	GZ961	7
+2018-01-31 17:38:00	56	8	QZ906	7
+2018-01-05 08:13:00	60	9	UT042	7
+2018-01-04 10:41:00	30	10	GM220	2
+2018-02-18 19:35:00	46	3	PX851	4
+2018-01-31 00:19:00	50	4	GM220	8
+2018-02-21 04:03:00	46	1	GG939	4
+2018-02-19 21:30:00	44	9	VS161	7
+2018-01-18 08:11:00	45	1	GF138	5
+2018-01-11 08:59:00	58	7	YH116	7
+2018-01-04 08:51:00	46	6	GG939	6
+2018-01-04 14:42:00	53	6	YH116	10
+2018-01-17 02:06:00	52	9	GZ961	1
+2018-01-20 19:49:00	38	4	GZ961	7
+2018-01-27 20:10:00	37	6	ND592	9
+2018-01-17 18:29:00	38	9	PX851	9
+2018-01-31 06:44:00	48	10	NU214	10
+2018-01-26 19:02:00	56	7	WK649	1
+2018-02-07 17:02:00	51	3	GZ961	7
+2018-01-11 10:52:00	49	10	ND592	1
+2018-02-25 06:16:00	57	9	GM220	5
+2018-02-27 23:51:00	60	6	PX851	4
+2018-01-12 20:53:00	49	5	UT042	4
+2018-02-02 19:47:00	30	4	GZ961	8
+2018-01-29 11:04:00	40	8	BE981	7
+2018-02-16 10:40:00	33	5	GF138	4
+2018-01-19 20:09:00	51	1	RL003	2
+2018-01-18 12:57:00	30	6	GM220	3
+2018-02-25 18:08:00	33	8	BE981	4
+2018-01-14 16:04:00	45	10	WK649	8
+2018-01-28 21:24:00	30	9	NU214	10
+2018-02-01 05:52:00	57	7	QZ906	1
+2018-01-16 04:24:00	35	5	GZ961	2
+2018-02-14 12:56:00	37	1	GM220	7
+2018-01-26 20:23:00	52	9	QZ906	4
+2018-02-15 05:45:00	49	9	TJ597	1
+2018-02-18 09:44:00	34	10	JL276	8
+2018-01-28 14:06:00	30	10	UT042	10
+2018-02-11 19:40:00	30	4	QP571	7
+2018-01-12 11:22:00	44	5	QP571	1
+2018-01-23 20:39:00	39	5	RL003	3
+2018-02-02 13:51:00	44	7	BE981	8
+2018-02-24 09:03:00	33	6	GM220	8
+2018-02-17 15:48:00	57	4	GM220	8
+2018-02-02 03:35:00	52	6	NU214	3
+2018-02-16 05:03:00	60	10	ND592	4
+2018-01-02 21:24:00	36	7	JL276	4
+2018-02-08 17:38:00	45	4	GF138	1
+2018-01-08 03:05:00	57	4	QZ906	10
+2018-01-20 05:20:00	58	6	WK649	8
+2018-02-15 10:47:00	34	4	GZ961	6
+2018-02-07 11:40:00	59	9	WK649	6
+2018-01-26 09:52:00	59	1	GG939	8
+2018-01-03 18:58:00	49	6	PX851	4
+2018-01-14 10:50:00	55	10	GM220	7
+2018-02-09 09:28:00	54	8	RL003	7
+2018-02-16 07:48:00	42	10	QP571	7
+2018-01-15 07:36:00	34	10	UT042	8
+2018-01-06 01:11:00	60	8	PX851	9
+2018-02-26 02:34:00	41	3	GZ961	5
+2018-01-15 03:52:00	57	1	TJ597	1
+2018-01-11 13:35:00	33	8	PX851	7
+2018-01-18 03:52:00	47	1	UT042	5
+2018-02-20 20:28:00	47	5	NU214	4
+2018-01-01 11:36:00	37	4	QZ906	7
+2018-01-14 15:46:00	41	9	JL276	4
+2018-01-02 12:04:00	51	8	GZ961	7
+2018-02-25 01:36:00	55	10	GM220	10
+2018-02-13 06:25:00	50	7	ND592	7
+2018-02-09 16:22:00	58	6	GZ961	9
+2018-02-13 15:11:00	45	3	GF138	5
+2018-02-13 23:46:00	39	3	PX851	4
+2018-01-16 13:34:00	39	8	NU214	1
+2018-01-03 18:02:00	42	3	UT042	4
+2018-02-09 04:56:00	47	8	RL003	10
+2018-01-17 03:32:00	47	5	GG939	9
+2018-01-17 23:05:00	60	4	ND592	6
+2018-02-02 22:53:00	34	5	GM220	4
+2018-02-22 10:43:00	32	9	GG939	7
+2018-01-15 20:28:00	39	9	GF138	9
+2018-01-21 01:48:00	37	8	GF138	6
+2018-02-21 13:45:00	50	7	RL003	5
+2018-02-16 12:38:00	56	7	RL003	6
+2018-02-21 07:25:00	38	4	RL003	2
+2018-01-08 20:40:00	46	3	VM615	4
+2018-01-20 05:56:00	56	3	PX851	3
+2018-01-29 19:11:00	43	10	BE981	1
+2018-01-17 11:30:00	48	9	BE981	4
+2018-01-12 23:20:00	30	1	PX851	1
+2018-02-11 05:26:00	47	10	VM615	4
+2018-02-09 01:13:00	47	8	VM615	5
+2018-01-08 10:06:00	52	9	AN978	9
+2018-01-22 02:26:00	49	3	AN978	1
+2018-02-21 22:39:00	34	7	AN978	10
+2018-01-13 21:42:00	55	5	AN978	3
+2018-02-14 20:56:00	50	8	AN978	3
+2018-02-17 01:56:00	47	7	GZ961	10
+2018-01-18 08:15:00	43	10	VS161	10
+2018-01-24 17:59:00	46	8	GG939	4
+2018-02-23 01:53:00	40	4	TJ597	5
+2018-01-25 00:30:00	59	1	PX851	5
+2018-02-07 09:59:00	60	9	WK649	7
+2018-01-22 22:17:00	38	3	QP571	9
+2018-01-16 23:41:00	45	9	NU214	3
+2018-01-07 07:07:00	55	6	VS161	4
+2018-02-09 10:36:00	54	8	JL276	10
+2018-02-06 07:43:00	39	10	TJ597	6
+2018-02-14 16:49:00	59	10	JL276	6
+2018-01-01 18:38:00	43	5	TJ597	6
+2018-01-01 21:51:00	47	5	GG939	6
+2018-02-02 04:49:00	45	10	GF138	3
+2018-02-14 21:57:00	30	7	ND592	6
+2018-01-28 21:21:00	36	8	RL003	6
+2018-01-04 18:41:00	35	3	ND592	2
+2018-02-09 07:51:00	42	10	RL003	7
+2018-01-21 16:02:00	49	10	WK649	7
+2018-02-10 08:30:00	31	9	VS161	6
+2018-02-23 02:23:00	46	1	GG939	1
+2018-01-21 04:50:00	46	10	YH116	6
+2018-01-02 03:29:00	36	5	UT042	1
+2018-01-17 17:30:00	49	10	QP571	4
+2018-02-27 00:12:00	34	1	UT042	3
+2018-01-15 21:43:00	51	10	GG939	3
+2018-01-11 19:30:00	57	7	YH116	4
+2018-01-03 06:35:00	36	10	QP571	10
+2018-01-16 11:08:00	58	3	UT042	4
+2018-02-20 10:38:00	32	8	GG939	8
+2018-01-22 14:05:00	32	9	JL276	9
+2018-01-12 08:26:00	30	10	NU214	5
+2018-01-14 12:28:00	30	8	TJ597	9
+2018-02-27 17:07:00	30	10	VS161	4
+2018-02-07 05:33:00	55	4	VM615	7
+2018-02-26 03:10:00	42	9	ND592	4
+2018-01-27 12:47:00	47	5	UT042	7
+2018-01-24 03:28:00	33	9	WK649	7
+2018-02-02 20:34:00	43	4	TJ597	5
+2018-01-04 10:26:00	48	9	GG939	1
+2018-02-28 22:17:00	50	6	JL276	5
+2018-02-13 17:48:00	54	8	QZ906	9
+2018-02-01 07:00:00	55	7	BE981	8
+2018-01-21 07:46:00	59	8	BE981	6
+2018-01-23 16:27:00	43	5	UT042	1
+2018-01-21 23:43:00	33	4	TJ597	1
+2018-01-18 13:44:00	49	8	BE981	2
+2018-01-30 09:30:00	37	3	JL276	9
+2018-01-14 10:13:00	30	4	RL003	2
+2018-02-08 10:55:00	45	4	GZ961	3
+2018-02-19 07:25:00	44	4	TJ597	9
+2018-01-07 20:13:00	38	4	TJ597	6
+2018-01-18 05:42:00	31	4	GZ961	9
+2018-01-16 10:20:00	40	9	QZ906	8
+2018-02-28 11:40:00	49	1	BE981	2
+2018-01-01 08:16:00	30	5	QZ906	8
+2018-01-05 05:52:00	55	4	GM220	5
+2018-02-03 00:19:00	37	9	PX851	3
+2018-01-23 16:24:00	48	3	GZ961	5
+2018-02-13 09:00:00	46	10	PX851	9
+2018-01-10 15:21:00	31	10	PX851	6
+2018-02-27 12:46:00	55	6	NU214	1
+2018-02-25 05:42:00	44	4	GF138	2
+2018-02-13 15:56:00	33	10	QZ906	6
+2018-02-22 04:23:00	49	9	PX851	8
+2018-02-06 14:46:00	37	1	WK649	6
+2018-02-11 14:39:00	46	8	VS161	3
+2018-02-04 07:11:00	42	4	RL003	6
+2018-02-20 22:47:00	40	5	VM615	5
+2018-02-03 23:49:00	30	8	TJ597	7
+2018-02-19 01:19:00	30	3	WK649	5
+2018-02-04 11:22:00	41	8	GG939	9
+2018-01-06 00:30:00	34	7	VM615	1
+2018-02-25 21:18:00	31	5	GZ961	4
+2018-01-31 06:36:00	54	4	GG939	4
+2018-01-26 22:02:00	38	5	GZ961	2
+2018-01-30 07:24:00	54	5	NU214	3
+2018-01-26 00:31:00	45	6	QP571	4
+2018-02-15 02:51:00	58	1	JL276	2
+2018-01-28 19:14:00	38	1	ND592	6
+2018-01-18 17:29:00	45	7	WK649	1
+2018-02-19 16:44:00	46	7	VM615	1
+2018-01-09 22:23:00	36	4	GZ961	1
+2018-01-25 03:16:00	41	10	GG939	2
+2018-02-07 19:16:00	35	9	WK649	7
+2018-01-25 21:05:00	57	9	JL276	1
+2018-02-02 11:12:00	55	8	ND592	1
+2018-02-28 15:26:00	35	4	RL003	5
+2018-01-15 18:07:00	37	1	TJ597	5
+2018-02-20 19:04:00	40	6	YH116	9
+2018-01-12 10:57:00	46	9	UT042	3
+2018-02-11 20:32:00	43	4	RL003	1
+2018-02-01 01:19:00	30	6	QZ906	2
+2018-02-03 19:30:00	40	7	NU214	1
+2018-02-08 03:46:00	35	3	GM220	9
+2018-01-15 16:54:00	46	8	RL003	3
+2018-02-15 22:49:00	52	7	ND592	2
+2018-01-20 09:48:00	56	5	GG939	6
+2018-02-06 04:10:00	43	10	TJ597	9
+2018-01-01 21:52:00	47	10	GZ961	2
+2018-01-08 23:40:00	54	8	TJ597	1
+2018-01-06 08:43:00	57	8	GZ961	5
+2018-01-22 16:43:00	30	8	WK649	7
+2018-01-06 09:46:00	59	10	VM615	10
+2018-01-04 21:59:00	35	8	RL003	9
+2018-02-21 15:42:00	50	1	BE981	10
+2018-01-10 12:14:00	52	4	JL276	1
+2018-01-25 13:17:00	54	1	VM615	6
+2018-02-24 23:09:00	48	1	GF138	7
+2018-02-07 19:37:00	57	5	GG939	10
+2018-01-20 04:17:00	42	6	BE981	2
+2018-01-04 07:49:00	53	6	JL276	3
+2018-02-24 22:14:00	45	4	PX851	8
+2018-02-05 08:18:00	52	9	GM220	10
+2018-01-16 00:13:00	37	8	QP571	3
+2018-02-26 17:22:00	50	1	ND592	8
+2018-01-09 01:31:00	48	8	UT042	5
+2018-01-01 20:36:00	40	1	VS161	10
+2018-02-27 16:35:00	55	6	VM615	1
+2018-01-08 06:15:00	33	9	WK649	3
+2018-01-11 06:32:00	40	5	QZ906	10
+2018-02-27 20:57:00	59	3	QP571	5
+2018-01-03 11:55:00	48	10	VS161	1
+2018-01-30 16:17:00	57	7	PX851	10
+2018-01-16 07:44:00	34	5	ND592	2
+2018-01-26 08:51:00	50	4	AN978	6
+2018-02-15 06:14:00	57	5	AN978	6
+2018-02-11 02:10:00	55	3	AN978	1
+2018-02-19 00:59:00	53	8	JL276	6
+2018-01-06 09:45:00	58	7	YH116	8
+2018-01-28 09:19:00	53	4	VS161	5
+2018-02-21 12:31:00	51	3	BE981	4
+2018-02-19 11:53:00	40	4	JL276	1
+2018-01-04 08:04:00	37	7	ND592	3
+2018-01-26 07:06:00	48	4	NU214	9
+2018-02-28 05:33:00	49	4	JL276	10
+2018-02-26 14:42:00	44	1	QZ906	6
+2018-02-22 23:11:00	30	10	PX851	8
+2018-01-02 15:49:00	31	4	UT042	7
+2018-01-17 16:47:00	38	7	BE981	2
+2018-01-01 14:57:00	36	4	PX851	6
+2018-02-07 10:20:00	32	9	ND592	4
+2018-02-08 08:09:00	50	8	VS161	5
+2018-01-03 05:50:00	54	5	NU214	10
+2018-01-05 10:04:00	51	3	WK649	1
+2018-01-20 16:32:00	31	3	NU214	4
+2018-01-31 14:29:00	47	3	YH116	4
+2018-01-31 18:38:00	48	8	JL276	3
+2018-02-20 21:44:00	31	3	JL276	1
+2018-02-02 03:59:00	34	6	QP571	3
+2018-02-22 12:50:00	30	4	VS161	1
+2018-01-29 15:36:00	43	10	GF138	3
+2018-02-23 14:50:00	45	5	YH116	9
+2018-01-04 06:17:00	39	1	GG939	1
+2018-02-21 19:12:00	59	7	QZ906	9
+2018-02-13 19:06:00	41	6	QP571	1
+2018-02-04 06:07:00	56	8	QP571	10
+2018-01-29 05:59:00	37	1	GZ961	1
+2018-02-06 11:42:00	31	4	TJ597	4
+2018-02-14 14:14:00	31	7	RL003	6
+2018-01-09 21:55:00	50	9	NU214	5
+2018-01-12 06:18:00	60	7	YH116	10
+2018-02-10 23:10:00	48	4	BE981	3
+2018-01-12 12:56:00	45	8	QP571	4
+2018-02-17 18:00:00	39	10	TJ597	2
+2018-02-24 02:52:00	51	1	JL276	1
+2018-02-15 13:24:00	36	1	UT042	8
+2018-01-11 10:56:00	32	5	QP571	5
+2018-02-27 10:34:00	32	6	YH116	3
+2018-02-27 15:58:00	40	5	YH116	9
+2018-01-25 20:22:00	39	5	JL276	8
+2018-02-23 01:46:00	57	5	QP571	9
+2018-02-06 11:50:00	39	5	QP571	6
+2018-01-29 09:18:00	39	9	TJ597	4
+2018-02-21 20:25:00	58	10	QP571	1
+2018-01-17 14:44:00	41	10	GG939	3
+2018-02-21 11:35:00	47	3	JL276	2
+2018-02-22 03:49:00	53	8	NU214	8
+2018-02-13 18:36:00	53	1	RL003	6
+2018-02-19 20:03:00	43	6	VM615	8
+2018-01-20 17:49:00	30	7	YH116	3
+2018-01-16 12:41:00	60	9	GM220	7
+2018-01-16 11:37:00	41	5	JL276	2
+2018-02-27 02:09:00	56	5	PX851	2
+2018-01-25 00:22:00	56	3	WK649	7
+2018-01-19 21:50:00	49	3	VS161	2
+2018-02-16 10:21:00	48	6	TJ597	7
+2018-01-24 05:28:00	58	1	NU214	9
+2018-01-23 02:09:00	46	4	VM615	2
+2018-01-06 08:22:00	40	8	GG939	8
+2018-02-19 20:24:00	47	3	JL276	5
+2018-01-04 00:35:00	59	1	VS161	3
+2018-01-27 22:31:00	35	9	RL003	3
+2018-02-26 10:41:00	44	7	VS161	2
+2018-01-11 06:21:00	58	9	NU214	5
+2018-02-23 17:17:00	52	8	VM615	4
+2018-01-22 16:39:00	56	1	ND592	7
+2018-02-21 13:38:00	47	7	BE981	7
+2018-01-07 23:42:00	48	9	GZ961	1
+2018-01-14 00:45:00	48	6	UT042	8
+2018-01-05 05:36:00	48	4	ND592	5
+2018-02-14 14:41:00	42	4	VM615	9
+2018-02-01 11:45:00	43	6	WK649	2
+2018-02-06 15:02:00	45	5	TJ597	8
+2018-02-26 01:41:00	59	6	YH116	5
+2018-02-25 03:19:00	32	10	GM220	10
+2018-02-17 03:23:00	43	1	YH116	10
+2018-01-23 01:54:00	31	5	JL276	10
+2018-02-04 05:12:00	57	1	QZ906	5
+2018-02-11 05:39:00	43	8	BE981	1
+2018-02-17 05:43:00	39	6	UT042	2
+2018-02-26 20:56:00	45	7	VS161	3
+2018-02-27 16:28:00	47	4	NU214	6
+2018-02-13 22:01:00	52	3	GF138	9
+2018-01-27 12:11:00	57	1	YH116	2
+2018-02-15 18:03:00	58	10	GZ961	7
+2018-01-12 20:01:00	39	6	GF138	7
+2018-01-02 04:20:00	37	3	WK649	4
+2018-01-16 21:49:00	39	10	TJ597	8
+2018-02-01 01:03:00	59	5	ND592	3
+2018-02-15 12:17:00	53	3	UT042	9
+2018-01-11 23:59:00	56	8	PX851	10
+2018-01-30 20:09:00	33	7	ND592	6
+2018-01-21 19:48:00	43	6	QZ906	5
+2018-02-25 11:59:00	31	10	QP571	10
+2018-02-07 11:11:00	38	4	GM220	1
+2018-01-16 07:05:00	50	9	BE981	2
+2018-01-09 08:04:00	54	7	PX851	10
+2018-01-03 05:01:00	47	10	VS161	5
+2018-01-20 04:37:00	43	10	BE981	5
+2018-02-14 07:18:00	56	8	VS161	10
+2018-01-31 01:06:00	34	4	GG939	4
+2018-02-08 07:19:00	38	3	UT042	6
+2018-02-18 04:09:00	37	7	VS161	3
+2018-02-11 07:02:00	45	7	PX851	9
+2018-01-03 09:58:00	48	8	QP571	5
+2018-02-09 07:11:00	31	5	ND592	8
+2018-02-26 09:32:00	53	10	JL276	7
+2018-01-24 18:01:00	40	9	RL003	2
+2018-02-12 21:49:00	60	8	GF138	4
+2018-01-02 08:36:00	36	10	GZ961	1
+2018-01-02 09:01:00	43	1	YH116	9
+2018-01-04 10:37:00	35	1	QZ906	9
+2018-01-11 21:11:00	41	7	BE981	7
+2018-01-29 23:11:00	32	7	QP571	8
+2018-01-04 09:56:00	42	6	GG939	5
+2018-02-04 16:32:00	57	5	GF138	2
+2018-01-14 09:47:00	31	4	AN978	5
+2018-01-15 02:20:00	57	7	AN978	2
+2018-01-09 06:31:00	53	5	AN978	7
+2018-01-14 21:08:00	55	1	AN978	4
+2018-02-25 15:03:00	45	5	AN978	9
+2018-01-21 07:25:00	41	5	AN978	7
+2018-01-10 21:13:00	56	9	VS161	10
+2018-02-23 21:28:00	53	9	GM220	2
+2018-01-17 16:18:00	31	8	NU214	1
+2018-01-26 13:55:00	31	10	WK649	3
+2018-02-19 04:08:00	37	5	GZ961	3
+2018-02-11 04:50:00	44	7	ND592	1
+2018-02-07 13:57:00	42	10	VS161	4
+2018-02-13 20:27:00	31	1	BE981	7
+2018-01-02 19:46:00	48	5	QP571	5
+2018-01-06 08:54:00	56	6	ND592	5
+2018-02-04 19:06:00	50	1	VM615	10
+2018-02-15 00:59:00	41	9	JL276	4
+2018-01-14 15:18:00	43	9	TJ597	7
+2018-02-19 19:21:00	56	10	GF138	5
+2018-02-22 11:55:00	47	1	RL003	4
+2018-02-01 01:33:00	50	9	ND592	1
+2018-01-02 22:17:00	33	10	GG939	5
+2018-01-02 02:45:00	60	9	ND592	5
+2018-02-05 07:03:00	41	8	VS161	10
+2018-02-03 13:01:00	44	6	JL276	5
+2018-01-27 19:18:00	49	5	JL276	1
+2018-02-27 22:49:00	50	3	JL276	5
+2018-01-10 09:06:00	41	10	JL276	6
+2018-01-19 05:08:00	50	1	GG939	1
+2018-01-27 15:36:00	56	6	RL003	5
+2018-02-19 01:24:00	55	5	YH116	6
+2018-02-07 02:26:00	49	8	GM220	9
+2018-01-25 08:55:00	31	10	QZ906	8
+2018-02-15 09:26:00	31	3	PX851	10
+2018-01-05 21:57:00	46	8	RL003	4
+2018-02-10 18:05:00	35	1	VM615	6
+2018-01-29 05:46:00	42	7	UT042	4
+2018-01-23 13:25:00	34	6	GF138	3
+2018-02-03 13:20:00	47	9	ND592	6
+2018-02-09 07:15:00	37	10	PX851	6
+2018-02-26 19:46:00	43	8	BE981	1
+2018-01-09 22:13:00	43	1	ND592	8
+2018-01-30 04:09:00	40	9	WK649	7
+2018-02-08 05:50:00	59	8	GG939	9
+2018-01-19 09:06:00	45	4	WK649	9
+2018-02-05 14:58:00	48	6	PX851	3
+2018-01-01 16:24:00	34	1	BE981	10
+2018-01-28 15:06:00	47	9	TJ597	4
+2018-02-19 19:18:00	56	7	YH116	1
+2018-02-27 03:01:00	54	6	PX851	3
+2018-01-16 03:13:00	33	10	RL003	8
+2018-02-23 14:17:00	37	1	WK649	8
+2018-01-03 18:22:00	45	5	YH116	9
+2018-02-02 21:53:00	51	9	BE981	6
+2018-02-22 12:14:00	46	10	QZ906	3
+2018-02-25 02:31:00	35	6	TJ597	1
+2018-01-15 13:36:00	53	1	VS161	5
+2018-01-12 08:05:00	49	6	NU214	7
+2018-01-28 13:01:00	46	5	WK649	8
+2018-02-27 22:08:00	59	1	JL276	9
+2018-01-22 06:02:00	58	6	TJ597	8
+2018-02-28 23:40:00	57	8	PX851	8
+2018-02-07 04:32:00	42	6	GZ961	6
+2018-01-24 13:11:00	30	9	GZ961	7
+2018-02-18 16:24:00	43	10	GG939	3
+2018-02-23 11:13:00	52	9	TJ597	8
+2018-02-08 05:33:00	32	6	JL276	1
+2018-01-12 01:50:00	42	1	GF138	5
+2018-01-26 20:23:00	52	5	UT042	7
+2018-02-19 22:20:00	44	6	ND592	1
+2018-02-21 22:25:00	49	1	QP571	7
+2018-02-11 05:53:00	59	3	QZ906	8
+2018-02-18 14:14:00	55	1	GF138	7
+2018-01-11 02:24:00	58	9	RL003	2
+2018-02-19 19:37:00	30	5	JL276	8
+2018-01-14 18:19:00	34	4	VM615	8
+2018-01-26 13:14:00	35	3	GZ961	8
+2018-01-18 04:24:00	42	6	BE981	5
+2018-01-11 05:34:00	56	7	WK649	7
+2018-01-28 11:39:00	48	5	PX851	2
+2018-02-25 22:46:00	41	4	QP571	5
+2018-01-03 00:55:00	38	8	VM615	9
+2018-02-15 09:41:00	46	1	VM615	10
+2018-01-27 00:27:00	48	6	GM220	2
+2018-01-02 20:08:00	47	4	VM615	10
+2018-01-08 22:15:00	43	5	WK649	10
+2018-02-19 03:18:00	49	9	VM615	10
+2018-02-24 23:55:00	38	10	UT042	6
+2018-01-25 14:51:00	36	4	WK649	10
+2018-01-01 12:41:00	44	7	UT042	6
+2018-02-27 11:33:00	37	5	QP571	5
+2018-02-15 02:13:00	54	4	WK649	4
+2018-02-11 14:10:00	37	1	WK649	9
+2018-01-19 06:18:00	45	9	UT042	7
+2018-02-12 13:50:00	59	10	WK649	9
+2018-02-21 13:03:00	47	3	PX851	8
+2018-01-04 06:10:00	45	4	WK649	1
+2018-01-17 20:13:00	53	9	JL276	6
+2018-02-27 14:06:00	37	7	NU214	2
+2018-01-04 02:00:00	56	6	GZ961	10
+2018-02-17 04:51:00	41	9	TJ597	3
+2018-01-19 15:35:00	40	4	TJ597	2
+2018-02-18 05:31:00	57	4	GF138	4
+2018-02-11 19:05:00	48	4	JL276	6
+2018-02-08 01:37:00	39	3	NU214	4
+2018-02-10 09:44:00	50	4	YH116	10
+2018-02-26 19:04:00	42	1	QZ906	2
+2018-01-29 23:59:00	50	4	GF138	4
+2018-02-10 19:04:00	47	5	NU214	4
+2018-02-20 11:29:00	55	6	BE981	4
+2018-02-18 07:49:00	35	8	UT042	2
+2018-01-12 06:58:00	33	10	GM220	10
+2018-01-19 04:42:00	33	6	TJ597	4
+2018-01-01 13:50:00	43	4	PX851	3
+2018-02-24 14:17:00	34	10	GZ961	1
+2018-02-25 11:07:00	33	5	TJ597	1
+2018-02-03 16:10:00	44	7	GG939	8
+2018-02-18 18:39:00	58	7	VS161	8
+2018-01-10 11:11:00	58	8	QP571	10
+2018-01-01 17:29:00	42	9	GF138	5
+2018-02-08 06:16:00	42	3	GG939	6
+2018-01-17 00:09:00	40	3	BE981	1
+2018-02-24 07:43:00	55	7	NU214	3
+2018-01-31 23:03:00	36	10	QZ906	5
+2018-01-09 03:39:00	46	10	UT042	7
+2018-02-22 09:32:00	56	7	BE981	1
+2018-01-16 12:30:00	34	9	RL003	6
+2018-02-01 14:06:00	54	10	AN978	8
+2018-02-24 07:43:00	32	6	AN978	3
+2018-02-15 08:54:00	30	4	AN978	1
+2018-02-04 11:33:00	33	7	AN978	1
+2018-01-18 11:52:00	46	10	AN978	9
+2018-02-12 11:31:00	31	6	AN978	9
+2018-02-05 21:24:00	30	10	BE981	2
+2018-01-08 04:31:00	58	6	NU214	6
+2018-02-16 22:30:00	34	10	NU214	10
+2018-01-19 09:22:00	46	7	GZ961	4
+2018-02-22 11:57:00	53	1	PX851	8
+2018-02-03 05:43:00	40	5	QP571	3
+2018-01-30 16:09:00	34	7	TJ597	10
+2018-01-05 06:43:00	55	1	PX851	4
+2018-02-14 17:13:00	59	10	BE981	10
+2018-02-27 18:54:00	44	4	JL276	10
+2018-01-19 19:09:00	32	8	QZ906	9
+2018-02-09 22:34:00	33	3	GF138	9
+2018-01-13 10:59:00	43	8	YH116	10
+2018-01-21 00:38:00	33	6	GZ961	4
+2018-01-06 07:46:00	31	9	GG939	4
+2018-01-23 23:16:00	36	5	ND592	1
+2018-02-08 18:46:00	31	6	GM220	2
+2018-01-11 00:17:00	41	9	VM615	4
+2018-01-06 02:17:00	59	3	NU214	8
+2018-01-25 07:16:00	44	9	QZ906	7
+2018-02-19 08:38:00	58	10	QZ906	10
+2018-01-21 19:33:00	35	10	YH116	7
+2018-02-20 22:52:00	51	8	GM220	1
+2018-02-25 19:06:00	54	9	GZ961	8
+2018-01-17 06:50:00	36	10	BE981	3
+2018-01-22 01:04:00	56	9	BE981	1
+2018-01-27 20:06:00	54	4	WK649	3
+2018-02-12 21:55:00	60	5	TJ597	1
+2018-02-14 06:24:00	59	5	GF138	5
+2018-02-26 02:51:00	47	5	ND592	6
+2018-01-24 21:19:00	50	3	PX851	4
+2018-01-19 17:45:00	47	10	NU214	1
+2018-01-17 03:52:00	35	7	GG939	4
+2018-02-09 16:52:00	32	4	ND592	7
+2018-01-07 02:43:00	30	10	JL276	7
+2018-02-16 23:58:00	32	1	TJ597	5
+2018-02-09 01:39:00	36	8	QZ906	9
+2018-01-24 14:08:00	52	5	GM220	4
+2018-01-31 01:52:00	38	4	NU214	9
+2018-02-01 19:33:00	43	8	PX851	10
+2018-01-02 02:53:00	34	10	GZ961	7
+2018-02-09 01:49:00	48	6	QZ906	3
+2018-01-02 10:07:00	39	9	QZ906	8
+2018-01-17 01:04:00	52	5	YH116	6
+2018-02-09 07:04:00	32	3	PX851	7
+2018-02-08 22:11:00	58	3	AN580	5
+2018-02-08 10:48:00	53	5	AN580	3
+2018-02-01 03:47:00	47	7	AN580	9
+2018-01-09 08:48:00	37	4	AN580	5
+2018-01-23 12:56:00	59	3	AN580	6
+2018-02-01 09:38:00	35	10	AN580	10
+2018-02-20 11:18:00	50	8	AN580	3
+2018-01-30 12:00:00	52	6	AN580	5
+2018-01-06 18:57:00	54	1	AN580	6
+2018-02-13 21:58:00	40	4	AN580	5
+2018-01-29 14:44:00	48	10	AN580	9
+2018-02-02 16:46:00	59	5	AN580	6
+2018-01-09 01:26:00	39	10	AN580	5
+2018-01-13 04:46:00	46	6	AN580	4
+2018-02-01 07:11:00	41	3	AN580	4
+2018-01-07 19:32:00	36	10	AN580	3
+2018-01-29 21:38:00	33	10	AN580	2
+2018-02-01 06:45:00	60	10	AN580	5
+2018-01-09 15:17:00	54	7	AN580	5
+2018-01-29 18:00:00	44	5	AN580	3
+2018-01-15 08:54:00	45	8	AN580	2
+2018-02-09 21:46:00	49	9	AN580	10
+2018-01-06 06:09:00	48	7	AN580	1
+2018-02-05 02:17:00	49	1	AN580	6
+2018-01-07 10:55:00	52	6	AN580	7
+2018-02-20 01:29:00	50	5	AN580	9
+2018-01-23 11:03:00	53	1	AN580	4
+2018-01-05 04:53:00	30	8	AN580	3
+2018-01-30 08:49:00	35	5	AN580	2
+2018-01-07 02:49:00	35	8	AN580	4
+2018-02-09 06:30:00	49	8	AN580	7
+2018-02-07 03:54:00	46	1	AN580	1
+2018-02-14 13:57:00	34	6	AN580	2
+2018-01-05 00:09:00	45	5	AN580	7
+2018-02-28 11:22:00	53	6	AN580	6
+2018-01-28 10:21:00	60	8	AN580	8
+2018-02-20 02:04:00	38	9	AN580	7
+2018-01-06 09:50:00	33	5	AN580	8
+2018-01-08 18:45:00	47	1	AN580	6
+2018-02-19 14:42:00	51	5	AN580	3
+2018-01-20 14:13:00	45	8	AN580	9
+2018-01-19 05:28:00	56	1	AN580	9
+2018-01-06 03:30:00	59	8	AN580	7
+2018-01-18 20:40:00	34	8	AN580	9
+2018-01-31 00:38:00	52	3	AN580	5
+2018-02-08 20:15:00	35	3	AN580	7
+2018-02-05 13:50:00	34	7	AN580	10
+2018-02-19 16:04:00	56	5	AN978	9
+2018-02-09 15:26:00	45	3	AN978	9
+2018-02-14 05:12:00	33	9	AN978	4
+2018-02-27 12:57:00	54	10	AN978	4
+2018-01-05 18:51:00	32	9	AN978	7
+2018-02-15 15:18:00	45	6	AN978	8
+2018-02-04 06:56:00	52	6	AN978	2
+2018-01-21 06:29:00	53	8	AN978	2
+2018-02-26 05:43:00	57	4	AN978	7
+2018-01-23 16:18:00	56	4	AN978	2
+2018-01-10 23:53:00	35	7	AN978	4
+2018-01-01 21:04:00	43	4	AN978	4
+2018-02-16 10:48:00	43	1	AN978	10
+2018-02-03 00:00:00	56	8	AN978	10
+2018-02-13 09:30:00	52	3	AN978	3
+2018-01-21 13:17:00	46	5	AN978	2
+\.
+
+
+--
+-- Data for Name: car_order; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.car_order (car_order_id, creating_time, status, cost_of_ride, pick_up_latitide, pick_up_longitude, dist_latitide, dist_longitude, distance, trip_duration, car_license_plate, customer_username, manager_username) FROM stdin;
+1	2018-01-17 12:20:00	0	79	60.2620000000000005	29.8919999999999995	60.2620000000000005	29.8919999999999995	10	96	WK649	louisalucio	chiamurphey
+2	2018-02-22 20:21:00	0	91	60.286999999999999	30.277000000000001	59.6060000000000016	30.4239999999999995	26	94	BE981	taneshastruthers	essiehempel
+3	2018-02-19 11:54:00	0	71	59.5850000000000009	30.2089999999999996	60.078000000000003	29.9819999999999993	25	102	RL003	masonmardis	donniemaskell
+4	2018-02-07 19:32:00	0	92	59.982999999999997	30.3290000000000006	59.9440000000000026	29.8419999999999987	15	96	VS161	hershelsmullen	elfriededittmer
+5	2018-03-01 00:37:00	0	33	59.9799999999999969	30.0590000000000011	60.2890000000000015	30.2409999999999997	29	70	GF138	marcellusmagana	wilburjustiniano
+6	2018-02-06 04:21:00	0	73	59.9450000000000003	29.9349999999999987	60.078000000000003	29.9819999999999993	8	67	ND592	lillythorton	sabrinacoss
+7	2018-02-21 08:53:00	0	60	60.2890000000000015	30.2310000000000016	59.7629999999999981	29.5859999999999985	28	51	VS161	lillythorton	danillewhiteside
+8	2018-01-17 02:57:00	0	64	59.8389999999999986	29.8850000000000016	60.0750000000000028	29.847999999999999	25	73	WK649	lerabreed	elfriededittmer
+9	2018-01-25 20:21:00	0	88	60.4249999999999972	30.1799999999999997	60.3870000000000005	30.1009999999999991	12	118	PX851	mitsuemcconico	joleenjefferis
+10	2018-02-28 16:42:00	0	47	60.1409999999999982	29.9239999999999995	60.2730000000000032	30.3170000000000002	17	57	QP571	hershelsmullen	debrahdeland
+11	2018-02-20 17:39:00	0	75	60.4249999999999972	30.1799999999999997	59.5420000000000016	29.5420000000000016	17	102	BE981	latinaphenix	pameliacavitt
+12	2018-01-29 21:21:00	0	72	60.2730000000000032	30.3170000000000002	59.982999999999997	30.3290000000000006	8	65	PX851	kevenschuller	pameliacavitt
+13	2018-02-15 10:31:00	0	55	59.5309999999999988	30.2809999999999988	60.0529999999999973	30.0670000000000002	25	22	RL003	nathanaelpaylor	consuelotokarz
+14	2018-01-27 01:47:00	0	12	59.8890000000000029	29.7579999999999991	59.5309999999999988	30.2809999999999988	7	66	VS161	lillythorton	debrahdeland
+15	2018-01-02 06:54:00	0	76	59.9500000000000028	29.8290000000000006	59.6450000000000031	30.0180000000000007	28	73	VM615	hershelsmullen	shamekalachance
+16	2018-02-12 12:52:00	0	18	59.9549999999999983	29.5459999999999994	59.828000000000003	30.4480000000000004	28	73	UT042	eugenesacks	judithvillareal
+17	2018-02-16 02:22:00	0	43	59.5850000000000009	30.2089999999999996	60.3340000000000032	29.5070000000000014	23	51	GG939	ozelladay	sierragingras
+19	2018-02-05 17:22:00	0	91	59.6450000000000031	30.0180000000000007	59.8109999999999999	30.2680000000000007	28	107	JL276	kenyarumore	elfriededittmer
+20	2018-01-30 06:38:00	0	94	59.6589999999999989	30.2139999999999986	59.5260000000000034	29.6750000000000007	20	15	GZ961	eugenesacks	ceolafazio
+21	2018-01-21 10:50:00	0	98	60.0360000000000014	30.3140000000000001	60.0769999999999982	30.2920000000000016	11	17	GM220	kevinnuno	madelainesing
+22	2018-02-26 16:08:00	0	61	60.2890000000000015	30.2409999999999997	60.3430000000000035	30.4759999999999991	10	35	GM220	sigridenger	danillewhiteside
+23	2018-02-13 08:36:00	0	40	59.982999999999997	30.3290000000000006	59.6589999999999989	30.2139999999999986	14	21	TJ597	kathlyndotts	donniemaskell
+24	2018-02-28 09:38:00	0	69	60.2779999999999987	29.745000000000001	59.8890000000000029	29.7579999999999991	29	72	NU214	timikanims	julioned
+25	2018-02-14 05:17:00	0	35	59.6439999999999984	30.0199999999999996	59.9440000000000026	29.8419999999999987	12	53	PX851	kevinnuno	joleenjefferis
+26	2018-02-01 18:53:00	0	48	59.7939999999999969	29.6230000000000011	60.0360000000000014	30.3140000000000001	27	38	UT042	nathanaelpaylor	vimilani
+27	2018-02-24 21:13:00	0	72	59.5260000000000034	29.6750000000000007	60.3840000000000003	29.5479999999999983	27	48	ND592	quentindelacruz	valrieburr
+28	2018-02-26 05:43:00	0	45	59.6039999999999992	29.5079999999999991	60.2349999999999994	29.8000000000000007	19	23	ND592	kevenschuller	danillewhiteside
+29	2018-01-15 18:24:00	0	15	60.3049999999999997	29.8129999999999988	59.6060000000000016	30.4239999999999995	8	86	BE981	marcellusmagana	elfriededittmer
+30	2018-01-10 07:11:00	0	100	60.3689999999999998	30.4340000000000011	59.6039999999999992	29.5079999999999991	5	69	QZ906	kevinnuno	valrieburr
+31	2018-01-09 05:50:00	0	17	59.9440000000000026	29.8419999999999987	60.3170000000000002	29.9080000000000013	20	72	VS161	beewommack	consuelotokarz
+32	2018-01-06 22:55:00	0	30	59.7460000000000022	29.6090000000000018	60.0750000000000028	29.847999999999999	25	27	GM220	kashacallen	alexacory
+33	2018-02-02 07:53:00	0	21	59.9350000000000023	30.1999999999999993	60.054000000000002	29.6660000000000004	11	110	QP571	lillythorton	vimilani
+34	2018-01-30 17:45:00	0	30	60.4769999999999968	29.8490000000000002	60.0660000000000025	29.5700000000000003	19	119	VM615	kenyarumore	ceolafazio
+35	2018-01-24 07:41:00	0	16	59.5290000000000035	29.7319999999999993	60.2730000000000032	30.3170000000000002	12	83	QP571	kevinnuno	ceolafazio
+36	2018-01-11 00:13:00	0	86	60.2890000000000015	30.2409999999999997	59.8509999999999991	29.7089999999999996	28	47	GG939	quentindelacruz	judithvillareal
+37	2018-01-15 17:33:00	0	66	59.6060000000000016	30.4239999999999995	59.7289999999999992	30.3599999999999994	28	16	VS161	timikanims	pameliacavitt
+38	2018-01-04 10:46:00	0	26	59.8960000000000008	29.629999999999999	60.3870000000000005	30.1009999999999991	30	59	GZ961	louisalucio	joleenjefferis
+39	2018-01-12 05:14:00	0	65	60.3430000000000035	30.4759999999999991	60.304000000000002	30.4299999999999997	19	44	GF138	nathanaelpaylor	ceolafazio
+40	2018-02-04 12:15:00	0	85	59.5159999999999982	29.5850000000000009	60.3170000000000002	29.9080000000000013	17	26	PX851	quentindelacruz	ceolafazio
+42	2018-02-18 11:44:00	0	25	60.347999999999999	30.4819999999999993	60.2890000000000015	30.2409999999999997	21	30	GZ961	louisalucio	lettybruner
+43	2018-02-23 15:39:00	0	11	59.8980000000000032	29.8939999999999984	59.7220000000000013	29.9080000000000013	18	89	JL276	quentindelacruz	shamekalachance
+44	2018-01-05 04:56:00	0	57	59.8049999999999997	29.5629999999999988	60.2730000000000032	30.3170000000000002	13	87	ND592	masonmardis	sierragingras
+45	2018-02-10 10:17:00	0	39	59.6749999999999972	30.4149999999999991	59.7220000000000013	29.9080000000000013	5	104	VM615	jerrodlupo	elfriededittmer
+46	2018-02-11 16:58:00	0	73	59.7460000000000022	29.6090000000000018	60.0660000000000025	29.5700000000000003	26	54	RL003	eugenesacks	normangreb
+47	2018-02-19 02:16:00	0	21	60.4939999999999998	30.0970000000000013	60.1910000000000025	29.8760000000000012	30	93	ND592	kathlyndotts	lettybruner
+49	2018-01-10 11:33:00	0	43	60.3070000000000022	30.0030000000000001	60.3459999999999965	29.7850000000000001	18	35	QP571	latinaphenix	elfriededittmer
+50	2018-02-16 11:27:00	0	51	60.2349999999999994	29.8000000000000007	59.9500000000000028	29.8290000000000006	10	70	ND592	nathanaelpaylor	fidelshimkus
+52	2018-01-09 16:46:00	0	89	59.8900000000000006	30.468	60.0660000000000025	29.5700000000000003	15	119	PX851	kenyarumore	vimilani
+53	2018-01-26 11:17:00	0	74	60.1910000000000025	29.8760000000000012	59.8800000000000026	30.3539999999999992	27	55	VM615	louisalucio	ceolafazio
+54	2018-01-04 03:23:00	0	40	60.2539999999999978	30.2719999999999985	59.5349999999999966	30.1960000000000015	24	88	QP571	lillythorton	consuelotokarz
+55	2018-02-17 18:44:00	0	72	60.4769999999999968	29.8490000000000002	60.2539999999999978	30.2719999999999985	29	53	PX851	eugenesacks	donniemaskell
+56	2018-01-17 15:48:00	0	22	59.5730000000000004	29.7250000000000014	59.6469999999999985	30.1529999999999987	11	96	RL003	kenyarumore	lettybruner
+57	2018-01-14 22:57:00	0	73	59.8509999999999991	29.7089999999999996	59.8509999999999991	29.7089999999999996	20	70	VM615	ozelladay	valrieburr
+58	2018-01-16 19:03:00	0	72	59.5840000000000032	30.1380000000000017	60.453000000000003	30.1389999999999993	23	76	WK649	kathlyndotts	normangreb
+59	2018-02-03 12:47:00	0	53	59.8890000000000029	29.7579999999999991	60.0360000000000014	30.3140000000000001	27	21	GG939	hershelsmullen	shamekalachance
+60	2018-01-23 03:17:00	0	23	60.402000000000001	29.9220000000000006	60.1910000000000025	29.8760000000000012	13	11	YH116	kathlyndotts	julioned
+61	2018-01-11 07:25:00	0	24	59.7460000000000022	29.6090000000000018	60.2730000000000032	30.3170000000000002	29	113	UT042	chungcottone	elfriededittmer
+18	2018-01-07 04:30:00	0	90	59.8890000000000029	29.7579999999999991	60.347999999999999	30.4819999999999993	10	76	AN978	latinaphenix	normangreb
+48	2018-01-22 00:38:00	0	37	59.8509999999999991	29.7089999999999996	60.0589999999999975	29.6359999999999992	8	92	AN978	lerabreed	nathanielgibb
+62	2018-01-21 03:02:00	0	90	59.6060000000000016	30.4239999999999995	60.4939999999999998	30.0970000000000013	5	31	GM220	masonmardis	judithvillareal
+63	2018-01-17 20:15:00	0	45	59.8400000000000034	29.8069999999999986	59.9799999999999969	30.0590000000000011	30	83	VS161	marcellusmagana	valrieburr
+64	2018-02-26 16:05:00	0	24	59.8389999999999986	29.8850000000000016	60.0750000000000028	29.847999999999999	13	44	RL003	jerrodlupo	ceolafazio
+66	2018-02-24 22:03:00	0	31	60.3070000000000022	30.0030000000000001	59.6450000000000031	30.0180000000000007	11	63	VS161	eugenesacks	wilburjustiniano
+67	2018-02-01 13:57:00	0	85	60.4249999999999972	30.1799999999999997	59.9799999999999969	30.0590000000000011	26	92	QZ906	springsergio	essiehempel
+68	2018-01-06 19:50:00	0	51	59.5900000000000034	29.5130000000000017	59.7460000000000022	29.6090000000000018	14	96	GF138	lillythorton	elfriededittmer
+69	2018-01-08 19:38:00	0	50	59.6920000000000002	30.2169999999999987	60.3689999999999998	30.4340000000000011	30	117	VS161	louisalucio	pameliacavitt
+70	2018-01-17 23:04:00	0	62	59.5290000000000035	30.4409999999999989	59.828000000000003	30.4480000000000004	27	108	GM220	lillythorton	sabrinacoss
+71	2018-02-07 00:06:00	0	98	60.1910000000000025	29.8760000000000012	60.3329999999999984	30.3909999999999982	22	64	YH116	ozelladay	lettybruner
+72	2018-01-14 15:59:00	0	19	59.8960000000000008	29.629999999999999	60.2629999999999981	29.7830000000000013	15	27	GG939	lillythorton	normangreb
+73	2018-02-13 00:40:00	0	52	59.6450000000000031	30.0180000000000007	60.453000000000003	30.1389999999999993	10	54	WK649	marcellusmagana	wilburjustiniano
+74	2018-01-16 10:42:00	0	54	60.0360000000000014	30.3140000000000001	59.7629999999999981	29.5859999999999985	18	50	GZ961	shaynacropp	ceolafazio
+75	2018-02-21 17:29:00	0	56	60.3870000000000005	30.1009999999999991	59.6060000000000016	30.4239999999999995	18	109	GF138	taneshastruthers	julioned
+76	2018-01-12 19:57:00	0	55	59.6039999999999992	29.5079999999999991	60.3870000000000005	30.1009999999999991	20	27	VM615	quentindelacruz	sierragingras
+77	2018-02-05 08:46:00	0	91	60.3430000000000035	30.4759999999999991	59.5309999999999988	30.2809999999999988	21	105	NU214	lillythorton	vimilani
+78	2018-02-02 01:21:00	0	78	59.7289999999999992	30.3599999999999994	60.0589999999999975	29.6359999999999992	22	64	WK649	latinaphenix	julioned
+79	2018-01-15 17:06:00	0	11	60.1910000000000025	29.8760000000000012	59.5159999999999982	29.5850000000000009	21	71	QZ906	lerabreed	elfriededittmer
+82	2018-02-04 07:29:00	0	88	59.8400000000000034	29.8069999999999986	60.3689999999999998	30.4340000000000011	20	48	GF138	masonmardis	consuelotokarz
+83	2018-01-25 07:11:00	0	60	60.3430000000000035	30.4759999999999991	59.5429999999999993	30.3120000000000012	28	103	RL003	jerrodlupo	sierragingras
+84	2018-02-01 22:36:00	0	25	60.054000000000002	29.6660000000000004	59.5840000000000032	30.1380000000000017	11	20	TJ597	timikanims	debrahdeland
+85	2018-02-12 00:57:00	0	23	59.8980000000000032	29.8939999999999984	59.7629999999999981	29.5859999999999985	25	46	JL276	latinaphenix	danillewhiteside
+86	2018-02-11 12:30:00	0	20	59.5840000000000032	30.1380000000000017	60.2890000000000015	30.2409999999999997	20	116	GG939	lerabreed	elfriededittmer
+87	2018-01-05 23:55:00	0	56	59.6980000000000004	30.0120000000000005	59.9799999999999969	30.0590000000000011	5	113	QZ906	lerabreed	joleenjefferis
+88	2018-01-05 20:40:00	0	54	60.347999999999999	30.4819999999999993	59.7289999999999992	30.3599999999999994	20	116	JL276	latinaphenix	julioned
+89	2018-01-30 15:10:00	0	65	60.347999999999999	30.4819999999999993	60.3070000000000022	30.0030000000000001	18	82	YH116	nathanaelpaylor	judithvillareal
+90	2018-01-05 16:37:00	0	58	60.2370000000000019	30.1509999999999998	59.5840000000000032	30.1380000000000017	11	105	VM615	kenyarumore	nathanielgibb
+91	2018-01-24 00:18:00	0	19	60.1749999999999972	29.8460000000000001	59.8049999999999997	29.5629999999999988	12	67	UT042	lerabreed	danillewhiteside
+92	2018-01-25 18:00:00	0	62	60.2620000000000005	29.8919999999999995	59.8049999999999997	29.5629999999999988	26	33	RL003	marcellusmagana	donniemaskell
+93	2018-02-02 07:08:00	0	72	60.2779999999999987	29.745000000000001	60.4939999999999998	30.0970000000000013	27	45	GG939	beewommack	sabrinacoss
+94	2018-01-12 12:47:00	0	38	60.402000000000001	29.9220000000000006	59.9309999999999974	29.5199999999999996	15	76	QZ906	jerrodlupo	nathanielgibb
+95	2018-02-05 02:02:00	0	55	60.0519999999999996	29.8249999999999993	60.0660000000000025	29.5700000000000003	23	19	GF138	mitsuemcconico	donniemaskell
+96	2018-01-18 19:08:00	0	55	60.0529999999999973	30.0949999999999989	59.6749999999999972	30.4149999999999991	14	28	QP571	springsergio	sierragingras
+97	2018-01-25 23:38:00	0	94	59.5309999999999988	30.2809999999999988	60.0750000000000028	29.847999999999999	29	16	JL276	springsergio	sierragingras
+98	2018-01-19 19:45:00	0	59	60.1910000000000025	29.8760000000000012	59.8049999999999997	29.5629999999999988	7	32	GM220	kenyarumore	judithvillareal
+99	2018-02-14 06:20:00	0	27	60.078000000000003	29.9819999999999993	59.902000000000001	30.2010000000000005	10	59	VS161	kevenschuller	normangreb
+100	2018-02-01 19:47:00	0	53	59.5840000000000032	30.1380000000000017	59.9500000000000028	29.8290000000000006	21	86	QZ906	quentindelacruz	joleenjefferis
+102	2018-02-13 08:28:00	0	92	59.6330000000000027	29.8200000000000003	60.0589999999999975	29.6359999999999992	27	110	QP571	jerrodlupo	ceolafazio
+104	2018-01-02 02:34:00	0	52	60.2539999999999978	30.2719999999999985	59.982999999999997	30.3290000000000006	11	70	NU214	lerabreed	consuelotokarz
+105	2018-01-24 07:54:00	0	37	59.8800000000000026	30.3539999999999992	60.3430000000000035	30.4759999999999991	22	16	VM615	hershelsmullen	nathanielgibb
+106	2018-02-21 15:33:00	0	90	60.078000000000003	29.9819999999999993	60.286999999999999	30.277000000000001	27	102	TJ597	eugenesacks	sabrinacoss
+107	2018-01-01 04:00:00	0	16	60.4769999999999968	29.8490000000000002	59.6749999999999972	30.4149999999999991	20	20	PX851	jerrodlupo	ceolafazio
+108	2018-02-14 22:26:00	0	66	60.286999999999999	30.277000000000001	60.078000000000003	29.9819999999999993	11	104	PX851	kashacallen	normangreb
+109	2018-02-17 21:31:00	0	76	60.2730000000000032	30.3170000000000002	59.6039999999999992	29.5079999999999991	16	17	YH116	eugenesacks	vimilani
+110	2018-02-01 19:39:00	0	30	60.078000000000003	29.9819999999999993	59.828000000000003	30.4480000000000004	8	75	JL276	jerrodlupo	ceolafazio
+112	2018-02-14 04:45:00	0	40	59.6330000000000027	29.8200000000000003	60.4939999999999998	30.0970000000000013	30	50	ND592	hershelsmullen	sabrinacoss
+114	2018-02-20 08:41:00	0	14	59.9500000000000028	29.8290000000000006	59.9549999999999983	29.5459999999999994	25	114	NU214	nathanaelpaylor	joleenjefferis
+115	2018-01-12 10:15:00	0	63	60.3840000000000003	29.5479999999999983	60.4470000000000027	30.1320000000000014	25	33	VS161	beewommack	normangreb
+116	2018-01-04 10:52:00	0	48	60.0750000000000028	29.847999999999999	59.8960000000000008	29.629999999999999	19	45	RL003	springsergio	nathanielgibb
+117	2018-01-13 15:38:00	0	67	59.5850000000000009	30.2089999999999996	60.0529999999999973	30.0670000000000002	8	46	UT042	marcellusmagana	alexacory
+118	2018-02-05 10:59:00	0	51	60.1749999999999972	29.8460000000000001	60.2620000000000005	29.8919999999999995	5	108	NU214	lerabreed	ceolafazio
+120	2018-02-07 13:52:00	0	26	60.2629999999999981	29.7830000000000013	59.8890000000000029	29.7579999999999991	15	81	VS161	beewommack	danillewhiteside
+121	2018-01-27 19:44:00	0	13	59.6920000000000002	30.2169999999999987	60.0519999999999996	29.8249999999999993	14	102	BE981	marcellusmagana	vimilani
+122	2018-02-21 23:46:00	0	78	59.9450000000000003	29.9349999999999987	59.9450000000000003	29.9349999999999987	13	111	UT042	kenyarumore	normangreb
+123	2018-01-03 13:17:00	0	71	60.1910000000000025	29.8760000000000012	59.8900000000000006	30.468	19	119	GZ961	kathlyndotts	donniemaskell
+103	2018-01-30 02:17:00	0	71	59.6980000000000004	30.0120000000000005	59.6880000000000024	29.7040000000000006	26	46	AN978	jerrodlupo	danillewhiteside
+119	2018-02-10 18:08:00	0	82	60.453000000000003	30.1389999999999993	59.6450000000000031	30.0180000000000007	23	57	AN978	kenyarumore	normangreb
+124	2018-02-27 04:21:00	0	82	59.6039999999999992	29.5079999999999991	59.5840000000000032	30.1380000000000017	15	56	TJ597	kevinnuno	lettybruner
+125	2018-01-12 04:19:00	0	11	60.0859999999999985	29.5779999999999994	60.2890000000000015	30.2409999999999997	10	48	ND592	mitsuemcconico	shamekalachance
+126	2018-01-05 20:05:00	0	19	60.3340000000000032	29.5070000000000014	59.8109999999999999	30.2680000000000007	8	21	TJ597	kenyarumore	shamekalachance
+127	2018-01-23 06:00:00	0	65	59.9500000000000028	29.8290000000000006	59.8389999999999986	29.8850000000000016	23	106	VM615	kevenschuller	essiehempel
+128	2018-02-10 23:15:00	0	89	60.1850000000000023	29.5539999999999985	60.453000000000003	30.1389999999999993	18	39	VS161	kenyarumore	normangreb
+129	2018-02-15 13:01:00	0	15	60.4470000000000027	30.1320000000000014	60.4939999999999998	30.0970000000000013	17	80	JL276	sigridenger	alexacory
+130	2018-01-23 17:14:00	0	79	60.054000000000002	29.6660000000000004	60.1910000000000025	29.8760000000000012	6	20	GZ961	nathanaelpaylor	essiehempel
+131	2018-01-21 20:48:00	0	60	60.0529999999999973	30.0949999999999989	59.982999999999997	30.3290000000000006	28	70	ND592	hershelsmullen	lettybruner
+132	2018-01-23 08:45:00	0	93	59.9799999999999969	30.0590000000000011	59.5290000000000035	30.4409999999999989	18	91	QP571	sigridenger	sabrinacoss
+133	2018-01-10 14:30:00	0	71	59.5790000000000006	30.0519999999999996	60.347999999999999	30.4819999999999993	7	109	TJ597	nathanaelpaylor	normangreb
+134	2018-02-13 16:48:00	0	14	60.0529999999999973	30.0949999999999989	59.5889999999999986	29.9390000000000001	5	33	VS161	sigridenger	joleenjefferis
+135	2018-02-23 13:14:00	0	62	59.8960000000000008	29.629999999999999	60.286999999999999	30.277000000000001	27	115	GF138	chungcottone	chiamurphey
+136	2018-01-20 03:55:00	0	75	59.6379999999999981	30.4720000000000013	59.5309999999999988	30.2809999999999988	6	75	PX851	shaynacropp	sierragingras
+137	2018-01-09 01:55:00	0	78	59.9500000000000028	29.8290000000000006	60.3070000000000022	30.0030000000000001	10	109	VS161	louisalucio	donniemaskell
+138	2018-01-16 12:41:00	0	45	59.5290000000000035	29.7319999999999993	60.1409999999999982	29.9239999999999995	7	88	GG939	lerabreed	lettybruner
+139	2018-02-04 17:25:00	0	49	60.0769999999999982	30.2920000000000016	60.2370000000000019	30.1509999999999998	5	83	NU214	masonmardis	sabrinacoss
+140	2018-01-26 12:57:00	0	45	60.0859999999999985	29.5779999999999994	59.8049999999999997	29.5629999999999988	13	91	BE981	kevenschuller	wilburjustiniano
+141	2018-02-27 13:58:00	0	10	59.5349999999999966	30.1960000000000015	60.4410000000000025	30.4540000000000006	16	68	UT042	marcellusmagana	alexacory
+142	2018-01-07 08:45:00	0	58	60.3340000000000032	29.5070000000000014	60.2539999999999978	30.2719999999999985	22	92	UT042	lerabreed	debrahdeland
+143	2018-01-01 18:38:00	0	85	59.6749999999999972	30.4149999999999991	60.3689999999999998	30.4340000000000011	15	54	RL003	jerrodlupo	elfriededittmer
+144	2018-01-07 02:30:00	0	33	60.3689999999999998	30.4340000000000011	59.6060000000000016	30.4239999999999995	5	64	VS161	ozelladay	joleenjefferis
+145	2018-01-07 13:41:00	0	42	60.1749999999999972	29.8460000000000001	59.6980000000000004	30.0120000000000005	17	114	YH116	mitsuemcconico	alexacory
+146	2018-01-26 02:21:00	0	30	59.5859999999999985	29.6539999999999999	59.6439999999999984	30.0199999999999996	9	35	PX851	ozelladay	sierragingras
+147	2018-01-16 00:37:00	0	96	59.5309999999999988	30.2809999999999988	59.6749999999999972	30.4149999999999991	25	63	GZ961	jerrodlupo	valrieburr
+148	2018-02-13 08:50:00	0	96	59.5589999999999975	29.8629999999999995	60.3049999999999997	29.8129999999999988	7	43	GM220	nathanaelpaylor	shamekalachance
+150	2018-02-21 17:42:00	0	81	60.4410000000000025	30.4540000000000006	59.902000000000001	30.2010000000000005	7	44	BE981	kevinnuno	chiamurphey
+151	2018-02-07 02:55:00	0	55	59.9350000000000023	30.1999999999999993	60.3840000000000003	29.5479999999999983	13	82	YH116	chungcottone	chiamurphey
+152	2018-02-18 17:48:00	0	57	59.8389999999999986	29.8850000000000016	59.5900000000000034	29.5130000000000017	28	103	VM615	sigridenger	fidelshimkus
+153	2018-02-08 14:26:00	0	31	59.5309999999999988	30.2809999999999988	59.6920000000000002	30.2169999999999987	17	42	GF138	kevinnuno	shamekalachance
+154	2018-02-22 10:59:00	0	31	59.5159999999999982	29.5850000000000009	59.7460000000000022	29.6090000000000018	15	86	JL276	ozelladay	lettybruner
+155	2018-01-12 23:03:00	0	69	60.2890000000000015	30.2409999999999997	59.6749999999999972	30.4149999999999991	22	113	PX851	shaynacropp	lettybruner
+156	2018-02-17 09:10:00	0	44	59.5840000000000032	30.1380000000000017	60.2890000000000015	30.2409999999999997	29	110	VM615	mitsuemcconico	fidelshimkus
+157	2018-02-27 07:35:00	0	96	60.4939999999999998	30.0970000000000013	59.5159999999999982	29.5850000000000009	20	113	RL003	mitsuemcconico	chiamurphey
+158	2018-02-05 21:14:00	0	45	59.9350000000000023	30.1999999999999993	60.1910000000000025	29.8760000000000012	26	15	QZ906	kenyarumore	joleenjefferis
+159	2018-01-22 14:10:00	0	87	60.0750000000000028	29.847999999999999	59.5159999999999982	29.5850000000000009	19	104	GF138	nathanaelpaylor	danillewhiteside
+160	2018-02-19 13:49:00	0	34	59.5349999999999966	30.1960000000000015	59.8400000000000034	29.8069999999999986	29	87	VM615	masonmardis	wilburjustiniano
+161	2018-01-21 00:23:00	0	35	59.8800000000000026	30.3539999999999992	60.3170000000000002	29.9080000000000013	12	117	QZ906	timikanims	danillewhiteside
+162	2018-02-20 02:39:00	0	40	60.2539999999999978	30.2719999999999985	60.402000000000001	29.9220000000000006	18	57	ND592	kevinnuno	wilburjustiniano
+163	2018-01-10 07:41:00	0	81	59.828000000000003	30.4480000000000004	59.7939999999999969	29.6230000000000011	12	23	VM615	taneshastruthers	judithvillareal
+164	2018-01-24 17:04:00	0	23	60.304000000000002	30.4299999999999997	60.3870000000000005	30.1009999999999991	27	43	YH116	cedricguilford	sierragingras
+165	2018-02-09 11:23:00	0	19	59.982999999999997	30.3290000000000006	60.2629999999999981	29.7830000000000013	23	75	NU214	beewommack	shamekalachance
+166	2018-02-09 16:34:00	0	63	60.3329999999999984	30.3909999999999982	60.078000000000003	29.9819999999999993	24	80	VM615	timikanims	fidelshimkus
+167	2018-01-23 10:28:00	0	61	59.9440000000000026	29.8419999999999987	60.3430000000000035	30.4759999999999991	30	116	ND592	shaynacropp	madelainesing
+168	2018-02-22 04:43:00	0	68	59.5309999999999988	30.2809999999999988	60.3459999999999965	29.7850000000000001	22	21	ND592	quentindelacruz	wilburjustiniano
+169	2018-02-27 01:52:00	0	28	60.0529999999999973	30.0670000000000002	59.6450000000000031	30.0180000000000007	6	12	BE981	marcellusmagana	ceolafazio
+170	2018-01-24 18:00:00	0	78	60.0750000000000028	29.847999999999999	60.078000000000003	29.9819999999999993	11	110	VS161	kashacallen	julioned
+171	2018-01-14 05:12:00	0	43	60.2539999999999978	30.2719999999999985	59.8400000000000034	29.8069999999999986	18	79	VS161	timikanims	debrahdeland
+173	2018-02-17 20:17:00	0	32	59.6450000000000031	30.0180000000000007	60.3340000000000032	29.5070000000000014	27	59	PX851	sigridenger	wilburjustiniano
+174	2018-01-06 03:19:00	0	92	60.2629999999999981	29.7830000000000013	59.8960000000000008	29.629999999999999	18	97	GM220	masonmardis	shamekalachance
+175	2018-02-28 00:41:00	0	36	59.6469999999999985	30.1529999999999987	60.304000000000002	30.4299999999999997	27	56	YH116	beewommack	ceolafazio
+176	2018-01-21 04:02:00	0	87	59.9500000000000028	29.8290000000000006	60.0519999999999996	29.8249999999999993	25	91	ND592	jerrodlupo	wilburjustiniano
+177	2018-02-24 12:34:00	0	10	60.2370000000000019	30.1509999999999998	59.8960000000000008	29.629999999999999	12	40	GM220	kenyarumore	judithvillareal
+178	2018-02-19 07:43:00	0	77	60.0660000000000025	29.5700000000000003	60.347999999999999	30.4819999999999993	25	14	QZ906	kathlyndotts	judithvillareal
+180	2018-02-04 05:59:00	0	81	60.3870000000000005	30.1009999999999991	60.2629999999999981	29.7830000000000013	19	84	GG939	latinaphenix	normangreb
+181	2018-02-24 03:19:00	0	37	59.8049999999999997	29.5629999999999988	60.4939999999999998	30.0970000000000013	24	41	QP571	kevinnuno	wilburjustiniano
+183	2018-01-06 09:03:00	0	93	59.9309999999999974	29.5199999999999996	60.0750000000000028	29.847999999999999	28	44	TJ597	cedricguilford	pameliacavitt
+184	2018-02-17 04:13:00	0	22	59.8389999999999986	29.8850000000000016	59.8509999999999991	29.7089999999999996	20	84	VM615	sigridenger	nathanielgibb
+185	2018-01-20 14:34:00	0	97	59.8389999999999986	29.8850000000000016	60.2730000000000032	30.3170000000000002	12	37	VS161	quentindelacruz	alexacory
+179	2018-01-28 01:55:00	0	26	60.3340000000000032	29.5070000000000014	59.5309999999999988	30.2809999999999988	8	35	AN978	eugenesacks	ceolafazio
+186	2018-01-09 02:42:00	0	95	60.3170000000000002	29.9080000000000013	60.2730000000000032	30.3170000000000002	17	40	GZ961	cedricguilford	danillewhiteside
+187	2018-01-25 14:37:00	0	33	59.6330000000000027	29.8200000000000003	60.4939999999999998	30.0970000000000013	25	65	GF138	eugenesacks	madelainesing
+188	2018-01-27 00:20:00	0	47	59.6469999999999985	30.1529999999999987	59.5349999999999966	30.1960000000000015	7	41	PX851	masonmardis	ceolafazio
+189	2018-01-06 20:30:00	0	53	60.1850000000000023	29.5539999999999985	59.8900000000000006	30.468	7	26	BE981	marcellusmagana	shamekalachance
+190	2018-01-16 14:57:00	0	62	60.054000000000002	29.6660000000000004	59.5290000000000035	29.7319999999999993	18	20	VS161	quentindelacruz	debrahdeland
+191	2018-02-27 05:53:00	0	13	60.0579999999999998	29.5689999999999991	59.9799999999999969	30.0590000000000011	8	79	VM615	marcellusmagana	valrieburr
+192	2018-01-18 02:05:00	0	90	60.2169999999999987	29.9899999999999984	59.5429999999999993	30.3120000000000012	29	75	GG939	lerabreed	donniemaskell
+193	2018-02-24 16:09:00	0	70	60.2169999999999987	29.9899999999999984	60.3430000000000035	30.4759999999999991	26	51	RL003	kathlyndotts	sierragingras
+194	2018-02-10 17:07:00	0	73	60.3430000000000035	30.4759999999999991	59.5309999999999988	30.2809999999999988	15	120	TJ597	beewommack	joleenjefferis
+195	2018-01-11 08:31:00	0	72	60.054000000000002	29.6660000000000004	59.8109999999999999	30.2680000000000007	8	61	QP571	eugenesacks	alexacory
+196	2018-01-14 12:10:00	0	54	60.0660000000000025	29.5700000000000003	59.8980000000000032	29.8939999999999984	6	60	GF138	kevinnuno	shamekalachance
+197	2018-02-20 22:03:00	0	79	60.3329999999999984	30.3909999999999982	60.453000000000003	30.1389999999999993	11	19	VM615	masonmardis	sabrinacoss
+198	2018-02-06 01:22:00	0	13	59.7460000000000022	29.6090000000000018	59.6920000000000002	30.2169999999999987	26	32	VM615	hershelsmullen	shamekalachance
+199	2018-01-02 13:22:00	0	54	60.4769999999999968	29.8490000000000002	59.8800000000000026	30.3539999999999992	7	39	RL003	louisalucio	pameliacavitt
+200	2018-02-18 13:35:00	0	46	60.4769999999999968	29.8490000000000002	60.2730000000000032	30.3170000000000002	21	48	TJ597	kenyarumore	vimilani
+201	2018-01-14 11:29:00	0	63	59.8049999999999997	29.5629999999999988	59.8980000000000032	29.8939999999999984	6	109	GG939	eugenesacks	wilburjustiniano
+203	2018-01-08 17:58:00	0	27	59.9450000000000003	29.9349999999999987	59.5790000000000006	30.0519999999999996	9	110	GM220	timikanims	danillewhiteside
+204	2018-01-17 18:10:00	0	68	60.1409999999999982	29.9239999999999995	59.6980000000000004	30.0120000000000005	19	85	YH116	beewommack	lettybruner
+205	2018-02-17 13:57:00	0	30	60.402000000000001	29.9220000000000006	59.8960000000000008	29.629999999999999	26	62	GZ961	mitsuemcconico	alexacory
+206	2018-01-02 12:30:00	0	81	59.5260000000000034	29.6750000000000007	60.078000000000003	29.9819999999999993	27	24	GZ961	marcellusmagana	julioned
+207	2018-01-09 03:09:00	0	39	59.5900000000000034	29.5130000000000017	60.3070000000000022	30.0030000000000001	20	43	JL276	latinaphenix	wilburjustiniano
+208	2018-02-13 03:25:00	0	21	59.5850000000000009	30.2089999999999996	60.4769999999999968	29.8490000000000002	7	16	QP571	nathanaelpaylor	sabrinacoss
+209	2018-01-17 17:16:00	0	74	59.5309999999999988	30.2809999999999988	59.9309999999999974	29.5199999999999996	8	11	NU214	quentindelacruz	alexacory
+210	2018-01-23 16:06:00	0	91	60.3170000000000002	29.9080000000000013	60.402000000000001	29.9220000000000006	20	67	QP571	springsergio	alexacory
+211	2018-01-14 09:01:00	0	33	59.9350000000000023	30.1999999999999993	59.9350000000000023	30.1999999999999993	7	66	VS161	lerabreed	lettybruner
+212	2018-01-15 17:39:00	0	11	59.5850000000000009	30.2089999999999996	60.453000000000003	30.1389999999999993	23	27	GF138	mitsuemcconico	shamekalachance
+213	2018-01-05 13:31:00	0	20	60.2370000000000019	30.1509999999999998	60.3070000000000022	30.0030000000000001	10	57	VS161	sigridenger	joleenjefferis
+214	2018-01-04 15:41:00	0	89	60.453000000000003	30.1389999999999993	60.2890000000000015	30.2409999999999997	24	80	QP571	kevenschuller	judithvillareal
+215	2018-02-10 14:36:00	0	93	60.4410000000000025	30.4540000000000006	60.1409999999999982	29.9239999999999995	26	59	YH116	taneshastruthers	elfriededittmer
+216	2018-02-17 11:16:00	0	75	60.0739999999999981	30.4229999999999983	59.5290000000000035	30.4409999999999989	11	55	WK649	timikanims	nathanielgibb
+217	2018-02-28 20:22:00	0	10	59.8890000000000029	29.7579999999999991	60.453000000000003	30.1389999999999993	11	28	GF138	cedricguilford	julioned
+219	2018-02-13 22:01:00	0	10	60.0529999999999973	30.0670000000000002	59.9440000000000026	29.8419999999999987	11	43	QZ906	springsergio	donniemaskell
+220	2018-02-12 22:12:00	0	21	60.402000000000001	29.9220000000000006	60.0859999999999985	29.5779999999999994	21	37	UT042	kathlyndotts	elfriededittmer
+221	2018-02-19 17:34:00	0	48	59.6920000000000002	30.2169999999999987	60.2349999999999994	29.8000000000000007	10	90	VM615	ozelladay	joleenjefferis
+222	2018-01-07 23:48:00	0	18	59.5290000000000035	30.4409999999999989	59.902000000000001	30.2010000000000005	13	16	QZ906	lerabreed	consuelotokarz
+223	2018-01-14 08:42:00	0	44	59.5730000000000004	29.7250000000000014	59.902000000000001	30.2010000000000005	12	95	ND592	chungcottone	sabrinacoss
+224	2018-02-02 09:20:00	0	13	59.6469999999999985	30.1529999999999987	59.7629999999999981	29.5859999999999985	9	27	QZ906	quentindelacruz	sabrinacoss
+225	2018-01-09 07:05:00	0	44	59.9450000000000003	29.9349999999999987	59.5850000000000009	30.2089999999999996	23	19	UT042	shaynacropp	julioned
+226	2018-01-26 01:24:00	0	48	59.8960000000000008	29.629999999999999	60.3329999999999984	30.3909999999999982	6	69	GG939	mitsuemcconico	vimilani
+227	2018-01-06 22:07:00	0	75	59.6880000000000024	29.7040000000000006	59.6749999999999972	30.4149999999999991	30	32	UT042	hershelsmullen	sierragingras
+228	2018-02-17 18:58:00	0	66	60.2349999999999994	29.8000000000000007	59.5859999999999985	29.6539999999999999	16	118	QZ906	mitsuemcconico	essiehempel
+229	2018-01-16 10:36:00	0	31	59.7460000000000022	29.6090000000000018	60.4769999999999968	29.8490000000000002	17	115	GZ961	eugenesacks	danillewhiteside
+230	2018-01-03 08:42:00	0	53	59.8800000000000026	30.3539999999999992	59.9440000000000026	29.8419999999999987	6	62	VS161	jerrodlupo	ceolafazio
+231	2018-01-02 07:56:00	0	82	60.3070000000000022	30.0030000000000001	59.6980000000000004	30.0120000000000005	14	19	ND592	kathlyndotts	joleenjefferis
+232	2018-01-24 20:18:00	0	55	59.8389999999999986	29.8850000000000016	59.982999999999997	30.3290000000000006	17	85	GZ961	kenyarumore	fidelshimkus
+233	2018-01-24 01:27:00	0	29	59.6439999999999984	30.0199999999999996	60.3070000000000022	30.0030000000000001	13	27	NU214	kevenschuller	pameliacavitt
+235	2018-02-22 12:28:00	0	55	59.9450000000000003	29.9349999999999987	60.2730000000000032	30.3170000000000002	27	104	GG939	chungcottone	sabrinacoss
+236	2018-01-04 22:45:00	0	73	59.6589999999999989	30.2139999999999986	60.3689999999999998	30.4340000000000011	18	89	NU214	quentindelacruz	fidelshimkus
+237	2018-02-22 09:13:00	0	81	59.7629999999999981	29.5859999999999985	59.6920000000000002	30.2169999999999987	22	71	GM220	kevenschuller	shamekalachance
+238	2018-02-18 21:19:00	0	91	60.0589999999999975	29.6359999999999992	60.2629999999999981	29.7830000000000013	12	57	ND592	masonmardis	debrahdeland
+239	2018-01-31 07:20:00	0	64	60.2620000000000005	29.8919999999999995	59.5900000000000034	29.5130000000000017	6	16	GM220	kevenschuller	fidelshimkus
+240	2018-02-06 15:08:00	0	61	60.4769999999999968	29.8490000000000002	59.7629999999999981	29.5859999999999985	28	48	BE981	marcellusmagana	chiamurphey
+241	2018-01-01 12:58:00	0	76	60.2349999999999994	29.8000000000000007	60.1749999999999972	29.8460000000000001	27	18	GZ961	quentindelacruz	julioned
+242	2018-01-16 05:07:00	0	99	59.982999999999997	30.3290000000000006	59.6439999999999984	30.0199999999999996	22	18	GG939	kathlyndotts	debrahdeland
+243	2018-01-27 07:12:00	0	85	59.5290000000000035	29.7319999999999993	59.5589999999999975	29.8629999999999995	21	115	GZ961	kashacallen	valrieburr
+244	2018-01-31 10:58:00	0	25	60.3340000000000032	29.5070000000000014	60.2779999999999987	29.745000000000001	10	90	GG939	louisalucio	elfriededittmer
+245	2018-02-09 17:49:00	0	80	60.286999999999999	30.277000000000001	59.8960000000000008	29.629999999999999	13	93	UT042	quentindelacruz	donniemaskell
+246	2018-02-21 10:49:00	0	90	59.7939999999999969	29.6230000000000011	59.6450000000000031	30.0180000000000007	20	31	YH116	ozelladay	consuelotokarz
+202	2018-01-12 00:22:00	0	60	60.4470000000000027	30.1320000000000014	59.8890000000000029	29.7579999999999991	19	120	AN978	louisalucio	pameliacavitt
+247	2018-01-03 07:28:00	0	11	60.2539999999999978	30.2719999999999985	59.5790000000000006	30.0519999999999996	8	27	GZ961	taneshastruthers	madelainesing
+248	2018-01-03 09:17:00	0	59	60.2349999999999994	29.8000000000000007	60.0750000000000028	29.847999999999999	29	55	VS161	kashacallen	wilburjustiniano
+249	2018-01-17 09:15:00	0	70	59.5840000000000032	30.1380000000000017	59.5790000000000006	30.0519999999999996	9	17	GG939	quentindelacruz	essiehempel
+251	2018-01-13 15:28:00	0	42	60.2890000000000015	30.2310000000000016	59.9549999999999983	29.5459999999999994	24	36	RL003	marcellusmagana	sierragingras
+252	2018-01-17 22:32:00	0	88	60.054000000000002	29.6660000000000004	60.304000000000002	30.4299999999999997	24	58	GG939	masonmardis	donniemaskell
+253	2018-02-23 17:41:00	0	60	60.2779999999999987	29.745000000000001	59.5309999999999988	30.2809999999999988	11	59	BE981	nathanaelpaylor	madelainesing
+254	2018-01-14 19:27:00	0	42	60.3430000000000035	30.4759999999999991	59.5900000000000034	29.5130000000000017	22	53	QP571	kenyarumore	shamekalachance
+256	2018-01-26 08:54:00	0	26	60.3329999999999984	30.3909999999999982	60.3070000000000022	30.0030000000000001	5	55	RL003	marcellusmagana	julioned
+257	2018-01-06 02:58:00	0	30	59.8400000000000034	29.8069999999999986	59.8980000000000032	29.8939999999999984	17	117	BE981	louisalucio	alexacory
+258	2018-01-31 02:05:00	0	74	60.1749999999999972	29.8460000000000001	60.3049999999999997	29.8129999999999988	6	73	YH116	jerrodlupo	normangreb
+259	2018-01-10 06:28:00	0	96	59.5159999999999982	29.5850000000000009	60.304000000000002	30.4299999999999997	22	71	QP571	beewommack	sabrinacoss
+260	2018-01-30 07:20:00	0	25	60.3170000000000002	29.9080000000000013	59.5290000000000035	29.7319999999999993	26	58	UT042	cedricguilford	chiamurphey
+261	2018-02-14 17:12:00	0	44	59.8509999999999991	29.7089999999999996	59.5260000000000034	29.6750000000000007	30	77	QZ906	hershelsmullen	lettybruner
+262	2018-01-23 16:09:00	0	82	60.0519999999999996	29.8249999999999993	59.9309999999999974	29.5199999999999996	25	112	BE981	hershelsmullen	judithvillareal
+263	2018-01-26 18:25:00	0	70	59.8900000000000006	30.468	60.3340000000000032	29.5070000000000014	22	39	VM615	hershelsmullen	sierragingras
+265	2018-02-03 19:39:00	0	45	60.2890000000000015	30.2310000000000016	60.3840000000000003	29.5479999999999983	16	69	BE981	quentindelacruz	lettybruner
+266	2018-02-02 19:15:00	0	82	59.9500000000000028	29.8290000000000006	59.5900000000000034	29.5130000000000017	16	95	TJ597	kashacallen	joleenjefferis
+267	2018-01-18 05:03:00	0	80	59.5429999999999993	30.3120000000000012	60.2539999999999978	30.2719999999999985	6	105	QZ906	springsergio	julioned
+268	2018-01-01 22:11:00	0	23	60.0360000000000014	30.3140000000000001	60.3870000000000005	30.1009999999999991	21	70	BE981	kevenschuller	chiamurphey
+269	2018-02-25 07:17:00	0	33	60.304000000000002	30.4299999999999997	60.4249999999999972	30.1799999999999997	5	75	VS161	kevinnuno	danillewhiteside
+270	2018-02-04 02:04:00	0	33	60.2349999999999994	29.8000000000000007	59.9450000000000003	29.9349999999999987	29	101	RL003	chungcottone	lettybruner
+271	2018-02-16 15:16:00	0	87	60.3049999999999997	29.8129999999999988	59.7220000000000013	29.9080000000000013	24	74	VM615	latinaphenix	elfriededittmer
+272	2018-02-14 20:52:00	0	24	60.3870000000000005	30.1009999999999991	60.2890000000000015	30.2409999999999997	29	58	ND592	mitsuemcconico	danillewhiteside
+273	2018-01-08 17:23:00	0	40	60.0589999999999975	29.6359999999999992	59.828000000000003	30.4480000000000004	28	115	WK649	shaynacropp	joleenjefferis
+274	2018-01-09 22:16:00	0	71	59.6589999999999989	30.2139999999999986	60.0589999999999975	29.6359999999999992	10	118	QP571	kenyarumore	debrahdeland
+275	2018-02-16 13:11:00	0	71	60.0589999999999975	29.6359999999999992	60.2370000000000019	30.1509999999999998	6	63	VS161	latinaphenix	madelainesing
+277	2018-02-07 08:09:00	0	77	60.0360000000000014	30.3140000000000001	59.982999999999997	30.3290000000000006	8	12	VS161	nathanaelpaylor	nathanielgibb
+278	2018-02-12 01:42:00	0	86	59.9309999999999974	29.5199999999999996	59.9350000000000023	30.1999999999999993	19	44	WK649	kevinnuno	julioned
+279	2018-02-26 14:09:00	0	83	59.5589999999999975	29.8629999999999995	60.4470000000000027	30.1320000000000014	20	79	QP571	jerrodlupo	vimilani
+280	2018-01-02 06:11:00	0	53	59.8800000000000026	30.3539999999999992	59.6330000000000027	29.8200000000000003	23	88	WK649	quentindelacruz	joleenjefferis
+281	2018-01-06 06:26:00	0	38	60.2539999999999978	30.2719999999999985	59.8800000000000026	30.3539999999999992	28	51	VS161	ozelladay	essiehempel
+283	2018-01-27 16:15:00	0	100	59.902000000000001	30.2010000000000005	59.5730000000000004	29.7250000000000014	16	11	PX851	latinaphenix	consuelotokarz
+284	2018-01-28 18:22:00	0	47	59.5349999999999966	30.1960000000000015	59.982999999999997	30.3290000000000006	21	103	UT042	springsergio	julioned
+285	2018-01-15 11:27:00	0	48	60.0360000000000014	30.3140000000000001	60.0859999999999985	29.5779999999999994	10	60	QP571	sigridenger	joleenjefferis
+287	2018-02-03 11:39:00	0	68	59.8890000000000029	29.7579999999999991	59.7289999999999992	30.3599999999999994	16	25	BE981	hershelsmullen	sabrinacoss
+289	2018-01-07 04:44:00	0	83	60.2620000000000005	29.8919999999999995	59.8389999999999986	29.8850000000000016	13	32	GF138	shaynacropp	shamekalachance
+290	2018-01-14 08:08:00	0	83	60.0529999999999973	30.0949999999999989	59.6920000000000002	30.2169999999999987	18	101	BE981	springsergio	shamekalachance
+291	2018-01-14 01:02:00	0	53	60.3430000000000035	30.4759999999999991	59.5309999999999988	30.2809999999999988	8	118	WK649	ozelladay	valrieburr
+292	2018-01-22 16:11:00	0	73	59.8890000000000029	29.7579999999999991	60.2539999999999978	30.2719999999999985	19	28	GZ961	marcellusmagana	valrieburr
+294	2018-01-27 05:27:00	0	67	59.7220000000000013	29.9080000000000013	60.0859999999999985	29.5779999999999994	26	16	GG939	kathlyndotts	consuelotokarz
+295	2018-02-24 05:10:00	0	52	59.6439999999999984	30.0199999999999996	60.3340000000000032	29.5070000000000014	21	97	QZ906	shaynacropp	alexacory
+296	2018-02-13 00:44:00	0	12	60.286999999999999	30.277000000000001	59.6920000000000002	30.2169999999999987	14	75	TJ597	kathlyndotts	shamekalachance
+297	2018-01-09 04:23:00	0	11	60.2890000000000015	30.2310000000000016	60.453000000000003	30.1389999999999993	27	30	GF138	mitsuemcconico	shamekalachance
+299	2018-02-18 05:05:00	0	56	60.4249999999999972	30.1799999999999997	60.0529999999999973	30.0670000000000002	14	80	GF138	kenyarumore	vimilani
+300	2018-02-13 17:38:00	0	99	60.347999999999999	30.4819999999999993	60.4249999999999972	30.1799999999999997	25	11	ND592	mitsuemcconico	wilburjustiniano
+301	2018-01-14 22:08:00	0	34	60.0579999999999998	29.5689999999999991	60.0750000000000028	29.847999999999999	27	26	QZ906	eugenesacks	vimilani
+302	2018-01-15 23:02:00	0	99	60.054000000000002	29.6660000000000004	60.3430000000000035	30.4759999999999991	11	117	QZ906	lillythorton	joleenjefferis
+304	2018-02-10 07:31:00	0	64	59.902000000000001	30.2010000000000005	60.2779999999999987	29.745000000000001	27	54	ND592	sigridenger	elfriededittmer
+305	2018-02-09 21:43:00	0	75	60.347999999999999	30.4819999999999993	59.5309999999999988	30.2809999999999988	27	86	WK649	quentindelacruz	danillewhiteside
+306	2018-01-25 06:25:00	0	86	60.3459999999999965	29.7850000000000001	60.1749999999999972	29.8460000000000001	25	64	TJ597	nathanaelpaylor	elfriededittmer
+308	2018-02-15 00:42:00	0	13	59.5349999999999966	30.1960000000000015	60.3689999999999998	30.4340000000000011	21	81	TJ597	marcellusmagana	vimilani
+250	2018-01-18 08:21:00	0	28	59.5730000000000004	29.7250000000000014	59.9549999999999983	29.5459999999999994	13	90	AN978	lerabreed	essiehempel
+264	2018-01-15 23:10:00	0	94	60.347999999999999	30.4819999999999993	59.5349999999999966	30.1960000000000015	17	14	AN978	jerrodlupo	chiamurphey
+276	2018-02-27 17:45:00	0	45	59.9500000000000028	29.8290000000000006	60.2169999999999987	29.9899999999999984	5	57	AN978	masonmardis	madelainesing
+282	2018-01-31 09:40:00	0	90	59.6920000000000002	30.2169999999999987	60.1749999999999972	29.8460000000000001	23	100	AN978	taneshastruthers	nathanielgibb
+309	2018-01-04 03:03:00	0	51	59.828000000000003	30.4480000000000004	59.982999999999997	30.3290000000000006	9	96	NU214	quentindelacruz	nathanielgibb
+310	2018-01-14 19:12:00	0	87	59.5850000000000009	30.2089999999999996	59.6060000000000016	30.4239999999999995	25	81	QP571	chungcottone	elfriededittmer
+311	2018-02-13 20:42:00	0	93	59.5790000000000006	30.0519999999999996	60.0660000000000025	29.5700000000000003	30	112	TJ597	ozelladay	chiamurphey
+312	2018-02-11 01:25:00	0	73	60.1409999999999982	29.9239999999999995	60.2890000000000015	30.2310000000000016	19	35	GG939	sigridenger	sierragingras
+313	2018-01-13 19:37:00	0	73	59.6060000000000016	30.4239999999999995	60.2169999999999987	29.9899999999999984	29	13	UT042	marcellusmagana	alexacory
+314	2018-01-17 13:03:00	0	10	60.0529999999999973	30.0670000000000002	59.5420000000000016	29.5420000000000016	30	40	GM220	springsergio	vimilani
+315	2018-02-07 15:38:00	0	94	60.4939999999999998	30.0970000000000013	60.054000000000002	29.6660000000000004	6	46	VS161	sigridenger	wilburjustiniano
+316	2018-01-14 07:19:00	0	74	59.9350000000000023	30.1999999999999993	59.6880000000000024	29.7040000000000006	25	85	QP571	kenyarumore	valrieburr
+317	2018-01-19 01:29:00	0	15	59.8400000000000034	29.8069999999999986	59.5730000000000004	29.7250000000000014	7	47	NU214	kenyarumore	julioned
+319	2018-02-23 10:10:00	0	94	60.3430000000000035	30.4759999999999991	59.5290000000000035	30.4409999999999989	6	73	VM615	ozelladay	normangreb
+320	2018-01-27 18:08:00	0	15	59.7460000000000022	29.6090000000000018	60.1409999999999982	29.9239999999999995	22	61	UT042	hershelsmullen	alexacory
+321	2018-02-11 22:44:00	0	67	59.5159999999999982	29.5850000000000009	60.3340000000000032	29.5070000000000014	25	100	VM615	shaynacropp	sabrinacoss
+322	2018-01-12 10:33:00	0	98	60.3430000000000035	30.4759999999999991	59.7220000000000013	29.9080000000000013	24	50	YH116	mitsuemcconico	shamekalachance
+323	2018-01-22 18:16:00	0	69	59.8890000000000029	29.7579999999999991	60.3870000000000005	30.1009999999999991	13	17	UT042	cedricguilford	nathanielgibb
+324	2018-01-29 15:26:00	0	15	60.1910000000000025	29.8760000000000012	60.0589999999999975	29.6359999999999992	24	119	GZ961	latinaphenix	debrahdeland
+326	2018-02-05 02:14:00	0	64	59.5840000000000032	30.1380000000000017	60.1409999999999982	29.9239999999999995	28	104	ND592	hershelsmullen	sabrinacoss
+327	2018-01-14 06:08:00	0	50	59.5309999999999988	30.2809999999999988	59.7289999999999992	30.3599999999999994	9	38	VM615	masonmardis	danillewhiteside
+328	2018-01-09 10:23:00	0	59	59.7220000000000013	29.9080000000000013	60.4939999999999998	30.0970000000000013	25	41	WK649	jerrodlupo	wilburjustiniano
+330	2018-01-25 14:31:00	0	12	59.6439999999999984	30.0199999999999996	59.8900000000000006	30.468	27	100	RL003	lillythorton	danillewhiteside
+331	2018-01-02 12:56:00	0	70	60.4249999999999972	30.1799999999999997	59.8800000000000026	30.3539999999999992	10	114	QP571	taneshastruthers	debrahdeland
+332	2018-01-23 07:51:00	0	22	60.2349999999999994	29.8000000000000007	60.4249999999999972	30.1799999999999997	6	115	UT042	kathlyndotts	elfriededittmer
+333	2018-02-08 00:36:00	0	82	59.902000000000001	30.2010000000000005	59.5429999999999993	30.3120000000000012	23	120	VS161	latinaphenix	sabrinacoss
+336	2018-02-04 09:41:00	0	57	59.5850000000000009	30.2089999999999996	59.5859999999999985	29.6539999999999999	11	16	WK649	sigridenger	judithvillareal
+337	2018-01-31 22:20:00	0	100	59.6060000000000016	30.4239999999999995	59.902000000000001	30.2010000000000005	29	26	QZ906	mitsuemcconico	consuelotokarz
+338	2018-02-16 16:44:00	0	86	60.1409999999999982	29.9239999999999995	60.3870000000000005	30.1009999999999991	5	44	PX851	timikanims	shamekalachance
+339	2018-02-22 08:35:00	0	20	60.4769999999999968	29.8490000000000002	60.3430000000000035	30.4759999999999991	14	110	QP571	louisalucio	consuelotokarz
+340	2018-01-20 03:44:00	0	43	59.902000000000001	30.2010000000000005	60.4769999999999968	29.8490000000000002	6	119	RL003	jerrodlupo	joleenjefferis
+341	2018-01-11 04:15:00	0	59	60.304000000000002	30.4299999999999997	59.6330000000000027	29.8200000000000003	15	41	YH116	cedricguilford	normangreb
+342	2018-02-22 18:44:00	0	14	59.6330000000000027	29.8200000000000003	59.902000000000001	30.2010000000000005	7	104	TJ597	taneshastruthers	donniemaskell
+343	2018-02-06 03:26:00	0	78	59.5840000000000032	30.1380000000000017	60.0360000000000014	30.3140000000000001	30	24	NU214	lerabreed	essiehempel
+344	2018-02-15 06:30:00	0	72	60.3840000000000003	29.5479999999999983	59.5290000000000035	29.7319999999999993	7	83	QZ906	eugenesacks	pameliacavitt
+345	2018-01-20 22:10:00	0	38	60.078000000000003	29.9819999999999993	60.4410000000000025	30.4540000000000006	28	91	JL276	kashacallen	alexacory
+347	2018-02-12 13:47:00	0	69	60.1749999999999972	29.8460000000000001	60.2349999999999994	29.8000000000000007	9	73	QZ906	eugenesacks	vimilani
+348	2018-01-29 17:58:00	0	45	59.6450000000000031	30.0180000000000007	59.6980000000000004	30.0120000000000005	14	95	WK649	latinaphenix	danillewhiteside
+349	2018-01-18 12:45:00	0	19	60.402000000000001	29.9220000000000006	60.3070000000000022	30.0030000000000001	13	50	NU214	kevenschuller	elfriededittmer
+351	2018-02-13 06:25:00	0	86	59.6880000000000024	29.7040000000000006	59.9450000000000003	29.9349999999999987	23	26	TJ597	shaynacropp	wilburjustiniano
+352	2018-01-15 03:25:00	0	93	59.5420000000000016	29.5420000000000016	59.8389999999999986	29.8850000000000016	24	76	QZ906	kashacallen	alexacory
+354	2018-01-27 01:30:00	0	60	59.828000000000003	30.4480000000000004	59.8890000000000029	29.7579999999999991	6	120	QP571	springsergio	chiamurphey
+355	2018-01-29 03:25:00	0	31	60.1910000000000025	29.8760000000000012	60.4470000000000027	30.1320000000000014	19	77	QP571	mitsuemcconico	madelainesing
+356	2018-02-24 08:54:00	0	55	60.0660000000000025	29.5700000000000003	60.0660000000000025	29.5700000000000003	14	50	VS161	chungcottone	donniemaskell
+357	2018-02-21 02:06:00	0	66	59.5840000000000032	30.1380000000000017	60.4249999999999972	30.1799999999999997	12	65	VM615	sigridenger	wilburjustiniano
+358	2018-01-12 19:07:00	0	10	59.9799999999999969	30.0590000000000011	60.3689999999999998	30.4340000000000011	11	102	PX851	marcellusmagana	madelainesing
+359	2018-01-13 23:20:00	0	83	59.6469999999999985	30.1529999999999987	60.1850000000000023	29.5539999999999985	9	88	NU214	louisalucio	judithvillareal
+360	2018-02-06 23:40:00	0	87	59.9440000000000026	29.8419999999999987	60.0660000000000025	29.5700000000000003	8	96	ND592	quentindelacruz	judithvillareal
+361	2018-01-21 13:12:00	0	32	59.9450000000000003	29.9349999999999987	59.8509999999999991	29.7089999999999996	5	44	GF138	nathanaelpaylor	vimilani
+362	2018-01-18 21:27:00	0	62	59.5859999999999985	29.6539999999999999	60.0660000000000025	29.5700000000000003	11	99	GZ961	kashacallen	normangreb
+363	2018-02-08 06:30:00	0	41	60.4249999999999972	30.1799999999999997	60.0589999999999975	29.6359999999999992	30	48	YH116	mitsuemcconico	sierragingras
+364	2018-01-24 15:13:00	0	33	59.5260000000000034	29.6750000000000007	59.6749999999999972	30.4149999999999991	30	55	VM615	cedricguilford	sabrinacoss
+365	2018-02-15 16:47:00	0	14	60.3170000000000002	29.9080000000000013	59.5420000000000016	29.5420000000000016	16	58	JL276	quentindelacruz	elfriededittmer
+366	2018-02-07 13:14:00	0	37	59.9799999999999969	30.0590000000000011	59.9350000000000023	30.1999999999999993	14	68	GG939	jerrodlupo	chiamurphey
+368	2018-01-25 06:23:00	0	70	60.3840000000000003	29.5479999999999983	60.1910000000000025	29.8760000000000012	15	81	PX851	latinaphenix	julioned
+369	2018-02-20 23:46:00	0	98	60.4939999999999998	30.0970000000000013	59.5889999999999986	29.9390000000000001	8	35	UT042	latinaphenix	lettybruner
+370	2018-02-28 11:07:00	0	74	59.6439999999999984	30.0199999999999996	60.3459999999999965	29.7850000000000001	22	29	WK649	kathlyndotts	vimilani
+318	2018-02-20 19:54:00	0	97	60.0739999999999981	30.4229999999999983	59.9799999999999969	30.0590000000000011	18	115	AN978	kevenschuller	joleenjefferis
+325	2018-01-18 08:38:00	0	96	60.3430000000000035	30.4759999999999991	60.3049999999999997	29.8129999999999988	30	117	AN978	kashacallen	vimilani
+329	2018-02-04 19:36:00	0	60	59.5900000000000034	29.5130000000000017	59.5260000000000034	29.6750000000000007	30	68	AN978	lerabreed	normangreb
+371	2018-02-10 07:10:00	0	81	60.3340000000000032	29.5070000000000014	59.7289999999999992	30.3599999999999994	24	50	JL276	nathanaelpaylor	ceolafazio
+372	2018-01-16 19:06:00	0	91	59.9309999999999974	29.5199999999999996	59.8980000000000032	29.8939999999999984	17	107	RL003	ozelladay	valrieburr
+373	2018-01-15 07:26:00	0	63	60.0589999999999975	29.6359999999999992	59.6469999999999985	30.1529999999999987	28	31	BE981	louisalucio	valrieburr
+374	2018-02-12 01:14:00	0	54	60.1850000000000023	29.5539999999999985	60.2629999999999981	29.7830000000000013	27	95	RL003	jerrodlupo	normangreb
+375	2018-02-25 11:21:00	0	77	60.0750000000000028	29.847999999999999	60.2779999999999987	29.745000000000001	27	36	RL003	lillythorton	essiehempel
+376	2018-01-06 20:07:00	0	73	60.3049999999999997	29.8129999999999988	60.3049999999999997	29.8129999999999988	26	34	VM615	hershelsmullen	pameliacavitt
+377	2018-02-08 11:57:00	0	23	59.7939999999999969	29.6230000000000011	59.5850000000000009	30.2089999999999996	21	40	PX851	ozelladay	wilburjustiniano
+378	2018-02-16 05:15:00	0	50	59.8960000000000008	29.629999999999999	60.3340000000000032	29.5070000000000014	14	33	ND592	ozelladay	nathanielgibb
+379	2018-02-06 12:25:00	0	91	60.402000000000001	29.9220000000000006	59.828000000000003	30.4480000000000004	17	17	YH116	lillythorton	ceolafazio
+380	2018-01-07 01:49:00	0	88	59.8900000000000006	30.468	59.6589999999999989	30.2139999999999986	29	31	ND592	springsergio	wilburjustiniano
+381	2018-01-21 20:46:00	0	52	60.1910000000000025	29.8760000000000012	59.9350000000000023	30.1999999999999993	5	71	GZ961	jerrodlupo	joleenjefferis
+382	2018-02-03 01:54:00	0	89	60.3070000000000022	30.0030000000000001	60.2629999999999981	29.7830000000000013	23	71	JL276	kathlyndotts	judithvillareal
+383	2018-02-28 06:27:00	0	65	59.5309999999999988	30.2809999999999988	60.453000000000003	30.1389999999999993	5	52	WK649	lerabreed	sabrinacoss
+384	2018-01-31 04:43:00	0	73	59.5859999999999985	29.6539999999999999	60.0660000000000025	29.5700000000000003	10	82	YH116	louisalucio	madelainesing
+385	2018-02-12 22:40:00	0	85	59.5840000000000032	30.1380000000000017	60.0589999999999975	29.6359999999999992	17	18	JL276	kathlyndotts	joleenjefferis
+386	2018-01-31 21:30:00	0	31	59.6039999999999992	29.5079999999999991	60.4249999999999972	30.1799999999999997	20	116	YH116	lerabreed	vimilani
+387	2018-01-11 21:26:00	0	33	59.5790000000000006	30.0519999999999996	60.286999999999999	30.277000000000001	5	115	WK649	kashacallen	nathanielgibb
+388	2018-01-05 04:13:00	0	20	59.6060000000000016	30.4239999999999995	60.2539999999999978	30.2719999999999985	25	100	ND592	shaynacropp	consuelotokarz
+389	2018-02-07 12:54:00	0	60	60.3430000000000035	30.4759999999999991	60.3430000000000035	30.4759999999999991	29	34	YH116	chungcottone	chiamurphey
+390	2018-01-10 05:18:00	0	75	59.9450000000000003	29.9349999999999987	59.5859999999999985	29.6539999999999999	20	112	GZ961	nathanaelpaylor	shamekalachance
+391	2018-02-18 21:41:00	0	68	60.2629999999999981	29.7830000000000013	59.5589999999999975	29.8629999999999995	23	43	QP571	kevenschuller	sierragingras
+393	2018-02-15 11:35:00	0	37	60.4939999999999998	30.0970000000000013	59.6469999999999985	30.1529999999999987	9	53	GG939	nathanaelpaylor	elfriededittmer
+394	2018-02-09 08:32:00	0	63	59.8890000000000029	29.7579999999999991	59.9450000000000003	29.9349999999999987	18	79	NU214	kenyarumore	elfriededittmer
+395	2018-01-13 12:43:00	0	41	59.5730000000000004	29.7250000000000014	60.1850000000000023	29.5539999999999985	7	17	GZ961	beewommack	julioned
+396	2018-01-19 09:27:00	0	65	60.3170000000000002	29.9080000000000013	60.1910000000000025	29.8760000000000012	12	13	QP571	kathlyndotts	madelainesing
+397	2018-02-21 08:53:00	0	60	59.9549999999999983	29.5459999999999994	60.0660000000000025	29.5700000000000003	23	43	TJ597	quentindelacruz	alexacory
+398	2018-02-23 12:39:00	0	98	60.2620000000000005	29.8919999999999995	59.5290000000000035	29.7319999999999993	16	93	RL003	eugenesacks	essiehempel
+399	2018-01-26 15:56:00	0	49	60.3329999999999984	30.3909999999999982	59.8960000000000008	29.629999999999999	26	75	ND592	kevinnuno	nathanielgibb
+400	2018-02-13 12:40:00	0	26	59.5840000000000032	30.1380000000000017	60.4470000000000027	30.1320000000000014	23	74	GF138	springsergio	chiamurphey
+402	2018-02-03 14:04:00	0	99	59.5159999999999982	29.5850000000000009	60.3430000000000035	30.4759999999999991	8	81	GM220	shaynacropp	chiamurphey
+403	2018-01-08 03:31:00	0	27	59.6450000000000031	30.0180000000000007	59.5260000000000034	29.6750000000000007	8	68	VS161	lerabreed	lettybruner
+404	2018-02-19 09:02:00	0	88	59.5420000000000016	29.5420000000000016	60.0769999999999982	30.2920000000000016	29	111	TJ597	taneshastruthers	consuelotokarz
+405	2018-01-27 23:37:00	0	82	59.6589999999999989	30.2139999999999986	60.078000000000003	29.9819999999999993	11	82	WK649	kathlyndotts	chiamurphey
+408	2018-02-11 22:16:00	0	65	59.7629999999999981	29.5859999999999985	60.4410000000000025	30.4540000000000006	20	101	RL003	shaynacropp	valrieburr
+409	2018-01-18 00:30:00	0	60	59.5790000000000006	30.0519999999999996	59.5889999999999986	29.9390000000000001	17	56	QP571	marcellusmagana	fidelshimkus
+411	2018-01-12 15:50:00	0	89	60.2779999999999987	29.745000000000001	59.5309999999999988	30.2809999999999988	10	107	NU214	timikanims	donniemaskell
+412	2018-01-05 07:09:00	0	98	60.2629999999999981	29.7830000000000013	60.2370000000000019	30.1509999999999998	27	38	QP571	quentindelacruz	shamekalachance
+413	2018-01-04 19:07:00	0	63	60.0739999999999981	30.4229999999999983	59.9309999999999974	29.5199999999999996	18	30	GM220	lerabreed	joleenjefferis
+414	2018-01-23 22:29:00	0	100	59.5260000000000034	29.6750000000000007	59.902000000000001	30.2010000000000005	18	45	GM220	ozelladay	madelainesing
+415	2018-02-06 19:06:00	0	87	60.0859999999999985	29.5779999999999994	59.8800000000000026	30.3539999999999992	29	30	UT042	quentindelacruz	pameliacavitt
+416	2018-02-10 13:06:00	0	39	59.7939999999999969	29.6230000000000011	60.2890000000000015	30.2310000000000016	26	72	TJ597	mitsuemcconico	donniemaskell
+417	2018-02-15 22:31:00	0	82	60.0859999999999985	29.5779999999999994	60.2730000000000032	30.3170000000000002	9	56	VS161	ozelladay	lettybruner
+418	2018-02-20 07:01:00	0	65	59.9799999999999969	30.0590000000000011	60.1910000000000025	29.8760000000000012	20	119	JL276	marcellusmagana	pameliacavitt
+419	2018-02-28 07:39:00	0	89	60.0579999999999998	29.5689999999999991	60.3170000000000002	29.9080000000000013	11	24	PX851	kathlyndotts	normangreb
+420	2018-02-16 04:14:00	0	36	60.0529999999999973	30.0670000000000002	59.8890000000000029	29.7579999999999991	14	88	GG939	masonmardis	shamekalachance
+421	2018-02-28 02:51:00	0	71	60.1409999999999982	29.9239999999999995	60.2539999999999978	30.2719999999999985	17	78	QZ906	lillythorton	essiehempel
+422	2018-01-17 10:12:00	0	51	59.7289999999999992	30.3599999999999994	59.5290000000000035	30.4409999999999989	10	11	GM220	quentindelacruz	elfriededittmer
+423	2018-02-04 02:46:00	0	13	59.5290000000000035	29.7319999999999993	59.982999999999997	30.3290000000000006	23	116	PX851	jerrodlupo	vimilani
+424	2018-02-26 16:03:00	0	68	59.6749999999999972	30.4149999999999991	59.5790000000000006	30.0519999999999996	11	41	GF138	lerabreed	donniemaskell
+425	2018-01-07 13:09:00	0	58	59.9350000000000023	30.1999999999999993	59.6439999999999984	30.0199999999999996	19	55	ND592	hershelsmullen	joleenjefferis
+426	2018-01-22 16:48:00	0	78	59.8890000000000029	29.7579999999999991	59.8800000000000026	30.3539999999999992	11	111	GF138	eugenesacks	julioned
+427	2018-01-29 03:29:00	0	37	60.2779999999999987	29.745000000000001	59.8389999999999986	29.8850000000000016	10	78	YH116	kevenschuller	wilburjustiniano
+428	2018-01-28 11:07:00	0	81	60.054000000000002	29.6660000000000004	60.3329999999999984	30.3909999999999982	30	85	JL276	ozelladay	elfriededittmer
+429	2018-02-22 11:42:00	0	20	59.9799999999999969	30.0590000000000011	60.4939999999999998	30.0970000000000013	7	81	JL276	latinaphenix	debrahdeland
+431	2018-02-12 13:44:00	0	84	59.6450000000000031	30.0180000000000007	60.1910000000000025	29.8760000000000012	26	106	GZ961	latinaphenix	debrahdeland
+432	2018-01-25 08:41:00	0	35	59.902000000000001	30.2010000000000005	59.9440000000000026	29.8419999999999987	15	78	QP571	kevinnuno	chiamurphey
+392	2018-01-23 21:22:00	0	32	60.3170000000000002	29.9080000000000013	60.1910000000000025	29.8760000000000012	20	62	AN978	hershelsmullen	fidelshimkus
+410	2018-01-29 19:33:00	0	47	60.054000000000002	29.6660000000000004	60.2779999999999987	29.745000000000001	21	46	AN978	springsergio	donniemaskell
+430	2018-01-20 17:30:00	0	21	59.5309999999999988	30.2809999999999988	59.7289999999999992	30.3599999999999994	22	56	AN978	springsergio	vimilani
+433	2018-01-04 05:44:00	0	60	59.6060000000000016	30.4239999999999995	59.7460000000000022	29.6090000000000018	18	114	VM615	louisalucio	donniemaskell
+434	2018-02-10 12:33:00	0	30	60.3329999999999984	30.3909999999999982	60.4249999999999972	30.1799999999999997	15	106	GF138	springsergio	sabrinacoss
+436	2018-02-15 21:22:00	0	31	60.402000000000001	29.9220000000000006	60.1409999999999982	29.9239999999999995	7	28	VS161	mitsuemcconico	alexacory
+437	2018-01-12 10:56:00	0	45	60.2349999999999994	29.8000000000000007	60.3340000000000032	29.5070000000000014	14	68	ND592	kevinnuno	shamekalachance
+438	2018-01-14 06:45:00	0	22	60.2620000000000005	29.8919999999999995	60.3070000000000022	30.0030000000000001	12	109	VS161	kevinnuno	elfriededittmer
+439	2018-02-23 07:12:00	0	44	59.9799999999999969	30.0590000000000011	59.5429999999999993	30.3120000000000012	7	98	YH116	masonmardis	madelainesing
+440	2018-01-29 13:04:00	0	75	59.6980000000000004	30.0120000000000005	59.8900000000000006	30.468	15	80	YH116	masonmardis	madelainesing
+441	2018-02-12 22:55:00	0	37	60.0529999999999973	30.0670000000000002	59.6880000000000024	29.7040000000000006	25	107	GM220	masonmardis	judithvillareal
+442	2018-01-31 14:52:00	0	23	59.6330000000000027	29.8200000000000003	59.6920000000000002	30.2169999999999987	23	28	QP571	kevinnuno	danillewhiteside
+443	2018-01-23 06:45:00	0	58	60.3170000000000002	29.9080000000000013	60.2730000000000032	30.3170000000000002	26	10	BE981	masonmardis	elfriededittmer
+444	2018-01-09 19:40:00	0	25	60.3459999999999965	29.7850000000000001	60.4470000000000027	30.1320000000000014	27	71	QZ906	quentindelacruz	danillewhiteside
+445	2018-02-25 00:33:00	0	16	59.9350000000000023	30.1999999999999993	59.8509999999999991	29.7089999999999996	26	80	WK649	beewommack	alexacory
+446	2018-02-01 18:48:00	0	45	60.286999999999999	30.277000000000001	60.2629999999999981	29.7830000000000013	6	51	UT042	kathlyndotts	wilburjustiniano
+447	2018-02-18 23:20:00	0	55	60.3170000000000002	29.9080000000000013	59.5859999999999985	29.6539999999999999	26	33	PX851	latinaphenix	wilburjustiniano
+448	2018-02-08 18:27:00	0	73	59.8900000000000006	30.468	59.9799999999999969	30.0590000000000011	27	102	GZ961	kenyarumore	chiamurphey
+449	2018-02-19 11:09:00	0	32	60.2620000000000005	29.8919999999999995	59.6450000000000031	30.0180000000000007	26	112	NU214	kenyarumore	elfriededittmer
+450	2018-02-16 13:00:00	0	76	59.5290000000000035	30.4409999999999989	60.402000000000001	29.9220000000000006	28	29	QP571	kashacallen	judithvillareal
+451	2018-01-18 07:56:00	0	90	59.902000000000001	30.2010000000000005	59.5730000000000004	29.7250000000000014	14	38	GM220	nathanaelpaylor	judithvillareal
+452	2018-01-23 07:46:00	0	87	59.9309999999999974	29.5199999999999996	59.9500000000000028	29.8290000000000006	22	106	TJ597	louisalucio	julioned
+453	2018-01-10 15:34:00	0	22	60.0769999999999982	30.2920000000000016	59.5260000000000034	29.6750000000000007	21	15	WK649	kevenschuller	nathanielgibb
+455	2018-02-20 06:18:00	0	72	60.0529999999999973	30.0670000000000002	59.5790000000000006	30.0519999999999996	15	114	GF138	lerabreed	judithvillareal
+456	2018-01-11 18:03:00	0	63	59.828000000000003	30.4480000000000004	60.0529999999999973	30.0949999999999989	7	91	ND592	lillythorton	lettybruner
+458	2018-01-19 12:49:00	0	59	59.6980000000000004	30.0120000000000005	59.8400000000000034	29.8069999999999986	6	44	RL003	kashacallen	joleenjefferis
+459	2018-01-09 23:08:00	0	56	60.2539999999999978	30.2719999999999985	59.7629999999999981	29.5859999999999985	21	45	GZ961	kevinnuno	alexacory
+460	2018-01-29 20:51:00	0	56	60.0589999999999975	29.6359999999999992	60.2349999999999994	29.8000000000000007	11	42	BE981	marcellusmagana	pameliacavitt
+461	2018-01-01 14:50:00	0	94	60.0589999999999975	29.6359999999999992	59.5850000000000009	30.2089999999999996	10	34	UT042	latinaphenix	debrahdeland
+462	2018-02-10 21:01:00	0	44	59.5290000000000035	30.4409999999999989	59.5429999999999993	30.3120000000000012	19	76	WK649	sigridenger	donniemaskell
+464	2018-02-01 03:03:00	0	81	59.5159999999999982	29.5850000000000009	60.1409999999999982	29.9239999999999995	14	81	YH116	springsergio	pameliacavitt
+465	2018-02-02 04:23:00	0	91	60.2890000000000015	30.2310000000000016	60.3430000000000035	30.4759999999999991	10	79	WK649	beewommack	sierragingras
+468	2018-02-08 03:01:00	0	73	60.3870000000000005	30.1009999999999991	60.2620000000000005	29.8919999999999995	19	11	VM615	kathlyndotts	normangreb
+469	2018-02-18 10:09:00	0	98	59.6330000000000027	29.8200000000000003	60.078000000000003	29.9819999999999993	16	90	QP571	cedricguilford	consuelotokarz
+471	2018-01-17 18:32:00	0	49	60.4249999999999972	30.1799999999999997	59.9549999999999983	29.5459999999999994	15	104	QZ906	kevinnuno	nathanielgibb
+472	2018-01-22 23:36:00	0	22	60.4410000000000025	30.4540000000000006	60.2779999999999987	29.745000000000001	16	112	GM220	marcellusmagana	pameliacavitt
+473	2018-02-15 10:36:00	0	21	59.8400000000000034	29.8069999999999986	59.9350000000000023	30.1999999999999993	20	52	YH116	latinaphenix	essiehempel
+474	2018-02-24 02:59:00	0	39	60.3049999999999997	29.8129999999999988	60.0589999999999975	29.6359999999999992	23	88	NU214	kevinnuno	valrieburr
+475	2018-01-14 08:23:00	0	73	59.8900000000000006	30.468	60.078000000000003	29.9819999999999993	24	38	TJ597	eugenesacks	pameliacavitt
+476	2018-01-26 21:35:00	0	37	59.902000000000001	30.2010000000000005	60.0859999999999985	29.5779999999999994	5	22	GF138	masonmardis	vimilani
+477	2018-02-19 08:11:00	0	54	59.5290000000000035	30.4409999999999989	59.828000000000003	30.4480000000000004	18	116	VM615	kenyarumore	fidelshimkus
+478	2018-01-20 02:39:00	0	43	60.3070000000000022	30.0030000000000001	60.1749999999999972	29.8460000000000001	19	36	VS161	hershelsmullen	chiamurphey
+479	2018-02-24 02:11:00	0	83	60.4769999999999968	29.8490000000000002	60.0579999999999998	29.5689999999999991	18	26	BE981	nathanaelpaylor	sierragingras
+480	2018-01-18 18:26:00	0	43	59.5309999999999988	30.2809999999999988	60.078000000000003	29.9819999999999993	28	103	PX851	kevinnuno	essiehempel
+481	2018-01-27 21:12:00	0	27	59.8109999999999999	30.2680000000000007	60.3170000000000002	29.9080000000000013	30	57	VM615	jerrodlupo	valrieburr
+482	2018-01-30 15:19:00	0	48	59.8109999999999999	30.2680000000000007	59.5889999999999986	29.9390000000000001	5	102	GF138	chungcottone	vimilani
+483	2018-02-16 01:20:00	0	41	60.0360000000000014	30.3140000000000001	59.6330000000000027	29.8200000000000003	5	87	NU214	mitsuemcconico	chiamurphey
+484	2018-01-23 20:17:00	0	73	59.5429999999999993	30.3120000000000012	59.5889999999999986	29.9390000000000001	27	91	UT042	masonmardis	joleenjefferis
+485	2018-02-26 03:27:00	0	82	60.4410000000000025	30.4540000000000006	60.2890000000000015	30.2310000000000016	28	11	UT042	masonmardis	madelainesing
+486	2018-02-03 01:00:00	0	48	60.2779999999999987	29.745000000000001	60.4410000000000025	30.4540000000000006	14	112	GZ961	lerabreed	sierragingras
+487	2018-02-20 06:11:00	0	82	60.1850000000000023	29.5539999999999985	59.9440000000000026	29.8419999999999987	24	17	NU214	beewommack	julioned
+488	2018-01-23 23:29:00	0	94	59.7939999999999969	29.6230000000000011	60.0660000000000025	29.5700000000000003	23	63	GZ961	beewommack	lettybruner
+489	2018-01-01 23:57:00	0	85	59.7460000000000022	29.6090000000000018	59.7629999999999981	29.5859999999999985	30	58	GZ961	masonmardis	chiamurphey
+490	2018-02-25 12:09:00	0	96	60.078000000000003	29.9819999999999993	59.8890000000000029	29.7579999999999991	18	111	VM615	hershelsmullen	consuelotokarz
+492	2018-02-21 07:10:00	0	27	60.3329999999999984	30.3909999999999982	60.2779999999999987	29.745000000000001	20	27	GM220	quentindelacruz	normangreb
+493	2018-01-08 16:04:00	0	76	60.0739999999999981	30.4229999999999983	59.6880000000000024	29.7040000000000006	15	54	QZ906	latinaphenix	madelainesing
+494	2018-02-20 09:54:00	0	74	59.8400000000000034	29.8069999999999986	60.0579999999999998	29.5689999999999991	22	68	QP571	kathlyndotts	ceolafazio
+454	2018-01-24 11:35:00	0	34	60.2370000000000019	30.1509999999999998	60.0769999999999982	30.2920000000000016	15	43	AN978	louisalucio	nathanielgibb
+457	2018-02-22 05:13:00	0	54	60.4939999999999998	30.0970000000000013	59.5309999999999988	30.2809999999999988	21	100	AN978	marcellusmagana	debrahdeland
+491	2018-01-21 05:24:00	0	97	60.286999999999999	30.277000000000001	60.0519999999999996	29.8249999999999993	16	112	AN978	marcellusmagana	sierragingras
+495	2018-02-13 16:35:00	0	48	59.6749999999999972	30.4149999999999991	59.5290000000000035	29.7319999999999993	6	55	PX851	taneshastruthers	debrahdeland
+496	2018-01-18 13:57:00	0	93	59.9350000000000023	30.1999999999999993	59.902000000000001	30.2010000000000005	14	56	RL003	kathlyndotts	danillewhiteside
+497	2018-01-30 17:46:00	0	36	60.0589999999999975	29.6359999999999992	60.2779999999999987	29.745000000000001	30	38	GZ961	mitsuemcconico	madelainesing
+498	2018-01-08 14:53:00	0	60	59.8980000000000032	29.8939999999999984	59.5429999999999993	30.3120000000000012	19	13	GZ961	mitsuemcconico	alexacory
+499	2018-02-10 05:35:00	0	86	59.5889999999999986	29.9390000000000001	60.3840000000000003	29.5479999999999983	27	61	YH116	lillythorton	ceolafazio
+500	2018-01-29 04:53:00	0	24	60.0360000000000014	30.3140000000000001	59.6880000000000024	29.7040000000000006	18	73	GG939	kathlyndotts	pameliacavitt
+501	2018-02-15 08:49:00	0	16	60.3689999999999998	30.4340000000000011	60.4939999999999998	30.0970000000000013	25	48	PX851	cedricguilford	elfriededittmer
+502	2018-01-23 23:40:00	0	79	60.078000000000003	29.9819999999999993	60.4939999999999998	30.0970000000000013	8	45	VS161	kevenschuller	shamekalachance
+504	2018-01-27 20:51:00	0	20	60.2539999999999978	30.2719999999999985	60.0750000000000028	29.847999999999999	8	28	GZ961	marcellusmagana	julioned
+505	2018-01-07 23:57:00	0	93	59.9549999999999983	29.5459999999999994	59.7629999999999981	29.5859999999999985	13	110	UT042	springsergio	valrieburr
+506	2018-02-12 09:03:00	0	69	59.5730000000000004	29.7250000000000014	59.9500000000000028	29.8290000000000006	28	89	QP571	timikanims	sabrinacoss
+507	2018-02-09 16:54:00	0	45	60.0660000000000025	29.5700000000000003	60.0529999999999973	30.0949999999999989	6	104	GG939	springsergio	debrahdeland
+508	2018-01-07 22:36:00	0	12	59.8509999999999991	29.7089999999999996	59.6379999999999981	30.4720000000000013	26	10	QP571	ozelladay	wilburjustiniano
+509	2018-01-23 09:40:00	0	52	59.8980000000000032	29.8939999999999984	60.0519999999999996	29.8249999999999993	6	101	RL003	kathlyndotts	vimilani
+510	2018-01-26 11:44:00	0	10	60.3340000000000032	29.5070000000000014	59.9799999999999969	30.0590000000000011	22	32	BE981	kenyarumore	sierragingras
+511	2018-02-17 01:33:00	0	22	59.5730000000000004	29.7250000000000014	60.2370000000000019	30.1509999999999998	11	78	PX851	masonmardis	valrieburr
+513	2018-02-12 05:24:00	0	34	59.6039999999999992	29.5079999999999991	60.2730000000000032	30.3170000000000002	21	90	GG939	timikanims	pameliacavitt
+514	2018-01-05 10:00:00	0	54	59.828000000000003	30.4480000000000004	59.5790000000000006	30.0519999999999996	16	64	PX851	kenyarumore	sierragingras
+515	2018-01-07 13:14:00	0	76	59.5840000000000032	30.1380000000000017	59.8980000000000032	29.8939999999999984	15	88	GZ961	cedricguilford	valrieburr
+516	2018-01-27 13:23:00	0	41	60.2890000000000015	30.2310000000000016	60.054000000000002	29.6660000000000004	26	42	QZ906	springsergio	alexacory
+517	2018-02-28 14:53:00	0	17	59.7939999999999969	29.6230000000000011	59.5159999999999982	29.5850000000000009	8	72	GM220	marcellusmagana	sabrinacoss
+518	2018-01-13 07:02:00	0	37	59.5859999999999985	29.6539999999999999	60.4769999999999968	29.8490000000000002	18	74	GM220	eugenesacks	consuelotokarz
+519	2018-02-17 20:38:00	0	22	60.3689999999999998	30.4340000000000011	59.5159999999999982	29.5850000000000009	27	30	UT042	lillythorton	debrahdeland
+520	2018-01-19 16:04:00	0	88	59.6039999999999992	29.5079999999999991	60.2779999999999987	29.745000000000001	29	62	VS161	masonmardis	pameliacavitt
+521	2018-01-06 08:26:00	0	10	59.9450000000000003	29.9349999999999987	59.8509999999999991	29.7089999999999996	16	78	GG939	timikanims	danillewhiteside
+522	2018-02-09 22:53:00	0	84	60.3340000000000032	29.5070000000000014	60.2539999999999978	30.2719999999999985	21	115	TJ597	jerrodlupo	sabrinacoss
+523	2018-02-04 20:37:00	0	23	60.0859999999999985	29.5779999999999994	60.1749999999999972	29.8460000000000001	19	118	NU214	latinaphenix	vimilani
+524	2018-02-27 01:12:00	0	44	59.982999999999997	30.3290000000000006	60.2779999999999987	29.745000000000001	26	40	PX851	marcellusmagana	alexacory
+525	2018-02-22 12:55:00	0	71	60.078000000000003	29.9819999999999993	59.8980000000000032	29.8939999999999984	15	13	GF138	latinaphenix	fidelshimkus
+526	2018-02-12 16:13:00	0	47	59.5290000000000035	29.7319999999999993	60.2890000000000015	30.2310000000000016	21	80	UT042	beewommack	valrieburr
+527	2018-01-02 05:47:00	0	98	59.7289999999999992	30.3599999999999994	59.6060000000000016	30.4239999999999995	28	97	VS161	mitsuemcconico	alexacory
+529	2018-01-02 04:18:00	0	61	59.8400000000000034	29.8069999999999986	59.982999999999997	30.3290000000000006	8	78	NU214	sigridenger	consuelotokarz
+530	2018-01-09 12:56:00	0	48	59.7939999999999969	29.6230000000000011	60.0859999999999985	29.5779999999999994	7	114	PX851	chungcottone	wilburjustiniano
+531	2018-02-24 20:10:00	0	33	59.8049999999999997	29.5629999999999988	60.0529999999999973	30.0949999999999989	7	88	QP571	timikanims	vimilani
+533	2018-01-16 23:35:00	0	17	60.3329999999999984	30.3909999999999982	60.078000000000003	29.9819999999999993	23	73	GM220	marcellusmagana	vimilani
+534	2018-01-31 18:10:00	0	68	60.0589999999999975	29.6359999999999992	59.5840000000000032	30.1380000000000017	22	111	UT042	lillythorton	chiamurphey
+535	2018-01-10 20:41:00	0	22	59.6039999999999992	29.5079999999999991	59.828000000000003	30.4480000000000004	28	68	TJ597	kevenschuller	nathanielgibb
+536	2018-01-25 13:52:00	0	64	59.5790000000000006	30.0519999999999996	59.6039999999999992	29.5079999999999991	5	57	UT042	marcellusmagana	pameliacavitt
+537	2018-01-16 10:38:00	0	26	60.2370000000000019	30.1509999999999998	59.982999999999997	30.3290000000000006	11	105	VM615	taneshastruthers	fidelshimkus
+539	2018-01-18 13:17:00	0	44	59.7460000000000022	29.6090000000000018	60.2629999999999981	29.7830000000000013	30	54	RL003	masonmardis	valrieburr
+540	2018-02-05 04:24:00	0	31	60.3870000000000005	30.1009999999999991	59.8049999999999997	29.5629999999999988	23	20	VS161	eugenesacks	alexacory
+542	2018-01-15 10:07:00	0	46	60.078000000000003	29.9819999999999993	60.0589999999999975	29.6359999999999992	22	89	GZ961	kashacallen	sierragingras
+543	2018-01-02 07:35:00	0	73	59.6439999999999984	30.0199999999999996	59.8049999999999997	29.5629999999999988	6	44	BE981	chungcottone	elfriededittmer
+544	2018-01-25 14:08:00	0	79	59.9500000000000028	29.8290000000000006	59.7220000000000013	29.9080000000000013	20	48	QZ906	lerabreed	pameliacavitt
+545	2018-01-01 19:50:00	0	89	60.4769999999999968	29.8490000000000002	60.1749999999999972	29.8460000000000001	9	95	VM615	quentindelacruz	normangreb
+547	2018-01-17 04:35:00	0	82	59.8800000000000026	30.3539999999999992	59.9440000000000026	29.8419999999999987	29	110	UT042	shaynacropp	elfriededittmer
+548	2018-02-15 11:16:00	0	65	60.1749999999999972	29.8460000000000001	59.5420000000000016	29.5420000000000016	11	53	GF138	taneshastruthers	debrahdeland
+550	2018-01-12 11:33:00	0	30	59.7629999999999981	29.5859999999999985	59.5859999999999985	29.6539999999999999	26	71	GF138	quentindelacruz	julioned
+551	2018-01-03 05:28:00	0	42	60.0769999999999982	30.2920000000000016	59.6439999999999984	30.0199999999999996	9	85	PX851	kathlyndotts	normangreb
+553	2018-01-10 01:19:00	0	96	59.8960000000000008	29.629999999999999	59.9440000000000026	29.8419999999999987	27	51	GF138	kevinnuno	essiehempel
+554	2018-01-30 15:58:00	0	67	59.9549999999999983	29.5459999999999994	59.5889999999999986	29.9390000000000001	29	22	UT042	kenyarumore	sierragingras
+555	2018-01-07 09:36:00	0	86	59.5889999999999986	29.9390000000000001	59.6920000000000002	30.2169999999999987	20	103	GM220	jerrodlupo	shamekalachance
+556	2018-01-13 06:03:00	0	28	60.0739999999999981	30.4229999999999983	60.078000000000003	29.9819999999999993	10	58	PX851	timikanims	elfriededittmer
+512	2018-02-13 11:21:00	0	50	59.828000000000003	30.4480000000000004	59.8389999999999986	29.8850000000000016	27	51	AN978	kathlyndotts	debrahdeland
+528	2018-02-28 15:37:00	0	10	60.2349999999999994	29.8000000000000007	59.8509999999999991	29.7089999999999996	16	33	AN978	beewommack	danillewhiteside
+538	2018-02-24 09:15:00	0	96	59.7629999999999981	29.5859999999999985	59.5290000000000035	30.4409999999999989	17	87	AN978	masonmardis	nathanielgibb
+541	2018-01-14 02:32:00	0	35	59.9799999999999969	30.0590000000000011	60.3689999999999998	30.4340000000000011	8	43	AN978	springsergio	essiehempel
+557	2018-02-06 01:07:00	0	28	59.5790000000000006	30.0519999999999996	59.9799999999999969	30.0590000000000011	15	116	BE981	quentindelacruz	danillewhiteside
+559	2018-02-06 16:27:00	0	55	60.4470000000000027	30.1320000000000014	59.8049999999999997	29.5629999999999988	15	109	UT042	louisalucio	sabrinacoss
+560	2018-02-11 20:11:00	0	88	59.5859999999999985	29.6539999999999999	60.286999999999999	30.277000000000001	10	22	BE981	kevenschuller	sabrinacoss
+561	2018-01-17 09:42:00	0	33	59.982999999999997	30.3290000000000006	59.5290000000000035	30.4409999999999989	15	91	WK649	louisalucio	pameliacavitt
+562	2018-02-28 15:59:00	0	43	59.7460000000000022	29.6090000000000018	59.9350000000000023	30.1999999999999993	20	118	YH116	nathanaelpaylor	vimilani
+563	2018-02-02 04:03:00	0	59	60.286999999999999	30.277000000000001	60.0360000000000014	30.3140000000000001	15	90	BE981	kathlyndotts	shamekalachance
+565	2018-02-10 02:11:00	0	53	60.0360000000000014	30.3140000000000001	59.6920000000000002	30.2169999999999987	24	10	RL003	kenyarumore	sabrinacoss
+566	2018-01-10 01:02:00	0	98	59.8389999999999986	29.8850000000000016	59.5850000000000009	30.2089999999999996	7	23	ND592	sigridenger	essiehempel
+567	2018-01-12 23:34:00	0	31	59.9309999999999974	29.5199999999999996	59.9309999999999974	29.5199999999999996	5	80	GZ961	cedricguilford	chiamurphey
+568	2018-01-10 07:59:00	0	47	60.0519999999999996	29.8249999999999993	59.6039999999999992	29.5079999999999991	23	81	RL003	lillythorton	vimilani
+569	2018-01-10 20:09:00	0	24	59.5290000000000035	30.4409999999999989	59.6880000000000024	29.7040000000000006	21	99	ND592	kathlyndotts	shamekalachance
+570	2018-01-08 20:12:00	0	90	59.8960000000000008	29.629999999999999	59.8400000000000034	29.8069999999999986	8	100	WK649	nathanaelpaylor	shamekalachance
+571	2018-01-09 10:04:00	0	82	59.5859999999999985	29.6539999999999999	59.5790000000000006	30.0519999999999996	25	35	GZ961	kathlyndotts	shamekalachance
+572	2018-02-04 15:38:00	0	26	60.2169999999999987	29.9899999999999984	60.3459999999999965	29.7850000000000001	21	75	BE981	taneshastruthers	pameliacavitt
+573	2018-01-01 02:11:00	0	99	59.5309999999999988	30.2809999999999988	60.3840000000000003	29.5479999999999983	27	61	VM615	lillythorton	danillewhiteside
+574	2018-01-15 09:15:00	0	58	59.5420000000000016	29.5420000000000016	60.3459999999999965	29.7850000000000001	27	51	VS161	nathanaelpaylor	debrahdeland
+575	2018-01-01 18:05:00	0	98	60.0360000000000014	30.3140000000000001	59.7289999999999992	30.3599999999999994	8	85	GZ961	kathlyndotts	joleenjefferis
+576	2018-01-13 13:09:00	0	28	60.2539999999999978	30.2719999999999985	60.1409999999999982	29.9239999999999995	20	88	VM615	timikanims	sabrinacoss
+577	2018-02-02 14:47:00	0	16	60.4410000000000025	30.4540000000000006	59.5840000000000032	30.1380000000000017	14	32	JL276	louisalucio	chiamurphey
+578	2018-02-15 08:39:00	0	95	60.1749999999999972	29.8460000000000001	59.5850000000000009	30.2089999999999996	18	82	GM220	taneshastruthers	danillewhiteside
+579	2018-02-28 13:01:00	0	54	60.2539999999999978	30.2719999999999985	60.3170000000000002	29.9080000000000013	9	75	GF138	louisalucio	danillewhiteside
+580	2018-01-28 01:23:00	0	29	59.5859999999999985	29.6539999999999999	60.0529999999999973	30.0670000000000002	28	119	BE981	beewommack	sabrinacoss
+581	2018-01-21 11:39:00	0	91	60.3430000000000035	30.4759999999999991	60.3430000000000035	30.4759999999999991	13	38	VM615	jerrodlupo	chiamurphey
+582	2018-01-17 08:43:00	0	33	60.0769999999999982	30.2920000000000016	59.8890000000000029	29.7579999999999991	27	64	QZ906	hershelsmullen	fidelshimkus
+583	2018-02-25 09:43:00	0	60	60.4769999999999968	29.8490000000000002	60.0589999999999975	29.6359999999999992	22	35	PX851	sigridenger	valrieburr
+584	2018-01-28 11:54:00	0	60	59.902000000000001	30.2010000000000005	59.5889999999999986	29.9390000000000001	7	19	QP571	eugenesacks	joleenjefferis
+585	2018-02-24 13:31:00	0	90	59.9450000000000003	29.9349999999999987	60.0529999999999973	30.0949999999999989	12	120	QZ906	kashacallen	chiamurphey
+586	2018-01-01 08:59:00	0	27	60.3459999999999965	29.7850000000000001	60.3049999999999997	29.8129999999999988	10	80	JL276	marcellusmagana	shamekalachance
+587	2018-01-11 15:19:00	0	55	60.078000000000003	29.9819999999999993	60.4769999999999968	29.8490000000000002	6	55	GG939	beewommack	donniemaskell
+588	2018-02-14 15:53:00	0	19	59.8049999999999997	29.5629999999999988	60.0529999999999973	30.0949999999999989	7	118	GG939	marcellusmagana	essiehempel
+589	2018-02-23 16:32:00	0	66	60.3459999999999965	29.7850000000000001	59.5159999999999982	29.5850000000000009	25	96	GG939	kevenschuller	debrahdeland
+590	2018-01-23 12:39:00	0	37	59.5159999999999982	29.5850000000000009	60.0750000000000028	29.847999999999999	8	24	QP571	masonmardis	shamekalachance
+591	2018-01-06 09:15:00	0	50	60.4410000000000025	30.4540000000000006	59.8400000000000034	29.8069999999999986	6	33	WK649	sigridenger	alexacory
+592	2018-02-18 01:49:00	0	44	59.8509999999999991	29.7089999999999996	59.5420000000000016	29.5420000000000016	15	23	BE981	masonmardis	essiehempel
+593	2018-02-17 09:14:00	0	20	60.3329999999999984	30.3909999999999982	60.0360000000000014	30.3140000000000001	6	15	VS161	kevenschuller	julioned
+594	2018-02-02 03:51:00	0	20	59.7289999999999992	30.3599999999999994	60.0859999999999985	29.5779999999999994	14	12	PX851	ozelladay	sabrinacoss
+595	2018-02-26 04:11:00	0	10	59.9799999999999969	30.0590000000000011	59.7939999999999969	29.6230000000000011	29	63	QP571	jerrodlupo	ceolafazio
+596	2018-02-09 20:24:00	0	56	60.2629999999999981	29.7830000000000013	59.9799999999999969	30.0590000000000011	9	61	PX851	kenyarumore	pameliacavitt
+597	2018-02-24 11:44:00	0	24	59.9309999999999974	29.5199999999999996	60.078000000000003	29.9819999999999993	11	110	ND592	eugenesacks	nathanielgibb
+598	2018-01-05 23:48:00	0	32	59.8389999999999986	29.8850000000000016	60.054000000000002	29.6660000000000004	20	41	QP571	taneshastruthers	alexacory
+599	2018-01-23 02:21:00	0	11	59.6379999999999981	30.4720000000000013	59.6880000000000024	29.7040000000000006	6	24	BE981	mitsuemcconico	ceolafazio
+600	2018-02-06 08:34:00	0	59	59.5290000000000035	29.7319999999999993	59.7939999999999969	29.6230000000000011	7	64	GG939	chungcottone	joleenjefferis
+601	2018-01-29 01:40:00	0	87	60.054000000000002	29.6660000000000004	60.1409999999999982	29.9239999999999995	8	114	YH116	springsergio	wilburjustiniano
+602	2018-02-20 22:04:00	0	40	59.902000000000001	30.2010000000000005	59.8960000000000008	29.629999999999999	21	92	TJ597	timikanims	joleenjefferis
+603	2018-01-18 21:12:00	0	30	59.902000000000001	30.2010000000000005	60.3049999999999997	29.8129999999999988	18	97	GZ961	taneshastruthers	judithvillareal
+604	2018-01-12 07:41:00	0	59	60.286999999999999	30.277000000000001	59.7460000000000022	29.6090000000000018	20	88	GG939	taneshastruthers	normangreb
+605	2018-02-20 13:47:00	0	89	59.6039999999999992	29.5079999999999991	59.6920000000000002	30.2169999999999987	30	38	NU214	kevenschuller	danillewhiteside
+606	2018-02-02 20:45:00	0	56	60.0739999999999981	30.4229999999999983	59.7460000000000022	29.6090000000000018	23	79	WK649	kashacallen	joleenjefferis
+607	2018-02-12 13:00:00	0	21	60.2730000000000032	30.3170000000000002	59.5889999999999986	29.9390000000000001	20	51	GF138	lillythorton	fidelshimkus
+608	2018-01-28 11:20:00	0	26	59.7460000000000022	29.6090000000000018	59.5260000000000034	29.6750000000000007	14	105	QP571	jerrodlupo	joleenjefferis
+609	2018-01-13 09:43:00	0	36	60.078000000000003	29.9819999999999993	59.6589999999999989	30.2139999999999986	24	51	PX851	latinaphenix	chiamurphey
+610	2018-02-01 15:41:00	0	25	60.0579999999999998	29.5689999999999991	59.982999999999997	30.3290000000000006	22	105	JL276	eugenesacks	wilburjustiniano
+612	2018-01-27 11:07:00	0	15	60.0769999999999982	30.2920000000000016	60.4249999999999972	30.1799999999999997	26	94	GG939	quentindelacruz	alexacory
+613	2018-02-07 11:27:00	0	21	59.8800000000000026	30.3539999999999992	59.5840000000000032	30.1380000000000017	18	77	WK649	kevinnuno	madelainesing
+615	2018-02-16 21:44:00	0	88	60.4939999999999998	30.0970000000000013	60.0579999999999998	29.5689999999999991	29	93	GM220	kenyarumore	sabrinacoss
+616	2018-01-17 00:51:00	0	66	60.3870000000000005	30.1009999999999991	59.9500000000000028	29.8290000000000006	22	28	VM615	kevinnuno	lettybruner
+617	2018-02-04 16:06:00	0	81	59.5889999999999986	29.9390000000000001	60.3840000000000003	29.5479999999999983	20	103	RL003	lerabreed	valrieburr
+618	2018-02-03 12:40:00	0	23	59.5290000000000035	30.4409999999999989	59.5290000000000035	30.4409999999999989	19	58	VS161	lillythorton	ceolafazio
+619	2018-01-09 05:52:00	0	44	60.1850000000000023	29.5539999999999985	59.6330000000000027	29.8200000000000003	23	55	JL276	kevenschuller	julioned
+621	2018-02-01 22:56:00	0	63	60.2169999999999987	29.9899999999999984	60.0360000000000014	30.3140000000000001	16	105	WK649	kathlyndotts	essiehempel
+622	2018-02-27 17:35:00	0	35	59.828000000000003	30.4480000000000004	60.2890000000000015	30.2310000000000016	24	38	VM615	lillythorton	lettybruner
+623	2018-02-27 03:53:00	0	12	60.402000000000001	29.9220000000000006	60.304000000000002	30.4299999999999997	25	67	VM615	latinaphenix	elfriededittmer
+624	2018-01-16 07:59:00	0	36	59.8389999999999986	29.8850000000000016	59.9799999999999969	30.0590000000000011	17	16	GZ961	lillythorton	chiamurphey
+625	2018-01-14 06:04:00	0	27	59.8900000000000006	30.468	60.4470000000000027	30.1320000000000014	6	86	WK649	springsergio	sierragingras
+626	2018-01-09 09:41:00	0	19	59.5429999999999993	30.3120000000000012	59.6749999999999972	30.4149999999999991	20	21	GM220	jerrodlupo	madelainesing
+627	2018-02-05 07:58:00	0	92	60.078000000000003	29.9819999999999993	59.6469999999999985	30.1529999999999987	18	100	QP571	lerabreed	donniemaskell
+629	2018-01-24 03:13:00	0	89	59.6450000000000031	30.0180000000000007	59.6330000000000027	29.8200000000000003	24	65	VM615	nathanaelpaylor	alexacory
+630	2018-01-25 07:51:00	0	97	60.2890000000000015	30.2310000000000016	60.0360000000000014	30.3140000000000001	27	53	GM220	lillythorton	madelainesing
+631	2018-01-29 03:53:00	0	64	60.1749999999999972	29.8460000000000001	59.828000000000003	30.4480000000000004	22	21	BE981	ozelladay	fidelshimkus
+633	2018-01-11 11:55:00	0	52	59.6469999999999985	30.1529999999999987	59.5900000000000034	29.5130000000000017	13	117	GZ961	kevinnuno	wilburjustiniano
+634	2018-02-01 00:15:00	0	37	60.4470000000000027	30.1320000000000014	60.4939999999999998	30.0970000000000013	23	13	BE981	kevinnuno	ceolafazio
+635	2018-01-30 09:18:00	0	88	59.5589999999999975	29.8629999999999995	59.5840000000000032	30.1380000000000017	17	85	VS161	lerabreed	danillewhiteside
+636	2018-02-07 10:56:00	0	94	59.7220000000000013	29.9080000000000013	59.6330000000000027	29.8200000000000003	28	101	GZ961	lerabreed	essiehempel
+637	2018-02-10 06:28:00	0	39	59.8890000000000029	29.7579999999999991	60.3049999999999997	29.8129999999999988	7	88	RL003	shaynacropp	nathanielgibb
+638	2018-02-22 12:52:00	0	76	59.8109999999999999	30.2680000000000007	60.2620000000000005	29.8919999999999995	9	18	GG939	springsergio	nathanielgibb
+639	2018-01-20 12:33:00	0	54	60.3430000000000035	30.4759999999999991	59.5349999999999966	30.1960000000000015	26	55	TJ597	kenyarumore	elfriededittmer
+640	2018-01-05 13:14:00	0	39	59.6469999999999985	30.1529999999999987	59.8049999999999997	29.5629999999999988	13	16	WK649	taneshastruthers	wilburjustiniano
+641	2018-02-25 13:42:00	0	91	59.6880000000000024	29.7040000000000006	59.5349999999999966	30.1960000000000015	16	36	GF138	ozelladay	chiamurphey
+642	2018-02-01 04:17:00	0	64	60.286999999999999	30.277000000000001	60.0750000000000028	29.847999999999999	14	85	UT042	quentindelacruz	donniemaskell
+644	2018-02-21 13:38:00	0	62	59.5429999999999993	30.3120000000000012	59.7460000000000022	29.6090000000000018	24	68	GG939	marcellusmagana	vimilani
+645	2018-02-08 11:14:00	0	27	60.0589999999999975	29.6359999999999992	60.0750000000000028	29.847999999999999	9	83	UT042	lillythorton	joleenjefferis
+646	2018-02-13 04:58:00	0	17	60.4470000000000027	30.1320000000000014	60.0360000000000014	30.3140000000000001	8	110	TJ597	lerabreed	nathanielgibb
+647	2018-01-21 12:21:00	0	13	59.7289999999999992	30.3599999999999994	60.0750000000000028	29.847999999999999	19	75	ND592	taneshastruthers	essiehempel
+648	2018-02-23 23:54:00	0	10	60.2629999999999981	29.7830000000000013	59.6330000000000027	29.8200000000000003	10	26	PX851	kevinnuno	ceolafazio
+649	2018-02-21 22:15:00	0	12	60.3070000000000022	30.0030000000000001	59.5730000000000004	29.7250000000000014	28	40	GM220	lerabreed	donniemaskell
+650	2018-02-08 23:23:00	0	32	59.6379999999999981	30.4720000000000013	60.2890000000000015	30.2310000000000016	18	36	VS161	mitsuemcconico	wilburjustiniano
+651	2018-01-17 06:35:00	0	82	60.0739999999999981	30.4229999999999983	60.3340000000000032	29.5070000000000014	22	15	GZ961	quentindelacruz	vimilani
+652	2018-01-26 08:11:00	0	83	59.7220000000000013	29.9080000000000013	59.7460000000000022	29.6090000000000018	27	38	GG939	louisalucio	consuelotokarz
+653	2018-01-05 00:22:00	0	68	59.5260000000000034	29.6750000000000007	59.5159999999999982	29.5850000000000009	26	91	JL276	kevenschuller	alexacory
+654	2018-02-02 01:29:00	0	73	60.2169999999999987	29.9899999999999984	60.2539999999999978	30.2719999999999985	19	44	QP571	louisalucio	nathanielgibb
+655	2018-01-02 05:31:00	0	27	59.5850000000000009	30.2089999999999996	59.6469999999999985	30.1529999999999987	5	19	BE981	timikanims	chiamurphey
+656	2018-02-26 13:29:00	0	49	59.5589999999999975	29.8629999999999995	59.7629999999999981	29.5859999999999985	20	52	TJ597	marcellusmagana	debrahdeland
+657	2018-01-18 04:03:00	0	60	60.4249999999999972	30.1799999999999997	60.3340000000000032	29.5070000000000014	18	99	BE981	ozelladay	judithvillareal
+658	2018-02-28 19:07:00	0	85	59.7629999999999981	29.5859999999999985	60.0360000000000014	30.3140000000000001	8	103	BE981	lerabreed	alexacory
+659	2018-01-03 19:47:00	0	30	60.3049999999999997	29.8129999999999988	59.9799999999999969	30.0590000000000011	7	103	VS161	eugenesacks	madelainesing
+661	2018-02-18 17:11:00	0	64	60.1850000000000023	29.5539999999999985	59.5889999999999986	29.9390000000000001	23	110	JL276	timikanims	wilburjustiniano
+662	2018-02-08 05:19:00	0	94	59.982999999999997	30.3290000000000006	59.5850000000000009	30.2089999999999996	29	84	QZ906	beewommack	alexacory
+663	2018-02-12 00:58:00	0	75	59.6980000000000004	30.0120000000000005	60.453000000000003	30.1389999999999993	9	104	GM220	quentindelacruz	judithvillareal
+664	2018-01-19 12:11:00	0	50	59.8049999999999997	29.5629999999999988	59.5290000000000035	30.4409999999999989	12	106	GF138	eugenesacks	joleenjefferis
+665	2018-02-13 00:39:00	0	43	59.982999999999997	30.3290000000000006	59.6589999999999989	30.2139999999999986	11	83	QP571	jerrodlupo	alexacory
+666	2018-01-31 09:10:00	0	14	60.3340000000000032	29.5070000000000014	60.078000000000003	29.9819999999999993	29	11	RL003	beewommack	normangreb
+667	2018-01-19 16:35:00	0	46	60.1850000000000023	29.5539999999999985	59.9309999999999974	29.5199999999999996	14	106	UT042	chungcottone	pameliacavitt
+668	2018-01-16 11:24:00	0	19	59.5290000000000035	30.4409999999999989	59.8049999999999997	29.5629999999999988	19	49	JL276	jerrodlupo	nathanielgibb
+669	2018-01-22 23:15:00	0	22	59.9450000000000003	29.9349999999999987	60.2169999999999987	29.9899999999999984	23	52	JL276	timikanims	normangreb
+670	2018-01-31 00:40:00	0	64	60.0589999999999975	29.6359999999999992	59.5859999999999985	29.6539999999999999	11	28	GM220	lillythorton	sierragingras
+671	2018-01-30 09:43:00	0	93	59.5790000000000006	30.0519999999999996	59.8389999999999986	29.8850000000000016	16	103	GG939	marcellusmagana	fidelshimkus
+672	2018-01-05 09:39:00	0	60	60.4939999999999998	30.0970000000000013	60.4410000000000025	30.4540000000000006	29	14	NU214	timikanims	lettybruner
+673	2018-01-12 10:50:00	0	24	60.4939999999999998	30.0970000000000013	59.5859999999999985	29.6539999999999999	11	85	YH116	masonmardis	judithvillareal
+674	2018-01-10 10:18:00	0	10	60.4939999999999998	30.0970000000000013	60.3840000000000003	29.5479999999999983	15	46	PX851	taneshastruthers	wilburjustiniano
+675	2018-01-17 06:11:00	0	50	60.453000000000003	30.1389999999999993	60.3170000000000002	29.9080000000000013	11	65	VM615	lillythorton	vimilani
+676	2018-02-27 00:13:00	0	32	60.4249999999999972	30.1799999999999997	59.5349999999999966	30.1960000000000015	23	45	GF138	timikanims	vimilani
+677	2018-02-01 04:17:00	0	86	60.2730000000000032	30.3170000000000002	59.7460000000000022	29.6090000000000018	10	16	GF138	sigridenger	wilburjustiniano
+678	2018-02-14 02:22:00	0	14	60.0660000000000025	29.5700000000000003	60.3049999999999997	29.8129999999999988	5	115	QP571	mitsuemcconico	judithvillareal
+679	2018-02-20 05:22:00	0	45	60.3430000000000035	30.4759999999999991	60.402000000000001	29.9220000000000006	15	52	QZ906	latinaphenix	normangreb
+632	2018-02-05 07:02:00	0	64	59.5290000000000035	29.7319999999999993	59.828000000000003	30.4480000000000004	28	27	AN978	hershelsmullen	lettybruner
+660	2018-02-22 07:23:00	0	70	59.9350000000000023	30.1999999999999993	59.9549999999999983	29.5459999999999994	9	106	AN978	kevenschuller	fidelshimkus
+680	2018-01-26 09:53:00	0	23	59.982999999999997	30.3290000000000006	59.5429999999999993	30.3120000000000012	13	34	QZ906	sigridenger	julioned
+681	2018-02-28 05:27:00	0	64	60.0769999999999982	30.2920000000000016	59.6749999999999972	30.4149999999999991	20	89	BE981	mitsuemcconico	vimilani
+682	2018-01-04 23:41:00	0	48	59.7289999999999992	30.3599999999999994	59.8980000000000032	29.8939999999999984	26	29	NU214	beewommack	essiehempel
+683	2018-01-15 04:00:00	0	41	60.1850000000000023	29.5539999999999985	59.6980000000000004	30.0120000000000005	21	23	BE981	masonmardis	fidelshimkus
+684	2018-01-04 15:39:00	0	57	59.8960000000000008	29.629999999999999	60.2629999999999981	29.7830000000000013	14	119	VS161	chungcottone	ceolafazio
+686	2018-02-01 13:38:00	0	88	59.982999999999997	30.3290000000000006	59.7289999999999992	30.3599999999999994	7	25	YH116	mitsuemcconico	nathanielgibb
+687	2018-01-05 00:31:00	0	93	59.5840000000000032	30.1380000000000017	60.3459999999999965	29.7850000000000001	16	72	PX851	taneshastruthers	chiamurphey
+688	2018-01-26 05:39:00	0	68	59.8400000000000034	29.8069999999999986	60.2539999999999978	30.2719999999999985	26	86	GM220	nathanaelpaylor	wilburjustiniano
+689	2018-02-05 15:26:00	0	72	59.828000000000003	30.4480000000000004	59.5889999999999986	29.9390000000000001	18	70	GG939	kashacallen	pameliacavitt
+690	2018-02-03 00:21:00	0	24	59.8049999999999997	29.5629999999999988	60.4410000000000025	30.4540000000000006	25	65	QP571	kenyarumore	alexacory
+691	2018-01-13 19:22:00	0	22	59.6589999999999989	30.2139999999999986	60.054000000000002	29.6660000000000004	18	91	GM220	eugenesacks	wilburjustiniano
+692	2018-02-22 16:53:00	0	60	59.6920000000000002	30.2169999999999987	60.304000000000002	30.4299999999999997	9	22	GF138	jerrodlupo	ceolafazio
+693	2018-01-01 12:43:00	0	37	59.6439999999999984	30.0199999999999996	60.0519999999999996	29.8249999999999993	22	21	PX851	lerabreed	elfriededittmer
+694	2018-02-15 02:52:00	0	80	60.3430000000000035	30.4759999999999991	60.0769999999999982	30.2920000000000016	18	103	PX851	hershelsmullen	ceolafazio
+695	2018-01-23 02:43:00	0	99	60.2629999999999981	29.7830000000000013	59.5290000000000035	29.7319999999999993	11	46	WK649	cedricguilford	nathanielgibb
+696	2018-01-12 05:05:00	0	76	59.828000000000003	30.4480000000000004	60.4249999999999972	30.1799999999999997	20	77	GM220	timikanims	joleenjefferis
+697	2018-02-06 06:34:00	0	41	59.9440000000000026	29.8419999999999987	59.7460000000000022	29.6090000000000018	10	104	UT042	kevinnuno	valrieburr
+698	2018-01-23 09:13:00	0	35	59.5900000000000034	29.5130000000000017	59.6379999999999981	30.4720000000000013	7	89	PX851	timikanims	judithvillareal
+700	2018-01-01 14:15:00	0	76	59.5349999999999966	30.1960000000000015	59.5290000000000035	29.7319999999999993	26	43	ND592	hershelsmullen	debrahdeland
+701	2018-01-03 08:56:00	0	22	59.8509999999999991	29.7089999999999996	60.2730000000000032	30.3170000000000002	13	73	GM220	lerabreed	consuelotokarz
+702	2018-01-16 05:15:00	0	45	59.5349999999999966	30.1960000000000015	59.9500000000000028	29.8290000000000006	28	43	NU214	timikanims	madelainesing
+703	2018-02-04 22:44:00	0	16	59.8900000000000006	30.468	60.1850000000000023	29.5539999999999985	18	74	VM615	kevinnuno	consuelotokarz
+704	2018-02-14 02:44:00	0	58	60.054000000000002	29.6660000000000004	60.3340000000000032	29.5070000000000014	17	20	GM220	louisalucio	donniemaskell
+705	2018-01-09 10:40:00	0	98	60.2349999999999994	29.8000000000000007	59.9549999999999983	29.5459999999999994	26	79	YH116	taneshastruthers	vimilani
+706	2018-02-14 12:52:00	0	90	59.9500000000000028	29.8290000000000006	59.5900000000000034	29.5130000000000017	20	30	NU214	hershelsmullen	valrieburr
+708	2018-02-25 15:19:00	0	92	59.902000000000001	30.2010000000000005	60.2620000000000005	29.8919999999999995	13	34	RL003	kashacallen	julioned
+709	2018-01-07 11:42:00	0	55	60.2539999999999978	30.2719999999999985	59.5260000000000034	29.6750000000000007	28	65	GZ961	marcellusmagana	madelainesing
+710	2018-01-09 08:04:00	0	49	60.0739999999999981	30.4229999999999983	60.3340000000000032	29.5070000000000014	13	11	QP571	mitsuemcconico	shamekalachance
+711	2018-02-09 03:21:00	0	33	60.453000000000003	30.1389999999999993	59.6379999999999981	30.4720000000000013	25	75	VS161	kashacallen	sierragingras
+712	2018-01-14 04:53:00	0	84	59.6749999999999972	30.4149999999999991	60.2370000000000019	30.1509999999999998	27	78	ND592	kevinnuno	lettybruner
+714	2018-02-17 09:19:00	0	23	60.453000000000003	30.1389999999999993	59.9500000000000028	29.8290000000000006	9	36	RL003	hershelsmullen	lettybruner
+715	2018-02-24 02:15:00	0	15	59.7289999999999992	30.3599999999999994	59.5159999999999982	29.5850000000000009	28	39	GG939	chungcottone	consuelotokarz
+716	2018-02-18 19:47:00	0	58	59.8389999999999986	29.8850000000000016	59.5159999999999982	29.5850000000000009	6	76	QZ906	mitsuemcconico	elfriededittmer
+717	2018-02-19 23:09:00	0	61	60.0519999999999996	29.8249999999999993	59.5589999999999975	29.8629999999999995	22	90	YH116	kenyarumore	julioned
+720	2018-01-09 01:53:00	0	67	60.078000000000003	29.9819999999999993	59.5420000000000016	29.5420000000000016	22	85	BE981	nathanaelpaylor	chiamurphey
+721	2018-01-06 16:53:00	0	45	59.6589999999999989	30.2139999999999986	59.7460000000000022	29.6090000000000018	29	16	YH116	cedricguilford	lettybruner
+722	2018-01-26 16:19:00	0	61	60.2169999999999987	29.9899999999999984	60.3689999999999998	30.4340000000000011	27	67	BE981	kenyarumore	lettybruner
+723	2018-01-30 12:04:00	0	10	60.4470000000000027	30.1320000000000014	60.2539999999999978	30.2719999999999985	7	32	ND592	taneshastruthers	pameliacavitt
+724	2018-01-11 03:17:00	0	88	60.453000000000003	30.1389999999999993	60.2730000000000032	30.3170000000000002	9	33	GF138	marcellusmagana	judithvillareal
+725	2018-01-05 14:45:00	0	45	60.0360000000000014	30.3140000000000001	59.6920000000000002	30.2169999999999987	24	111	PX851	jerrodlupo	essiehempel
+726	2018-01-27 19:43:00	0	64	59.5260000000000034	29.6750000000000007	59.5859999999999985	29.6539999999999999	23	57	ND592	mitsuemcconico	judithvillareal
+727	2018-01-07 12:10:00	0	82	60.0519999999999996	29.8249999999999993	60.0739999999999981	30.4229999999999983	10	22	GF138	marcellusmagana	consuelotokarz
+728	2018-02-20 17:29:00	0	39	59.9350000000000023	30.1999999999999993	59.6060000000000016	30.4239999999999995	16	79	GG939	louisalucio	julioned
+729	2018-01-24 19:16:00	0	97	60.3170000000000002	29.9080000000000013	60.3049999999999997	29.8129999999999988	25	38	ND592	jerrodlupo	essiehempel
+730	2018-01-19 16:06:00	0	77	59.8800000000000026	30.3539999999999992	60.054000000000002	29.6660000000000004	12	82	WK649	kathlyndotts	judithvillareal
+731	2018-02-06 17:53:00	0	47	59.8900000000000006	30.468	60.3459999999999965	29.7850000000000001	17	99	QZ906	timikanims	lettybruner
+732	2018-01-02 01:15:00	0	23	60.4249999999999972	30.1799999999999997	59.8900000000000006	30.468	28	107	VS161	louisalucio	debrahdeland
+733	2018-01-26 03:51:00	0	11	60.3170000000000002	29.9080000000000013	60.3840000000000003	29.5479999999999983	25	59	VS161	lillythorton	vimilani
+734	2018-02-17 05:41:00	0	42	60.1749999999999972	29.8460000000000001	60.078000000000003	29.9819999999999993	6	104	TJ597	kevinnuno	valrieburr
+735	2018-01-01 11:32:00	0	89	60.3459999999999965	29.7850000000000001	60.0579999999999998	29.5689999999999991	7	44	GZ961	beewommack	fidelshimkus
+736	2018-01-05 04:07:00	0	74	59.8980000000000032	29.8939999999999984	59.7460000000000022	29.6090000000000018	30	26	JL276	mitsuemcconico	judithvillareal
+738	2018-01-19 03:04:00	0	86	59.8960000000000008	29.629999999999999	59.8960000000000008	29.629999999999999	20	88	JL276	sigridenger	sabrinacoss
+739	2018-01-09 07:44:00	0	40	60.0589999999999975	29.6359999999999992	59.5850000000000009	30.2089999999999996	9	10	QP571	hershelsmullen	normangreb
+740	2018-02-02 15:08:00	0	96	59.7220000000000013	29.9080000000000013	59.7460000000000022	29.6090000000000018	5	16	UT042	marcellusmagana	alexacory
+685	2018-02-08 18:22:00	0	77	60.3049999999999997	29.8129999999999988	60.0589999999999975	29.6359999999999992	9	55	AN978	marcellusmagana	valrieburr
+699	2018-02-03 08:16:00	0	57	59.9440000000000026	29.8419999999999987	60.0660000000000025	29.5700000000000003	24	73	AN978	lerabreed	danillewhiteside
+741	2018-01-26 01:01:00	0	70	60.4470000000000027	30.1320000000000014	59.7289999999999992	30.3599999999999994	15	29	GM220	nathanaelpaylor	judithvillareal
+743	2018-02-19 11:33:00	0	76	60.304000000000002	30.4299999999999997	60.2730000000000032	30.3170000000000002	12	63	VM615	lillythorton	nathanielgibb
+744	2018-01-15 22:46:00	0	59	59.6450000000000031	30.0180000000000007	59.5290000000000035	30.4409999999999989	14	113	ND592	kenyarumore	julioned
+745	2018-01-27 01:42:00	0	92	59.5850000000000009	30.2089999999999996	59.5429999999999993	30.3120000000000012	16	119	VS161	beewommack	sierragingras
+747	2018-01-26 13:29:00	0	78	59.5840000000000032	30.1380000000000017	60.347999999999999	30.4819999999999993	18	60	UT042	jerrodlupo	consuelotokarz
+748	2018-01-19 10:20:00	0	89	59.6379999999999981	30.4720000000000013	60.2169999999999987	29.9899999999999984	7	65	GG939	lerabreed	madelainesing
+749	2018-02-21 01:25:00	0	21	59.7629999999999981	29.5859999999999985	60.0579999999999998	29.5689999999999991	25	106	BE981	hershelsmullen	sierragingras
+750	2018-02-18 21:18:00	0	95	59.7939999999999969	29.6230000000000011	59.8960000000000008	29.629999999999999	27	78	QP571	lillythorton	vimilani
+751	2018-02-18 11:42:00	0	52	60.0529999999999973	30.0670000000000002	59.9549999999999983	29.5459999999999994	17	60	UT042	marcellusmagana	consuelotokarz
+752	2018-02-13 20:46:00	0	60	60.4470000000000027	30.1320000000000014	59.5159999999999982	29.5850000000000009	9	120	ND592	nathanaelpaylor	julioned
+753	2018-02-01 09:54:00	0	56	60.2169999999999987	29.9899999999999984	60.2169999999999987	29.9899999999999984	24	28	UT042	shaynacropp	julioned
+754	2018-02-04 19:12:00	0	45	59.8400000000000034	29.8069999999999986	59.8109999999999999	30.2680000000000007	20	65	QP571	chungcottone	sierragingras
+755	2018-02-06 16:21:00	0	90	60.4939999999999998	30.0970000000000013	59.8980000000000032	29.8939999999999984	20	49	JL276	kashacallen	consuelotokarz
+756	2018-01-02 15:29:00	0	19	60.3049999999999997	29.8129999999999988	60.0750000000000028	29.847999999999999	24	115	VM615	ozelladay	joleenjefferis
+757	2018-01-10 21:44:00	0	17	60.0769999999999982	30.2920000000000016	60.4249999999999972	30.1799999999999997	7	95	UT042	lerabreed	sierragingras
+758	2018-01-23 10:14:00	0	79	59.8109999999999999	30.2680000000000007	59.6039999999999992	29.5079999999999991	8	81	GG939	nathanaelpaylor	julioned
+759	2018-01-30 11:07:00	0	17	60.1850000000000023	29.5539999999999985	59.6060000000000016	30.4239999999999995	5	47	GM220	nathanaelpaylor	wilburjustiniano
+760	2018-01-01 04:19:00	0	82	59.9549999999999983	29.5459999999999994	59.5889999999999986	29.9390000000000001	27	42	VM615	shaynacropp	nathanielgibb
+762	2018-01-03 07:18:00	0	51	59.5900000000000034	29.5130000000000017	59.6039999999999992	29.5079999999999991	13	12	GG939	taneshastruthers	ceolafazio
+763	2018-02-02 22:55:00	0	18	59.6589999999999989	30.2139999999999986	60.0660000000000025	29.5700000000000003	8	109	UT042	taneshastruthers	fidelshimkus
+764	2018-01-05 19:15:00	0	66	60.0589999999999975	29.6359999999999992	60.347999999999999	30.4819999999999993	14	23	VM615	jerrodlupo	judithvillareal
+765	2018-01-14 06:36:00	0	75	59.6880000000000024	29.7040000000000006	60.0589999999999975	29.6359999999999992	17	114	RL003	lillythorton	debrahdeland
+766	2018-02-19 08:47:00	0	48	60.3840000000000003	29.5479999999999983	59.5730000000000004	29.7250000000000014	25	26	GG939	eugenesacks	julioned
+767	2018-01-06 00:44:00	0	13	59.7939999999999969	29.6230000000000011	60.3070000000000022	30.0030000000000001	22	90	UT042	marcellusmagana	sierragingras
+768	2018-02-16 05:27:00	0	90	59.7289999999999992	30.3599999999999994	59.9549999999999983	29.5459999999999994	30	23	UT042	nathanaelpaylor	debrahdeland
+769	2018-02-11 17:29:00	0	26	60.2629999999999981	29.7830000000000013	59.6920000000000002	30.2169999999999987	29	37	VS161	chungcottone	valrieburr
+770	2018-02-04 00:47:00	0	72	59.8960000000000008	29.629999999999999	59.5900000000000034	29.5130000000000017	11	101	VS161	cedricguilford	wilburjustiniano
+771	2018-01-20 01:08:00	0	77	59.7289999999999992	30.3599999999999994	59.5349999999999966	30.1960000000000015	6	53	GM220	louisalucio	joleenjefferis
+773	2018-02-25 02:30:00	0	10	59.6060000000000016	30.4239999999999995	59.6920000000000002	30.2169999999999987	29	16	RL003	hershelsmullen	lettybruner
+774	2018-02-07 18:36:00	0	38	59.9309999999999974	29.5199999999999996	60.3340000000000032	29.5070000000000014	23	62	ND592	taneshastruthers	judithvillareal
+776	2018-01-10 08:24:00	0	73	59.6880000000000024	29.7040000000000006	60.0660000000000025	29.5700000000000003	24	92	GZ961	timikanims	ceolafazio
+777	2018-02-28 23:39:00	0	50	60.0529999999999973	30.0670000000000002	60.4410000000000025	30.4540000000000006	5	85	VM615	louisalucio	donniemaskell
+778	2018-01-05 12:47:00	0	79	60.1850000000000023	29.5539999999999985	60.3840000000000003	29.5479999999999983	11	99	VM615	ozelladay	valrieburr
+779	2018-01-06 19:26:00	0	68	60.1910000000000025	29.8760000000000012	59.5840000000000032	30.1380000000000017	28	19	VS161	kevinnuno	essiehempel
+780	2018-01-04 13:40:00	0	19	60.2539999999999978	30.2719999999999985	60.3840000000000003	29.5479999999999983	10	109	WK649	hershelsmullen	julioned
+781	2018-02-22 22:08:00	0	87	60.4470000000000027	30.1320000000000014	60.0739999999999981	30.4229999999999983	27	32	GZ961	marcellusmagana	julioned
+782	2018-01-04 17:22:00	0	53	59.8960000000000008	29.629999999999999	59.8980000000000032	29.8939999999999984	21	42	ND592	sigridenger	julioned
+783	2018-01-23 16:30:00	0	31	60.2890000000000015	30.2409999999999997	60.1409999999999982	29.9239999999999995	5	89	BE981	kevinnuno	shamekalachance
+784	2018-01-23 03:00:00	0	28	60.0519999999999996	29.8249999999999993	60.4470000000000027	30.1320000000000014	5	109	GM220	kathlyndotts	ceolafazio
+785	2018-02-24 03:26:00	0	74	60.0589999999999975	29.6359999999999992	59.8980000000000032	29.8939999999999984	24	85	QZ906	nathanaelpaylor	vimilani
+786	2018-01-23 17:50:00	0	22	60.2779999999999987	29.745000000000001	59.8049999999999997	29.5629999999999988	27	99	NU214	louisalucio	ceolafazio
+787	2018-02-20 15:54:00	0	94	59.8980000000000032	29.8939999999999984	59.5589999999999975	29.8629999999999995	13	91	GG939	kathlyndotts	consuelotokarz
+788	2018-02-12 16:33:00	0	10	59.5889999999999986	29.9390000000000001	60.0579999999999998	29.5689999999999991	27	15	WK649	louisalucio	essiehempel
+789	2018-01-09 09:56:00	0	68	59.8109999999999999	30.2680000000000007	60.3049999999999997	29.8129999999999988	28	49	GM220	kashacallen	alexacory
+790	2018-02-21 21:48:00	0	50	60.3329999999999984	30.3909999999999982	60.3170000000000002	29.9080000000000013	13	89	VS161	eugenesacks	joleenjefferis
+791	2018-01-17 20:48:00	0	88	60.2539999999999978	30.2719999999999985	60.1409999999999982	29.9239999999999995	7	34	GZ961	kevinnuno	julioned
+792	2018-02-12 15:30:00	0	71	59.7629999999999981	29.5859999999999985	59.9309999999999974	29.5199999999999996	15	81	BE981	taneshastruthers	pameliacavitt
+794	2018-01-21 15:30:00	0	68	59.6379999999999981	30.4720000000000013	60.3070000000000022	30.0030000000000001	13	58	QP571	latinaphenix	vimilani
+795	2018-02-25 22:06:00	0	67	60.304000000000002	30.4299999999999997	59.7460000000000022	29.6090000000000018	18	82	WK649	cedricguilford	danillewhiteside
+797	2018-01-24 05:42:00	0	97	60.3049999999999997	29.8129999999999988	59.902000000000001	30.2010000000000005	16	85	JL276	jerrodlupo	consuelotokarz
+799	2018-01-31 04:21:00	0	19	60.0739999999999981	30.4229999999999983	60.3459999999999965	29.7850000000000001	8	41	GF138	kashacallen	fidelshimkus
+800	2018-01-03 03:34:00	0	34	59.8109999999999999	30.2680000000000007	60.0529999999999973	30.0670000000000002	21	110	QZ906	sigridenger	sabrinacoss
+801	2018-01-19 10:08:00	0	22	59.7460000000000022	29.6090000000000018	60.4470000000000027	30.1320000000000014	23	84	JL276	mitsuemcconico	joleenjefferis
+802	2018-02-02 01:23:00	0	85	59.9549999999999983	29.5459999999999994	59.902000000000001	30.2010000000000005	19	22	GM220	nathanaelpaylor	madelainesing
+746	2018-01-04 17:22:00	0	67	59.5859999999999985	29.6539999999999999	59.7939999999999969	29.6230000000000011	15	120	AN978	marcellusmagana	sierragingras
+761	2018-02-25 23:20:00	0	49	59.5309999999999988	30.2809999999999988	59.5889999999999986	29.9390000000000001	22	51	AN978	mitsuemcconico	sabrinacoss
+772	2018-01-12 23:41:00	0	62	59.6589999999999989	30.2139999999999986	60.4769999999999968	29.8490000000000002	9	116	AN978	cedricguilford	donniemaskell
+793	2018-02-11 06:27:00	0	88	60.2370000000000019	30.1509999999999998	59.5790000000000006	30.0519999999999996	5	111	AN978	lillythorton	sierragingras
+804	2018-02-08 05:25:00	0	20	60.1749999999999972	29.8460000000000001	60.2730000000000032	30.3170000000000002	17	77	GF138	masonmardis	judithvillareal
+805	2018-02-19 01:06:00	0	56	60.1910000000000025	29.8760000000000012	60.1749999999999972	29.8460000000000001	22	85	UT042	kevenschuller	wilburjustiniano
+806	2018-01-11 18:20:00	0	94	60.1409999999999982	29.9239999999999995	60.3430000000000035	30.4759999999999991	6	79	PX851	springsergio	joleenjefferis
+808	2018-01-07 05:05:00	0	55	60.4769999999999968	29.8490000000000002	60.3170000000000002	29.9080000000000013	8	40	GF138	sigridenger	debrahdeland
+809	2018-01-20 00:53:00	0	11	60.0660000000000025	29.5700000000000003	60.2890000000000015	30.2409999999999997	17	33	GM220	louisalucio	madelainesing
+810	2018-02-26 05:07:00	0	12	60.0529999999999973	30.0949999999999989	59.6039999999999992	29.5079999999999991	21	26	TJ597	eugenesacks	joleenjefferis
+811	2018-02-12 19:02:00	0	60	60.2620000000000005	29.8919999999999995	59.9799999999999969	30.0590000000000011	6	44	VM615	taneshastruthers	julioned
+812	2018-02-01 01:38:00	0	38	59.6920000000000002	30.2169999999999987	60.0519999999999996	29.8249999999999993	23	107	VS161	ozelladay	nathanielgibb
+813	2018-01-24 08:53:00	0	16	59.902000000000001	30.2010000000000005	60.1409999999999982	29.9239999999999995	30	86	GZ961	taneshastruthers	valrieburr
+814	2018-01-19 22:22:00	0	15	60.3070000000000022	30.0030000000000001	60.1910000000000025	29.8760000000000012	10	81	UT042	chungcottone	donniemaskell
+816	2018-01-23 19:58:00	0	74	60.1850000000000023	29.5539999999999985	59.902000000000001	30.2010000000000005	8	70	GM220	lerabreed	ceolafazio
+817	2018-01-17 05:45:00	0	30	59.9500000000000028	29.8290000000000006	59.5850000000000009	30.2089999999999996	11	61	GG939	latinaphenix	debrahdeland
+818	2018-01-02 19:07:00	0	44	59.828000000000003	30.4480000000000004	59.6330000000000027	29.8200000000000003	17	53	GZ961	timikanims	vimilani
+819	2018-01-08 09:59:00	0	71	60.2890000000000015	30.2409999999999997	60.2730000000000032	30.3170000000000002	9	118	RL003	sigridenger	donniemaskell
+820	2018-02-06 19:29:00	0	47	59.5730000000000004	29.7250000000000014	60.0750000000000028	29.847999999999999	8	119	GF138	mitsuemcconico	danillewhiteside
+821	2018-01-03 04:36:00	0	90	60.0529999999999973	30.0670000000000002	60.1850000000000023	29.5539999999999985	28	51	VS161	taneshastruthers	chiamurphey
+822	2018-02-07 04:25:00	0	36	60.1749999999999972	29.8460000000000001	60.3430000000000035	30.4759999999999991	22	76	TJ597	nathanaelpaylor	essiehempel
+823	2018-01-12 06:59:00	0	100	60.0660000000000025	29.5700000000000003	60.2370000000000019	30.1509999999999998	18	87	YH116	marcellusmagana	madelainesing
+824	2018-02-10 04:30:00	0	18	60.3689999999999998	30.4340000000000011	60.4939999999999998	30.0970000000000013	9	76	UT042	timikanims	chiamurphey
+825	2018-02-23 22:06:00	0	51	59.6039999999999992	29.5079999999999991	59.5260000000000034	29.6750000000000007	14	75	BE981	eugenesacks	essiehempel
+826	2018-01-25 19:06:00	0	49	60.4939999999999998	30.0970000000000013	60.1749999999999972	29.8460000000000001	26	87	NU214	jerrodlupo	essiehempel
+827	2018-01-23 11:48:00	0	61	60.1749999999999972	29.8460000000000001	59.6439999999999984	30.0199999999999996	8	56	VM615	chungcottone	donniemaskell
+828	2018-01-18 16:12:00	0	85	60.054000000000002	29.6660000000000004	59.8980000000000032	29.8939999999999984	24	47	QZ906	kathlyndotts	essiehempel
+829	2018-01-05 07:59:00	0	22	60.1409999999999982	29.9239999999999995	59.5840000000000032	30.1380000000000017	10	61	BE981	chungcottone	elfriededittmer
+830	2018-01-31 14:46:00	0	43	59.5850000000000009	30.2089999999999996	60.2169999999999987	29.9899999999999984	16	79	GM220	sigridenger	wilburjustiniano
+831	2018-02-22 23:21:00	0	38	60.304000000000002	30.4299999999999997	59.6749999999999972	30.4149999999999991	18	17	GG939	jerrodlupo	consuelotokarz
+832	2018-01-21 05:37:00	0	88	60.4470000000000027	30.1320000000000014	60.4410000000000025	30.4540000000000006	9	34	YH116	nathanaelpaylor	essiehempel
+833	2018-02-16 12:10:00	0	16	59.5850000000000009	30.2089999999999996	60.3459999999999965	29.7850000000000001	14	88	VM615	timikanims	normangreb
+834	2018-01-08 15:26:00	0	69	60.347999999999999	30.4819999999999993	59.5429999999999993	30.3120000000000012	28	38	RL003	ozelladay	valrieburr
+835	2018-02-05 10:30:00	0	53	59.5420000000000016	29.5420000000000016	60.4939999999999998	30.0970000000000013	17	52	VS161	nathanaelpaylor	judithvillareal
+836	2018-02-11 09:15:00	0	100	59.6980000000000004	30.0120000000000005	60.1409999999999982	29.9239999999999995	17	57	WK649	beewommack	sabrinacoss
+837	2018-02-25 11:46:00	0	21	60.0579999999999998	29.5689999999999991	59.8400000000000034	29.8069999999999986	8	69	JL276	kashacallen	julioned
+838	2018-01-11 05:02:00	0	79	59.5290000000000035	29.7319999999999993	59.6589999999999989	30.2139999999999986	25	99	PX851	jerrodlupo	sierragingras
+839	2018-01-06 04:33:00	0	91	59.6980000000000004	30.0120000000000005	59.5290000000000035	30.4409999999999989	19	88	GG939	hershelsmullen	vimilani
+842	2018-01-05 10:53:00	0	77	60.0859999999999985	29.5779999999999994	59.9450000000000003	29.9349999999999987	10	98	QP571	kashacallen	pameliacavitt
+843	2018-02-04 18:16:00	0	30	60.4769999999999968	29.8490000000000002	60.054000000000002	29.6660000000000004	15	18	UT042	kathlyndotts	judithvillareal
+844	2018-01-04 00:25:00	0	55	60.2629999999999981	29.7830000000000013	59.6469999999999985	30.1529999999999987	18	95	TJ597	marcellusmagana	madelainesing
+845	2018-02-21 09:43:00	0	63	60.2890000000000015	30.2310000000000016	60.4470000000000027	30.1320000000000014	13	16	YH116	springsergio	vimilani
+847	2018-02-25 09:33:00	0	39	60.0579999999999998	29.5689999999999991	60.286999999999999	30.277000000000001	10	25	QZ906	marcellusmagana	donniemaskell
+848	2018-01-08 00:56:00	0	10	60.1850000000000023	29.5539999999999985	59.5889999999999986	29.9390000000000001	7	51	UT042	cedricguilford	shamekalachance
+849	2018-01-31 16:06:00	0	34	59.7460000000000022	29.6090000000000018	59.9309999999999974	29.5199999999999996	26	13	PX851	kathlyndotts	valrieburr
+850	2018-01-17 05:05:00	0	11	60.2370000000000019	30.1509999999999998	60.0859999999999985	29.5779999999999994	6	119	ND592	ozelladay	vimilani
+851	2018-02-13 16:22:00	0	94	60.0529999999999973	30.0670000000000002	59.828000000000003	30.4480000000000004	16	51	TJ597	kenyarumore	essiehempel
+852	2018-01-18 08:29:00	0	16	59.9549999999999983	29.5459999999999994	59.9450000000000003	29.9349999999999987	20	72	VS161	shaynacropp	fidelshimkus
+853	2018-01-18 14:45:00	0	91	59.6589999999999989	30.2139999999999986	60.0579999999999998	29.5689999999999991	24	100	BE981	hershelsmullen	pameliacavitt
+854	2018-01-16 23:09:00	0	83	59.6439999999999984	30.0199999999999996	59.8400000000000034	29.8069999999999986	23	17	QZ906	springsergio	fidelshimkus
+855	2018-01-23 22:34:00	0	42	60.1409999999999982	29.9239999999999995	60.2169999999999987	29.9899999999999984	14	87	GG939	ozelladay	judithvillareal
+856	2018-02-09 12:06:00	0	19	60.3430000000000035	30.4759999999999991	60.3459999999999965	29.7850000000000001	28	28	GZ961	nathanaelpaylor	vimilani
+857	2018-02-15 20:37:00	0	33	59.828000000000003	30.4480000000000004	60.1409999999999982	29.9239999999999995	5	96	RL003	springsergio	normangreb
+858	2018-02-19 20:34:00	0	34	60.2730000000000032	30.3170000000000002	59.6589999999999989	30.2139999999999986	25	76	RL003	chungcottone	donniemaskell
+859	2018-01-27 07:21:00	0	58	60.0769999999999982	30.2920000000000016	59.6980000000000004	30.0120000000000005	23	67	RL003	sigridenger	normangreb
+861	2018-02-01 04:51:00	0	72	59.8400000000000034	29.8069999999999986	60.3430000000000035	30.4759999999999991	11	68	QP571	timikanims	judithvillareal
+862	2018-01-04 16:36:00	0	13	59.5420000000000016	29.5420000000000016	60.0579999999999998	29.5689999999999991	15	64	JL276	kenyarumore	sabrinacoss
+863	2018-02-01 08:22:00	0	73	59.5290000000000035	30.4409999999999989	60.304000000000002	30.4299999999999997	7	32	BE981	sigridenger	judithvillareal
+864	2018-01-28 19:03:00	0	81	60.4410000000000025	30.4540000000000006	60.1850000000000023	29.5539999999999985	29	63	UT042	kashacallen	donniemaskell
+840	2018-01-28 20:01:00	0	99	60.0739999999999981	30.4229999999999983	59.6379999999999981	30.4720000000000013	5	75	AN978	eugenesacks	vimilani
+860	2018-01-29 01:10:00	0	77	59.5159999999999982	29.5850000000000009	59.8800000000000026	30.3539999999999992	15	49	AN978	taneshastruthers	nathanielgibb
+865	2018-02-24 01:06:00	0	57	59.7939999999999969	29.6230000000000011	60.1749999999999972	29.8460000000000001	22	33	UT042	quentindelacruz	pameliacavitt
+866	2018-02-16 08:56:00	0	48	59.8900000000000006	30.468	60.286999999999999	30.277000000000001	20	13	PX851	springsergio	sabrinacoss
+867	2018-01-06 06:30:00	0	23	59.9799999999999969	30.0590000000000011	60.0660000000000025	29.5700000000000003	15	19	PX851	hershelsmullen	ceolafazio
+868	2018-01-03 12:48:00	0	31	59.6439999999999984	30.0199999999999996	60.1409999999999982	29.9239999999999995	18	82	VM615	kenyarumore	chiamurphey
+869	2018-01-14 17:08:00	0	54	60.0769999999999982	30.2920000000000016	59.8389999999999986	29.8850000000000016	27	40	QZ906	springsergio	donniemaskell
+870	2018-02-16 15:30:00	0	86	59.6330000000000027	29.8200000000000003	59.6039999999999992	29.5079999999999991	20	51	YH116	chungcottone	essiehempel
+871	2018-01-18 00:30:00	0	13	60.0769999999999982	30.2920000000000016	60.4939999999999998	30.0970000000000013	22	58	YH116	cedricguilford	danillewhiteside
+872	2018-02-14 09:38:00	0	19	60.2349999999999994	29.8000000000000007	60.402000000000001	29.9220000000000006	23	61	RL003	hershelsmullen	fidelshimkus
+873	2018-01-18 16:52:00	0	19	60.0739999999999981	30.4229999999999983	59.5309999999999988	30.2809999999999988	24	108	GF138	beewommack	alexacory
+874	2018-01-26 07:06:00	0	32	59.6980000000000004	30.0120000000000005	59.5840000000000032	30.1380000000000017	8	19	VM615	lerabreed	pameliacavitt
+875	2018-02-24 06:48:00	0	47	60.304000000000002	30.4299999999999997	59.6330000000000027	29.8200000000000003	19	68	NU214	springsergio	alexacory
+876	2018-01-09 13:16:00	0	82	59.5900000000000034	29.5130000000000017	60.1910000000000025	29.8760000000000012	24	64	GF138	kashacallen	fidelshimkus
+877	2018-02-05 14:06:00	0	46	59.9450000000000003	29.9349999999999987	60.0859999999999985	29.5779999999999994	27	59	RL003	kenyarumore	madelainesing
+878	2018-02-23 16:35:00	0	38	59.5290000000000035	30.4409999999999989	59.8509999999999991	29.7089999999999996	9	91	QZ906	hershelsmullen	elfriededittmer
+879	2018-02-26 03:00:00	0	56	60.0859999999999985	29.5779999999999994	59.5290000000000035	30.4409999999999989	20	39	ND592	chungcottone	valrieburr
+880	2018-01-03 01:18:00	0	58	60.3340000000000032	29.5070000000000014	59.7220000000000013	29.9080000000000013	21	92	JL276	kevenschuller	joleenjefferis
+881	2018-01-27 12:25:00	0	94	59.7220000000000013	29.9080000000000013	59.982999999999997	30.3290000000000006	29	36	PX851	kathlyndotts	alexacory
+883	2018-02-05 03:28:00	0	46	60.2779999999999987	29.745000000000001	60.0859999999999985	29.5779999999999994	28	66	QZ906	timikanims	consuelotokarz
+884	2018-02-17 03:03:00	0	83	60.1850000000000023	29.5539999999999985	60.3070000000000022	30.0030000000000001	15	105	NU214	hershelsmullen	chiamurphey
+885	2018-02-06 22:19:00	0	92	60.3689999999999998	30.4340000000000011	59.6330000000000027	29.8200000000000003	25	106	WK649	latinaphenix	elfriededittmer
+886	2018-01-19 02:21:00	0	76	60.3049999999999997	29.8129999999999988	59.5859999999999985	29.6539999999999999	22	12	WK649	timikanims	elfriededittmer
+887	2018-02-23 08:59:00	0	53	59.828000000000003	30.4480000000000004	60.3870000000000005	30.1009999999999991	7	117	JL276	kashacallen	nathanielgibb
+888	2018-02-11 14:13:00	0	25	59.6439999999999984	30.0199999999999996	59.9799999999999969	30.0590000000000011	24	91	WK649	springsergio	sabrinacoss
+891	2018-02-22 11:56:00	0	24	59.8800000000000026	30.3539999999999992	59.6330000000000027	29.8200000000000003	20	94	RL003	masonmardis	julioned
+892	2018-02-14 12:42:00	0	48	60.0529999999999973	30.0670000000000002	59.8800000000000026	30.3539999999999992	22	75	GM220	lerabreed	fidelshimkus
+893	2018-01-11 13:28:00	0	57	59.828000000000003	30.4480000000000004	60.1749999999999972	29.8460000000000001	13	116	GM220	kashacallen	elfriededittmer
+894	2018-02-01 14:54:00	0	89	59.6589999999999989	30.2139999999999986	60.0529999999999973	30.0949999999999989	14	93	VM615	nathanaelpaylor	consuelotokarz
+895	2018-02-17 10:26:00	0	99	59.902000000000001	30.2010000000000005	60.3689999999999998	30.4340000000000011	16	33	VS161	jerrodlupo	joleenjefferis
+896	2018-02-28 07:16:00	0	36	60.0529999999999973	30.0670000000000002	60.4939999999999998	30.0970000000000013	19	64	PX851	lillythorton	essiehempel
+897	2018-01-19 11:00:00	0	94	60.1409999999999982	29.9239999999999995	60.1749999999999972	29.8460000000000001	25	106	UT042	lillythorton	ceolafazio
+898	2018-02-08 03:32:00	0	60	59.5589999999999975	29.8629999999999995	60.3340000000000032	29.5070000000000014	6	60	GM220	kathlyndotts	consuelotokarz
+899	2018-02-17 07:13:00	0	69	59.8980000000000032	29.8939999999999984	60.0360000000000014	30.3140000000000001	23	97	WK649	timikanims	essiehempel
+900	2018-01-10 16:29:00	0	88	60.2370000000000019	30.1509999999999998	60.3329999999999984	30.3909999999999982	9	61	ND592	taneshastruthers	judithvillareal
+901	2018-01-21 23:40:00	0	21	60.2620000000000005	29.8919999999999995	60.2730000000000032	30.3170000000000002	27	115	GZ961	taneshastruthers	judithvillareal
+903	2018-02-20 01:41:00	0	21	60.1910000000000025	29.8760000000000012	59.828000000000003	30.4480000000000004	6	65	VS161	kathlyndotts	lettybruner
+905	2018-01-06 13:21:00	0	39	59.6589999999999989	30.2139999999999986	59.7289999999999992	30.3599999999999994	21	85	QZ906	lerabreed	vimilani
+907	2018-01-31 14:12:00	0	18	59.6450000000000031	30.0180000000000007	60.0859999999999985	29.5779999999999994	19	96	PX851	cedricguilford	fidelshimkus
+908	2018-01-19 00:44:00	0	74	60.3459999999999965	29.7850000000000001	59.8960000000000008	29.629999999999999	14	113	BE981	louisalucio	alexacory
+910	2018-01-25 01:32:00	0	59	59.8509999999999991	29.7089999999999996	59.5290000000000035	30.4409999999999989	21	43	GZ961	kevenschuller	pameliacavitt
+911	2018-01-26 07:57:00	0	66	60.0660000000000025	29.5700000000000003	60.0739999999999981	30.4229999999999983	13	105	UT042	hershelsmullen	fidelshimkus
+912	2018-01-06 20:11:00	0	63	59.8980000000000032	29.8939999999999984	60.3430000000000035	30.4759999999999991	5	90	VM615	lerabreed	julioned
+913	2018-01-03 16:44:00	0	53	59.5889999999999986	29.9390000000000001	60.453000000000003	30.1389999999999993	15	91	VM615	mitsuemcconico	fidelshimkus
+914	2018-02-25 17:52:00	0	14	59.6469999999999985	30.1529999999999987	59.5349999999999966	30.1960000000000015	30	104	JL276	kashacallen	sierragingras
+916	2018-02-02 04:08:00	0	62	59.5420000000000016	29.5420000000000016	59.7220000000000013	29.9080000000000013	10	64	PX851	masonmardis	madelainesing
+917	2018-01-17 17:10:00	0	64	59.5420000000000016	29.5420000000000016	60.304000000000002	30.4299999999999997	6	11	PX851	quentindelacruz	sabrinacoss
+918	2018-01-08 12:28:00	0	79	59.5900000000000034	29.5130000000000017	59.828000000000003	30.4480000000000004	24	59	VM615	mitsuemcconico	pameliacavitt
+919	2018-01-21 09:47:00	0	86	59.6920000000000002	30.2169999999999987	60.3459999999999965	29.7850000000000001	14	90	GF138	hershelsmullen	pameliacavitt
+920	2018-01-21 03:55:00	0	73	60.3459999999999965	29.7850000000000001	59.8900000000000006	30.468	7	38	GM220	cedricguilford	normangreb
+921	2018-01-28 05:44:00	0	51	59.5349999999999966	30.1960000000000015	60.0859999999999985	29.5779999999999994	12	93	JL276	kenyarumore	shamekalachance
+922	2018-02-24 02:13:00	0	42	59.9500000000000028	29.8290000000000006	60.0519999999999996	29.8249999999999993	12	38	VS161	springsergio	valrieburr
+923	2018-01-23 04:09:00	0	62	59.6450000000000031	30.0180000000000007	59.9309999999999974	29.5199999999999996	12	75	QP571	springsergio	ceolafazio
+924	2018-01-05 23:25:00	0	43	60.054000000000002	29.6660000000000004	60.0589999999999975	29.6359999999999992	21	49	QZ906	hershelsmullen	debrahdeland
+925	2018-02-03 17:47:00	0	29	60.2890000000000015	30.2409999999999997	59.5290000000000035	29.7319999999999993	20	112	JL276	latinaphenix	vimilani
+882	2018-02-21 05:14:00	0	67	60.2890000000000015	30.2310000000000016	60.286999999999999	30.277000000000001	14	30	AN978	timikanims	sabrinacoss
+889	2018-01-16 12:56:00	0	77	60.453000000000003	30.1389999999999993	60.3840000000000003	29.5479999999999983	29	38	AN978	eugenesacks	ceolafazio
+926	2018-01-12 14:59:00	0	29	60.2169999999999987	29.9899999999999984	60.2349999999999994	29.8000000000000007	22	114	VM615	louisalucio	shamekalachance
+927	2018-02-18 09:40:00	0	54	60.453000000000003	30.1389999999999993	60.2890000000000015	30.2409999999999997	23	98	UT042	ozelladay	shamekalachance
+929	2018-01-15 08:21:00	0	31	59.6469999999999985	30.1529999999999987	60.1850000000000023	29.5539999999999985	20	19	WK649	jerrodlupo	sabrinacoss
+931	2018-01-05 03:03:00	0	61	60.2370000000000019	30.1509999999999998	60.3459999999999965	29.7850000000000001	19	13	PX851	eugenesacks	danillewhiteside
+932	2018-02-15 00:00:00	0	29	59.5290000000000035	29.7319999999999993	59.9450000000000003	29.9349999999999987	13	36	VS161	mitsuemcconico	lettybruner
+933	2018-01-12 00:03:00	0	67	60.078000000000003	29.9819999999999993	60.3870000000000005	30.1009999999999991	29	63	GF138	chungcottone	joleenjefferis
+934	2018-02-11 23:49:00	0	72	59.5589999999999975	29.8629999999999995	59.5429999999999993	30.3120000000000012	16	45	WK649	marcellusmagana	ceolafazio
+935	2018-01-20 20:43:00	0	25	59.982999999999997	30.3290000000000006	60.2539999999999978	30.2719999999999985	12	79	ND592	chungcottone	danillewhiteside
+936	2018-01-25 13:06:00	0	72	60.4470000000000027	30.1320000000000014	59.6589999999999989	30.2139999999999986	24	114	WK649	hershelsmullen	normangreb
+937	2018-01-18 05:26:00	0	89	60.1409999999999982	29.9239999999999995	59.5309999999999988	30.2809999999999988	8	107	NU214	lillythorton	wilburjustiniano
+938	2018-02-14 07:15:00	0	69	59.9440000000000026	29.8419999999999987	60.4769999999999968	29.8490000000000002	21	60	VS161	kevenschuller	consuelotokarz
+939	2018-01-06 11:23:00	0	89	59.9309999999999974	29.5199999999999996	60.3340000000000032	29.5070000000000014	6	18	YH116	masonmardis	consuelotokarz
+940	2018-02-18 11:50:00	0	37	59.8960000000000008	29.629999999999999	59.9450000000000003	29.9349999999999987	23	73	JL276	nathanaelpaylor	sabrinacoss
+941	2018-02-08 11:59:00	0	85	60.3870000000000005	30.1009999999999991	59.9440000000000026	29.8419999999999987	12	112	VM615	kenyarumore	judithvillareal
+943	2018-02-02 08:11:00	0	83	59.5589999999999975	29.8629999999999995	59.5900000000000034	29.5130000000000017	19	98	UT042	sigridenger	essiehempel
+945	2018-01-03 19:19:00	0	58	60.1910000000000025	29.8760000000000012	60.0859999999999985	29.5779999999999994	30	111	BE981	chungcottone	sierragingras
+946	2018-01-13 09:19:00	0	16	60.3430000000000035	30.4759999999999991	59.6060000000000016	30.4239999999999995	16	37	QZ906	lillythorton	shamekalachance
+947	2018-01-13 00:04:00	0	39	59.6469999999999985	30.1529999999999987	59.5889999999999986	29.9390000000000001	11	49	JL276	kevinnuno	essiehempel
+948	2018-01-06 12:54:00	0	48	59.8109999999999999	30.2680000000000007	60.286999999999999	30.277000000000001	21	117	GZ961	shaynacropp	chiamurphey
+949	2018-02-13 23:21:00	0	19	60.3870000000000005	30.1009999999999991	60.3840000000000003	29.5479999999999983	23	42	QP571	taneshastruthers	alexacory
+950	2018-01-07 06:08:00	0	32	59.982999999999997	30.3290000000000006	60.0360000000000014	30.3140000000000001	30	69	ND592	latinaphenix	judithvillareal
+951	2018-01-11 09:59:00	0	75	59.7289999999999992	30.3599999999999994	60.1409999999999982	29.9239999999999995	24	16	GG939	sigridenger	valrieburr
+952	2018-02-10 21:47:00	0	72	59.5159999999999982	29.5850000000000009	60.4410000000000025	30.4540000000000006	11	13	GF138	sigridenger	ceolafazio
+953	2018-01-19 05:25:00	0	97	60.3070000000000022	30.0030000000000001	59.7939999999999969	29.6230000000000011	19	84	JL276	shaynacropp	wilburjustiniano
+954	2018-02-17 05:11:00	0	49	60.402000000000001	29.9220000000000006	59.5850000000000009	30.2089999999999996	24	51	VS161	kashacallen	elfriededittmer
+955	2018-01-22 08:40:00	0	26	59.6379999999999981	30.4720000000000013	60.0579999999999998	29.5689999999999991	24	25	QP571	nathanaelpaylor	debrahdeland
+956	2018-01-19 21:19:00	0	87	59.5309999999999988	30.2809999999999988	59.7629999999999981	29.5859999999999985	9	107	ND592	quentindelacruz	joleenjefferis
+957	2018-01-06 03:03:00	0	77	59.5429999999999993	30.3120000000000012	59.9450000000000003	29.9349999999999987	18	80	WK649	chungcottone	madelainesing
+958	2018-02-10 11:48:00	0	23	59.828000000000003	30.4480000000000004	59.7460000000000022	29.6090000000000018	27	56	BE981	louisalucio	normangreb
+959	2018-01-12 00:28:00	0	52	59.9440000000000026	29.8419999999999987	59.5429999999999993	30.3120000000000012	5	41	QP571	lerabreed	judithvillareal
+960	2018-01-12 19:40:00	0	94	59.5420000000000016	29.5420000000000016	60.0579999999999998	29.5689999999999991	14	19	BE981	timikanims	donniemaskell
+961	2018-01-15 17:39:00	0	24	60.2169999999999987	29.9899999999999984	59.8800000000000026	30.3539999999999992	18	23	TJ597	kevenschuller	danillewhiteside
+962	2018-01-17 01:59:00	0	15	60.0859999999999985	29.5779999999999994	59.6920000000000002	30.2169999999999987	16	92	RL003	lillythorton	wilburjustiniano
+963	2018-02-04 03:19:00	0	33	60.3459999999999965	29.7850000000000001	60.1749999999999972	29.8460000000000001	21	21	GM220	ozelladay	sabrinacoss
+964	2018-02-02 06:27:00	0	73	60.0589999999999975	29.6359999999999992	59.6980000000000004	30.0120000000000005	13	112	UT042	beewommack	consuelotokarz
+966	2018-02-23 15:50:00	0	24	59.5900000000000034	29.5130000000000017	59.9799999999999969	30.0590000000000011	7	23	TJ597	masonmardis	shamekalachance
+967	2018-02-26 19:06:00	0	32	59.5850000000000009	30.2089999999999996	60.2349999999999994	29.8000000000000007	19	105	GF138	ozelladay	joleenjefferis
+968	2018-01-19 08:54:00	0	70	59.5290000000000035	29.7319999999999993	60.304000000000002	30.4299999999999997	29	118	YH116	jerrodlupo	judithvillareal
+969	2018-01-05 07:46:00	0	16	59.8900000000000006	30.468	60.2539999999999978	30.2719999999999985	27	16	VS161	jerrodlupo	nathanielgibb
+970	2018-01-19 06:49:00	0	16	60.304000000000002	30.4299999999999997	59.5850000000000009	30.2089999999999996	14	52	BE981	quentindelacruz	debrahdeland
+971	2018-02-24 00:47:00	0	78	59.9549999999999983	29.5459999999999994	60.3329999999999984	30.3909999999999982	9	100	VS161	springsergio	sierragingras
+973	2018-01-24 22:56:00	0	33	60.286999999999999	30.277000000000001	59.8049999999999997	29.5629999999999988	14	18	NU214	latinaphenix	joleenjefferis
+974	2018-02-16 06:01:00	0	79	60.0660000000000025	29.5700000000000003	59.5420000000000016	29.5420000000000016	12	111	WK649	cedricguilford	chiamurphey
+975	2018-02-27 04:56:00	0	88	59.5589999999999975	29.8629999999999995	59.9309999999999974	29.5199999999999996	24	18	UT042	kevenschuller	sierragingras
+976	2018-02-16 15:28:00	0	76	60.4410000000000025	30.4540000000000006	59.6450000000000031	30.0180000000000007	20	83	YH116	beewommack	essiehempel
+977	2018-01-01 07:59:00	0	22	59.9440000000000026	29.8419999999999987	59.5840000000000032	30.1380000000000017	14	109	ND592	timikanims	sabrinacoss
+978	2018-02-09 16:42:00	0	93	59.5790000000000006	30.0519999999999996	59.5900000000000034	29.5130000000000017	30	105	VS161	hershelsmullen	donniemaskell
+979	2018-01-14 15:25:00	0	78	60.3430000000000035	30.4759999999999991	59.982999999999997	30.3290000000000006	6	93	TJ597	nathanaelpaylor	elfriededittmer
+980	2018-02-07 23:10:00	0	69	60.2890000000000015	30.2310000000000016	60.2779999999999987	29.745000000000001	29	50	RL003	kathlyndotts	essiehempel
+981	2018-02-04 13:42:00	0	79	59.8389999999999986	29.8850000000000016	60.4939999999999998	30.0970000000000013	28	113	RL003	mitsuemcconico	wilburjustiniano
+982	2018-02-16 15:34:00	0	61	60.4939999999999998	30.0970000000000013	59.5290000000000035	29.7319999999999993	14	75	VS161	kashacallen	danillewhiteside
+986	2018-02-04 18:03:00	0	41	60.1409999999999982	29.9239999999999995	60.2779999999999987	29.745000000000001	12	25	VM615	jerrodlupo	julioned
+930	2018-02-01 23:38:00	0	77	60.0859999999999985	29.5779999999999994	59.6060000000000016	30.4239999999999995	14	99	AN978	sigridenger	shamekalachance
+942	2018-01-21 09:38:00	0	57	60.078000000000003	29.9819999999999993	59.6920000000000002	30.2169999999999987	8	96	AN978	hershelsmullen	essiehempel
+944	2018-02-06 15:37:00	0	11	60.0360000000000014	30.3140000000000001	59.5349999999999966	30.1960000000000015	13	89	AN978	masonmardis	elfriededittmer
+987	2018-02-20 12:57:00	0	69	59.7939999999999969	29.6230000000000011	59.5309999999999988	30.2809999999999988	5	49	GM220	quentindelacruz	debrahdeland
+988	2018-01-14 20:57:00	0	17	59.6469999999999985	30.1529999999999987	59.5429999999999993	30.3120000000000012	18	28	VM615	kathlyndotts	ceolafazio
+989	2018-02-21 00:15:00	0	53	60.0360000000000014	30.3140000000000001	60.3459999999999965	29.7850000000000001	23	37	VM615	cedricguilford	shamekalachance
+990	2018-02-14 06:18:00	0	55	60.1850000000000023	29.5539999999999985	59.5159999999999982	29.5850000000000009	22	28	QP571	beewommack	normangreb
+991	2018-02-04 17:25:00	0	72	59.7939999999999969	29.6230000000000011	60.3430000000000035	30.4759999999999991	10	81	RL003	marcellusmagana	donniemaskell
+992	2018-02-19 13:12:00	0	74	60.3459999999999965	29.7850000000000001	60.3459999999999965	29.7850000000000001	5	118	NU214	kevenschuller	shamekalachance
+993	2018-01-05 18:50:00	0	41	60.0660000000000025	29.5700000000000003	60.2779999999999987	29.745000000000001	15	28	UT042	latinaphenix	elfriededittmer
+994	2018-02-09 18:59:00	0	43	59.5260000000000034	29.6750000000000007	59.8960000000000008	29.629999999999999	7	63	YH116	beewommack	sabrinacoss
+995	2018-01-22 07:57:00	0	91	60.0529999999999973	30.0670000000000002	59.6589999999999989	30.2139999999999986	23	98	VM615	ozelladay	chiamurphey
+996	2018-01-22 05:16:00	0	91	59.6060000000000016	30.4239999999999995	60.2629999999999981	29.7830000000000013	12	25	GG939	taneshastruthers	alexacory
+997	2018-02-01 10:52:00	0	26	60.347999999999999	30.4819999999999993	60.347999999999999	30.4819999999999993	19	78	UT042	hershelsmullen	judithvillareal
+999	2018-01-22 01:31:00	0	64	59.8900000000000006	30.468	59.7939999999999969	29.6230000000000011	25	64	BE981	cedricguilford	chiamurphey
+1000	2018-01-25 19:04:00	0	97	60.3070000000000022	30.0030000000000001	60.304000000000002	30.4299999999999997	9	109	YH116	lerabreed	wilburjustiniano
+41	2018-01-19 23:36:00	0	42	59.5309999999999988	30.2809999999999988	59.5850000000000009	30.2089999999999996	22	42	AN580	kevenschuller	sabrinacoss
+51	2018-02-18 04:02:00	0	91	60.3329999999999984	30.3909999999999982	59.5850000000000009	30.2089999999999996	26	29	AN580	kevenschuller	elfriededittmer
+65	2018-01-23 02:00:00	0	23	59.7220000000000013	29.9080000000000013	59.7289999999999992	30.3599999999999994	24	35	AN580	lillythorton	madelainesing
+80	2018-01-08 19:43:00	0	56	59.8980000000000032	29.8939999999999984	59.8960000000000008	29.629999999999999	14	29	AN580	kevinnuno	consuelotokarz
+81	2018-01-27 17:46:00	0	17	59.8800000000000026	30.3539999999999992	59.6450000000000031	30.0180000000000007	25	62	AN580	kathlyndotts	normangreb
+101	2018-01-24 07:59:00	0	49	60.4470000000000027	30.1320000000000014	60.3170000000000002	29.9080000000000013	9	116	AN580	chungcottone	normangreb
+111	2018-02-16 22:11:00	0	41	60.0529999999999973	30.0949999999999989	60.3170000000000002	29.9080000000000013	9	105	AN580	ozelladay	normangreb
+113	2018-02-11 01:22:00	0	60	59.8109999999999999	30.2680000000000007	60.3840000000000003	29.5479999999999983	14	12	AN580	timikanims	alexacory
+149	2018-02-22 09:13:00	0	50	59.982999999999997	30.3290000000000006	59.9799999999999969	30.0590000000000011	11	69	AN580	beewommack	sabrinacoss
+172	2018-01-22 02:40:00	0	29	59.8389999999999986	29.8850000000000016	60.0360000000000014	30.3140000000000001	27	112	AN580	latinaphenix	joleenjefferis
+234	2018-02-25 09:28:00	0	13	60.1749999999999972	29.8460000000000001	60.0769999999999982	30.2920000000000016	13	97	AN580	cedricguilford	valrieburr
+255	2018-02-18 02:09:00	0	27	59.5589999999999975	29.8629999999999995	59.6469999999999985	30.1529999999999987	15	113	AN580	louisalucio	chiamurphey
+288	2018-01-19 13:18:00	0	19	59.6589999999999989	30.2139999999999986	60.2890000000000015	30.2310000000000016	20	97	AN580	marcellusmagana	sierragingras
+298	2018-02-07 22:25:00	0	48	59.5290000000000035	30.4409999999999989	59.5290000000000035	30.4409999999999989	8	94	AN580	kevinnuno	judithvillareal
+303	2018-02-08 14:19:00	0	46	59.982999999999997	30.3290000000000006	60.3329999999999984	30.3909999999999982	21	15	AN580	kevenschuller	joleenjefferis
+307	2018-02-09 12:53:00	0	69	60.0660000000000025	29.5700000000000003	60.2779999999999987	29.745000000000001	7	30	AN580	beewommack	vimilani
+346	2018-02-22 08:52:00	0	15	60.0519999999999996	29.8249999999999993	59.6450000000000031	30.0180000000000007	20	86	AN580	kenyarumore	normangreb
+350	2018-01-21 02:06:00	0	33	59.9500000000000028	29.8290000000000006	59.7939999999999969	29.6230000000000011	6	117	AN580	masonmardis	fidelshimkus
+367	2018-02-09 00:54:00	0	18	59.5900000000000034	29.5130000000000017	60.0769999999999982	30.2920000000000016	14	113	AN580	quentindelacruz	consuelotokarz
+401	2018-02-07 15:53:00	0	62	60.0579999999999998	29.5689999999999991	59.9440000000000026	29.8419999999999987	26	28	AN580	marcellusmagana	judithvillareal
+406	2018-01-07 12:06:00	0	27	60.054000000000002	29.6660000000000004	59.9440000000000026	29.8419999999999987	27	57	AN580	lillythorton	sabrinacoss
+407	2018-01-13 07:36:00	0	43	60.0750000000000028	29.847999999999999	60.1749999999999972	29.8460000000000001	27	23	AN580	cedricguilford	chiamurphey
+435	2018-01-19 10:29:00	0	36	59.5840000000000032	30.1380000000000017	59.8900000000000006	30.468	6	89	AN580	quentindelacruz	donniemaskell
+463	2018-02-09 19:55:00	0	67	59.5850000000000009	30.2089999999999996	60.3329999999999984	30.3909999999999982	23	45	AN580	latinaphenix	madelainesing
+466	2018-01-17 16:43:00	0	27	59.5349999999999966	30.1960000000000015	59.9440000000000026	29.8419999999999987	5	96	AN580	kevenschuller	wilburjustiniano
+467	2018-01-02 11:52:00	0	50	60.0859999999999985	29.5779999999999994	59.9549999999999983	29.5459999999999994	13	52	AN580	kenyarumore	judithvillareal
+470	2018-02-24 10:58:00	0	76	60.2370000000000019	30.1509999999999998	59.7289999999999992	30.3599999999999994	30	11	AN580	marcellusmagana	sabrinacoss
+503	2018-02-18 23:49:00	0	56	59.902000000000001	30.2010000000000005	59.7289999999999992	30.3599999999999994	17	61	AN580	kevenschuller	madelainesing
+532	2018-01-05 16:09:00	0	70	59.6980000000000004	30.0120000000000005	60.2890000000000015	30.2409999999999997	14	69	AN580	shaynacropp	judithvillareal
+546	2018-01-26 07:29:00	0	17	60.054000000000002	29.6660000000000004	60.2370000000000019	30.1509999999999998	25	53	AN580	chungcottone	wilburjustiniano
+549	2018-01-27 22:01:00	0	23	60.347999999999999	30.4819999999999993	59.9440000000000026	29.8419999999999987	18	45	AN580	lerabreed	nathanielgibb
+558	2018-01-31 21:55:00	0	17	60.3840000000000003	29.5479999999999983	60.4249999999999972	30.1799999999999997	22	54	AN580	sigridenger	essiehempel
+564	2018-02-17 23:20:00	0	37	59.5589999999999975	29.8629999999999995	59.5730000000000004	29.7250000000000014	13	87	AN580	taneshastruthers	judithvillareal
+611	2018-02-07 08:26:00	0	25	59.828000000000003	30.4480000000000004	59.6920000000000002	30.2169999999999987	12	117	AN580	beewommack	sabrinacoss
+614	2018-02-03 03:04:00	0	69	59.5349999999999966	30.1960000000000015	59.5349999999999966	30.1960000000000015	30	33	AN580	kathlyndotts	joleenjefferis
+620	2018-01-13 20:37:00	0	68	60.3340000000000032	29.5070000000000014	60.3870000000000005	30.1009999999999991	13	88	AN580	jerrodlupo	danillewhiteside
+628	2018-01-13 17:24:00	0	15	59.5159999999999982	29.5850000000000009	60.2629999999999981	29.7830000000000013	14	31	AN580	taneshastruthers	debrahdeland
+643	2018-02-05 07:22:00	0	15	59.8890000000000029	29.7579999999999991	60.0859999999999985	29.5779999999999994	26	68	AN580	mitsuemcconico	madelainesing
+707	2018-01-13 16:41:00	0	31	60.0529999999999973	30.0949999999999989	60.0769999999999982	30.2920000000000016	29	39	AN580	kevinnuno	elfriededittmer
+713	2018-02-01 23:33:00	0	12	60.0660000000000025	29.5700000000000003	59.7289999999999992	30.3599999999999994	8	46	AN580	kathlyndotts	pameliacavitt
+742	2018-01-02 19:01:00	0	69	60.4410000000000025	30.4540000000000006	60.054000000000002	29.6660000000000004	29	53	AN580	latinaphenix	debrahdeland
+775	2018-01-09 23:22:00	0	16	60.1749999999999972	29.8460000000000001	59.982999999999997	30.3290000000000006	18	101	AN580	shaynacropp	debrahdeland
+796	2018-01-01 21:00:00	0	47	59.5850000000000009	30.2089999999999996	59.8980000000000032	29.8939999999999984	10	94	AN580	lerabreed	sabrinacoss
+798	2018-01-10 05:59:00	0	95	60.3689999999999998	30.4340000000000011	60.3070000000000022	30.0030000000000001	28	93	AN580	kevinnuno	debrahdeland
+803	2018-02-06 16:01:00	0	21	60.3049999999999997	29.8129999999999988	60.3329999999999984	30.3909999999999982	19	48	AN580	masonmardis	pameliacavitt
+807	2018-01-03 07:56:00	0	43	59.9500000000000028	29.8290000000000006	59.8109999999999999	30.2680000000000007	23	64	AN580	kenyarumore	pameliacavitt
+815	2018-01-24 17:29:00	0	73	59.9549999999999983	29.5459999999999994	59.6450000000000031	30.0180000000000007	19	60	AN580	kashacallen	vimilani
+841	2018-02-13 01:41:00	0	15	59.6469999999999985	30.1529999999999987	60.0750000000000028	29.847999999999999	9	101	AN580	louisalucio	joleenjefferis
+846	2018-01-01 11:50:00	0	55	60.2539999999999978	30.2719999999999985	60.3840000000000003	29.5479999999999983	12	67	AN580	quentindelacruz	elfriededittmer
+902	2018-01-11 23:35:00	0	23	60.0859999999999985	29.5779999999999994	59.6060000000000016	30.4239999999999995	24	12	AN580	chungcottone	sabrinacoss
+915	2018-01-20 03:56:00	0	98	59.7939999999999969	29.6230000000000011	59.5349999999999966	30.1960000000000015	22	80	AN580	marcellusmagana	pameliacavitt
+928	2018-02-19 08:43:00	0	76	60.0750000000000028	29.847999999999999	59.9500000000000028	29.8290000000000006	8	89	AN580	hershelsmullen	valrieburr
+965	2018-01-16 10:54:00	0	74	59.982999999999997	30.3290000000000006	60.4769999999999968	29.8490000000000002	13	110	AN580	nathanaelpaylor	debrahdeland
+972	2018-01-31 04:04:00	0	23	60.2629999999999981	29.7830000000000013	60.1749999999999972	29.8460000000000001	25	77	AN580	mitsuemcconico	sierragingras
+182	2018-01-26 02:00:00	0	29	59.5159999999999982	29.5850000000000009	59.6880000000000024	29.7040000000000006	30	92	AN978	marcellusmagana	fidelshimkus
+218	2018-01-04 17:10:00	0	70	59.5900000000000034	29.5130000000000017	59.7460000000000022	29.6090000000000018	10	27	AN978	shaynacropp	fidelshimkus
+286	2018-01-12 18:59:00	0	76	60.304000000000002	30.4299999999999997	60.3689999999999998	30.4340000000000011	13	68	AN978	kenyarumore	donniemaskell
+293	2018-01-05 07:38:00	0	50	60.304000000000002	30.4299999999999997	60.402000000000001	29.9220000000000006	6	88	AN978	eugenesacks	ceolafazio
+334	2018-01-28 04:49:00	0	96	60.2629999999999981	29.7830000000000013	60.0769999999999982	30.2920000000000016	15	13	AN978	lillythorton	fidelshimkus
+335	2018-01-24 20:31:00	0	27	59.9350000000000023	30.1999999999999993	59.902000000000001	30.2010000000000005	25	19	AN978	springsergio	nathanielgibb
+353	2018-01-29 18:10:00	0	38	60.3340000000000032	29.5070000000000014	59.6330000000000027	29.8200000000000003	21	66	AN978	springsergio	chiamurphey
+552	2018-02-13 08:36:00	0	27	59.5420000000000016	29.5420000000000016	60.0589999999999975	29.6359999999999992	24	61	AN978	springsergio	shamekalachance
+718	2018-01-13 04:12:00	0	50	60.453000000000003	30.1389999999999993	59.5589999999999975	29.8629999999999995	27	16	AN978	latinaphenix	nathanielgibb
+719	2018-01-21 13:10:00	0	82	59.6039999999999992	29.5079999999999991	60.0519999999999996	29.8249999999999993	13	46	AN978	nathanaelpaylor	wilburjustiniano
+737	2018-01-27 16:59:00	0	85	60.2539999999999978	30.2719999999999985	59.8400000000000034	29.8069999999999986	11	41	AN978	kenyarumore	essiehempel
+890	2018-02-21 07:13:00	0	89	60.078000000000003	29.9819999999999993	60.3459999999999965	29.7850000000000001	30	120	AN978	marcellusmagana	chiamurphey
+904	2018-01-26 11:10:00	0	43	59.5790000000000006	30.0519999999999996	59.5429999999999993	30.3120000000000012	15	80	AN978	hershelsmullen	sierragingras
+906	2018-01-19 09:17:00	0	48	59.6439999999999984	30.0199999999999996	59.7939999999999969	29.6230000000000011	17	50	AN978	nathanaelpaylor	valrieburr
+909	2018-02-01 06:12:00	0	94	59.5349999999999966	30.1960000000000015	60.304000000000002	30.4299999999999997	11	18	AN978	nathanaelpaylor	sabrinacoss
+983	2018-01-04 08:15:00	0	71	59.6379999999999981	30.4720000000000013	59.9549999999999983	29.5459999999999994	28	85	AN978	lillythorton	vimilani
+984	2018-01-28 00:08:00	0	31	60.0739999999999981	30.4229999999999983	60.3329999999999984	30.3909999999999982	18	54	AN978	kathlyndotts	lettybruner
+985	2018-02-26 14:22:00	0	69	59.9440000000000026	29.8419999999999987	60.0769999999999982	30.2920000000000016	7	12	AN978	lerabreed	ceolafazio
+998	2018-01-29 11:56:00	0	38	59.8389999999999986	29.8850000000000016	59.8109999999999999	30.2680000000000007	18	92	AN978	lerabreed	lettybruner
+\.
+
+
+--
+-- Data for Name: car_part; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.car_part (car_part_id, part_name, car_type_id) FROM stdin;
+1	Piston﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+2	Catalytic Converter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+3	Transmission﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	10
+4	Muffler﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	6
+5	Catalytic Converter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+6	Catalytic Converter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+7	Catalytic Converter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	10
+8	Catalytic Converter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	6
+9	Transmission﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+10	Radiator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	5
+11	A/C Compressor﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+12	Pressure Gauge﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+13	Car Jack﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	6
+14	Clutch﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	3
+15	Spark Plug﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	5
+16	Engine Fan﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+17	A/C Compressor﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	6
+18	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+19	Transmission﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	6
+20	Radiator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+21	Fuel Injector﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	5
+22	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	5
+23	Power Steering Fluid﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿	5
+24	Alternator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	3
+25	Brakes﻿﻿﻿﻿﻿﻿\n	1
+26	Shock Absorbers﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	3
+27	Catalytic Converter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	4
+28	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	3
+29	Shock Absorbers﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+30	Piston﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	10
+31	Transmission﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+32	Piston﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+33	Spare Tire﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	10
+34	A/C Compressor﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	10
+35	Clutch﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+36	Brakes﻿﻿﻿﻿﻿﻿\n	6
+37	Shock Absorbers﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+38	Catalytic Converter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+39	Shock Absorbers﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	6
+40	Axle﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+41	Engine Fan﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	10
+42	Battery﻿﻿﻿﻿\n	5
+43	Alternator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+44	Radiator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+45	Power Steering Fluid﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿	2
+46	Alternator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+47	Car Jack﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+48	Muffler﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+49	Radiator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+50	Shock Absorbers﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+51	Car Jack﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+52	Piston﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+53	Transmission﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+54	Muffler﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+55	Pressure Gauge﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	6
+56	Spare Tire﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+57	Spark Plug﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+58	Catalytic Converter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	10
+59	Spare Tire﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+60	Pressure Gauge﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	5
+61	Power Steering Fluid﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿	7
+62	Pressure Gauge﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	4
+63	Alternator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+64	Fuel Injector﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	10
+65	Shock Absorbers﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	3
+66	Clutch﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+67	Shock Absorbers﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+68	Radiator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+69	Car Jack﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+70	Power Steering Fluid﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿	8
+71	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+72	Shock Absorbers﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	3
+73	Clutch﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	10
+74	Spark Plug﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+75	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+76	Pressure Gauge﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+77	Spare Tire﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+78	Battery﻿﻿﻿﻿\n	4
+79	Fuel Injector﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+80	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+81	Pressure Gauge﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+82	Fuel Injector﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+83	Piston﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	6
+84	Alternator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+85	Brakes﻿﻿﻿﻿﻿﻿\n	2
+86	Brakes﻿﻿﻿﻿﻿﻿\n	8
+87	Car Jack﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	3
+88	Axle﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	5
+89	Battery﻿﻿﻿﻿\n	3
+90	Catalytic Converter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	4
+91	Radiator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	5
+92	Spare Tire﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+93	Axle﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	4
+94	Alternator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+95	Transmission﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+96	Alternator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	4
+97	Battery﻿﻿﻿﻿\n	2
+98	Engine Fan﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	10
+99	Pressure Gauge﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+100	Power Steering Fluid﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿	7
+\.
+
+
+--
+-- Data for Name: car_parts_order; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.car_parts_order (car_parts_order_id, description, status, creating_time, workshop_id, car_parts_provider_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: car_parts_provider; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.car_parts_provider (provider_id, name, phone_number, latitide, longitude) FROM stdin;
+1	Aisin Seiki Co.\n	54934935573	59.5429999999999993	30.3120000000000012
+2	Akebono Brake Industry Co.\n	90300995596	59.5840000000000032	30.1380000000000017
+3	Alcoa Inc.\n	57401682934	59.8900000000000006	30.468
+4	Alpine Electronics Inc.\n	01969174077	60.3070000000000022	30.0030000000000001
+5	American Axle & Mfg. Holdings Inc.\n	37040673341	60.4249999999999972	30.1799999999999997
+6	Asahi Glass Co.\n	21788807399	60.347999999999999	30.4819999999999993
+7	Autoliv Inc.\n	34041010606	59.5589999999999975	29.8629999999999995
+8	Autoneum Management AG\n	75832863732	60.2539999999999978	30.2719999999999985
+9	BASF SE\n	85024924643	59.982999999999997	30.3290000000000006
+10	Bayer MaterialScience AG\n	01132148158	59.5859999999999985	29.6539999999999999
+11	Behr GmbH\n	53194014995	59.8049999999999997	29.5629999999999988
+12	Benteler Automobiltechnik GmbH\n	92725715976	60.3870000000000005	30.1009999999999991
+13	BorgWarner Inc.\n	78529991983	60.4939999999999998	30.0970000000000013
+14	Brose Fahrzeugteile GmbH\n	63944399951	60.3430000000000035	30.4759999999999991
+15	CalsonicKansei Corp.\n	81045722397	59.9350000000000023	30.1999999999999993
+16	CIE Automotive SA\n	45484505670	59.8890000000000029	29.7579999999999991
+17	CITIC Dicastal Co.\n	86304818219	59.8049999999999997	29.5629999999999988
+18	Continental AG\n	55488726326	59.9450000000000003	29.9349999999999987
+19	Cooper-Standard Automotive\n	47495614433	60.0529999999999973	30.0949999999999989
+20	Cummins Inc.\n	91073692003	60.078000000000003	29.9819999999999993
+21	Dana Holding Corp.\n	43328229549	59.6450000000000031	30.0180000000000007
+22	Delphi Automotive PLC\n	33872595585	59.6980000000000004	30.0120000000000005
+23	Denso Corp.\n	66281634094	59.6880000000000024	29.7040000000000006
+24	Draexlmaier Group\n	76856696842	60.3689999999999998	30.4340000000000011
+25	DuPont	53245402270	59.5349999999999966	30.1960000000000015
+\.
+
+
+--
+-- Data for Name: car_repairing_log; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.car_repairing_log (date, manager_username, workshop_id, car_license_plate, broken_car_part_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: car_type; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.car_type (car_type_id, brand, model) FROM stdin;
+1	BMW	i3\n
+2	Kia	Soul EV\n
+3	Hyundai	IONIQ Electric\n
+4	Volkswagen	e-Golf\n
+5	Nissan	LEAF\n
+6	Renault	ZOE\n
+7	Chevy	Bolt\n
+8	Tesla	Model 3\n
+9	Tesla	Model X\n
+10	Tesla	Model S
+\.
+
+
+--
+-- Data for Name: catalogue_provider; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.catalogue_provider (provider_id, car_part_id, amount_of_available, cost) FROM stdin;
+14	97	11	380.769999999999982
+13	95	18	778.100000000000023
+21	81	5	352.410000000000025
+23	76	8	328.79000000000002
+13	32	17	827.580000000000041
+5	88	9	282.04000000000002
+22	59	20	932.049999999999955
+13	66	17	817.529999999999973
+22	4	20	267.560000000000002
+7	89	10	496.870000000000005
+15	87	10	550.539999999999964
+16	44	16	317.620000000000005
+6	38	5	733.139999999999986
+4	17	6	691.82000000000005
+1	24	11	592.860000000000014
+14	78	8	932.759999999999991
+10	5	5	766.720000000000027
+11	66	7	473.550000000000011
+16	35	2	330.620000000000005
+14	50	8	470.550000000000011
+25	80	13	651.559999999999945
+7	28	18	853.25
+8	50	2	947.850000000000023
+16	58	8	372.089999999999975
+25	78	18	628.649999999999977
+14	79	5	979.840000000000032
+18	86	15	196.72999999999999
+2	21	13	313.589999999999975
+2	22	1	503.240000000000009
+2	54	11	73.1599999999999966
+24	14	13	627.549999999999955
+12	71	15	200.030000000000001
+4	55	1	408.949999999999989
+3	33	3	466.240000000000009
+5	15	0	127.980000000000004
+2	55	4	409.670000000000016
+7	63	6	434.779999999999973
+9	67	10	463.860000000000014
+1	67	11	414.689999999999998
+22	94	3	429.660000000000025
+17	1	3	928.970000000000027
+18	16	20	405.5
+3	69	9	155.699999999999989
+25	69	5	171.659999999999997
+24	91	7	608.789999999999964
+17	64	17	446.529999999999973
+25	38	4	429.939999999999998
+21	64	18	615.149999999999977
+24	70	2	566.769999999999982
+18	22	9	140.419999999999987
+7	35	18	98.6200000000000045
+14	24	6	986.299999999999955
+12	81	11	406.699999999999989
+7	17	18	691.490000000000009
+10	96	18	482.699999999999989
+4	39	8	280.339999999999975
+11	1	13	667.409999999999968
+16	40	9	530.82000000000005
+10	89	12	142.659999999999997
+9	23	2	773.710000000000036
+11	20	20	178.400000000000006
+10	94	6	819.860000000000014
+25	40	8	394.019999999999982
+1	19	11	928.850000000000023
+9	50	5	477.069999999999993
+5	71	1	432.439999999999998
+6	50	17	665.049999999999955
+11	74	12	450.439999999999998
+9	61	18	942.039999999999964
+22	1	17	403.300000000000011
+10	45	11	913.830000000000041
+1	53	20	765.059999999999945
+1	49	18	193.090000000000003
+1	42	20	80.0799999999999983
+22	13	4	418.850000000000023
+23	40	10	637.620000000000005
+16	33	5	45.1799999999999997
+6	40	2	353.20999999999998
+12	43	13	479.529999999999973
+19	60	5	503.329999999999984
+24	72	6	391.949999999999989
+8	89	1	766.730000000000018
+17	29	0	38.7899999999999991
+16	20	15	480.550000000000011
+16	100	15	177.599999999999994
+8	15	0	812.509999999999991
+10	100	12	768.269999999999982
+15	68	4	149.219999999999999
+25	58	0	679.169999999999959
+20	58	15	186.780000000000001
+11	31	10	992.539999999999964
+8	61	15	602.169999999999959
+20	26	3	790.090000000000032
+12	64	17	686.549999999999955
+23	62	20	942.110000000000014
+19	79	10	96.0699999999999932
+24	99	18	108.730000000000004
+8	16	11	514.090000000000032
+1	8	17	934.559999999999945
+2	25	0	841.840000000000032
+24	27	19	298.829999999999984
+23	58	2	705.360000000000014
+15	67	4	413.839999999999975
+6	90	19	459.839999999999975
+17	91	18	300.620000000000005
+2	74	14	390.79000000000002
+19	38	18	882.419999999999959
+21	36	20	169.27000000000001
+2	33	6	47.509999999999998
+7	70	4	100.359999999999999
+4	15	20	344.970000000000027
+24	66	2	660.92999999999995
+4	23	12	466.70999999999998
+25	70	8	99.2600000000000051
+4	60	4	125.480000000000004
+10	41	1	889.210000000000036
+18	52	7	848.779999999999973
+9	41	11	713.730000000000018
+8	92	19	728.669999999999959
+21	2	13	389.480000000000018
+5	61	4	258.660000000000025
+22	27	4	740.32000000000005
+13	64	15	530.710000000000036
+1	34	0	563.110000000000014
+14	56	0	340.319999999999993
+8	69	2	11.2799999999999994
+10	86	13	623.049999999999955
+4	41	12	981.149999999999977
+3	72	15	789.480000000000018
+16	93	0	206.310000000000002
+7	75	16	855.480000000000018
+10	12	8	250.090000000000003
+7	9	8	293.240000000000009
+22	71	20	15.3200000000000003
+3	11	11	843.870000000000005
+5	7	3	936.950000000000045
+12	9	3	641.519999999999982
+13	58	11	346.100000000000023
+25	19	17	801.730000000000018
+5	3	18	660.25
+22	78	19	136.129999999999995
+10	62	14	64.8700000000000045
+5	62	3	549.080000000000041
+20	85	15	646.649999999999977
+16	81	2	24.6099999999999994
+2	48	9	314.79000000000002
+22	2	9	557.190000000000055
+18	46	14	237.490000000000009
+23	90	0	400.199999999999989
+22	42	12	215.430000000000007
+12	82	13	894.309999999999945
+18	85	9	69.0999999999999943
+5	41	16	555.970000000000027
+12	15	2	699.899999999999977
+12	10	17	83.5799999999999983
+15	58	15	603.659999999999968
+23	94	14	623.519999999999982
+12	34	19	902.659999999999968
+4	1	6	456.089999999999975
+21	86	14	496.089999999999975
+23	92	7	980.100000000000023
+24	19	7	760.059999999999945
+10	74	9	654.039999999999964
+8	4	20	88.3599999999999994
+10	9	4	174.469999999999999
+6	16	6	603.860000000000014
+8	38	12	295.560000000000002
+15	79	11	349.759999999999991
+15	62	8	947.470000000000027
+13	4	10	366.819999999999993
+20	37	0	895.149999999999977
+20	29	4	831.059999999999945
+22	3	8	756.059999999999945
+14	71	4	549.07000000000005
+19	41	0	369.180000000000007
+3	76	10	345.129999999999995
+4	14	5	632.710000000000036
+25	3	9	253.680000000000007
+4	20	18	232.090000000000003
+10	14	13	268.240000000000009
+12	69	2	189.659999999999997
+25	15	15	985.039999999999964
+5	16	17	331.180000000000007
+12	35	9	583.779999999999973
+12	72	13	679.029999999999973
+14	95	9	814.149999999999977
+24	86	4	862.17999999999995
+16	61	14	904.620000000000005
+10	22	3	452.879999999999995
+17	30	15	895.669999999999959
+8	24	8	927
+13	19	2	921.860000000000014
+9	87	9	904.279999999999973
+5	95	10	434.189999999999998
+16	15	11	396.519999999999982
+12	97	9	177.379999999999995
+19	54	3	914.559999999999945
+6	10	9	215.949999999999989
+15	19	8	495.060000000000002
+10	36	1	837.259999999999991
+2	4	5	413.199999999999989
+25	48	17	858.5
+1	97	6	19.75
+17	51	16	354.45999999999998
+17	70	6	527.850000000000023
+25	28	13	943.960000000000036
+25	88	15	216.740000000000009
+23	7	0	987.480000000000018
+16	55	0	451.439999999999998
+20	83	12	375.399999999999977
+1	7	15	893.240000000000009
+13	91	9	41.6400000000000006
+25	84	10	71.0999999999999943
+5	53	18	981.100000000000023
+12	11	13	225.02000000000001
+11	71	13	538.059999999999945
+9	47	10	43.4799999999999969
+19	28	13	293.389999999999986
+20	20	4	383.569999999999993
+2	51	12	527.779999999999973
+12	54	1	458.480000000000018
+1	64	13	32.009999999999998
+11	83	5	980.940000000000055
+4	3	19	226.990000000000009
+4	33	12	372.829999999999984
+12	84	7	241.099999999999994
+16	67	12	687.67999999999995
+5	2	2	180.330000000000013
+17	8	20	694.610000000000014
+7	80	0	866.730000000000018
+6	68	19	213.810000000000002
+17	80	1	275.689999999999998
+10	82	7	941.200000000000045
+13	93	0	180.830000000000013
+5	89	5	203.740000000000009
+13	49	12	556.350000000000023
+18	60	3	618.159999999999968
+7	98	13	548.419999999999959
+15	89	14	564.700000000000045
+18	38	11	425.350000000000023
+17	23	9	373.470000000000027
+24	51	20	837.940000000000055
+11	15	14	471.069999999999993
+13	1	5	506.339999999999975
+24	37	3	141.810000000000002
+21	71	9	45.1000000000000014
+13	50	7	181.699999999999989
+15	50	0	855.919999999999959
+6	19	7	803.559999999999945
+24	44	12	872.110000000000014
+20	66	7	439.970000000000027
+19	16	11	710.549999999999955
+20	32	4	411.04000000000002
+2	57	10	739.600000000000023
+4	46	20	598.990000000000009
+17	52	5	301.050000000000011
+20	89	2	698.519999999999982
+14	55	16	92.6800000000000068
+15	77	18	877.159999999999968
+14	18	17	638.649999999999977
+9	28	20	521.5
+15	81	15	227.699999999999989
+23	20	12	306.060000000000002
+22	6	1	921.720000000000027
+25	1	13	277.370000000000005
+11	32	9	279.600000000000023
+10	44	6	87.9399999999999977
+14	20	9	767.509999999999991
+7	74	13	736.309999999999945
+25	95	4	30.9899999999999984
+12	38	9	192.659999999999997
+8	2	6	457.269999999999982
+13	53	7	966.470000000000027
+19	56	8	56.6599999999999966
+12	55	0	651.399999999999977
+4	47	14	439.839999999999975
+8	85	2	570.029999999999973
+21	11	9	620.490000000000009
+9	42	4	467.300000000000011
+1	87	2	53.0600000000000023
+18	98	7	888.07000000000005
+8	55	19	789.950000000000045
+7	13	7	943.159999999999968
+3	49	17	508.810000000000002
+24	35	11	63.9799999999999969
+6	73	4	751.940000000000055
+15	53	14	378.569999999999993
+22	93	10	495.490000000000009
+11	25	17	859.210000000000036
+24	59	18	274.660000000000025
+6	37	13	165.650000000000006
+14	12	7	332.420000000000016
+20	40	3	782.600000000000023
+16	7	8	28.1999999999999993
+19	40	18	693.539999999999964
+5	20	11	956.399999999999977
+15	42	17	591.629999999999995
+7	52	16	230.849999999999994
+14	30	20	852.220000000000027
+8	60	4	998.100000000000023
+17	53	14	918.309999999999945
+8	47	17	337.910000000000025
+14	35	0	649.009999999999991
+4	63	5	298.920000000000016
+13	84	20	828.279999999999973
+3	95	1	858.220000000000027
+20	80	15	989.289999999999964
+21	16	10	187.280000000000001
+20	23	0	174.430000000000007
+4	64	19	627.899999999999977
+21	60	18	322.449999999999989
+9	66	2	245.97999999999999
+2	82	15	775.789999999999964
+10	90	6	693.629999999999995
+4	50	2	63.6499999999999986
+25	12	14	638.759999999999991
+22	97	19	528.17999999999995
+16	47	0	697.57000000000005
+19	4	9	57.5499999999999972
+6	25	16	137.969999999999999
+1	20	12	938.710000000000036
+21	68	4	780.460000000000036
+16	75	3	238.22999999999999
+8	71	16	536.580000000000041
+17	59	7	757.92999999999995
+2	80	1	490.410000000000025
+9	52	11	978.659999999999968
+25	25	7	258.95999999999998
+1	93	18	613.509999999999991
+4	32	9	984.42999999999995
+16	64	1	589.840000000000032
+9	62	16	718.230000000000018
+4	40	20	456.990000000000009
+3	81	19	699.419999999999959
+21	90	17	524.970000000000027
+18	44	6	180.189999999999998
+8	67	8	582.289999999999964
+10	78	2	632.909999999999968
+8	25	12	281.529999999999973
+13	12	20	859.25
+2	68	14	910.720000000000027
+13	69	8	731.590000000000032
+15	39	13	753.059999999999945
+18	45	13	132.259999999999991
+3	32	10	708.990000000000009
+20	67	19	874.190000000000055
+1	89	0	501.660000000000025
+25	55	11	93.7099999999999937
+13	31	2	985.559999999999945
+6	84	6	179.110000000000014
+23	41	0	941.220000000000027
+14	62	7	411.519999999999982
+21	91	3	857.57000000000005
+13	39	0	540.92999999999995
+5	14	10	144.22999999999999
+5	96	15	736.730000000000018
+17	6	0	198.599999999999994
+6	87	9	558.210000000000036
+15	37	17	184.830000000000013
+19	44	7	208.75
+24	89	7	375.54000000000002
+1	92	19	136.550000000000011
+24	22	7	418.279999999999973
+19	64	9	831.42999999999995
+10	18	17	195.77000000000001
+12	87	20	988.539999999999964
+4	38	13	946.289999999999964
+17	25	10	664.039999999999964
+22	46	10	519.309999999999945
+19	85	15	659.059999999999945
+6	89	4	690.230000000000018
+3	55	7	524.169999999999959
+2	70	5	981.120000000000005
+8	59	13	925.169999999999959
+5	31	6	556.460000000000036
+23	69	7	22.5100000000000016
+17	40	3	468.920000000000016
+16	11	12	92.230000000000004
+10	55	11	376.769999999999982
+6	83	19	505.550000000000011
+2	36	14	349.300000000000011
+3	34	8	825.789999999999964
+15	22	7	929.32000000000005
+8	27	18	218.090000000000003
+17	78	8	945.909999999999968
+22	56	14	558.889999999999986
+24	81	6	818.740000000000009
+8	95	19	593.009999999999991
+9	10	7	662.330000000000041
+13	98	15	43.5900000000000034
+7	3	11	911.940000000000055
+22	85	10	679.240000000000009
+3	75	9	369.649999999999977
+18	43	14	574.450000000000045
+25	8	13	123.730000000000004
+7	22	17	910.450000000000045
+21	30	11	198.530000000000001
+1	91	15	838.360000000000014
+2	71	4	594.17999999999995
+15	63	20	333.25
+15	31	10	346.089999999999975
+22	60	6	601.919999999999959
+7	91	12	160.960000000000008
+25	20	14	91.6599999999999966
+14	44	14	389.399999999999977
+4	5	7	420.819999999999993
+14	27	9	485.740000000000009
+19	33	0	807.309999999999945
+3	47	7	822.17999999999995
+9	15	11	573.850000000000023
+17	11	2	974.110000000000014
+13	80	13	229.219999999999999
+16	65	11	819.970000000000027
+25	91	20	746.480000000000018
+7	94	0	613.850000000000023
+6	49	20	923
+8	48	3	582.779999999999973
+4	86	10	73.5
+12	1	7	742.049999999999955
+14	36	20	817.740000000000009
+18	100	14	883.049999999999955
+25	13	1	289.660000000000025
+15	16	3	19.8099999999999987
+6	82	6	247.740000000000009
+2	96	7	641.669999999999959
+12	31	13	732.17999999999995
+6	22	7	540.450000000000045
+11	60	7	671.850000000000023
+19	100	19	132.050000000000011
+19	93	15	354.439999999999998
+7	18	5	841.740000000000009
+19	78	15	229.449999999999989
+12	56	15	575.809999999999945
+24	87	11	526
+8	51	11	385.699999999999989
+23	19	7	611.980000000000018
+11	57	17	437.129999999999995
+6	67	8	207.199999999999989
+6	92	0	156.310000000000002
+22	96	12	418.629999999999995
+16	16	6	631.17999999999995
+18	30	12	27.2300000000000004
+16	73	11	725.580000000000041
+4	62	8	711.67999999999995
+12	68	12	936.360000000000014
+15	7	13	681.830000000000041
+21	32	20	448.769999999999982
+5	30	8	212.889999999999986
+10	51	8	989.5
+5	85	14	802.039999999999964
+19	5	3	590.25
+8	52	5	900.690000000000055
+10	15	19	79.3799999999999955
+14	1	6	935.980000000000018
+17	75	11	803.230000000000018
+18	8	15	334.850000000000023
+2	72	8	787.870000000000005
+9	30	14	46.4099999999999966
+24	92	14	172.449999999999989
+2	94	2	596.299999999999955
+21	29	11	78.2000000000000028
+21	35	5	422.379999999999995
+16	68	14	476.089999999999975
+15	100	12	95.5799999999999983
+14	73	18	863.17999999999995
+16	30	12	869.350000000000023
+23	15	13	467.680000000000007
+4	57	15	686.289999999999964
+7	62	11	614.690000000000055
+22	98	14	941.789999999999964
+14	88	19	673.600000000000023
+25	86	9	735.590000000000032
+17	74	18	507.319999999999993
+1	54	14	481.600000000000023
+17	79	4	854.009999999999991
+25	36	0	778.649999999999977
+7	40	5	871.32000000000005
+16	5	1	999.039999999999964
+5	63	20	157.860000000000014
+25	11	20	469.009999999999991
+5	34	2	411.759999999999991
+19	99	7	691.149999999999977
+4	25	5	780.029999999999973
+14	61	8	590.470000000000027
+2	16	1	59.7700000000000031
+9	22	0	570.309999999999945
+25	97	8	322.399999999999977
+1	15	1	317.310000000000002
+2	58	9	738.870000000000005
+13	21	16	975.039999999999964
+15	30	20	41.1000000000000014
+2	6	10	82.480000000000004
+2	5	16	40.25
+2	17	20	160.620000000000005
+7	44	12	325.170000000000016
+21	19	8	377.25
+23	12	17	575.740000000000009
+14	59	13	464.029999999999973
+8	77	7	600.230000000000018
+5	72	16	112.879999999999995
+6	72	5	750.539999999999964
+3	52	3	645.919999999999959
+21	53	18	541.350000000000023
+15	4	3	81.2199999999999989
+4	85	17	896.159999999999968
+23	99	7	608.07000000000005
+19	80	4	775.82000000000005
+19	66	3	86.0499999999999972
+17	81	1	678.039999999999964
+10	52	12	895.220000000000027
+13	73	2	754.769999999999982
+18	39	2	302.449999999999989
+15	99	12	853.129999999999995
+13	89	12	170.409999999999997
+4	4	5	788.960000000000036
+2	79	5	580.799999999999955
+10	69	16	199.319999999999993
+14	64	13	926.470000000000027
+17	26	3	895.259999999999991
+18	12	19	381.670000000000016
+16	48	15	684.080000000000041
+5	37	6	834.450000000000045
+14	17	2	536.139999999999986
+9	20	4	369.730000000000018
+5	74	11	117.459999999999994
+9	90	18	546.220000000000027
+25	73	20	397.160000000000025
+14	23	12	959.850000000000023
+19	70	11	765.409999999999968
+12	75	17	287.29000000000002
+5	57	16	345.319999999999993
+20	100	1	569.360000000000014
+21	83	14	240.030000000000001
+11	37	20	243.009999999999991
+1	83	9	643.580000000000041
+15	93	20	842.389999999999986
+3	71	2	948.779999999999973
+20	74	1	117.609999999999999
+24	1	20	751.92999999999995
+1	59	15	162.560000000000002
+23	96	3	166.840000000000003
+4	27	7	265.759999999999991
+14	28	4	174.319999999999993
+17	5	15	417.45999999999998
+9	14	18	22.6999999999999993
+6	79	0	337.110000000000014
+13	48	12	510.870000000000005
+13	40	8	55.7000000000000028
+14	33	0	142.340000000000003
+21	33	6	706.129999999999995
+13	85	2	658.379999999999995
+20	61	17	412.319999999999993
+10	32	20	525.590000000000032
+8	82	13	979.549999999999955
+12	61	17	121.609999999999999
+12	4	10	185.340000000000003
+14	65	4	67.4399999999999977
+17	46	12	387.259999999999991
+5	19	16	362.870000000000005
+17	10	16	796.419999999999959
+7	95	8	847.82000000000005
+22	36	12	614.620000000000005
+17	12	7	163.659999999999997
+19	76	10	569.490000000000009
+16	95	4	92.2999999999999972
+21	61	17	65.230000000000004
+7	39	12	179.889999999999986
+14	9	18	183.430000000000007
+20	77	16	411.430000000000007
+9	59	14	441.329999999999984
+13	76	7	493.699999999999989
+19	11	4	760.17999999999995
+10	93	10	415.54000000000002
+13	25	16	632.279999999999973
+5	56	3	544.169999999999959
+1	41	14	834.149999999999977
+8	78	5	880.809999999999945
+24	77	1	250.02000000000001
+24	53	4	957.809999999999945
+25	49	6	748.480000000000018
+9	100	7	364.810000000000002
+15	45	10	673.950000000000045
+16	24	19	18.3399999999999999
+14	40	1	196.090000000000003
+13	36	20	226.530000000000001
+4	2	7	602.789999999999964
+13	29	18	655.090000000000032
+9	97	10	747.730000000000018
+12	63	3	769.110000000000014
+9	96	2	594.42999999999995
+17	54	7	56.740000000000002
+21	17	9	760.330000000000041
+4	81	5	19.9299999999999997
+25	39	4	908.139999999999986
+25	66	8	391.79000000000002
+4	65	17	175.419999999999987
+22	70	8	142.47999999999999
+12	8	18	234.409999999999997
+4	82	9	647.639999999999986
+13	5	13	162.650000000000006
+15	55	4	718.190000000000055
+3	45	16	346.649999999999977
+1	3	5	379.870000000000005
+23	59	8	463.920000000000016
+19	36	4	205.870000000000005
+22	20	12	18.9100000000000001
+4	73	16	952.259999999999991
+15	51	8	508.329999999999984
+10	27	4	140.849999999999994
+21	76	8	525.960000000000036
+1	22	0	538.970000000000027
+18	51	7	748.440000000000055
+22	77	1	220.219999999999999
+5	38	19	18.6099999999999994
+16	66	10	491.120000000000005
+15	61	10	939.809999999999945
+18	93	20	176.819999999999993
+10	20	18	678.600000000000023
+16	50	1	88.4899999999999949
+1	85	18	310.300000000000011
+25	65	6	483.930000000000007
+13	18	4	60.3599999999999994
+4	89	5	634.240000000000009
+14	34	4	310.339999999999975
+6	2	19	320.04000000000002
+21	87	1	678.059999999999945
+11	73	3	723.129999999999995
+6	98	19	127.909999999999997
+24	2	12	506.519999999999982
+19	47	6	996.690000000000055
+17	58	0	147.490000000000009
+5	91	6	532.210000000000036
+25	42	14	524.850000000000023
+15	43	5	898.409999999999968
+24	58	9	805.590000000000032
+4	77	12	215.099999999999994
+7	83	1	886.419999999999959
+7	10	19	591.700000000000045
+22	25	7	57.759999999999998
+4	49	11	545.769999999999982
+8	86	1	824.730000000000018
+20	43	1	517.460000000000036
+22	64	5	594.740000000000009
+10	19	3	425.050000000000011
+25	6	20	598.860000000000014
+22	65	19	773.230000000000018
+3	54	2	255.909999999999997
+18	32	4	404.45999999999998
+19	17	4	64.6800000000000068
+18	7	15	671.42999999999995
+6	85	19	482
+7	79	2	753.879999999999995
+1	39	18	78.5300000000000011
+2	42	9	496.069999999999993
+7	97	4	73.3900000000000006
+10	67	17	525.909999999999968
+16	77	7	936.159999999999968
+4	34	3	137.689999999999998
+3	5	6	625.629999999999995
+17	86	16	324.279999999999973
+14	19	11	226.039999999999992
+4	43	13	391.759999999999991
+17	97	10	419.759999999999991
+6	7	19	260.170000000000016
+11	90	19	913.440000000000055
+18	74	9	517.629999999999995
+25	92	0	543.220000000000027
+8	18	10	211.780000000000001
+25	5	8	69.1599999999999966
+18	23	6	550.460000000000036
+21	65	1	95.4699999999999989
+16	43	8	132.219999999999999
+21	67	14	242.210000000000008
+10	50	8	853.980000000000018
+20	51	16	355.939999999999998
+24	26	11	699.399999999999977
+3	12	19	738.559999999999945
+11	59	12	196.930000000000007
+21	95	8	571.980000000000018
+17	57	2	128.620000000000005
+23	55	1	367.079999999999984
+1	61	15	922.950000000000045
+18	75	15	295.79000000000002
+1	21	18	334.699999999999989
+18	73	10	254.819999999999993
+15	40	14	109.939999999999998
+2	35	8	400.079999999999984
+7	19	4	527.769999999999982
+5	98	2	499.509999999999991
+13	13	13	386
+22	19	9	901.350000000000023
+21	51	17	395.79000000000002
+23	2	8	911.460000000000036
+14	57	13	90.3499999999999943
+4	97	18	271.110000000000014
+16	89	19	55.6499999999999986
+2	11	1	977.879999999999995
+1	50	18	934.940000000000055
+24	100	12	474.689999999999998
+5	5	10	383.04000000000002
+22	15	12	285.930000000000007
+24	17	6	374.689999999999998
+21	38	17	35.0200000000000031
+13	82	15	539.379999999999995
+21	44	17	190.189999999999998
+11	43	12	622.730000000000018
+20	64	16	246.819999999999993
+14	60	2	354.069999999999993
+10	30	7	751.919999999999959
+24	84	10	787.740000000000009
+8	90	14	674.759999999999991
+4	56	17	800.610000000000014
+22	92	11	817.57000000000005
+24	94	13	325.839999999999975
+16	57	3	704.610000000000014
+4	44	20	378.420000000000016
+21	12	15	308.519999999999982
+4	12	11	342.720000000000027
+1	33	12	416.04000000000002
+18	5	5	630.259999999999991
+20	87	18	480.279999999999973
+17	24	3	101.790000000000006
+18	61	12	989.700000000000045
+15	64	4	650.269999999999982
+21	98	9	472.490000000000009
+20	2	2	812.690000000000055
+25	35	4	616.330000000000041
+1	81	2	681.059999999999945
+21	8	0	147.960000000000008
+14	90	17	141.810000000000002
+21	21	5	80.3400000000000034
+8	8	6	962.870000000000005
+3	61	20	349.019999999999982
+6	64	4	93.3199999999999932
+9	6	10	631.740000000000009
+7	11	0	370.420000000000016
+6	54	0	663.200000000000045
+18	29	14	177.289999999999992
+5	43	0	966.309999999999945
+10	85	20	261.089999999999975
+3	91	17	790.080000000000041
+19	75	1	558.269999999999982
+1	100	0	692.350000000000023
+13	24	3	495.269999999999982
+17	83	1	806.440000000000055
+14	86	16	583.5
+1	9	5	507.730000000000018
+4	88	0	116.439999999999998
+20	21	17	384.139999999999986
+10	25	13	603.370000000000005
+24	13	3	319.329999999999984
+10	10	6	877.100000000000023
+6	23	8	391.420000000000016
+9	3	5	141.039999999999992
+15	65	12	142.840000000000003
+22	87	3	538.600000000000023
+23	89	10	227.360000000000014
+22	67	0	881.879999999999995
+22	37	7	496.329999999999984
+23	8	12	816.009999999999991
+13	46	1	795.860000000000014
+14	81	14	629.690000000000055
+12	49	12	765.529999999999973
+10	68	6	229.969999999999999
+10	56	8	547.879999999999995
+11	46	8	640.879999999999995
+19	69	12	693.950000000000045
+1	62	19	205.25
+1	78	2	96.5400000000000063
+4	54	12	233.139999999999986
+25	85	10	165.009999999999991
+15	2	0	558.610000000000014
+11	82	6	719.340000000000032
+10	83	1	167.909999999999997
+18	35	12	482.100000000000023
+17	31	2	844.659999999999968
+18	3	11	75.1400000000000006
+8	45	12	45.1000000000000014
+5	25	1	356.639999999999986
+4	37	1	818.75
+21	92	19	629.580000000000041
+19	21	2	679.220000000000027
+23	28	11	683.470000000000027
+23	44	3	708.480000000000018
+12	7	15	398.170000000000016
+19	42	3	409.20999999999998
+1	75	20	400.980000000000018
+25	100	15	715.92999999999995
+23	91	16	578.899999999999977
+12	76	7	241.939999999999998
+3	87	4	200.949999999999989
+22	39	0	637.210000000000036
+3	31	10	25.4800000000000004
+20	44	1	104.739999999999995
+18	68	15	495.470000000000027
+8	70	6	863.970000000000027
+11	70	0	343.25
+14	49	10	21.9899999999999984
+1	47	18	623.159999999999968
+17	63	7	176.72999999999999
+18	99	20	23.4400000000000013
+3	9	20	260.519999999999982
+3	15	4	620.460000000000036
+16	97	14	172.659999999999997
+1	12	7	551.07000000000005
+1	99	4	919.460000000000036
+23	85	14	436.670000000000016
+19	2	14	966.509999999999991
+10	42	16	420.110000000000014
+2	64	6	125.359999999999999
+12	62	20	836.240000000000009
+4	92	7	60.009999999999998
+3	92	11	723.42999999999995
+12	86	7	363.949999999999989
+25	89	5	327.129999999999995
+15	5	16	887.610000000000014
+3	22	11	744.129999999999995
+23	36	1	768.559999999999945
+18	33	14	138.509999999999991
+12	89	18	457.269999999999982
+19	32	9	972.700000000000045
+21	63	11	106.120000000000005
+24	57	14	13.0700000000000003
+18	40	8	546.419999999999959
+3	97	20	519.559999999999945
+16	60	9	313.519999999999982
+6	46	0	671.759999999999991
+17	41	8	982.549999999999955
+17	33	13	954.269999999999982
+24	5	7	977.809999999999945
+6	44	7	611.529999999999973
+18	72	18	616.559999999999945
+20	86	20	562.389999999999986
+19	34	3	352.800000000000011
+4	11	1	748.159999999999968
+20	91	0	463.949999999999989
+22	22	0	12.4800000000000004
+15	56	6	48.9500000000000028
+11	50	5	772.870000000000005
+23	23	1	880.399999999999977
+21	66	9	207.360000000000014
+7	1	5	251.629999999999995
+18	89	14	954.970000000000027
+2	93	2	36.2700000000000031
+15	12	15	364.850000000000023
+25	17	3	674.360000000000014
+6	61	6	507.670000000000016
+7	37	8	453.310000000000002
+3	96	15	720.009999999999991
+7	93	13	33.3400000000000034
+16	38	6	907.889999999999986
+18	36	4	866.309999999999945
+24	48	16	524.850000000000023
+9	88	16	385.29000000000002
+12	44	9	699.370000000000005
+12	6	9	770.990000000000009
+9	74	2	360.990000000000009
+12	36	7	196.169999999999987
+21	93	4	402.110000000000014
+19	29	10	738.67999999999995
+3	44	2	559.190000000000055
+23	1	8	699.42999999999995
+9	19	4	335.819999999999993
+24	6	6	362.300000000000011
+6	95	11	274.699999999999989
+5	79	11	553.789999999999964
+5	46	7	289.120000000000005
+11	64	3	61.7000000000000028
+23	14	20	752.559999999999945
+23	83	3	69.6800000000000068
+7	55	19	628.850000000000023
+15	36	8	34.3299999999999983
+12	99	6	423.879999999999995
+24	23	5	776.559999999999945
+4	58	12	580.629999999999995
+12	48	12	620.309999999999945
+19	10	10	758.029999999999973
+17	66	5	885.059999999999945
+17	50	15	530.139999999999986
+5	48	2	979.090000000000032
+16	14	17	477.670000000000016
+13	60	12	153.330000000000013
+2	56	0	795.379999999999995
+16	29	9	10.0299999999999994
+14	68	10	451.569999999999993
+8	72	18	114.920000000000002
+24	36	14	33.6899999999999977
+3	90	3	439.699999999999989
+15	49	18	636.399999999999977
+6	56	1	706.889999999999986
+12	79	6	302.300000000000011
+5	39	11	911.009999999999991
+13	35	16	329.740000000000009
+5	17	2	479.54000000000002
+19	15	2	163.539999999999992
+15	52	19	561.539999999999964
+13	51	9	289.009999999999991
+15	76	0	157.930000000000007
+6	71	14	903.879999999999995
+3	94	13	929.309999999999945
+13	94	20	176.97999999999999
+7	45	7	691.909999999999968
+6	97	7	795.17999999999995
+5	29	3	558.639999999999986
+19	72	7	324.189999999999998
+19	73	0	916.610000000000014
+9	39	0	624.289999999999964
+23	88	18	822.5
+18	83	6	825.039999999999964
+8	12	9	629.870000000000005
+14	76	0	908.370000000000005
+22	30	17	271.910000000000025
+5	59	7	282.550000000000011
+14	14	9	62.0900000000000034
+9	64	8	277.949999999999989
+3	36	0	807.350000000000023
+15	74	7	163.379999999999995
+10	60	15	397.810000000000002
+20	6	0	698.600000000000023
+8	43	17	777.67999999999995
+21	48	18	298.399999999999977
+11	86	13	978.960000000000036
+2	87	4	53.8500000000000014
+17	47	15	122.25
+25	62	14	241.25
+6	69	16	809.049999999999955
+2	43	19	856.649999999999977
+21	46	10	796.759999999999991
+6	28	2	268.310000000000002
+17	89	3	48.259999999999998
+4	72	11	933.129999999999995
+17	35	18	916.730000000000018
+14	45	6	747.990000000000009
+13	54	0	523.159999999999968
+22	79	7	902.980000000000018
+4	42	9	166.990000000000009
+24	3	2	27.5199999999999996
+17	71	15	30.8500000000000014
+20	49	13	998.350000000000023
+14	51	7	451
+2	85	16	19.0300000000000011
+13	100	2	12.0600000000000005
+25	30	11	182.430000000000007
+24	83	15	374.889999999999986
+14	32	20	593.779999999999973
+17	49	3	670.460000000000036
+16	10	8	982.029999999999973
+17	37	13	669.259999999999991
+12	65	6	298.519999999999982
+9	40	19	901.700000000000045
+6	53	16	976.730000000000018
+6	4	9	715.460000000000036
+13	63	14	175.210000000000008
+18	9	12	348.569999999999993
+18	24	2	875.509999999999991
+17	93	9	498.860000000000014
+3	67	10	399.139999999999986
+22	35	16	149
+10	24	10	869.309999999999945
+8	11	8	608.590000000000032
+2	98	7	464.54000000000002
+14	67	0	399.980000000000018
+15	75	2	978.32000000000005
+23	46	5	462.470000000000027
+23	73	1	788.009999999999991
+15	20	8	310.5
+21	59	16	543.299999999999955
+24	98	17	596.009999999999991
+11	9	18	353.240000000000009
+4	16	3	122.310000000000002
+22	55	2	475.810000000000002
+24	85	8	802.490000000000009
+11	10	10	747.990000000000009
+9	86	4	558.049999999999955
+23	72	20	484.149999999999977
+22	23	10	468.639999999999986
+6	8	19	806.519999999999982
+13	23	16	567.17999999999995
+25	4	10	980.899999999999977
+9	12	15	700.799999999999955
+19	53	12	34.3299999999999983
+15	14	11	333.480000000000018
+9	36	3	573.220000000000027
+11	61	17	391.550000000000011
+12	80	6	299.839999999999975
+13	2	15	875.740000000000009
+11	34	13	290.04000000000002
+3	80	6	855.960000000000036
+13	68	5	299.899999999999977
+24	75	17	101.959999999999994
+19	35	17	76.8799999999999955
+5	92	7	890.440000000000055
+5	24	18	673.049999999999955
+8	7	9	585.269999999999982
+4	30	9	755.460000000000036
+3	77	17	130.710000000000008
+9	53	12	313.670000000000016
+17	22	0	382.990000000000009
+22	62	4	673.779999999999973
+7	33	7	990.17999999999995
+5	27	14	539.460000000000036
+22	66	10	569.259999999999991
+22	41	15	438.899999999999977
+11	17	3	67.8599999999999994
+2	30	7	726.289999999999964
+21	7	3	912.509999999999991
+3	7	11	531.830000000000041
+21	18	17	144.699999999999989
+21	69	11	14.0399999999999991
+3	59	6	637.82000000000005
+9	27	7	557.740000000000009
+3	100	14	946.809999999999945
+25	24	14	862.580000000000041
+10	71	19	51.7299999999999969
+21	40	16	204.919999999999987
+12	90	15	583.549999999999955
+1	77	11	844.789999999999964
+18	26	14	713.649999999999977
+8	84	2	149.870000000000005
+22	28	17	590.090000000000032
+20	53	2	665.490000000000009
+20	98	17	901.659999999999968
+21	3	12	76.7199999999999989
+13	77	20	695.360000000000014
+12	59	10	43.9600000000000009
+24	96	20	984.899999999999977
+5	36	17	364.920000000000016
+6	66	10	717.289999999999964
+6	99	20	288.70999999999998
+23	31	8	633.559999999999945
+10	48	7	384.449999999999989
+1	52	5	627.279999999999973
+1	23	19	194.069999999999993
+23	21	18	911.669999999999959
+13	6	13	634.559999999999945
+13	74	0	443.009999999999991
+16	99	12	862.610000000000014
+13	34	20	47.7000000000000028
+13	41	12	75.3599999999999994
+18	57	18	13.8100000000000005
+18	28	16	927.440000000000055
+11	88	13	367.720000000000027
+20	30	15	105.780000000000001
+23	49	2	791.92999999999995
+15	8	11	628.350000000000023
+25	37	18	355.079999999999984
+12	29	7	321.970000000000027
+25	23	5	698.159999999999968
+1	60	15	275.430000000000007
+1	29	12	402.350000000000023
+16	3	12	335.350000000000023
+21	15	4	266.649999999999977
+13	75	10	54.6000000000000014
+2	100	6	447.759999999999991
+17	38	5	83.0699999999999932
+13	81	19	826.389999999999986
+17	44	0	371.509999999999991
+8	68	17	795.830000000000041
+19	71	9	645.870000000000005
+18	70	11	189.050000000000011
+22	72	13	247.360000000000014
+13	42	0	971.940000000000055
+2	83	3	53.8299999999999983
+8	21	1	466.019999999999982
+19	96	2	338.009999999999991
+1	13	10	928.970000000000027
+20	34	17	114.469999999999999
+21	89	5	603.629999999999995
+9	57	3	464.04000000000002
+5	45	4	741.879999999999995
+14	5	0	765.129999999999995
+15	84	16	149.72999999999999
+21	96	5	772.870000000000005
+3	14	16	467.279999999999973
+11	48	0	646.159999999999968
+10	87	16	619.330000000000041
+15	90	5	804.700000000000045
+2	62	16	842.259999999999991
+1	2	19	446.920000000000016
+7	29	9	508.75
+11	29	1	754.559999999999945
+11	45	15	849
+22	49	7	539.360000000000014
+15	29	17	541.110000000000014
+11	69	9	378.639999999999986
+14	89	20	765.009999999999991
+3	42	15	508.389999999999986
+20	47	20	120.780000000000001
+3	26	18	758.779999999999973
+14	48	0	876.559999999999945
+11	97	1	350.920000000000016
+8	46	1	220.620000000000005
+25	26	3	292.589999999999975
+16	36	11	517.129999999999995
+4	78	20	884.549999999999955
+4	70	4	619.399999999999977
+2	9	2	726.610000000000014
+6	34	8	571.840000000000032
+22	73	7	382.720000000000027
+5	83	9	933.059999999999945
+11	79	19	541.350000000000023
+9	98	3	898.240000000000009
+11	23	5	76.7900000000000063
+1	94	3	516.980000000000018
+4	84	14	427.319999999999993
+17	13	6	254.340000000000003
+11	24	5	75.0100000000000051
+18	13	6	461.560000000000002
+19	14	11	793.850000000000023
+22	21	2	32.6099999999999994
+16	82	15	286.220000000000027
+20	36	11	370.620000000000005
+1	16	18	858.82000000000005
+23	82	17	508.180000000000007
+8	58	10	827.720000000000027
+6	17	2	181.460000000000008
+6	57	3	141.280000000000001
+15	72	10	215.389999999999986
+5	93	0	569.769999999999982
+15	24	9	260.819999999999993
+22	88	13	464.480000000000018
+25	81	2	500.639999999999986
+23	84	7	731.129999999999995
+20	59	8	850.620000000000005
+25	2	4	629.539999999999964
+23	10	1	294.600000000000023
+17	39	2	618.610000000000014
+14	29	9	592.519999999999982
+20	42	19	401.009999999999991
+23	38	2	757.240000000000009
+18	69	19	361.269999999999982
+14	7	15	395.810000000000002
+24	97	8	636.17999999999995
+9	63	15	406.560000000000002
+7	24	6	157.219999999999999
+16	18	15	526.559999999999945
+9	4	6	279.379999999999995
+11	98	16	545.860000000000014
+17	85	4	558.659999999999968
+5	44	2	371.389999999999986
+14	3	6	160.990000000000009
+8	28	20	294.70999999999998
+2	67	14	980.909999999999968
+19	13	0	935.82000000000005
+17	82	7	205.97999999999999
+11	76	6	325.839999999999975
+24	28	11	758.519999999999982
+11	51	4	926.100000000000023
+15	71	13	99.2199999999999989
+8	31	20	395.399999999999977
+16	21	13	441.970000000000027
+14	8	5	771.039999999999964
+13	61	15	828.309999999999945
+2	28	11	568.32000000000005
+3	73	6	901.960000000000036
+3	85	18	417.160000000000025
+4	76	15	422.160000000000025
+7	31	14	878.75
+22	12	7	977.419999999999959
+16	80	10	390.350000000000023
+15	96	19	160.599999999999994
+20	19	11	541.669999999999959
+7	51	13	802.840000000000032
+15	82	0	741.049999999999955
+6	76	3	64.5900000000000034
+24	61	10	470.829999999999984
+21	49	1	60.5
+2	7	4	106.209999999999994
+11	26	16	596.169999999999959
+21	42	20	979.710000000000036
+10	1	11	319.730000000000018
+22	86	16	95.0300000000000011
+8	30	4	864.580000000000041
+15	33	1	176.009999999999991
+5	35	17	133.439999999999998
+24	42	12	655.980000000000018
+22	31	17	129.47999999999999
+22	69	9	616.480000000000018
+20	17	15	961.649999999999977
+18	58	5	417.990000000000009
+11	85	4	336.389999999999986
+25	60	6	415.569999999999993
+7	34	16	90.6800000000000068
+6	52	3	21.9699999999999989
+9	32	5	464.699999999999989
+17	45	16	693.580000000000041
+2	69	6	869.669999999999959
+21	5	10	276.04000000000002
+23	78	6	988.419999999999959
+2	1	15	570.870000000000005
+1	55	12	416.75
+18	76	11	572.460000000000036
+19	58	7	319.939999999999998
+3	18	9	356.269999999999982
+5	66	19	866.399999999999977
+20	94	3	976.539999999999964
+24	40	20	231.129999999999995
+18	53	12	29.870000000000001
+6	35	6	149.240000000000009
+5	87	16	553.159999999999968
+25	76	5	757.009999999999991
+24	50	14	299.910000000000025
+23	13	13	569.5
+14	42	9	120.689999999999998
+10	98	3	491.329999999999984
+6	15	11	262.439999999999998
+22	61	13	842.809999999999945
+15	46	12	194.530000000000001
+2	60	16	973.42999999999995
+20	82	15	305.5
+12	3	12	481.759999999999991
+25	50	18	119.939999999999998
+7	26	8	602.940000000000055
+2	20	13	542.169999999999959
+7	81	7	282.819999999999993
+21	94	19	964.840000000000032
+2	14	9	276.45999999999998
+18	96	1	184.830000000000013
+1	38	2	617.049999999999955
+12	46	14	746.879999999999995
+3	16	12	64.7900000000000063
+20	65	1	255.599999999999994
+6	20	20	866.279999999999973
+18	18	13	898.990000000000009
+11	49	12	364.649999999999977
+6	18	2	42.9399999999999977
+22	16	12	655.519999999999982
+15	27	20	378.79000000000002
+5	67	2	104.180000000000007
+3	21	0	615.909999999999968
+20	62	13	459.639999999999986
+9	34	2	740.559999999999945
+9	60	3	570.419999999999959
+23	75	8	671.789999999999964
+2	39	16	841.799999999999955
+15	9	2	188.680000000000007
+1	63	20	703.409999999999968
+12	32	0	39.2800000000000011
+16	76	1	164.699999999999989
+15	41	2	462.360000000000014
+24	63	9	115.450000000000003
+21	78	3	750.860000000000014
+3	84	15	937.830000000000041
+15	83	6	68.1200000000000045
+9	37	3	810.899999999999977
+6	13	18	621.700000000000045
+23	48	20	998.779999999999973
+18	66	15	589.809999999999945
+21	24	8	64.0600000000000023
+10	28	20	282.970000000000027
+18	41	20	791.039999999999964
+3	37	17	756.090000000000032
+6	21	14	366.949999999999989
+23	86	3	252.139999999999986
+8	93	10	622.960000000000036
+1	26	13	185.129999999999995
+20	70	6	599.669999999999959
+4	26	4	247.300000000000011
+13	3	18	879.769999999999982
+18	14	3	373.310000000000002
+2	45	1	44.9699999999999989
+14	75	14	659.32000000000005
+14	93	8	424.25
+12	18	17	671.940000000000055
+9	78	6	100.040000000000006
+18	80	2	291.529999999999973
+13	86	6	396.569999999999993
+11	3	4	670.019999999999982
+11	18	10	339.769999999999982
+9	8	5	479.970000000000027
+1	17	3	497.310000000000002
+13	11	20	221.439999999999998
+24	24	17	75.3199999999999932
+16	53	20	792.240000000000009
+11	16	3	593.710000000000036
+24	46	4	597.190000000000055
+6	29	15	441.5
+5	65	4	132.449999999999989
+20	73	12	431.920000000000016
+5	80	16	788.330000000000041
+11	89	15	917.039999999999964
+13	16	7	745.919999999999959
+1	84	11	181.789999999999992
+3	50	9	214.469999999999999
+8	57	18	202.400000000000006
+11	40	0	648.07000000000005
+19	49	9	903.659999999999968
+8	97	14	374.079999999999984
+16	6	20	850.690000000000055
+22	83	4	951.769999999999982
+16	59	1	662.529999999999973
+1	82	16	18.8500000000000014
+2	10	4	585.830000000000041
+15	86	3	864.970000000000027
+3	46	10	417.350000000000023
+12	33	18	330.819999999999993
+23	53	7	892.279999999999973
+20	76	20	140.419999999999987
+19	45	7	611.57000000000005
+7	4	15	726.269999999999982
+5	6	6	179.169999999999987
+24	73	13	14.0700000000000003
+22	14	2	34.7100000000000009
+20	99	11	904.600000000000023
+22	9	12	954.240000000000009
+14	47	12	905.529999999999973
+6	60	13	686
+24	68	5	687.549999999999955
+11	65	15	35.7999999999999972
+9	13	17	947.460000000000036
+7	32	7	742.110000000000014
+19	61	5	432.279999999999973
+13	78	16	348.689999999999998
+16	54	17	259.730000000000018
+16	32	18	606.909999999999968
+18	55	5	910.389999999999986
+6	100	6	490.699999999999989
+19	51	12	887.769999999999982
+7	2	19	348.870000000000005
+19	25	20	381.699999999999989
+12	77	17	65.5999999999999943
+3	56	8	743.539999999999964
+2	66	10	13.9499999999999993
+22	76	12	412.230000000000018
+2	18	16	481.160000000000025
+12	27	18	324.769999999999982
+12	53	17	74.3700000000000045
+10	26	0	320.889999999999986
+7	5	16	171.090000000000003
+6	48	1	57.6099999999999994
+5	13	18	711.059999999999945
+14	11	10	937.549999999999955
+7	49	3	297.980000000000018
+2	50	10	427.399999999999977
+16	83	6	279.129999999999995
+12	73	13	42.7000000000000028
+16	52	6	371.199999999999989
+2	38	7	338.060000000000002
+25	61	8	421.949999999999989
+15	85	2	357.319999999999993
+16	45	15	540.480000000000018
+24	74	2	192.930000000000007
+24	56	2	421.449999999999989
+23	4	19	189.699999999999989
+5	42	19	797.159999999999968
+17	92	8	431.310000000000002
+15	97	7	687.559999999999945
+10	54	4	124.599999999999994
+9	92	20	193.199999999999989
+6	31	14	420.930000000000007
+20	35	11	764.419999999999959
+21	47	3	755.450000000000045
+19	94	5	980.100000000000023
+20	1	3	568.700000000000045
+20	15	1	455.240000000000009
+17	9	12	595.870000000000005
+2	15	5	18.1999999999999993
+10	95	11	355.569999999999993
+4	80	16	796.690000000000055
+3	83	16	403.800000000000011
+12	60	17	423.279999999999973
+25	59	18	20.2699999999999996
+11	63	10	229.539999999999992
+14	91	7	445.089999999999975
+8	73	13	709.509999999999991
+24	11	5	738.659999999999968
+2	91	15	866.92999999999995
+17	96	19	531.990000000000009
+3	79	7	774.830000000000041
+18	63	4	548.110000000000014
+25	75	11	724.490000000000009
+22	74	19	396.560000000000002
+20	41	5	314.740000000000009
+17	98	13	803.899999999999977
+12	37	7	460.069999999999993
+7	88	14	462.689999999999998
+21	43	16	550.460000000000036
+11	56	13	523.07000000000005
+23	43	8	115.549999999999997
+7	87	7	819.600000000000023
+19	7	9	903.509999999999991
+5	8	12	860.440000000000055
+4	66	5	219.810000000000002
+13	8	16	600.700000000000045
+20	9	19	266.730000000000018
+7	56	17	226.27000000000001
+12	74	20	544.769999999999982
+8	20	16	418.420000000000016
+10	92	10	178.199999999999989
+13	70	13	315.670000000000016
+9	46	19	896.909999999999968
+9	54	0	193.139999999999986
+21	97	10	108.010000000000005
+10	33	6	474.660000000000025
+22	45	14	643.419999999999959
+12	13	16	154.639999999999986
+24	71	3	669.039999999999964
+21	1	18	540.240000000000009
+12	2	3	383.829999999999984
+23	5	18	360.639999999999986
+5	22	10	698.049999999999955
+12	26	16	417.339999999999975
+20	52	3	434.110000000000014
+8	23	9	840.210000000000036
+24	78	4	126.989999999999995
+6	36	5	438.129999999999995
+14	92	20	409.670000000000016
+6	12	2	173.080000000000013
+4	48	18	340.20999999999998
+1	11	10	48.4299999999999997
+9	85	19	222.030000000000001
+12	57	17	503.939999999999998
+15	11	7	136.539999999999992
+22	24	7	212.990000000000009
+3	64	11	315.699999999999989
+23	35	4	813.740000000000009
+9	2	17	68.3299999999999983
+9	75	8	351.300000000000011
+25	7	0	150.469999999999999
+25	14	17	674.309999999999945
+17	16	20	155.439999999999998
+13	20	2	801.159999999999968
+5	76	14	425.120000000000005
+10	49	3	386.420000000000016
+8	87	4	453.730000000000018
+3	6	12	449.810000000000002
+17	87	11	411.810000000000002
+25	27	15	332.470000000000027
+19	52	7	759.669999999999959
+11	100	17	71.8199999999999932
+24	12	16	240.509999999999991
+1	69	0	485.910000000000025
+17	100	9	296.509999999999991
+7	84	12	70.5
+23	9	4	477.240000000000009
+19	86	7	608.129999999999995
+6	39	8	887.799999999999955
+15	69	10	127.920000000000002
+6	41	4	479.350000000000023
+20	48	15	766
+25	72	18	632.480000000000018
+15	13	3	334.069999999999993
+11	4	18	773.629999999999995
+10	17	13	617.470000000000027
+10	37	9	948.210000000000036
+4	21	12	454.620000000000005
+2	29	5	942.759999999999991
+19	87	7	270.399999999999977
+19	12	20	838.220000000000027
+7	69	2	463.199999999999989
+17	2	18	707.610000000000014
+7	27	6	121.530000000000001
+9	95	16	500.769999999999982
+6	42	12	337.689999999999998
+24	8	0	921.110000000000014
+13	45	16	609.860000000000014
+21	58	15	221.069999999999993
+15	17	19	149.360000000000014
+3	63	7	716.950000000000045
+18	19	2	68.4300000000000068
+19	67	13	582.25
+10	35	10	494.980000000000018
+25	31	9	924.629999999999995
+7	15	13	90.3900000000000006
+16	13	15	853.039999999999964
+4	96	5	775.279999999999973
+5	90	11	441.269999999999982
+14	4	18	809.940000000000055
+8	74	5	651.370000000000005
+9	94	16	691.690000000000055
+15	32	16	446.019999999999982
+1	51	4	359.050000000000011
+15	88	14	164.409999999999997
+9	45	5	844.220000000000027
+2	88	1	276.899999999999977
+5	49	13	245.27000000000001
+11	87	2	436.569999999999993
+21	82	13	593.899999999999977
+9	17	11	119.569999999999993
+7	66	7	825.299999999999955
+4	91	11	905.529999999999973
+25	45	16	387.160000000000025
+17	19	2	17.0799999999999983
+19	81	8	959.159999999999968
+16	94	12	927.220000000000027
+8	81	11	797.340000000000032
+7	38	7	281.879999999999995
+23	80	8	278.410000000000025
+20	4	3	108.469999999999999
+21	45	19	548.950000000000045
+14	21	6	264.529999999999973
+16	63	18	881.350000000000023
+10	23	11	245.590000000000003
+14	53	12	618.440000000000055
+7	43	7	619.379999999999995
+20	31	0	167.52000000000001
+23	100	0	664.299999999999955
+12	25	0	651.039999999999964
+19	37	13	332.970000000000027
+3	35	4	134.379999999999995
+23	79	1	207.949999999999989
+3	43	20	256.670000000000016
+4	53	8	952.460000000000036
+11	84	3	723.379999999999995
+11	5	11	880.980000000000018
+17	17	20	102.680000000000007
+1	6	5	706.740000000000009
+20	96	16	417.149999999999977
+1	74	8	467.360000000000014
+22	57	2	588.480000000000018
+24	93	3	393.420000000000016
+21	88	1	518.360000000000014
+16	4	4	470.970000000000027
+18	71	2	33.7800000000000011
+2	26	16	197.189999999999998
+10	21	13	44.6000000000000014
+3	98	10	690.710000000000036
+12	17	20	637.120000000000005
+23	33	2	598.769999999999982
+16	78	9	216.210000000000008
+24	80	5	457.410000000000025
+17	72	1	226.240000000000009
+25	54	8	559.639999999999986
+18	59	0	34.5
+4	31	14	209.969999999999999
+15	21	1	768.25
+20	95	6	765.600000000000023
+7	6	16	564.379999999999995
+21	100	12	639
+4	19	11	482.259999999999991
+5	21	8	153.860000000000014
+22	10	16	293.480000000000018
+23	63	20	961.899999999999977
+21	84	19	263.480000000000018
+20	11	0	267.120000000000005
+12	95	9	722.409999999999968
+13	79	7	775.769999999999982
+11	47	5	606.779999999999973
+7	50	16	463.879999999999995
+8	39	5	997.840000000000032
+18	31	16	316.149999999999977
+25	96	14	562.309999999999945
+17	61	11	962.549999999999955
+19	88	14	800.139999999999986
+14	31	17	713.139999999999986
+15	23	14	123.290000000000006
+2	27	8	174.740000000000009
+1	32	8	866.299999999999955
+22	63	14	507.170000000000016
+6	91	4	44.0600000000000023
+13	59	17	484.420000000000016
+15	18	3	604.990000000000009
+5	18	10	400.389999999999986
+16	85	10	196.02000000000001
+6	78	3	724.57000000000005
+7	59	14	477.480000000000018
+8	36	17	505.70999999999998
+2	78	5	540.120000000000005
+22	18	3	970.450000000000045
+23	74	20	356.870000000000005
+15	54	0	693.590000000000032
+2	31	12	938.5
+19	91	17	485.449999999999989
+13	71	5	479.480000000000018
+11	36	10	900.139999999999986
+16	42	14	632.029999999999973
+5	100	12	809.370000000000005
+18	97	16	11.5
+19	18	1	560.350000000000023
+10	3	9	270.720000000000027
+4	9	17	367.470000000000027
+5	54	15	822.139999999999986
+23	45	15	952.629999999999995
+5	77	4	416.649999999999977
+8	26	4	191.610000000000014
+25	77	18	685.379999999999995
+8	5	11	795.370000000000005
+5	69	2	441.850000000000023
+9	73	16	327.870000000000005
+19	1	8	583.549999999999955
+1	98	15	581.490000000000009
+3	41	18	920.480000000000018
+13	87	18	215.580000000000013
+1	80	10	802.399999999999977
+23	22	8	797.090000000000032
+3	3	16	546.039999999999964
+19	48	18	33.6599999999999966
+18	65	0	893.25
+16	70	10	740.509999999999991
+12	19	16	735.409999999999968
+13	10	18	130.949999999999989
+1	27	17	898.120000000000005
+24	9	9	908.210000000000036
+18	78	6	130.620000000000005
+19	63	14	604.899999999999977
+23	61	1	661.759999999999991
+19	74	7	510.769999999999982
+17	67	9	93.4399999999999977
+20	90	8	639.809999999999945
+11	67	17	447.699999999999989
+18	91	3	425.180000000000007
+1	95	9	395.240000000000009
+8	3	13	188.349999999999994
+9	82	2	624.82000000000005
+25	57	15	566.590000000000032
+4	83	13	165.960000000000008
+18	54	6	680.049999999999955
+16	12	9	508.610000000000014
+4	45	6	683.389999999999986
+3	20	4	461.399999999999977
+25	68	14	733.129999999999995
+18	56	19	875.299999999999955
+15	44	9	267.879999999999995
+10	43	19	747.009999999999991
+24	7	1	162.47999999999999
+19	22	6	498.430000000000007
+7	12	18	650.649999999999977
+3	57	3	486.70999999999998
+22	26	8	203.389999999999986
+13	15	11	811.399999999999977
+7	57	5	278.110000000000014
+7	7	6	222.150000000000006
+20	50	10	523.92999999999995
+21	28	14	28.9400000000000013
+7	71	6	986.529999999999973
+3	38	10	593.269999999999982
+5	52	2	369.699999999999989
+8	80	16	951.059999999999945
+20	16	16	195
+16	9	14	362.389999999999986
+19	57	10	363.579999999999984
+22	40	9	241.5
+5	70	1	35.5799999999999983
+2	75	8	389.980000000000018
+14	15	11	634.759999999999991
+8	10	9	917.779999999999973
+5	10	2	484.920000000000016
+7	53	11	579.990000000000009
+5	68	20	449.339999999999975
+21	57	15	881.610000000000014
+17	28	20	483.240000000000009
+2	40	8	986.659999999999968
+3	27	4	443.269999999999982
+13	67	1	485.910000000000025
+14	25	18	479.649999999999977
+15	92	3	586.899999999999977
+9	83	20	565.309999999999945
+25	46	18	103.109999999999999
+7	73	6	860.82000000000005
+21	23	7	125.859999999999999
+7	23	14	428.939999999999998
+23	6	6	420.810000000000002
+14	70	8	765.379999999999995
+24	88	2	230.77000000000001
+3	25	3	758.950000000000045
+11	75	7	808.330000000000041
+3	28	17	643.360000000000014
+14	22	6	527.850000000000023
+16	37	20	547.960000000000036
+23	64	4	247.400000000000006
+18	42	8	827.769999999999982
+25	33	7	417.399999999999977
+8	63	10	757.039999999999964
+16	56	4	775.649999999999977
+23	95	1	767.649999999999977
+19	84	11	612.470000000000027
+12	83	7	667.669999999999959
+20	56	15	189.469999999999999
+17	14	15	11.1899999999999995
+3	65	5	687.57000000000005
+3	19	14	211.72999999999999
+7	65	14	16.6900000000000013
+17	48	3	493.310000000000002
+20	97	5	372.759999999999991
+17	88	19	282.189999999999998
+8	56	9	787.32000000000005
+18	90	15	867.019999999999982
+20	10	19	12.8000000000000007
+22	29	16	766.299999999999955
+25	51	5	309.370000000000005
+8	34	17	310.199999999999989
+17	60	10	110.430000000000007
+12	12	18	653.870000000000005
+11	52	20	148.139999999999986
+12	16	12	107.049999999999997
+25	93	19	810.42999999999995
+22	75	11	476.800000000000011
+1	40	0	91.8199999999999932
+16	74	16	366.230000000000018
+7	42	17	352.620000000000005
+2	86	2	111.599999999999994
+6	80	7	367.639999999999986
+16	91	5	45.4399999999999977
+1	14	2	199.710000000000008
+10	72	13	754.850000000000023
+20	33	20	37.7199999999999989
+8	29	9	526.659999999999968
+1	72	4	672.600000000000023
+23	30	9	656.200000000000045
+11	93	13	675.480000000000018
+22	48	6	960.980000000000018
+2	53	3	442.769999999999982
+10	76	6	786.610000000000014
+3	29	14	399.139999999999986
+22	100	2	731.370000000000005
+2	12	4	184.400000000000006
+4	22	5	375.25
+13	90	13	423.019999999999982
+5	81	19	334.120000000000005
+13	33	18	633.789999999999964
+18	1	3	862.92999999999995
+21	6	11	827.720000000000027
+8	44	17	605.230000000000018
+8	75	18	158.139999999999986
+3	68	5	424.399999999999977
+11	77	5	525.970000000000027
+9	91	17	843.210000000000036
+12	41	7	652.450000000000045
+14	2	14	277.389999999999986
+2	59	11	379.910000000000025
+19	98	8	217.379999999999995
+9	11	5	486.060000000000002
+6	55	10	527.470000000000027
+19	31	18	367.519999999999982
+6	58	12	624.200000000000045
+4	59	11	931.309999999999945
+3	39	18	304.189999999999998
+19	23	11	860.009999999999991
+24	34	11	997.659999999999968
+24	82	19	718.960000000000036
+4	51	14	148.469999999999999
+8	83	19	315.470000000000027
+21	70	17	22.6499999999999986
+4	74	8	718.700000000000045
+8	88	13	66.8499999999999943
+3	89	9	858.299999999999955
+22	54	14	796.090000000000032
+2	34	7	80.9000000000000057
+16	28	19	241.569999999999993
+15	28	1	706.360000000000014
+9	76	6	909.389999999999986
+18	11	17	357.149999999999977
+7	47	12	656.17999999999995
+12	45	4	319.240000000000009
+2	89	1	996.080000000000041
+22	90	19	434.699999999999989
+20	71	18	835.259999999999991
+4	13	5	638.330000000000041
+16	34	18	649.639999999999986
+20	7	5	992.779999999999973
+5	58	3	61.9099999999999966
+14	87	11	536.549999999999955
+15	25	10	702.840000000000032
+7	64	7	132.740000000000009
+6	1	1	803.450000000000045
+23	24	7	277.240000000000009
+2	92	10	368.699999999999989
+23	54	17	584.980000000000018
+23	52	12	653.110000000000014
+1	48	4	239.120000000000005
+23	77	0	913.230000000000018
+11	19	0	995.57000000000005
+14	43	14	998.009999999999991
+17	27	12	808.919999999999959
+19	92	4	948.5
+6	51	8	329.009999999999991
+2	24	20	990.399999999999977
+7	54	4	460.850000000000023
+21	20	11	23.0700000000000003
+4	7	7	178.919999999999987
+16	26	10	620.409999999999968
+5	9	15	189.740000000000009
+11	99	3	276.529999999999973
+17	76	4	695.419999999999959
+12	100	3	597.659999999999968
+21	34	14	333.29000000000002
+17	95	3	165.550000000000011
+13	30	10	588.67999999999995
+11	55	0	914.029999999999973
+25	47	10	757.629999999999995
+7	99	15	659.289999999999964
+10	79	13	95.6099999999999994
+3	4	12	266.730000000000018
+15	80	2	148.319999999999993
+23	87	14	904.67999999999995
+16	1	18	315.949999999999989
+7	36	2	564.629999999999995
+11	78	18	110.510000000000005
+8	64	10	397.920000000000016
+2	63	18	397.660000000000025
+13	22	17	269.350000000000023
+2	99	13	39.6199999999999974
+13	72	0	430.25
+13	62	1	930.539999999999964
+6	94	1	388.529999999999973
+8	40	9	313.129999999999995
+7	77	9	641.370000000000005
+25	67	6	421.350000000000023
+19	19	20	478.79000000000002
+16	84	0	23.2699999999999996
+16	88	10	973.350000000000023
+20	57	10	885.039999999999964
+6	93	4	182.02000000000001
+18	88	9	920.110000000000014
+13	14	13	604.809999999999945
+2	47	18	240.330000000000013
+23	60	20	531.220000000000027
+24	4	8	680.370000000000005
+4	87	9	827.210000000000036
+1	37	15	759.700000000000045
+20	88	17	564.700000000000045
+1	58	20	902.799999999999955
+3	13	19	899.419999999999959
+14	85	11	833.419999999999959
+6	63	16	891.960000000000036
+23	67	4	697.850000000000023
+13	26	4	976.440000000000055
+24	45	8	61
+1	88	6	264.819999999999993
+6	88	3	90.5799999999999983
+8	98	5	295.889999999999986
+9	29	4	27.5599999999999987
+18	20	14	32.1799999999999997
+15	15	15	925.279999999999973
+20	75	15	95.1500000000000057
+8	6	15	744.080000000000041
+4	69	1	83.3400000000000034
+21	77	12	108.140000000000001
+21	99	0	214.919999999999987
+5	97	6	278.350000000000023
+4	71	17	820.409999999999968
+21	79	14	250.159999999999997
+19	62	16	45.009999999999998
+7	58	12	408.870000000000005
+17	4	13	794.690000000000055
+8	13	2	80.7099999999999937
+16	22	0	396.699999999999989
+3	53	8	175.150000000000006
+24	52	18	444.170000000000016
+8	91	17	970.889999999999986
+25	90	18	857.580000000000041
+11	72	12	806.129999999999995
+5	1	18	70.3199999999999932
+2	76	6	232.199999999999989
+13	57	0	514.620000000000005
+6	47	0	183.639999999999986
+3	62	16	94.5799999999999983
+25	64	3	892.460000000000036
+4	67	15	752.029999999999973
+10	6	14	797.980000000000018
+18	37	3	877.960000000000036
+16	87	11	392.220000000000027
+11	7	16	385.329999999999984
+24	18	2	946.399999999999977
+24	30	16	898.370000000000005
+15	78	7	595.960000000000036
+21	56	12	547.559999999999945
+15	35	7	42.1499999999999986
+14	69	7	801.440000000000055
+20	8	17	514.669999999999959
+4	18	14	374.930000000000007
+23	66	19	188.860000000000014
+24	90	7	274.589999999999975
+2	90	8	12.3300000000000001
+16	72	20	939.720000000000027
+18	94	10	125.680000000000007
+5	12	14	464.279999999999973
+17	56	11	989.909999999999968
+2	61	9	30.6700000000000017
+7	21	20	684.379999999999995
+23	42	0	179.219999999999999
+17	7	2	138.689999999999998
+19	83	7	259.149999999999977
+5	64	7	24.3000000000000007
+22	32	13	130.629999999999995
+9	24	17	396.019999999999982
+10	63	16	153.139999999999986
+4	35	5	731.840000000000032
+6	5	0	946.129999999999995
+16	92	20	46.0900000000000034
+24	65	14	160.009999999999991
+7	82	2	163.219999999999999
+14	26	14	260.230000000000018
+7	30	11	68.980000000000004
+16	19	2	310.430000000000007
+1	96	8	116.120000000000005
+5	23	20	805.049999999999955
+16	62	2	918.42999999999995
+23	97	17	41.9099999999999966
+12	14	18	860.769999999999982
+2	3	10	12.5099999999999998
+7	100	0	659.120000000000005
+14	54	3	884.289999999999964
+8	35	20	763.120000000000005
+25	21	5	977.039999999999964
+11	44	15	143.120000000000005
+8	19	6	93.9200000000000017
+20	5	11	733.450000000000045
+9	48	1	147.689999999999998
+16	41	0	570.539999999999964
+14	46	20	138.849999999999994
+1	76	12	774.370000000000005
+14	66	8	541.200000000000045
+9	72	1	733.080000000000041
+2	19	17	691.129999999999995
+10	58	5	936.549999999999955
+10	80	16	482.490000000000009
+17	68	10	772.5
+10	16	12	638.610000000000014
+5	86	16	802.230000000000018
+10	11	5	889.259999999999991
+18	49	19	843.659999999999968
+14	39	17	587.700000000000045
+6	43	19	390.300000000000011
+10	66	6	973.259999999999991
+1	36	3	439.730000000000018
+8	65	7	592.399999999999977
+17	43	20	295.149999999999977
+11	11	9	774.159999999999968
+3	78	7	373.279999999999973
+10	53	1	507.269999999999982
+4	75	15	299.029999999999973
+4	98	20	972.840000000000032
+23	51	2	862.629999999999995
+3	58	18	621.220000000000027
+1	56	6	344.339999999999975
+24	15	3	58.3800000000000026
+3	86	14	715.899999999999977
+22	38	7	320.980000000000018
+12	24	3	423.25
+9	7	12	910.5
+17	99	5	911.759999999999991
+9	71	10	177.949999999999989
+12	88	9	617.789999999999964
+22	53	12	84.519999999999996
+15	70	15	852.269999999999982
+18	21	1	364.339999999999975
+23	11	3	517.700000000000045
+23	50	4	61.5600000000000023
+7	48	15	696.450000000000045
+22	33	17	370.069999999999993
+13	27	8	100.620000000000005
+4	94	18	116.519999999999996
+8	49	12	390.389999999999986
+23	98	13	450.990000000000009
+15	38	2	714.950000000000045
+11	62	7	324.170000000000016
+11	94	16	17.8999999999999986
+4	6	2	371.759999999999991
+8	9	4	704.200000000000045
+21	9	17	695.139999999999986
+11	81	0	169.789999999999992
+6	9	12	961.159999999999968
+3	93	8	591.629999999999995
+8	100	3	59.6099999999999994
+16	51	3	416.899999999999977
+24	20	18	505.519999999999982
+14	96	3	439.04000000000002
+11	39	5	511.069999999999993
+14	72	17	236.569999999999993
+12	98	4	101.099999999999994
+15	59	9	911.100000000000023
+23	32	12	623.370000000000005
+18	4	11	219.02000000000001
+18	77	17	825.389999999999986
+21	14	2	705.480000000000018
+12	78	10	487.970000000000027
+4	90	9	843.230000000000018
+5	99	16	82.9000000000000057
+3	60	1	368.620000000000005
+14	84	19	182.090000000000003
+8	32	6	165.610000000000014
+12	5	9	83.4000000000000057
+8	99	8	908.389999999999986
+18	15	16	330.449999999999989
+12	93	11	939.220000000000027
+22	51	6	70.4200000000000017
+25	29	4	896.07000000000005
+10	38	17	932.860000000000014
+25	53	8	984.639999999999986
+25	32	14	961.649999999999977
+8	42	11	863.730000000000018
+17	55	15	914.350000000000023
+24	49	1	844.309999999999945
+13	44	12	372.430000000000007
+22	58	8	37.1599999999999966
+11	96	2	641.039999999999964
+13	83	7	17.7399999999999984
+18	92	9	938.360000000000014
+3	70	18	73.3599999999999994
+11	2	16	332.839999999999975
+20	81	5	476.240000000000009
+19	3	4	343.529999999999973
+25	43	3	944.399999999999977
+12	21	14	920.480000000000018
+25	63	16	379.5
+6	33	15	364.310000000000002
+24	79	6	218.960000000000008
+17	62	11	646.889999999999986
+18	82	18	693.990000000000009
+24	76	13	494.230000000000018
+20	63	11	684.519999999999982
+8	53	9	555.07000000000005
+10	65	4	785.960000000000036
+8	22	20	323.259999999999991
+3	23	5	382.170000000000016
+11	12	20	844.67999999999995
+8	76	13	810.559999999999945
+5	75	17	334.389999999999986
+9	38	17	154
+25	74	2	507.360000000000014
+6	74	4	842.399999999999977
+13	7	5	187.25
+9	70	6	213.389999999999986
+24	41	11	24.5
+13	92	16	605.299999999999955
+7	46	18	185.360000000000014
+1	57	7	586.950000000000045
+5	33	1	598.730000000000018
+19	55	15	31.5399999999999991
+10	84	2	229.810000000000002
+24	54	15	348.839999999999975
+5	60	14	967.379999999999995
+9	68	18	311.139999999999986
+22	91	11	546.309999999999945
+5	47	17	360.199999999999989
+6	70	7	740.57000000000005
+1	44	17	321.430000000000007
+10	2	12	980.039999999999964
+11	22	20	582.490000000000009
+12	30	8	117.549999999999997
+25	10	19	176.800000000000011
+19	8	0	25.1099999999999994
+11	27	11	305.769999999999982
+13	99	20	315.430000000000007
+6	14	5	645.190000000000055
+10	4	1	83.6400000000000006
+21	13	17	888.870000000000005
+1	18	5	539.470000000000027
+16	46	13	46.6700000000000017
+6	75	7	255.300000000000011
+23	68	15	145.069999999999993
+25	94	12	404.899999999999977
+20	45	20	337.550000000000011
+17	90	6	400.240000000000009
+12	85	13	628.590000000000032
+1	73	7	664.309999999999945
+11	30	8	855.519999999999982
+4	8	17	487.300000000000011
+20	78	1	270.870000000000005
+9	77	13	466.240000000000009
+20	38	9	55.4399999999999977
+2	46	11	361.20999999999998
+22	80	20	345.100000000000023
+24	62	7	624.509999999999991
+12	22	1	834.649999999999977
+24	38	20	585.730000000000018
+7	41	8	529.169999999999959
+1	86	1	572.850000000000023
+9	56	8	606.200000000000045
+4	99	8	110.049999999999997
+6	24	11	454.779999999999973
+24	29	17	481.910000000000025
+14	16	3	967.259999999999991
+10	47	11	861.720000000000027
+14	63	1	291.879999999999995
+18	64	17	658
+4	61	2	180.539999999999992
+24	67	2	940.440000000000055
+3	30	1	240.259999999999991
+12	40	0	940.220000000000027
+10	88	12	823.080000000000041
+15	66	3	244.699999999999989
+16	71	20	510.149999999999977
+20	39	7	474.689999999999998
+11	80	6	872.139999999999986
+16	86	1	875.710000000000036
+24	69	4	747.080000000000041
+2	13	9	924.389999999999986
+12	94	8	706.230000000000018
+13	96	3	496.569999999999993
+1	4	1	43.6899999999999977
+20	72	10	612.740000000000009
+10	31	9	518.129999999999995
+10	70	8	855.700000000000045
+19	46	16	617
+15	95	10	319.829999999999984
+21	4	15	216.469999999999999
+11	6	13	331.370000000000005
+14	38	7	603.299999999999955
+21	41	11	162.840000000000003
+21	22	12	262.160000000000025
+21	55	2	766.909999999999968
+20	69	7	942.639999999999986
+7	72	3	981.149999999999977
+18	10	0	300.589999999999975
+22	34	10	467.189999999999998
+25	41	1	498.319999999999993
+3	99	3	768.509999999999991
+14	13	20	338.100000000000023
+15	98	19	175.300000000000011
+25	79	19	616.370000000000005
+20	27	1	566.299999999999955
+18	62	17	83.269999999999996
+22	50	3	238.77000000000001
+6	62	20	697.309999999999945
+12	58	17	854.350000000000023
+17	69	3	83.2800000000000011
+21	25	2	590.850000000000023
+13	38	20	759.370000000000005
+23	47	18	292.610000000000014
+19	9	18	353.120000000000005
+14	80	0	926.879999999999995
+18	50	6	190.25
+23	27	1	839.490000000000009
+7	76	13	479.389999999999986
+10	73	11	374.819999999999993
+12	52	12	74.75
+7	16	17	912.200000000000045
+23	26	3	595.17999999999995
+10	81	6	30.2800000000000011
+25	18	16	600.259999999999991
+22	17	4	817.080000000000041
+25	44	8	773.370000000000005
+1	5	5	432.430000000000007
+22	95	11	739.950000000000045
+23	37	5	938.720000000000027
+24	21	2	27.5
+24	43	10	406.920000000000016
+5	40	10	936.360000000000014
+19	30	17	387.25
+20	54	12	711.600000000000023
+11	41	20	568.029999999999973
+3	51	2	239.810000000000002
+2	2	17	29.7300000000000004
+9	55	19	442.620000000000005
+12	96	11	29.5
+1	68	18	882.009999999999991
+1	65	4	355.279999999999973
+3	17	20	96.9000000000000057
+20	18	9	553.279999999999973
+12	39	16	707.710000000000036
+2	73	13	671.919999999999959
+17	77	14	370.089999999999975
+19	59	19	399.839999999999975
+12	23	20	803.860000000000014
+20	93	11	434.839999999999975
+10	46	16	727.32000000000005
+1	66	16	55.1799999999999997
+15	47	2	842.720000000000027
+19	43	16	543.370000000000005
+14	94	18	37.6899999999999977
+11	42	12	331.240000000000009
+9	81	2	504.170000000000016
+19	50	11	967.700000000000045
+9	5	7	394.100000000000023
+2	65	4	897.240000000000009
+19	82	12	368.180000000000007
+13	97	19	292.430000000000007
+19	77	0	374.199999999999989
+20	46	19	560.210000000000036
+25	52	2	400.220000000000027
+15	91	14	336.740000000000009
+24	31	17	336.639999999999986
+22	52	8	830.639999999999986
+17	32	6	817.779999999999973
+23	25	17	789.330000000000041
+14	82	20	701.039999999999964
+11	53	11	540.610000000000014
+4	93	1	851.970000000000027
+3	48	8	729.580000000000041
+8	33	0	925.659999999999968
+14	98	8	590.100000000000023
+11	58	18	674
+9	93	1	70.3299999999999983
+20	12	8	791.200000000000045
+7	86	1	556.039999999999964
+15	57	20	309.029999999999973
+15	10	0	745.970000000000027
+19	65	2	86.6500000000000057
+15	94	0	408.600000000000023
+21	74	0	358.430000000000007
+7	68	15	907.299999999999955
+1	35	17	509.759999999999991
+7	20	13	99.9599999999999937
+1	28	12	381.100000000000023
+10	13	13	634.889999999999986
+6	96	3	998.950000000000045
+2	81	1	929.669999999999959
+10	91	3	266.339999999999975
+17	36	16	170.419999999999987
+5	84	13	307.360000000000014
+12	51	19	238.580000000000013
+18	84	16	689.019999999999982
+9	69	7	576.529999999999973
+10	59	17	292.670000000000016
+11	13	1	685.629999999999995
+22	81	14	671.17999999999995
+12	20	14	564.090000000000032
+14	58	15	727.57000000000005
+12	47	8	334.050000000000011
+14	100	0	12.0399999999999991
+5	26	14	348.100000000000023
+9	18	5	507.610000000000014
+8	37	17	777.350000000000023
+6	81	20	258.310000000000002
+13	28	11	234.360000000000014
+22	43	13	874.769999999999982
+24	60	10	741.009999999999991
+20	84	13	598.389999999999986
+16	23	9	487.470000000000027
+9	25	14	868.009999999999991
+7	61	14	858.610000000000014
+11	91	13	850.769999999999982
+16	79	18	438.180000000000007
+11	38	15	725.460000000000036
+18	48	13	981.909999999999968
+23	93	6	544.889999999999986
+9	26	5	869.379999999999995
+3	1	3	420.730000000000018
+2	84	5	293.439999999999998
+23	65	6	709.470000000000027
+17	3	17	773.110000000000014
+20	92	19	189.919999999999987
+13	43	12	865.470000000000027
+13	65	16	642.039999999999964
+13	56	2	788.639999999999986
+2	32	15	559.990000000000009
+11	33	4	238.310000000000002
+10	40	9	857.690000000000055
+20	68	18	949.139999999999986
+7	60	1	504.769999999999982
+8	79	8	987.110000000000014
+6	45	2	564.509999999999991
+18	47	6	360.100000000000023
+25	22	16	253.389999999999986
+24	39	6	642.159999999999968
+23	3	12	729.25
+15	73	10	370.600000000000023
+5	11	1	520.330000000000041
+11	68	16	731.970000000000027
+25	99	8	378.75
+17	34	4	536.17999999999995
+8	14	15	613.370000000000005
+11	21	20	757.960000000000036
+9	49	7	510.399999999999977
+16	49	3	67.9099999999999966
+2	49	1	668.350000000000023
+6	65	3	897.710000000000036
+4	29	17	179.240000000000009
+20	60	13	738.330000000000041
+14	37	19	880.940000000000055
+20	3	3	52.9200000000000017
+8	94	2	852.600000000000023
+9	44	12	201.009999999999991
+4	95	8	226.759999999999991
+3	24	11	592.419999999999959
+16	98	0	555.159999999999968
+23	18	14	579.789999999999964
+4	68	17	836.889999999999986
+5	78	11	394.430000000000007
+22	8	13	250.080000000000013
+21	54	15	855.029999999999973
+21	75	4	905.379999999999995
+8	17	2	863.789999999999964
+10	61	0	855.210000000000036
+1	71	19	100.260000000000005
+19	27	15	893.120000000000005
+14	10	8	130.800000000000011
+21	37	10	165.610000000000014
+13	37	1	531.75
+18	17	1	837.370000000000005
+7	92	18	294.800000000000011
+22	47	2	108.620000000000005
+15	3	0	381.230000000000018
+24	10	2	748.490000000000009
+18	34	6	14.3499999999999996
+21	26	20	470.889999999999986
+16	27	11	986.549999999999955
+2	8	3	35.8599999999999994
+4	52	2	188.280000000000001
+6	6	20	19.2300000000000004
+18	95	19	310.269999999999982
+4	36	1	848.259999999999991
+22	82	7	782.940000000000055
+21	73	15	268.970000000000027
+1	79	11	669.799999999999955
+19	6	11	624.690000000000055
+15	6	15	557.730000000000018
+24	33	19	30.9800000000000004
+1	45	14	226.310000000000002
+23	57	6	271.70999999999998
+9	9	17	130.060000000000002
+19	89	10	690.269999999999982
+17	42	11	370.259999999999991
+15	48	10	403.220000000000027
+11	95	16	832.529999999999973
+1	31	7	150.47999999999999
+11	14	13	584.519999999999982
+24	25	10	146.400000000000006
+4	24	10	394.639999999999986
+16	17	6	248.819999999999993
+9	33	4	11.6300000000000008
+20	25	15	938.379999999999995
+13	17	3	969.490000000000009
+9	89	8	700.75
+10	29	16	807.389999999999986
+6	86	18	516.5
+2	77	5	754.940000000000055
+11	28	3	556.090000000000032
+17	15	12	590.769999999999982
+22	11	15	270.240000000000009
+1	10	18	447.740000000000009
+25	82	5	431.870000000000005
+7	85	13	466.199999999999989
+6	77	4	548.779999999999973
+16	8	0	312.930000000000007
+14	83	5	841.07000000000005
+25	34	15	709.470000000000027
+14	77	19	400.829999999999984
+20	13	0	115.239999999999995
+18	87	3	660.450000000000045
+24	32	15	814.980000000000018
+7	8	2	706.490000000000009
+17	94	0	863.720000000000027
+5	4	15	871.279999999999973
+1	90	12	105.599999999999994
+4	79	7	850.539999999999964
+21	52	7	132.050000000000011
+12	50	8	526.370000000000005
+17	21	17	978.840000000000032
+8	54	17	622.779999999999973
+19	20	19	816.240000000000009
+13	55	17	987.159999999999968
+12	28	7	643.649999999999977
+7	96	15	954.67999999999995
+3	66	16	812.419999999999959
+2	95	3	258.259999999999991
+23	70	12	430.199999999999989
+21	27	1	675.309999999999945
+6	3	20	575.590000000000032
+17	20	8	102.689999999999998
+6	32	19	536.559999999999945
+12	70	1	518.649999999999977
+8	62	16	219.909999999999997
+10	64	0	645.940000000000055
+3	8	12	295.970000000000027
+16	31	11	364.720000000000027
+25	83	14	626.940000000000055
+1	30	9	210.669999999999987
+16	39	1	337.980000000000018
+2	37	17	392.370000000000005
+22	5	18	676.190000000000055
+15	26	10	977.200000000000045
+9	65	9	555.649999999999977
+19	39	3	307.810000000000002
+10	99	18	882.850000000000023
+3	10	11	656.669999999999959
+5	51	18	733.67999999999995
+23	39	5	673.090000000000032
+7	14	18	863.610000000000014
+6	59	13	424.610000000000014
+22	99	11	117.109999999999999
+9	43	9	443.110000000000014
+13	88	18	475.699999999999989
+6	27	9	660.57000000000005
+22	7	20	733.769999999999982
+5	82	9	139.259999999999991
+12	91	6	461.910000000000025
+25	9	8	894.399999999999977
+14	41	19	886.509999999999991
+25	56	16	10.0099999999999998
+17	65	1	56.009999999999998
+10	34	20	794.67999999999995
+12	42	2	982.07000000000005
+18	2	16	232.110000000000014
+21	50	10	806.950000000000045
+20	79	12	577.460000000000036
+21	85	7	439.079999999999984
+4	100	14	391.060000000000002
+9	51	13	520.830000000000041
+10	57	16	727.980000000000018
+9	21	5	567.210000000000036
+18	6	9	57.6199999999999974
+24	55	8	544.279999999999973
+18	79	10	268.810000000000002
+10	39	14	302.740000000000009
+14	74	10	473.120000000000005
+20	24	15	238.289999999999992
+25	98	7	994.470000000000027
+2	41	9	722.299999999999955
+23	34	19	543.639999999999986
+3	2	9	994.879999999999995
+21	80	3	530.639999999999986
+22	84	15	687.549999999999955
+8	41	5	18.8299999999999983
+10	8	11	193.189999999999998
+9	58	4	918.289999999999964
+23	71	12	11.6099999999999994
+10	97	1	408.199999999999989
+2	23	10	870.440000000000055
+1	43	2	690.559999999999945
+17	18	18	314.769999999999982
+23	17	9	533.629999999999995
+15	60	9	472.379999999999995
+25	16	4	84.6400000000000006
+17	84	6	984.759999999999991
+16	96	8	720.090000000000032
+13	47	10	703.039999999999964
+21	72	15	586.769999999999982
+2	52	4	499.009999999999991
+9	16	2	563
+21	39	19	802.309999999999945
+25	87	18	30.7699999999999996
+9	84	17	346.879999999999995
+19	26	3	729.419999999999959
+15	34	7	500.449999999999989
+4	28	5	438.870000000000005
+9	1	9	675.730000000000018
+20	22	14	141.27000000000001
+19	97	17	275.110000000000014
+1	70	19	501.509999999999991
+5	28	6	790.600000000000023
+11	54	0	904.159999999999968
+1	1	3	536.940000000000055
+3	82	16	914.700000000000045
+16	90	9	30
+20	55	12	204.389999999999986
+25	71	19	105.079999999999998
+3	88	2	90.6400000000000006
+23	56	12	941.07000000000005
+18	81	17	396.740000000000009
+15	1	16	679.940000000000055
+11	35	7	10.4299999999999997
+9	35	16	332.579999999999984
+5	73	4	559.32000000000005
+16	2	6	880.120000000000005
+10	77	6	268.980000000000018
+19	90	7	489.990000000000009
+24	64	0	166.509999999999991
+10	75	0	663.120000000000005
+20	14	0	97.5600000000000023
+9	79	9	226.159999999999997
+7	90	6	946.789999999999964
+7	25	9	216.129999999999995
+24	47	19	486.79000000000002
+22	68	2	568.100000000000023
+9	99	0	929.129999999999995
+18	25	10	345.389999999999986
+4	10	6	948.200000000000045
+23	81	2	215.72999999999999
+8	1	18	595.129999999999995
+24	95	17	356.949999999999989
+6	30	14	179.430000000000007
+19	68	11	326.079999999999984
+12	92	1	49.3599999999999994
+18	27	13	454.819999999999993
+6	26	15	475.220000000000027
+11	8	19	944.580000000000041
+5	50	2	736.75
+16	25	8	658.639999999999986
+7	67	19	526.519999999999982
+\.
+
+
+--
+-- Data for Name: catalogue_workshop; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.catalogue_workshop (workshop_id, car_part_id, amount_of_available, cost) FROM stdin;
+19	68	17	804.710000000000036
+23	98	1	341.189999999999998
+3	93	15	54.240000000000002
+26	54	5	366.79000000000002
+29	22	5	453.759999999999991
+29	14	19	42.1400000000000006
+18	27	16	947.57000000000005
+2	44	3	36.3999999999999986
+24	84	2	400.899999999999977
+4	73	1	462.389999999999986
+23	38	14	698.059999999999945
+7	7	6	631.039999999999964
+19	71	11	775.419999999999959
+18	92	11	498
+28	38	14	298.639999999999986
+22	24	18	698.409999999999968
+30	4	20	59.8999999999999986
+21	25	12	99.4300000000000068
+30	46	16	765.529999999999973
+13	64	0	432.29000000000002
+28	5	19	664.889999999999986
+23	28	17	541.460000000000036
+30	31	18	148.939999999999998
+12	90	12	280.100000000000023
+29	90	6	339.439999999999998
+20	44	13	229.659999999999997
+19	79	12	319.050000000000011
+4	91	0	994.960000000000036
+11	36	20	252.129999999999995
+15	90	1	26.4299999999999997
+14	12	19	635.039999999999964
+27	91	2	891.67999999999995
+13	87	7	551.259999999999991
+21	50	12	473.319999999999993
+30	97	20	660.879999999999995
+23	86	19	480.129999999999995
+16	57	8	340.310000000000002
+28	59	16	531.039999999999964
+5	53	18	591.25
+1	72	5	212.009999999999991
+19	90	20	580.769999999999982
+14	47	19	286.519999999999982
+26	43	14	301.240000000000009
+4	35	9	686.899999999999977
+2	95	15	405.990000000000009
+21	76	7	765
+10	59	18	691.649999999999977
+11	78	7	67.4599999999999937
+5	10	4	524.620000000000005
+26	49	3	294.189999999999998
+17	30	12	31.8500000000000014
+16	86	16	16.2699999999999996
+22	71	8	389.180000000000007
+17	16	7	304.980000000000018
+7	6	9	978.67999999999995
+12	12	11	858.490000000000009
+6	43	8	658.269999999999982
+12	89	0	196.909999999999997
+21	32	14	344.110000000000014
+6	99	19	636.82000000000005
+28	29	6	535.139999999999986
+7	91	3	206.819999999999993
+11	50	13	56.8299999999999983
+14	62	6	405.610000000000014
+5	36	18	819.340000000000032
+25	71	3	151.460000000000008
+18	30	2	174.030000000000001
+6	58	4	143.449999999999989
+8	45	19	955.25
+5	78	12	36.6599999999999966
+23	46	16	121.549999999999997
+28	58	18	715.710000000000036
+3	92	18	658.759999999999991
+19	21	10	242.360000000000014
+16	42	14	751.870000000000005
+24	22	16	672.32000000000005
+23	1	0	27.3500000000000014
+13	30	16	827.559999999999945
+4	45	8	47.5
+15	70	7	148.680000000000007
+15	49	7	78.5600000000000023
+16	77	3	472.420000000000016
+10	82	9	169.909999999999997
+3	78	10	790.269999999999982
+20	34	9	581.080000000000041
+12	38	10	221.849999999999994
+22	78	4	27.9200000000000017
+3	12	13	955.899999999999977
+14	35	3	444.670000000000016
+11	80	19	779.629999999999995
+12	27	13	50.3800000000000026
+6	34	5	62.1899999999999977
+23	59	19	583.659999999999968
+1	9	2	860.490000000000009
+14	89	11	263.579999999999984
+18	87	8	508.639999999999986
+22	15	1	623.67999999999995
+20	79	10	224.740000000000009
+15	63	6	624.110000000000014
+17	99	14	737.190000000000055
+12	16	11	169.52000000000001
+23	43	11	656.539999999999964
+29	42	4	449.089999999999975
+15	83	12	17.9299999999999997
+26	71	19	755.360000000000014
+23	64	4	485.5
+30	99	3	90.0300000000000011
+10	39	6	536.649999999999977
+7	60	15	821.67999999999995
+21	33	6	400.45999999999998
+11	100	20	557.419999999999959
+8	62	13	200.629999999999995
+18	59	2	723.159999999999968
+12	64	7	134.469999999999999
+9	58	9	280.319999999999993
+9	23	4	841.389999999999986
+28	19	16	225.389999999999986
+3	10	18	251.469999999999999
+11	75	8	929.5
+12	92	13	136.379999999999995
+7	100	10	815.340000000000032
+10	30	10	756.580000000000041
+2	77	2	581.659999999999968
+19	73	14	186.810000000000002
+17	10	7	260.689999999999998
+28	40	17	17.5399999999999991
+17	71	14	449.589999999999975
+20	75	12	408.100000000000023
+5	15	12	83.4899999999999949
+17	33	7	817.850000000000023
+27	50	8	329.300000000000011
+9	43	9	175.72999999999999
+1	84	16	736.220000000000027
+21	10	2	398.199999999999989
+5	6	4	10.5299999999999994
+30	22	6	182.409999999999997
+20	91	2	274.879999999999995
+2	6	19	201.210000000000008
+9	85	20	701.259999999999991
+30	37	6	925.600000000000023
+10	69	8	668.409999999999968
+24	67	4	534.519999999999982
+25	67	8	206.430000000000007
+27	21	14	551.480000000000018
+7	22	10	80.2000000000000028
+15	1	8	183.050000000000011
+6	40	9	91.0499999999999972
+17	18	12	175.300000000000011
+4	6	11	218.360000000000014
+25	77	19	232.22999999999999
+24	77	16	703.539999999999964
+3	37	11	818.669999999999959
+16	14	17	379.509999999999991
+18	24	17	740.909999999999968
+19	48	0	458.740000000000009
+16	82	16	285.610000000000014
+17	93	6	771.789999999999964
+3	67	14	969.830000000000041
+23	70	19	582.220000000000027
+14	59	13	183.539999999999992
+26	91	17	47.4500000000000028
+17	83	16	147.629999999999995
+22	79	14	177.490000000000009
+15	77	11	191.939999999999998
+4	31	16	785.340000000000032
+21	99	10	525.92999999999995
+20	60	10	912.149999999999977
+1	15	6	439.220000000000027
+5	28	11	670.950000000000045
+13	19	10	577.07000000000005
+5	88	1	257.79000000000002
+18	99	20	366.800000000000011
+9	90	13	426.370000000000005
+15	13	1	321.930000000000007
+16	67	15	148.639999999999986
+19	19	14	266.680000000000007
+27	95	3	717.17999999999995
+22	57	13	80.1299999999999955
+16	43	16	89.0400000000000063
+8	89	5	333.70999999999998
+1	30	1	759.57000000000005
+5	64	16	945.57000000000005
+12	97	19	727.110000000000014
+9	60	15	709.870000000000005
+11	59	10	778.42999999999995
+11	81	8	432.089999999999975
+23	66	11	554.460000000000036
+28	78	7	778.899999999999977
+25	69	9	867.669999999999959
+29	21	10	792.309999999999945
+17	57	12	899.399999999999977
+29	4	19	571.200000000000045
+16	21	19	698.389999999999986
+25	100	18	927.169999999999959
+14	37	10	775.580000000000041
+1	3	11	958.980000000000018
+4	87	15	380.870000000000005
+11	88	11	261.100000000000023
+7	74	6	210.080000000000013
+7	13	14	817.42999999999995
+10	56	15	326.910000000000025
+8	37	9	483.660000000000025
+1	52	18	578.940000000000055
+15	21	16	899.419999999999959
+9	83	3	161.840000000000003
+12	4	20	912.909999999999968
+25	82	19	460.089999999999975
+2	54	1	964.450000000000045
+1	92	4	125.620000000000005
+17	12	3	74.9899999999999949
+27	72	4	845.399999999999977
+15	72	17	733.529999999999973
+2	41	3	384.329999999999984
+26	60	17	984.059999999999945
+4	57	19	330.95999999999998
+11	84	7	383.970000000000027
+11	96	13	808.529999999999973
+9	46	10	330.279999999999973
+9	54	7	366.480000000000018
+30	14	17	897.240000000000009
+6	63	11	356.509999999999991
+18	22	17	940.200000000000045
+17	63	20	789.980000000000018
+3	71	4	759.379999999999995
+4	16	14	616.860000000000014
+25	88	7	750.32000000000005
+26	94	13	761.409999999999968
+28	55	20	736.190000000000055
+9	10	18	390.839999999999975
+16	50	5	343.149999999999977
+8	73	4	896.669999999999959
+27	70	7	871.759999999999991
+20	30	10	806.759999999999991
+26	23	2	763.5
+15	17	5	968.610000000000014
+15	25	8	356.589999999999975
+7	87	20	686.019999999999982
+4	38	19	789.139999999999986
+7	37	4	932.840000000000032
+17	51	1	712.690000000000055
+24	51	12	617.279999999999973
+17	79	8	771.57000000000005
+28	9	15	320.730000000000018
+25	72	0	965.220000000000027
+18	37	15	302.860000000000014
+19	61	4	664.710000000000036
+8	7	4	987.67999999999995
+4	36	16	531.940000000000055
+19	33	18	211.830000000000013
+9	21	20	342.259999999999991
+20	88	1	820.149999999999977
+26	81	4	724.879999999999995
+21	4	11	649.389999999999986
+5	13	19	135.120000000000005
+14	44	3	69.8900000000000006
+25	97	16	939.309999999999945
+9	14	16	871.419999999999959
+3	30	20	629.669999999999959
+4	4	18	98.5300000000000011
+18	7	5	397.199999999999989
+7	73	9	986.519999999999982
+25	42	4	583.639999999999986
+24	82	15	806.25
+9	100	4	580.139999999999986
+25	75	18	981.110000000000014
+30	48	8	526.460000000000036
+21	20	19	886.960000000000036
+5	59	8	416.279999999999973
+25	15	13	741.970000000000027
+10	3	9	814.67999999999995
+29	57	0	794.740000000000009
+18	26	2	491.160000000000025
+26	44	11	839.059999999999945
+13	65	7	141.870000000000005
+17	81	6	616.730000000000018
+24	50	9	803.42999999999995
+18	53	16	692.159999999999968
+19	66	16	527.289999999999964
+23	94	5	724.240000000000009
+23	27	3	166.27000000000001
+17	25	20	479.519999999999982
+6	95	15	420.829999999999984
+22	1	9	238.349999999999994
+16	91	9	123.890000000000001
+18	40	5	450.560000000000002
+30	26	0	678.700000000000045
+16	4	18	413.980000000000018
+19	70	5	165.509999999999991
+9	89	1	717.980000000000018
+14	16	16	955.220000000000027
+24	55	12	19.2699999999999996
+29	97	6	666.009999999999991
+2	28	10	26.2300000000000004
+26	22	11	915.25
+19	3	18	809.67999999999995
+1	8	10	240.710000000000008
+14	43	14	928.720000000000027
+21	35	13	933.960000000000036
+11	40	14	297.129999999999995
+6	53	6	219.139999999999986
+10	20	10	11.2899999999999991
+14	31	13	228.889999999999986
+30	16	6	40.9600000000000009
+23	58	14	490.149999999999977
+4	2	0	288.310000000000002
+23	36	11	739.42999999999995
+21	66	20	400.550000000000011
+25	81	17	474.930000000000007
+11	54	2	410.600000000000023
+30	56	4	295.449999999999989
+6	59	15	686.42999999999995
+11	87	13	371.589999999999975
+13	75	10	863.990000000000009
+27	4	7	177.090000000000003
+10	2	2	590.980000000000018
+11	51	10	160.789999999999992
+22	32	7	415.300000000000011
+15	19	7	439.949999999999989
+21	68	7	248.819999999999993
+25	83	11	759.82000000000005
+25	64	0	308.740000000000009
+12	88	2	239.830000000000013
+19	100	16	922.899999999999977
+24	56	18	627.620000000000005
+8	53	11	948.07000000000005
+6	9	19	440.569999999999993
+17	17	9	219.039999999999992
+16	68	20	992.32000000000005
+16	93	8	110.349999999999994
+6	72	6	623.289999999999964
+10	74	4	180.860000000000014
+9	77	10	186.349999999999994
+18	61	4	602.720000000000027
+7	76	0	743.75
+21	37	12	878.779999999999973
+2	89	1	95.4899999999999949
+4	62	15	140.110000000000014
+27	52	15	198.740000000000009
+23	85	4	208.990000000000009
+1	71	12	149.159999999999997
+4	10	14	384.70999999999998
+1	21	3	659.870000000000005
+7	49	2	165.280000000000001
+6	51	15	10.5800000000000001
+10	21	16	178.710000000000008
+8	40	9	570.389999999999986
+30	81	19	650.279999999999973
+1	56	3	283.050000000000011
+24	62	17	977.57000000000005
+13	76	12	272.930000000000007
+3	58	0	255.159999999999997
+26	69	16	767.649999999999977
+23	13	19	611.450000000000045
+17	80	10	392.860000000000014
+8	31	4	273.899999999999977
+16	75	8	784.789999999999964
+25	29	8	864.700000000000045
+3	72	11	984.509999999999991
+21	60	3	837.480000000000018
+16	55	5	373.050000000000011
+11	93	17	575.190000000000055
+18	18	1	584.269999999999982
+30	71	17	703.75
+7	32	12	617.730000000000018
+20	76	15	814.210000000000036
+30	25	20	402.560000000000002
+18	11	1	655.049999999999955
+14	9	12	684.82000000000005
+11	46	11	73.8799999999999955
+26	24	7	837.519999999999982
+19	72	5	157.210000000000008
+12	37	2	875.870000000000005
+8	3	7	383.889999999999986
+18	38	16	203.550000000000011
+14	65	0	244.280000000000001
+30	84	20	331.009999999999991
+19	22	0	974.360000000000014
+20	58	6	500.990000000000009
+28	94	10	792.019999999999982
+10	11	19	48.1899999999999977
+20	84	9	753.389999999999986
+11	45	11	658.169999999999959
+9	76	1	230.419999999999987
+28	68	18	641.909999999999968
+13	83	11	994.480000000000018
+18	49	12	769.200000000000045
+16	13	1	875.629999999999995
+1	90	17	19.5100000000000016
+19	99	1	440.70999999999998
+17	38	1	333.279999999999973
+30	13	6	357.70999999999998
+20	62	2	511.839999999999975
+13	9	13	86.0600000000000023
+13	52	10	337.370000000000005
+29	33	6	386.430000000000007
+25	11	0	834.629999999999995
+12	80	20	147.830000000000013
+10	53	13	623.240000000000009
+16	73	5	376.980000000000018
+1	23	17	409.160000000000025
+6	62	14	598.340000000000032
+3	6	13	267.399999999999977
+26	19	20	121.25
+20	66	17	26.7100000000000009
+23	41	16	826.590000000000032
+29	31	14	243.740000000000009
+9	50	9	702.649999999999977
+14	57	17	244.319999999999993
+25	35	6	995.919999999999959
+27	13	5	453.310000000000002
+9	2	16	726.399999999999977
+13	5	20	646.649999999999977
+28	92	0	501.490000000000009
+13	1	14	781.309999999999945
+1	5	2	479.439999999999998
+1	68	20	511.569999999999993
+20	41	9	971.82000000000005
+18	73	14	696.149999999999977
+30	27	15	10.4399999999999995
+10	43	1	345.970000000000027
+26	99	8	80.9200000000000017
+20	6	4	945.330000000000041
+22	14	12	686.600000000000023
+25	16	1	725.649999999999977
+12	17	17	191.759999999999991
+15	52	3	211.430000000000007
+14	18	5	93.6299999999999955
+13	98	17	974.169999999999959
+9	70	16	717.690000000000055
+28	30	18	360.439999999999998
+2	13	13	11.0500000000000007
+20	43	6	571.309999999999945
+30	44	5	161.530000000000001
+7	86	4	988.649999999999977
+14	92	3	488.54000000000002
+11	30	2	416.470000000000027
+19	85	9	318.810000000000002
+26	97	15	70.230000000000004
+28	21	1	190.5
+8	11	3	579.789999999999964
+16	36	5	340.879999999999995
+17	72	10	238.099999999999994
+20	90	11	47.2899999999999991
+27	28	9	579.129999999999995
+11	85	14	117.180000000000007
+27	90	7	875.039999999999964
+1	24	5	33.3699999999999974
+9	27	1	144.02000000000001
+26	87	4	385.20999999999998
+18	54	3	542.019999999999982
+14	7	16	571.57000000000005
+4	96	6	742.720000000000027
+13	3	20	557.269999999999982
+26	78	14	42.6700000000000017
+24	41	4	389.120000000000005
+11	92	16	732.870000000000005
+26	79	7	671.190000000000055
+1	43	9	28.7899999999999991
+29	72	20	156.72999999999999
+16	54	4	723.299999999999955
+27	88	12	302.689999999999998
+2	70	13	241.530000000000001
+14	77	7	406.420000000000016
+21	94	18	533.669999999999959
+6	41	13	757.600000000000023
+17	52	3	216.909999999999997
+5	86	7	292.29000000000002
+13	86	18	626.259999999999991
+11	48	14	756.639999999999986
+6	25	8	454.560000000000002
+6	39	7	573.07000000000005
+15	39	18	196.379999999999995
+2	58	8	637.75
+25	63	18	691.029999999999973
+7	54	16	971.039999999999964
+18	36	16	229.349999999999994
+22	46	20	966.139999999999986
+25	40	0	37.0200000000000031
+29	34	8	95.9300000000000068
+14	74	10	246.759999999999991
+13	29	15	908.639999999999986
+25	91	15	108.049999999999997
+16	47	17	311.620000000000005
+11	98	14	630.769999999999982
+12	29	13	632.889999999999986
+10	84	13	686.590000000000032
+22	38	17	412.629999999999995
+26	9	14	880.259999999999991
+6	4	16	165.25
+20	3	11	525.67999999999995
+26	55	14	845.620000000000005
+2	99	16	850.539999999999964
+16	3	18	929.019999999999982
+29	51	9	127.739999999999995
+28	14	4	424.100000000000023
+2	93	17	201.099999999999994
+7	24	13	310.649999999999977
+5	9	8	710.919999999999959
+2	47	19	753.789999999999964
+7	64	7	235.280000000000001
+11	99	8	151.139999999999986
+1	22	15	690.25
+12	71	2	603.710000000000036
+19	34	20	135.719999999999999
+30	38	10	392.259999999999991
+28	88	2	882.389999999999986
+21	42	14	455.170000000000016
+29	64	1	509.420000000000016
+30	79	4	935.370000000000005
+29	61	11	174.780000000000001
+12	81	11	309.100000000000023
+17	64	3	697.309999999999945
+28	71	8	147.439999999999998
+16	11	1	188.539999999999992
+27	78	6	343.870000000000005
+13	79	20	898.350000000000023
+21	96	12	642.710000000000036
+26	16	7	464.379999999999995
+18	100	0	551.92999999999995
+29	84	20	646.860000000000014
+8	69	16	519.379999999999995
+7	5	15	462.019999999999982
+14	80	20	401.050000000000011
+20	5	4	603.850000000000023
+15	43	14	456.579999999999984
+10	41	16	513.840000000000032
+27	74	18	324.79000000000002
+11	89	13	236.439999999999998
+7	4	6	257.050000000000011
+21	98	20	182.719999999999999
+11	20	2	173.189999999999998
+28	25	5	263.839999999999975
+12	63	13	626.200000000000045
+7	88	11	904.450000000000045
+3	46	4	97.0400000000000063
+13	45	15	472.079999999999984
+4	44	9	219.889999999999986
+12	36	7	611.669999999999959
+9	19	1	689.899999999999977
+8	29	5	587.230000000000018
+7	57	8	344.850000000000023
+10	33	14	325.740000000000009
+6	100	18	248.719999999999999
+7	14	0	434.949999999999989
+21	36	0	298.759999999999991
+24	91	15	936.07000000000005
+4	52	13	455.779999999999973
+30	68	7	438.199999999999989
+3	95	7	387.649999999999977
+12	79	1	599.049999999999955
+4	12	18	879.25
+14	28	9	713.100000000000023
+17	9	12	188.639999999999986
+8	42	14	676.169999999999959
+26	77	4	338.569999999999993
+11	5	12	176.800000000000011
+7	90	9	964.690000000000055
+2	73	10	236.530000000000001
+23	22	2	660.17999999999995
+28	87	7	746.169999999999959
+11	86	1	358.470000000000027
+18	28	3	817.529999999999973
+26	76	5	192.530000000000001
+22	58	11	407.029999999999973
+17	41	9	399.95999999999998
+14	30	0	311.29000000000002
+13	59	12	994.960000000000036
+24	13	15	227.580000000000013
+15	29	19	97.9500000000000028
+10	5	17	882.759999999999991
+9	5	12	532.019999999999982
+17	56	5	951.32000000000005
+3	34	4	745.769999999999982
+3	27	13	186.639999999999986
+14	6	7	132.789999999999992
+1	78	19	202.439999999999998
+5	51	13	298.70999999999998
+29	25	14	498
+17	55	13	556.850000000000023
+12	40	18	30.9200000000000017
+28	16	19	670.419999999999959
+24	87	9	786.460000000000036
+9	74	5	940.330000000000041
+9	81	13	421.819999999999993
+3	38	1	670.100000000000023
+20	12	17	406.45999999999998
+24	17	11	386.569999999999993
+28	1	9	167.97999999999999
+7	42	6	146.659999999999997
+13	31	12	902.190000000000055
+30	33	10	226.159999999999997
+8	95	6	918.32000000000005
+12	96	6	276.350000000000023
+11	42	15	52.9699999999999989
+23	49	12	388.689999999999998
+13	91	2	541.230000000000018
+27	75	12	91.6299999999999955
+19	25	14	17.4800000000000004
+11	23	19	654.460000000000036
+4	19	0	761.82000000000005
+10	19	6	775.830000000000041
+28	52	12	759.399999999999977
+18	58	18	25.7399999999999984
+11	15	20	642.639999999999986
+29	79	7	220.009999999999991
+26	75	16	735.700000000000045
+15	60	13	125.099999999999994
+15	2	14	791.92999999999995
+19	69	1	769.690000000000055
+21	77	9	744.419999999999959
+14	8	7	42.4500000000000028
+29	65	16	104.290000000000006
+24	21	16	92.5100000000000051
+3	100	4	623.139999999999986
+8	87	3	739.129999999999995
+11	38	18	737.519999999999982
+2	32	19	105.180000000000007
+17	8	12	905.169999999999959
+15	44	6	394.089999999999975
+22	51	12	957.649999999999977
+1	26	9	842.190000000000055
+1	12	0	106.920000000000002
+19	28	17	802.17999999999995
+20	36	12	537.830000000000041
+19	6	1	98.3299999999999983
+21	49	0	75.5
+8	22	17	113.939999999999998
+21	70	1	156.050000000000011
+10	85	14	104.329999999999998
+17	92	19	35.8500000000000014
+3	45	11	564.67999999999995
+2	75	5	56.240000000000002
+19	91	17	24.6600000000000001
+1	98	3	602.17999999999995
+22	31	0	326.079999999999984
+20	27	7	343.259999999999991
+24	100	20	624.42999999999995
+5	54	11	558.009999999999991
+10	6	1	899.279999999999973
+9	68	8	191.810000000000002
+19	11	8	331.629999999999995
+24	14	9	73.6500000000000057
+14	91	13	490.160000000000025
+24	94	9	141.879999999999995
+1	96	17	72.019999999999996
+24	24	14	173.52000000000001
+20	74	1	732.25
+5	83	20	48.4200000000000017
+17	40	7	45.1899999999999977
+8	85	16	467.129999999999995
+10	15	19	800.909999999999968
+4	29	17	684.269999999999982
+10	63	7	66.5699999999999932
+26	6	12	517.509999999999991
+5	81	7	665.700000000000045
+16	38	20	36.0900000000000034
+1	13	14	643.100000000000023
+7	18	2	443.180000000000007
+2	88	18	136.159999999999997
+4	61	14	602.129999999999995
+3	68	0	160.330000000000013
+23	60	13	44.2999999999999972
+4	74	11	900.029999999999973
+11	28	7	102.049999999999997
+18	21	20	206.430000000000007
+16	89	1	776.559999999999945
+15	6	14	335.819999999999993
+4	69	18	895.049999999999955
+6	67	6	77.2900000000000063
+23	88	16	931.5
+9	52	15	760.519999999999982
+24	96	3	187.699999999999989
+16	25	9	534.730000000000018
+4	11	17	953.299999999999955
+28	49	5	903.830000000000041
+7	29	4	367.660000000000025
+15	62	7	731.5
+15	4	19	254.650000000000006
+29	93	2	167.550000000000011
+7	46	16	128.219999999999999
+6	11	20	685.129999999999995
+17	68	8	469.920000000000016
+4	98	2	707.649999999999977
+3	31	18	30.9299999999999997
+19	2	0	67.7600000000000051
+29	75	19	119.689999999999998
+30	51	4	499.569999999999993
+29	15	9	665.629999999999995
+21	38	2	960.159999999999968
+5	33	3	875.120000000000005
+10	28	8	708.169999999999959
+28	99	12	583
+30	100	4	75.9000000000000057
+13	14	15	681.350000000000023
+17	73	4	277.019999999999982
+2	100	12	89.8499999999999943
+22	48	20	651.57000000000005
+24	58	16	629.970000000000027
+4	83	6	518.019999999999982
+12	65	5	528.470000000000027
+22	68	8	567.789999999999964
+27	60	9	459.879999999999995
+21	55	6	399.120000000000005
+21	46	14	930.909999999999968
+24	27	3	850.980000000000018
+15	24	10	977.289999999999964
+27	84	10	782.059999999999945
+7	77	4	273.100000000000023
+17	90	15	339.800000000000011
+15	48	12	166.25
+8	48	13	678.870000000000005
+27	40	16	435.269999999999982
+29	49	15	486.560000000000002
+27	73	16	660.899999999999977
+24	1	17	191.27000000000001
+5	11	1	672.840000000000032
+14	96	1	362.410000000000025
+30	83	10	354.519999999999982
+13	50	4	83.769999999999996
+19	32	8	513.240000000000009
+14	34	0	455.850000000000023
+6	74	19	574.220000000000027
+27	41	7	90.8499999999999943
+19	83	13	391.069999999999993
+9	98	19	569.039999999999964
+19	50	9	248.039999999999992
+8	98	12	192.719999999999999
+2	52	9	534.950000000000045
+16	48	19	384.100000000000023
+25	50	13	706.450000000000045
+8	39	11	693.879999999999995
+11	95	16	797.559999999999945
+19	45	11	658.67999999999995
+6	55	7	773.169999999999959
+18	97	17	401.360000000000014
+9	15	1	675.129999999999995
+26	30	13	285.699999999999989
+21	85	17	172.710000000000008
+30	29	19	950.159999999999968
+18	60	19	72.1800000000000068
+26	92	7	776.230000000000018
+7	45	9	369.149999999999977
+16	76	9	120.280000000000001
+28	44	3	674.399999999999977
+1	65	7	955.409999999999968
+28	69	12	403.670000000000016
+17	29	12	356.220000000000027
+30	95	15	980.169999999999959
+20	1	0	904.159999999999968
+30	28	6	625.549999999999955
+27	56	0	749.809999999999945
+9	13	14	48.2199999999999989
+16	60	0	685.610000000000014
+5	62	18	853.639999999999986
+10	94	11	859.289999999999964
+13	68	13	419.899999999999977
+28	67	10	112.060000000000002
+25	19	18	610.649999999999977
+14	26	20	295.060000000000002
+6	20	12	550.149999999999977
+1	75	11	103.569999999999993
+17	96	5	124.099999999999994
+19	9	10	564.259999999999991
+22	56	3	669.529999999999973
+26	61	20	624.629999999999995
+21	93	11	641.269999999999982
+11	62	4	697.360000000000014
+22	73	16	915.039999999999964
+18	2	3	987.129999999999995
+25	80	12	753.120000000000005
+20	80	2	251.52000000000001
+15	35	11	485.45999999999998
+16	26	8	541.259999999999991
+11	74	18	752.620000000000005
+20	9	2	429.509999999999991
+5	19	13	499.579999999999984
+18	66	19	531.299999999999955
+29	37	5	644.169999999999959
+23	93	4	178.840000000000003
+8	55	0	300.120000000000005
+13	40	5	882.92999999999995
+15	56	9	332.550000000000011
+7	15	2	109.049999999999997
+27	82	9	257.480000000000018
+27	38	2	842.110000000000014
+2	83	4	496.949999999999989
+5	4	3	93.8199999999999932
+3	79	11	745.580000000000041
+21	22	16	128.930000000000007
+17	47	12	329.95999999999998
+18	91	7	255.539999999999992
+16	95	15	75.3599999999999994
+15	38	10	848.990000000000009
+14	81	11	796.419999999999959
+7	1	19	209.740000000000009
+15	40	16	592.580000000000041
+30	40	20	26.6099999999999994
+27	71	17	681.139999999999986
+29	92	13	752.799999999999955
+26	12	3	285.920000000000016
+19	88	12	16.1799999999999997
+3	59	0	819.75
+2	34	3	133.120000000000005
+7	51	0	89.0799999999999983
+3	75	19	76.2600000000000051
+13	8	4	768.67999999999995
+14	5	17	40.7800000000000011
+9	30	2	252.169999999999987
+22	22	5	94.2000000000000028
+2	23	5	220.810000000000002
+10	83	16	105.280000000000001
+23	21	7	887.450000000000045
+6	3	9	520.830000000000041
+2	4	8	35.5200000000000031
+6	57	4	773.659999999999968
+25	34	17	252.469999999999999
+17	84	10	959.409999999999968
+1	19	15	245.789999999999992
+6	17	12	54.3599999999999994
+5	21	13	460.75
+19	53	4	607.17999999999995
+11	4	7	678.110000000000014
+18	17	9	581.57000000000005
+15	26	12	385.620000000000005
+28	90	1	689.269999999999982
+17	24	4	647.039999999999964
+4	18	1	554.240000000000009
+2	1	6	971.330000000000041
+25	65	3	357.680000000000007
+21	89	9	573.789999999999964
+22	42	2	296.639999999999986
+1	60	10	329.550000000000011
+20	86	12	837.529999999999973
+17	100	10	833.57000000000005
+21	9	20	300.829999999999984
+5	20	1	173.02000000000001
+8	78	4	378.730000000000018
+19	30	15	755.67999999999995
+23	20	18	220.370000000000005
+26	50	20	392.75
+2	94	11	546.080000000000041
+19	82	11	106.420000000000002
+14	4	12	107.510000000000005
+30	96	14	375.930000000000007
+16	99	18	278.050000000000011
+7	67	13	997.389999999999986
+3	77	15	995.190000000000055
+7	38	16	620.889999999999986
+2	26	0	465.740000000000009
+30	63	1	630.809999999999945
+15	47	9	921.230000000000018
+20	82	2	575.960000000000036
+3	43	1	841.649999999999977
+7	69	9	643.32000000000005
+27	2	12	418.610000000000014
+11	82	8	785.169999999999959
+28	79	8	673.57000000000005
+12	46	4	832.659999999999968
+22	72	3	444.529999999999973
+7	63	8	949.029999999999973
+18	15	7	50.5
+11	63	1	90.4399999999999977
+20	65	11	95.6099999999999994
+22	49	3	687.529999999999973
+26	31	16	396.329999999999984
+13	27	16	613.67999999999995
+4	86	15	691.110000000000014
+17	13	14	270.920000000000016
+22	19	17	211.680000000000007
+28	37	10	851.659999999999968
+4	1	9	667.919999999999959
+13	13	7	788.470000000000027
+3	90	9	864.389999999999986
+26	28	18	391.100000000000023
+17	86	14	987.279999999999973
+10	1	3	83.8599999999999994
+26	95	20	79.4399999999999977
+18	46	1	672.009999999999991
+27	100	6	705.649999999999977
+18	77	19	555.299999999999955
+8	30	19	708.399999999999977
+25	95	8	498.350000000000023
+2	56	15	352.600000000000023
+30	9	14	581.919999999999959
+13	90	1	150.560000000000002
+7	84	15	147.580000000000013
+30	45	16	487.769999999999982
+27	93	3	754.769999999999982
+12	60	17	911.269999999999982
+21	80	6	139.77000000000001
+21	64	15	74.8400000000000034
+20	37	20	898.379999999999995
+9	64	20	626.210000000000036
+7	85	12	730.620000000000005
+8	52	19	44.6300000000000026
+30	87	8	887.080000000000041
+23	29	5	225.680000000000007
+22	92	9	45.8299999999999983
+9	73	0	402.199999999999989
+9	4	19	730.080000000000041
+12	7	15	281.95999999999998
+23	12	13	133.009999999999991
+29	43	4	436
+14	86	19	625.809999999999945
+10	13	19	130.650000000000006
+3	13	4	262.519999999999982
+4	97	13	733.25
+2	67	8	268.449999999999989
+10	64	19	69.7000000000000028
+30	36	9	384.25
+26	34	17	485.689999999999998
+4	67	5	929.870000000000005
+17	62	1	477.319999999999993
+1	57	2	507.360000000000014
+21	23	10	494.379999999999995
+7	70	13	217.430000000000007
+6	89	3	347.089999999999975
+7	31	2	270.079999999999984
+29	70	10	158.77000000000001
+19	20	19	578.730000000000018
+18	1	7	352.329999999999984
+4	95	18	859.539999999999964
+12	33	20	860.580000000000041
+23	16	5	874.409999999999968
+4	76	19	957.279999999999973
+14	85	14	261.990000000000009
+14	84	4	249.129999999999995
+25	68	0	863.289999999999964
+10	32	11	655.019999999999982
+29	80	4	216
+3	53	18	886.980000000000018
+13	60	1	989.379999999999995
+14	42	7	169.909999999999997
+30	52	6	682.75
+9	49	10	270.519999999999982
+21	75	10	827.779999999999973
+25	51	1	542.509999999999991
+12	77	13	475.560000000000002
+24	90	0	383.310000000000002
+10	17	3	236.939999999999998
+4	60	8	540.269999999999982
+13	85	8	779.090000000000032
+15	16	14	342.360000000000014
+16	87	10	533.409999999999968
+28	57	4	224.939999999999998
+3	60	9	297.110000000000014
+24	89	10	386.389999999999986
+7	50	5	156.169999999999987
+20	23	6	799.519999999999982
+26	83	10	264.949999999999989
+20	2	12	702.990000000000009
+25	2	13	549.529999999999973
+26	27	13	124.060000000000002
+6	13	19	926.480000000000018
+24	68	6	520.830000000000041
+21	88	1	846.149999999999977
+1	83	3	312.25
+10	72	10	617.529999999999973
+2	7	7	161.189999999999998
+4	84	0	768.009999999999991
+24	30	19	691.129999999999995
+16	64	1	572.690000000000055
+14	20	9	210.330000000000013
+29	17	4	852.730000000000018
+26	58	10	952.940000000000055
+16	32	15	793.75
+30	62	19	811.639999999999986
+30	43	9	856.539999999999964
+19	10	6	957.950000000000045
+10	95	17	682.539999999999964
+10	31	2	783.620000000000005
+21	82	1	666.330000000000041
+29	100	12	487.579999999999984
+16	80	4	387.819999999999993
+16	83	17	147.490000000000009
+13	57	7	340.980000000000018
+8	14	15	684.039999999999964
+2	66	9	444.620000000000005
+9	53	4	899.169999999999959
+2	79	16	843.600000000000023
+27	6	17	443.779999999999973
+3	16	2	289.569999999999993
+12	45	4	838.710000000000036
+7	92	2	774.120000000000005
+23	51	20	182.72999999999999
+22	41	9	914.860000000000014
+23	34	15	604.490000000000009
+18	23	13	865.789999999999964
+21	19	17	534.210000000000036
+7	56	20	755.440000000000055
+27	64	3	735.980000000000018
+4	17	4	400.5
+13	17	7	136.199999999999989
+16	71	14	458.939999999999998
+20	33	10	171.639999999999986
+17	22	7	737.980000000000018
+15	23	16	886.159999999999968
+5	35	2	707.909999999999968
+18	71	16	280.25
+26	42	20	843.940000000000055
+25	57	14	34.5499999999999972
+2	72	6	655.67999999999995
+14	49	6	258.230000000000018
+13	10	18	679.220000000000027
+25	92	15	274.170000000000016
+4	81	14	459.089999999999975
+5	85	17	721.990000000000009
+30	92	10	818.149999999999977
+15	7	3	890.490000000000009
+7	21	20	560.419999999999959
+4	89	11	125.780000000000001
+17	60	15	436.589999999999975
+17	95	13	910.980000000000018
+4	65	8	861.840000000000032
+18	10	7	511.350000000000023
+22	16	8	222.77000000000001
+14	82	11	375.870000000000005
+29	54	8	239.159999999999997
+9	94	9	798.450000000000045
+16	49	13	878.850000000000023
+16	70	8	559.450000000000045
+6	82	1	182.360000000000014
+5	76	4	26.5399999999999991
+2	38	7	521.159999999999968
+24	47	7	121.370000000000005
+10	78	3	837.809999999999945
+27	20	8	195.879999999999995
+18	86	14	845.259999999999991
+20	45	8	579.210000000000036
+13	73	17	190.52000000000001
+30	69	12	969.460000000000036
+27	89	13	580.230000000000018
+15	66	7	23.8999999999999986
+9	92	16	663.009999999999991
+22	77	19	859.450000000000045
+6	37	9	667.720000000000027
+24	39	10	48.4299999999999997
+8	91	2	400.829999999999984
+17	5	14	332.589999999999975
+3	51	4	981.789999999999964
+28	36	18	83.0400000000000063
+27	54	4	121.109999999999999
+17	82	6	904.509999999999991
+24	52	17	315.420000000000016
+20	11	20	22.0700000000000003
+5	90	11	305.279999999999973
+8	75	3	230.580000000000013
+9	45	6	641.009999999999991
+28	47	7	51.9099999999999966
+1	47	20	19.1999999999999993
+27	42	14	96.2600000000000051
+25	31	18	164.620000000000005
+11	72	1	317.490000000000009
+25	87	15	156.009999999999991
+24	65	14	29.0500000000000007
+10	75	11	608.549999999999955
+6	78	15	788.67999999999995
+14	23	16	95.5699999999999932
+6	47	5	950.269999999999982
+28	45	5	378
+25	78	18	162.909999999999997
+27	65	19	819.539999999999964
+15	54	4	333.769999999999982
+21	15	6	994.720000000000027
+14	48	13	929.720000000000027
+23	65	1	861.480000000000018
+8	28	4	232.340000000000003
+23	92	7	142.180000000000007
+10	61	19	432.449999999999989
+20	100	6	606.009999999999991
+7	59	3	433.240000000000009
+3	15	19	616.019999999999982
+3	52	14	45.4500000000000028
+7	47	0	128
+19	15	20	160.97999999999999
+15	84	17	495.769999999999982
+17	26	3	742.580000000000041
+1	54	7	619.17999999999995
+13	89	3	860.049999999999955
+29	7	11	346.759999999999991
+27	46	12	330.569999999999993
+30	11	20	738.830000000000041
+22	4	3	398.579999999999984
+17	3	11	640.259999999999991
+25	23	7	365.810000000000002
+19	55	16	433.230000000000018
+22	63	10	142.469999999999999
+1	28	18	361.860000000000014
+17	85	17	717.17999999999995
+8	68	8	151.050000000000011
+10	98	7	532.039999999999964
+12	35	18	63.8999999999999986
+17	15	13	13.0700000000000003
+21	26	18	577.730000000000018
+29	44	5	966.639999999999986
+28	62	17	955.590000000000032
+27	97	5	572.700000000000045
+1	80	7	762.409999999999968
+11	29	18	257.149999999999977
+11	9	0	868.460000000000036
+9	61	15	197.659999999999997
+27	68	0	840.029999999999973
+21	95	4	514.759999999999991
+14	36	14	792.230000000000018
+26	67	17	557.509999999999991
+21	81	20	779.450000000000045
+19	93	9	787.700000000000045
+2	39	16	879.029999999999973
+25	45	12	78.6500000000000057
+24	34	0	382.54000000000002
+17	58	17	978.549999999999955
+23	89	11	987.110000000000014
+30	42	5	335.129999999999995
+9	99	5	869.029999999999973
+23	55	2	247.689999999999998
+4	22	7	389.75
+17	74	5	953.509999999999991
+18	83	8	774.779999999999973
+19	96	15	975.539999999999964
+12	44	19	889.389999999999986
+8	94	5	105.450000000000003
+16	16	7	531.57000000000005
+14	50	6	277
+30	6	4	160.680000000000007
+1	48	16	872.440000000000055
+2	40	18	755.370000000000005
+27	98	18	863.970000000000027
+1	63	5	382.060000000000002
+1	36	0	889.779999999999973
+3	39	2	204.030000000000001
+20	52	14	481.389999999999986
+26	89	10	439.949999999999989
+23	80	7	740.899999999999977
+15	20	16	151.949999999999989
+12	56	11	898.669999999999959
+1	20	16	572.379999999999995
+6	32	9	56.3400000000000034
+24	80	12	853.080000000000041
+29	73	9	189.099999999999994
+21	57	13	668.42999999999995
+29	41	8	504.360000000000014
+4	59	20	344.329999999999984
+10	88	20	511.25
+19	56	1	317.240000000000009
+17	36	17	570.32000000000005
+19	76	4	318.220000000000027
+11	17	6	628.309999999999945
+15	3	1	973.710000000000036
+29	47	11	443.300000000000011
+6	12	4	517.080000000000041
+25	93	11	241.300000000000011
+8	8	7	552.07000000000005
+24	61	19	379.319999999999993
+19	14	19	455.660000000000025
+8	9	14	110.819999999999993
+23	68	5	103.370000000000005
+22	80	9	474.930000000000007
+8	65	13	693.389999999999986
+18	93	16	167.280000000000001
+24	16	6	36.8500000000000014
+2	5	20	585.279999999999973
+4	3	6	74.6599999999999966
+2	85	14	326.689999999999998
+16	9	3	468.230000000000018
+23	18	12	56.5399999999999991
+16	19	14	600.190000000000055
+27	35	18	626.610000000000014
+2	11	15	734.889999999999986
+19	7	14	801.049999999999955
+30	98	12	460.579999999999984
+15	79	19	150.469999999999999
+10	80	10	111.840000000000003
+7	98	9	601.769999999999982
+29	26	13	715.590000000000032
+25	1	12	870.940000000000055
+27	15	4	83.4699999999999989
+6	98	15	859.059999999999945
+29	13	15	493.439999999999998
+12	8	9	313.560000000000002
+22	95	11	910.669999999999959
+6	36	15	324.990000000000009
+21	87	7	321.04000000000002
+9	26	5	236.169999999999987
+22	26	20	81.8100000000000023
+16	15	10	450.949999999999989
+29	94	4	589.990000000000009
+15	65	1	100.290000000000006
+11	58	9	654.460000000000036
+18	84	4	940.940000000000055
+5	24	2	647.629999999999995
+26	70	11	699.649999999999977
+2	65	13	547.279999999999973
+28	48	14	921.789999999999964
+18	52	3	923.610000000000014
+13	34	6	421.050000000000011
+9	3	15	941.809999999999945
+7	72	0	576.730000000000018
+27	47	7	615.980000000000018
+9	47	7	609.960000000000036
+14	39	8	420.129999999999995
+21	28	9	824.100000000000023
+27	33	5	765.340000000000032
+5	40	20	261.550000000000011
+14	38	11	173.919999999999987
+2	10	0	304.70999999999998
+17	20	18	518.409999999999968
+7	81	1	986.889999999999986
+5	3	9	39.2000000000000028
+12	21	8	185.620000000000005
+11	35	12	467.379999999999995
+6	21	16	410.899999999999977
+27	48	12	63.1799999999999997
+19	95	9	989.620000000000005
+21	45	3	930.25
+29	1	6	699
+19	51	15	935.57000000000005
+29	68	12	725.159999999999968
+28	50	0	244.590000000000003
+14	29	16	295.610000000000014
+6	48	1	460.550000000000011
+18	76	7	262.980000000000018
+16	28	1	79.75
+15	55	20	495.490000000000009
+27	17	19	638.210000000000036
+7	58	16	875.409999999999968
+5	38	6	841.629999999999995
+3	8	8	818.190000000000055
+10	23	18	434.050000000000011
+15	14	16	353.689999999999998
+24	2	4	538.529999999999973
+23	48	0	646.710000000000036
+9	28	8	574.480000000000018
+5	60	6	77.6899999999999977
+11	6	16	901.669999999999959
+24	48	9	238.039999999999992
+17	59	9	903.690000000000055
+3	80	3	999.110000000000014
+14	15	11	455.009999999999991
+7	27	10	701.039999999999964
+17	88	19	246.900000000000006
+3	32	5	720.399999999999977
+21	91	18	215.949999999999989
+22	98	20	447.050000000000011
+18	62	16	325.600000000000023
+13	44	20	812.5
+10	90	6	416.779999999999973
+10	79	5	252.150000000000006
+10	68	7	94.0900000000000034
+21	72	3	558.230000000000018
+4	13	8	342.449999999999989
+4	63	17	873.67999999999995
+21	6	10	278.199999999999989
+23	17	3	415
+25	37	2	356.970000000000027
+7	83	4	645.17999999999995
+29	77	10	446.470000000000027
+6	60	15	827.82000000000005
+20	7	19	228.439999999999998
+3	2	7	48.5499999999999972
+19	52	17	840.210000000000036
+6	66	19	713.200000000000045
+8	58	13	987.600000000000023
+23	82	15	269.839999999999975
+8	92	19	32.8100000000000023
+19	13	9	353.970000000000027
+12	99	5	211.02000000000001
+14	10	0	977.480000000000018
+11	16	13	764.330000000000041
+21	69	1	732.059999999999945
+3	69	5	730.669999999999959
+5	18	14	376.879999999999995
+15	87	10	521.769999999999982
+19	58	1	557
+8	32	0	905.620000000000005
+18	55	8	42.0200000000000031
+6	8	15	442.170000000000016
+15	50	15	48.9799999999999969
+30	55	16	594.299999999999955
+4	9	6	248.389999999999986
+12	95	2	624.830000000000041
+14	71	16	891.860000000000014
+27	36	7	460.769999999999982
+15	75	8	614.480000000000018
+3	22	15	394.350000000000023
+8	24	0	70.0999999999999943
+6	16	12	570.519999999999982
+28	53	12	767.379999999999995
+10	9	16	945.549999999999955
+14	98	12	754.42999999999995
+28	42	18	14.9600000000000009
+15	10	5	205.439999999999998
+17	78	8	470.5
+16	53	7	732.350000000000023
+16	12	2	278.389999999999986
+28	32	0	222.400000000000006
+17	98	13	136.199999999999989
+17	42	15	912.120000000000005
+2	19	9	136.620000000000005
+24	60	17	236.060000000000002
+24	86	18	55.3500000000000014
+2	25	13	752.330000000000041
+23	30	3	746.309999999999945
+15	96	16	35.1300000000000026
+13	41	17	694.360000000000014
+7	48	6	496.79000000000002
+24	81	10	158.650000000000006
+1	51	3	421.160000000000025
+14	87	19	379.970000000000027
+27	14	17	281.110000000000014
+10	77	3	771.110000000000014
+21	43	10	940.909999999999968
+19	40	8	617.370000000000005
+25	33	3	180.039999999999992
+18	64	14	20.6400000000000006
+12	14	1	697.269999999999982
+7	53	17	191.139999999999986
+21	71	20	510.870000000000005
+2	86	10	357.569999999999993
+11	11	9	132.360000000000014
+17	54	19	178.129999999999995
+20	63	10	210.569999999999993
+2	81	6	805.590000000000032
+28	15	7	352.589999999999975
+14	27	4	922.340000000000032
+30	67	4	315.850000000000023
+10	36	15	215.469999999999999
+27	86	16	926.049999999999955
+6	52	5	157.150000000000006
+7	33	15	401.75
+23	56	5	242.72999999999999
+18	56	18	430.079999999999984
+10	22	13	538.940000000000055
+12	59	0	255.699999999999989
+1	81	4	373.060000000000002
+22	84	11	677.899999999999977
+17	19	9	987.559999999999945
+24	42	12	557.889999999999986
+19	92	19	377.220000000000027
+5	37	14	243.889999999999986
+6	10	19	375.610000000000014
+20	72	19	157.47999999999999
+26	73	13	166.699999999999989
+5	84	14	306.019999999999982
+14	73	3	148.110000000000014
+25	62	10	953.940000000000055
+15	86	12	80.1200000000000045
+24	45	11	656.509999999999991
+22	90	0	255.300000000000011
+5	55	1	286.269999999999982
+11	76	11	223.319999999999993
+12	18	18	96.4300000000000068
+12	57	10	85.1400000000000006
+29	96	4	181.77000000000001
+7	36	20	683.710000000000036
+3	5	20	565.019999999999982
+4	88	13	444.300000000000011
+10	38	9	494.670000000000016
+12	52	7	547.340000000000032
+12	15	1	33.6499999999999986
+6	23	12	563.480000000000018
+25	96	6	793.309999999999945
+17	44	8	728.230000000000018
+15	94	1	23.2800000000000011
+6	96	9	363.899999999999977
+5	22	19	859.5
+28	100	8	200.550000000000011
+23	26	12	254.449999999999989
+14	22	4	514.240000000000009
+18	4	1	124.390000000000001
+26	46	3	229.599999999999994
+26	59	8	439.720000000000027
+13	11	20	265.139999999999986
+4	42	14	644.580000000000041
+24	75	13	291.25
+9	1	14	764.379999999999995
+29	81	20	755.590000000000032
+28	66	20	972.450000000000045
+29	91	7	994.5
+19	77	1	847.299999999999955
+28	63	4	186.490000000000009
+16	37	2	808.190000000000055
+25	49	5	353.649999999999977
+9	87	8	925.940000000000055
+5	95	9	498.410000000000025
+24	10	16	16.3500000000000014
+1	2	19	283.25
+28	83	12	855.870000000000005
+6	65	18	96.5699999999999932
+3	94	13	603.509999999999991
+1	18	16	914.519999999999982
+10	58	5	232.680000000000007
+21	62	13	862.580000000000041
+2	27	15	818.789999999999964
+25	74	15	465.149999999999977
+19	57	5	613.32000000000005
+20	56	15	270.089999999999975
+25	22	7	61.3400000000000034
+20	78	18	596.409999999999968
+7	39	10	270.160000000000025
+26	33	20	162.719999999999999
+16	85	14	850.960000000000036
+15	8	20	948.549999999999955
+28	51	17	177.860000000000014
+10	89	20	962.149999999999977
+18	96	17	104.129999999999995
+15	12	5	302.069999999999993
+6	56	15	914.450000000000045
+16	96	11	688.019999999999982
+26	51	19	704.360000000000014
+11	65	3	677.600000000000023
+3	63	17	150.900000000000006
+21	13	4	534.32000000000005
+11	33	13	439.620000000000005
+30	50	1	79.3499999999999943
+14	93	13	568.669999999999959
+12	82	10	206.069999999999993
+19	24	18	407.800000000000011
+11	97	13	833.480000000000018
+21	18	1	216.789999999999992
+23	24	1	149.689999999999998
+15	33	15	695.32000000000005
+15	18	17	598.440000000000055
+23	90	16	264.329999999999984
+3	23	18	179.680000000000007
+12	94	16	392.350000000000023
+21	17	17	769.340000000000032
+2	3	15	176.449999999999989
+18	65	2	681.480000000000018
+15	57	8	521.309999999999945
+1	1	4	609.139999999999986
+4	50	3	444.720000000000027
+26	40	13	923.240000000000009
+4	28	15	552.980000000000018
+19	75	0	194.77000000000001
+2	68	10	320.509999999999991
+17	91	16	934.940000000000055
+29	89	15	570.549999999999955
+1	55	4	81.3499999999999943
+23	47	17	132.830000000000013
+6	26	11	437.509999999999991
+25	9	1	248.990000000000009
+18	12	19	41.740000000000002
+27	30	0	552.799999999999955
+23	33	11	82.1200000000000045
+23	25	8	772.409999999999968
+4	53	9	181.800000000000011
+13	28	4	438.720000000000027
+4	51	15	768.860000000000014
+5	43	19	400.240000000000009
+9	33	18	32.3599999999999994
+4	54	18	714.210000000000036
+24	97	9	915.42999999999995
+3	73	4	49.6599999999999966
+21	14	0	182.860000000000014
+13	82	5	324.089999999999975
+29	86	17	531.139999999999986
+24	40	7	551.850000000000023
+3	64	19	567.309999999999945
+23	53	12	603.289999999999964
+7	44	2	693.080000000000041
+12	61	18	834.42999999999995
+30	61	19	506.850000000000023
+16	35	13	715.450000000000045
+29	83	1	152.819999999999993
+13	46	17	47.0499999999999972
+16	44	6	708.940000000000055
+21	21	17	202.590000000000003
+30	58	15	679.379999999999995
+20	18	15	307.54000000000002
+6	50	13	370.95999999999998
+13	4	17	243.909999999999997
+24	74	7	61.9099999999999966
+29	9	11	691.090000000000032
+20	35	11	146.949999999999989
+27	53	7	922.389999999999986
+11	56	15	661.730000000000018
+28	35	7	737.57000000000005
+10	54	13	741.019999999999982
+18	80	8	473.189999999999998
+24	29	6	187.569999999999993
+22	3	5	21.4200000000000017
+12	11	8	554.100000000000023
+28	60	3	78.9399999999999977
+16	22	6	174.460000000000008
+24	98	15	288.839999999999975
+16	5	10	791.769999999999982
+21	7	17	886.029999999999973
+27	81	0	597.909999999999968
+26	11	14	14.1899999999999995
+10	50	3	911.399999999999977
+23	5	12	190.900000000000006
+23	69	12	382.930000000000007
+18	88	13	157.150000000000006
+2	15	9	110.659999999999997
+22	91	17	143.030000000000001
+30	10	18	969.259999999999991
+19	74	17	559.309999999999945
+9	18	9	567.190000000000055
+4	7	3	348.319999999999993
+3	3	5	876.100000000000023
+3	48	16	464.019999999999982
+21	74	5	742.539999999999964
+5	99	4	131.389999999999986
+5	17	7	408.949999999999989
+1	33	11	850.259999999999991
+27	63	1	687.840000000000032
+27	76	7	426.95999999999998
+26	62	13	861.309999999999945
+17	75	7	208.710000000000008
+15	53	12	473.560000000000002
+1	31	17	125.719999999999999
+24	9	10	266.829999999999984
+29	52	7	913.049999999999955
+7	16	8	309.180000000000007
+30	57	7	895.970000000000027
+12	66	18	679.259999999999991
+16	31	14	524.690000000000055
+4	5	9	24.7899999999999991
+1	70	5	747.629999999999995
+20	59	6	237.52000000000001
+22	61	13	685.059999999999945
+30	8	0	919.460000000000036
+21	31	3	762.350000000000023
+24	23	19	148.370000000000005
+15	41	12	77.4500000000000028
+6	2	15	554.100000000000023
+14	72	0	740.340000000000032
+9	48	15	613.309999999999945
+3	42	4	950.080000000000041
+20	94	15	884.159999999999968
+15	15	3	505.25
+8	50	0	166.569999999999993
+13	95	0	227.650000000000006
+13	49	20	907.919999999999959
+22	6	0	664.610000000000014
+20	89	13	704.289999999999964
+23	11	0	128.550000000000011
+9	38	3	199.719999999999999
+18	3	17	842.659999999999968
+5	29	14	625.269999999999982
+14	69	20	43.9099999999999966
+1	10	4	55.0499999999999972
+13	80	10	369.019999999999982
+8	88	4	515.57000000000005
+12	34	0	780.879999999999995
+19	17	17	178.810000000000002
+16	23	9	94.9899999999999949
+25	13	6	610.279999999999973
+25	6	0	324
+28	56	7	133.090000000000003
+18	19	9	208.689999999999998
+29	67	9	70.2999999999999972
+8	79	10	921.779999999999973
+24	83	20	550.669999999999959
+26	66	10	981.269999999999982
+30	3	14	410.54000000000002
+27	23	14	142.189999999999998
+9	63	2	207.550000000000011
+2	71	11	914.370000000000005
+14	60	13	291.269999999999982
+2	30	4	66.480000000000004
+8	90	0	853.720000000000027
+9	66	7	648.67999999999995
+30	5	5	446.54000000000002
+29	36	12	858.090000000000032
+9	22	1	684.870000000000005
+8	47	14	856.57000000000005
+30	93	0	348.519999999999982
+10	62	19	788.720000000000027
+6	19	5	637.279999999999973
+12	47	1	492.230000000000018
+8	36	6	694.860000000000014
+25	56	18	662.269999999999982
+16	27	2	91.0400000000000063
+10	26	8	212.719999999999999
+1	85	9	674.889999999999986
+17	27	0	564.67999999999995
+29	98	3	13.0600000000000005
+5	75	15	974.25
+4	32	8	32.2299999999999969
+14	78	14	434.899999999999977
+19	38	0	977.830000000000041
+8	64	18	730.090000000000032
+4	85	1	320.860000000000014
+20	57	14	120.030000000000001
+29	20	10	995.450000000000045
+13	96	14	801.509999999999991
+17	4	5	30.6600000000000001
+22	76	20	732.399999999999977
+7	9	11	813.009999999999991
+6	73	18	64.9200000000000017
+22	88	16	668.899999999999977
+25	59	14	124.030000000000001
+30	2	10	427.199999999999989
+3	49	8	673.899999999999977
+20	25	15	705.700000000000045
+26	13	0	532.529999999999973
+8	56	1	164.310000000000002
+22	45	14	863.129999999999995
+15	28	1	108.609999999999999
+22	40	1	596.919999999999959
+18	51	14	287.79000000000002
+6	42	4	394.230000000000018
+18	13	12	796.730000000000018
+5	56	8	224.319999999999993
+2	51	4	601.490000000000009
+20	46	10	836.029999999999973
+17	48	4	569.289999999999964
+8	93	6	514.549999999999955
+3	29	17	816.169999999999959
+16	6	1	235.569999999999993
+18	90	2	345.389999999999986
+29	39	18	42.1099999999999994
+17	21	16	856.590000000000032
+26	80	17	51.9600000000000009
+18	67	13	982.200000000000045
+21	84	5	528.190000000000055
+27	19	8	540.639999999999986
+25	98	9	564.779999999999973
+8	86	4	739.799999999999955
+7	97	6	755.039999999999964
+22	83	20	310.819999999999993
+12	69	18	128.389999999999986
+7	20	4	296.379999999999995
+29	55	19	90.9000000000000057
+21	54	3	894.57000000000005
+20	96	11	778.659999999999968
+2	53	20	156.259999999999991
+9	78	14	417.170000000000016
+17	53	8	779.639999999999986
+13	70	14	334.810000000000002
+7	68	3	784.67999999999995
+25	46	19	366.079999999999984
+20	49	7	362.529999999999973
+14	1	8	262.769999999999982
+16	79	14	392.149999999999977
+13	100	5	101.25
+6	15	17	906.440000000000055
+24	25	8	302.889999999999986
+14	83	13	216.889999999999986
+17	45	6	898.980000000000018
+30	24	15	168.330000000000013
+22	60	2	565.240000000000009
+23	57	8	684.139999999999986
+28	74	3	198.22999999999999
+19	47	4	620.230000000000018
+9	40	19	721.080000000000041
+26	4	10	658.710000000000036
+22	36	5	569.440000000000055
+16	94	6	561.980000000000018
+26	47	15	295.910000000000025
+24	73	4	892.75
+10	25	5	867.419999999999959
+25	54	1	492.5
+11	19	7	497.189999999999998
+20	77	12	977.07000000000005
+4	48	0	842.159999999999968
+1	99	1	588.299999999999955
+18	48	11	931.460000000000036
+26	10	18	299.019999999999982
+29	99	14	878.399999999999977
+6	81	5	499.439999999999998
+13	23	0	821.92999999999995
+17	39	13	352.560000000000002
+26	37	7	762.990000000000009
+12	91	3	779.379999999999995
+24	64	19	105.299999999999997
+19	46	13	938.100000000000023
+7	52	9	20.370000000000001
+4	46	3	555.879999999999995
+26	26	6	546.350000000000023
+11	91	1	518.629999999999995
+14	90	7	162.259999999999991
+25	39	9	704.039999999999964
+18	42	16	97.0300000000000011
+24	95	13	725.690000000000055
+22	81	19	284.79000000000002
+2	74	17	156.090000000000003
+7	65	13	100.409999999999997
+24	26	3	18.9299999999999997
+3	99	11	974.860000000000014
+12	51	5	608.059999999999945
+28	85	19	473.029999999999973
+26	96	20	503.04000000000002
+19	80	2	176.080000000000013
+1	77	6	158.27000000000001
+16	58	3	483.980000000000018
+22	85	11	99.3299999999999983
+18	89	12	185.050000000000011
+6	90	15	596.519999999999982
+4	25	19	789.259999999999991
+22	25	6	454.20999999999998
+21	90	20	275.170000000000016
+25	61	11	741.590000000000032
+16	1	2	77.2000000000000028
+27	39	11	928.25
+3	20	16	20.9800000000000004
+30	75	11	487.910000000000025
+2	22	9	32.6599999999999966
+22	35	17	116.879999999999995
+12	58	14	410.470000000000027
+10	46	0	441.54000000000002
+5	50	15	939.100000000000023
+5	27	3	890.350000000000023
+6	76	1	983.039999999999964
+19	5	14	724.259999999999991
+26	85	18	653.67999999999995
+5	2	11	673.190000000000055
+7	43	13	266.930000000000007
+30	65	3	440.649999999999977
+9	62	18	657.669999999999959
+22	7	15	117.109999999999999
+7	96	20	667.759999999999991
+4	30	14	255.240000000000009
+13	18	12	737.940000000000055
+18	85	8	164.800000000000011
+29	12	4	506.449999999999989
+22	75	3	806.059999999999945
+1	14	15	239.219999999999999
+2	36	14	282.5
+1	45	9	210.590000000000003
+8	97	15	315.269999999999982
+22	87	15	403.050000000000011
+19	67	15	671.370000000000005
+26	14	6	212.22999999999999
+22	69	7	985.519999999999982
+2	57	12	807.759999999999991
+17	94	19	272.879999999999995
+25	38	20	934.740000000000009
+15	45	10	761.639999999999986
+1	50	3	14.6199999999999992
+23	3	9	281.95999999999998
+2	87	9	546.399999999999977
+6	85	10	243.449999999999989
+14	33	13	604.710000000000036
+26	65	3	854.759999999999991
+23	35	5	655.259999999999991
+29	58	0	837.590000000000032
+12	32	18	197.990000000000009
+13	42	0	122.420000000000002
+23	19	7	757.259999999999991
+10	65	14	813.580000000000041
+4	79	9	679.340000000000032
+30	32	6	588.32000000000005
+19	81	2	22.2100000000000009
+18	34	17	653.730000000000018
+13	16	16	875.100000000000023
+30	60	6	652.379999999999995
+11	25	17	439.149999999999977
+6	77	7	976.17999999999995
+6	18	10	129.129999999999995
+19	16	6	154.599999999999994
+20	42	0	171.75
+23	31	5	196.400000000000006
+22	10	0	478.25
+20	19	19	99.2999999999999972
+20	15	8	606.409999999999968
+24	7	16	798.769999999999982
+23	14	14	803.490000000000009
+8	77	13	973.92999999999995
+6	28	11	372.370000000000005
+26	64	17	550.889999999999986
+29	29	16	919.600000000000023
+13	51	11	465.5
+25	20	3	174.189999999999998
+24	15	5	978.389999999999986
+25	24	16	491.779999999999973
+3	81	16	459.579999999999984
+8	5	20	607.25
+14	94	12	242.439999999999998
+25	58	11	660.639999999999986
+6	49	15	217.050000000000011
+17	89	11	365.829999999999984
+9	97	20	523.759999999999991
+3	41	9	755.830000000000041
+26	18	19	720.850000000000023
+5	32	19	400.029999999999973
+26	38	7	409.269999999999982
+30	20	15	583.07000000000005
+28	34	19	530.17999999999995
+10	40	2	33.0499999999999972
+1	40	18	603.100000000000023
+12	1	11	587.389999999999986
+30	94	8	380.779999999999973
+2	14	7	89.4899999999999949
+28	98	15	221.849999999999994
+15	100	5	347.519999999999982
+8	57	14	345.480000000000018
+18	8	1	310.730000000000018
+11	10	14	848.620000000000005
+10	8	11	341.050000000000011
+21	52	19	433.100000000000023
+8	26	1	65.6400000000000006
+20	48	14	558.330000000000041
+13	92	19	84.9500000000000028
+22	13	6	200.400000000000006
+26	25	0	829.039999999999964
+11	57	15	275.990000000000009
+12	74	7	56.7999999999999972
+2	69	8	165.930000000000007
+13	88	2	897.519999999999982
+30	78	8	455.04000000000002
+14	58	16	537.580000000000041
+25	85	16	95.2999999999999972
+2	97	2	155.389999999999986
+27	87	18	807.909999999999968
+11	79	5	583.759999999999991
+19	94	5	210.759999999999991
+6	7	8	633.379999999999995
+24	76	12	720.899999999999977
+28	91	12	776.919999999999959
+1	89	16	526.350000000000023
+15	34	6	267.839999999999975
+3	88	19	783.139999999999986
+4	78	5	991.889999999999986
+25	28	5	459.870000000000005
+18	6	2	51.0499999999999972
+9	86	4	688.57000000000005
+13	37	9	874.690000000000055
+24	46	20	887.090000000000032
+7	25	0	280.949999999999989
+22	37	7	967.450000000000045
+11	21	17	447.509999999999991
+7	26	6	41.2800000000000011
+16	62	13	707.409999999999968
+24	88	12	212.409999999999997
+10	91	17	10.0899999999999999
+9	36	16	124.109999999999999
+10	57	19	495.379999999999995
+28	8	13	406.079999999999984
+25	47	16	374.699999999999989
+11	83	9	991.460000000000036
+23	83	19	93.1599999999999966
+20	24	15	563.909999999999968
+14	66	0	342.800000000000011
+11	41	14	830.080000000000041
+10	14	4	535.07000000000005
+10	70	0	81.4099999999999966
+10	42	1	191.689999999999998
+19	1	18	926.700000000000045
+15	99	15	987.480000000000018
+14	64	17	389.230000000000018
+28	76	10	612.470000000000027
+27	83	5	568.899999999999977
+3	98	17	120.109999999999999
+12	83	4	624.67999999999995
+24	85	2	851.32000000000005
+11	43	4	573.639999999999986
+2	20	5	763.440000000000055
+19	27	11	939.909999999999968
+30	74	4	985.649999999999977
+4	90	14	999.370000000000005
+20	99	10	253.050000000000011
+5	97	2	399.279999999999973
+21	67	16	557.029999999999973
+3	82	7	275.860000000000014
+29	62	17	375.680000000000007
+22	55	12	39.8100000000000023
+18	68	16	131.240000000000009
+1	16	5	683.600000000000023
+27	66	8	714.759999999999991
+16	69	9	456.860000000000014
+4	15	2	56.6400000000000006
+20	28	8	824.350000000000023
+25	94	15	97.2000000000000028
+1	41	2	362.300000000000011
+30	19	5	683.830000000000041
+15	11	6	624.330000000000041
+17	11	13	258.019999999999982
+2	55	16	880.629999999999995
+18	94	15	252.719999999999999
+2	84	8	398.779999999999973
+8	4	9	62.3299999999999983
+5	25	1	389.850000000000023
+6	71	6	116.819999999999993
+22	29	20	336.439999999999998
+1	93	10	499.730000000000018
+22	18	20	23.870000000000001
+6	83	11	250.75
+19	39	17	111.519999999999996
+22	2	11	699.42999999999995
+5	30	1	725.960000000000036
+10	47	2	633.82000000000005
+5	72	10	929.169999999999959
+28	81	0	339.910000000000025
+26	84	17	278.860000000000014
+5	1	8	399.980000000000018
+28	2	19	87.2399999999999949
+5	46	2	38.0700000000000003
+20	10	14	299.149999999999977
+8	83	5	484.060000000000002
+28	20	4	171.02000000000001
+20	92	6	438.490000000000009
+16	33	12	206.740000000000009
+18	20	7	98.4899999999999949
+25	25	20	957.240000000000009
+12	87	3	821.950000000000045
+15	30	11	307.810000000000002
+23	42	17	417.240000000000009
+15	73	8	293.170000000000016
+27	96	9	372.230000000000018
+13	94	6	524.75
+29	48	6	448.199999999999989
+9	17	13	407.079999999999984
+30	39	4	126
+5	68	13	156.740000000000009
+16	39	16	877.799999999999955
+6	86	7	354.360000000000014
+21	79	11	571.909999999999968
+24	78	14	66.0799999999999983
+26	1	5	836.909999999999968
+13	77	13	435.680000000000007
+6	38	19	738.009999999999991
+8	81	14	123.769999999999996
+28	27	18	14.9299999999999997
+5	8	20	848.309999999999945
+18	98	6	676.230000000000018
+24	5	17	388.139999999999986
+20	4	5	232.150000000000006
+4	56	6	755.67999999999995
+27	8	16	989.029999999999973
+18	14	11	44.6499999999999986
+6	54	10	135.210000000000008
+9	51	12	633.110000000000014
+22	8	17	915.299999999999955
+1	58	10	924.059999999999945
+11	77	8	127.980000000000004
+5	71	17	867.909999999999968
+20	87	0	489
+5	93	4	71.4300000000000068
+3	26	18	114.239999999999995
+25	44	20	415.139999999999986
+2	37	18	900.759999999999991
+1	25	20	413.829999999999984
+1	4	9	128.47999999999999
+28	82	8	909.100000000000023
+3	62	17	865.059999999999945
+2	62	5	855.259999999999991
+23	40	14	134
+12	5	14	459.069999999999993
+25	52	4	516.279999999999973
+4	68	11	731.039999999999964
+25	89	8	945.870000000000005
+2	24	3	343.519999999999982
+18	78	17	32.2299999999999969
+12	67	12	685.490000000000009
+21	78	10	160.629999999999995
+13	62	16	193.310000000000002
+15	31	11	165.77000000000001
+11	8	5	443.370000000000005
+5	79	13	829.139999999999986
+8	82	12	109.900000000000006
+28	13	18	306.689999999999998
+18	63	20	570.509999999999991
+21	44	7	943.940000000000055
+24	72	11	535.100000000000023
+28	70	14	685.559999999999945
+21	86	14	528.590000000000032
+29	78	1	369.79000000000002
+6	46	0	197.810000000000002
+9	69	2	997.740000000000009
+7	93	16	51.8400000000000034
+12	98	10	513.980000000000018
+8	59	6	53.7800000000000011
+3	84	10	24.0599999999999987
+21	16	1	462.370000000000005
+14	45	11	326.029999999999973
+13	72	4	446.670000000000016
+19	8	11	666.360000000000014
+21	27	16	263.870000000000005
+10	10	8	283.620000000000005
+1	42	7	596.809999999999945
+27	10	8	855.019999999999982
+15	92	6	955.809999999999945
+22	66	3	899.450000000000045
+9	79	7	391.310000000000002
+28	86	18	945.029999999999973
+23	23	14	662.17999999999995
+1	59	8	544.019999999999982
+3	21	7	812.409999999999968
+18	72	0	649.419999999999959
+20	29	5	651.42999999999995
+28	65	14	137.879999999999995
+8	17	19	943.32000000000005
+1	64	15	504.100000000000023
+9	59	7	939.450000000000045
+15	42	9	256.79000000000002
+11	18	1	65.730000000000004
+23	39	12	426.279999999999973
+5	89	9	72.5799999999999983
+4	8	0	955.710000000000036
+20	32	10	656.659999999999968
+30	17	16	218.909999999999997
+20	40	8	107.510000000000005
+22	96	16	555.710000000000036
+29	60	15	351.850000000000023
+14	41	1	524.07000000000005
+23	62	19	230.830000000000013
+8	60	6	240.590000000000003
+16	72	17	874.649999999999977
+23	99	11	454.759999999999991
+1	62	6	69.1500000000000057
+15	64	12	864.42999999999995
+15	46	14	40.740000000000002
+10	48	13	907.039999999999964
+5	100	9	784.110000000000014
+14	51	8	405.720000000000027
+1	29	16	422.379999999999995
+29	71	20	849.360000000000014
+15	74	8	350.699999999999989
+18	31	7	967.620000000000005
+22	54	9	271.879999999999995
+23	15	1	404.720000000000027
+4	71	20	313.339999999999975
+9	82	4	325.670000000000016
+10	16	18	899.850000000000023
+6	29	15	438.04000000000002
+22	93	14	839.029999999999973
+3	66	11	875.720000000000027
+29	16	18	958.620000000000005
+26	45	17	877.700000000000045
+27	34	16	619.509999999999991
+22	28	19	484.25
+29	6	10	356.439999999999998
+28	64	3	203.620000000000005
+22	62	20	260.680000000000007
+7	41	11	348.470000000000027
+18	47	4	879.330000000000041
+7	62	14	71.9300000000000068
+7	10	4	854.809999999999945
+15	95	5	77.3100000000000023
+10	81	13	849.539999999999964
+26	5	12	29.379999999999999
+1	17	17	150.789999999999992
+24	18	10	746.240000000000009
+8	6	17	488.689999999999998
+25	32	4	411.689999999999998
+28	77	15	780.960000000000036
+26	7	18	532.720000000000027
+14	53	18	158.810000000000002
+8	99	17	613.379999999999995
+28	95	13	325.319999999999993
+11	44	2	681.080000000000041
+13	99	4	759.590000000000032
+22	30	10	69.3400000000000034
+7	71	10	122.739999999999995
+12	22	13	587.07000000000005
+25	8	1	190.949999999999989
+30	23	6	419.54000000000002
+9	84	19	601.620000000000005
+8	23	7	760.470000000000027
+9	12	12	795.460000000000036
+22	65	10	112.489999999999995
+4	80	15	698.490000000000009
+9	93	6	116.079999999999998
+25	48	19	514.970000000000027
+26	48	4	318
+14	63	19	281.550000000000011
+9	37	15	612.059999999999945
+4	47	19	172.150000000000006
+17	66	3	958.309999999999945
+8	71	11	732.990000000000009
+25	90	5	247.490000000000009
+20	39	6	845.600000000000023
+27	49	1	626.490000000000009
+5	44	5	498.579999999999984
+20	98	19	127.340000000000003
+14	55	15	307.95999999999998
+5	61	15	811.549999999999955
+14	99	18	126.140000000000001
+23	9	8	73.1599999999999966
+16	30	7	771.240000000000009
+11	22	5	187.740000000000009
+12	50	12	915.639999999999986
+9	80	6	845
+21	58	6	587.720000000000027
+12	31	1	773.620000000000005
+14	46	1	891.879999999999995
+23	95	16	363.529999999999973
+27	55	13	996.259999999999991
+4	55	8	895.559999999999945
+10	99	6	41.2999999999999972
+2	31	4	21.6000000000000014
+6	88	7	712.129999999999995
+14	40	7	513.850000000000023
+24	54	4	379.730000000000018
+6	44	8	793.190000000000055
+29	27	16	798.279999999999973
+20	69	3	281.339999999999975
+5	92	5	959.080000000000041
+16	63	11	720.129999999999995
+26	20	17	592.700000000000045
+24	44	19	112.879999999999995
+13	55	13	224.75
+22	89	6	363.720000000000027
+3	28	18	52.2100000000000009
+28	3	18	848.059999999999945
+30	73	19	531.509999999999991
+24	36	9	806.480000000000018
+4	39	12	867.610000000000014
+8	66	11	117.459999999999994
+29	11	15	99.0600000000000023
+21	29	17	484.189999999999998
+22	9	14	802.759999999999991
+5	41	6	467.310000000000002
+29	56	10	518.059999999999945
+15	98	11	451.740000000000009
+7	11	15	544.82000000000005
+20	22	15	916.620000000000005
+18	74	5	661.350000000000023
+26	98	3	345.839999999999975
+10	37	15	810.559999999999945
+10	51	19	376.009999999999991
+11	60	1	582.659999999999968
+4	64	12	481.069999999999993
+10	29	19	997.389999999999986
+3	4	19	907.740000000000009
+14	56	6	13.4900000000000002
+29	59	15	738.82000000000005
+5	58	10	22.8900000000000006
+28	12	0	731.789999999999964
+23	37	10	731.200000000000045
+2	82	16	150.97999999999999
+22	52	5	487.519999999999982
+1	7	2	243.830000000000013
+11	24	8	943.289999999999964
+22	74	7	368.339999999999975
+15	93	19	425.120000000000005
+7	34	14	384.089999999999975
+11	26	11	898.25
+30	70	8	684.330000000000041
+16	7	15	232.77000000000001
+15	67	10	237.22999999999999
+21	53	13	694.330000000000041
+29	87	4	646.870000000000005
+20	64	8	687.940000000000055
+16	78	15	848.450000000000045
+3	96	0	902.720000000000027
+6	6	12	435.310000000000002
+5	45	3	874.17999999999995
+27	16	17	154.310000000000002
+4	92	13	237.539999999999992
+22	53	6	234.629999999999995
+24	4	18	675.620000000000005
+24	19	7	732.32000000000005
+6	93	5	354.810000000000002
+27	27	18	244.090000000000003
+9	56	9	328.180000000000007
+19	62	8	993.629999999999995
+1	11	6	536.460000000000036
+19	43	5	756.649999999999977
+1	53	0	443.899999999999977
+5	70	2	967.759999999999991
+18	25	19	90.6099999999999994
+26	21	19	805.67999999999995
+26	2	2	790.139999999999986
+21	59	5	540.57000000000005
+13	74	5	611.870000000000005
+15	89	18	263.939999999999998
+17	49	10	351.310000000000002
+11	71	9	898.490000000000009
+23	4	18	475.04000000000002
+25	86	3	121.469999999999999
+2	76	19	983.399999999999977
+3	7	11	362.519999999999982
+9	55	10	947.710000000000036
+28	24	20	726.720000000000027
+3	65	19	732.75
+17	50	4	40.25
+14	52	4	377.310000000000002
+21	48	11	132.169999999999987
+30	89	14	479.629999999999995
+27	62	1	810.17999999999995
+30	88	1	907.370000000000005
+8	43	11	376.060000000000002
+13	7	19	746.110000000000014
+13	71	3	917.110000000000014
+19	64	18	828.200000000000045
+19	12	2	384.110000000000014
+30	72	17	220.169999999999987
+26	86	12	794.159999999999968
+3	97	19	59.7100000000000009
+30	30	12	758.830000000000041
+25	99	4	412.529999999999973
+7	12	15	438.04000000000002
+10	27	17	82.8400000000000034
+26	29	9	130.759999999999991
+21	92	14	585.240000000000009
+21	39	10	217.280000000000001
+4	100	7	893.730000000000018
+18	33	15	372.730000000000018
+14	24	17	835.399999999999977
+23	72	12	265.800000000000011
+1	87	5	389.639999999999986
+17	61	19	853.980000000000018
+23	97	18	119.099999999999994
+3	17	2	257.95999999999998
+1	74	15	735.159999999999968
+22	97	11	45.6000000000000014
+10	97	1	129.669999999999987
+30	85	12	39.8200000000000003
+21	97	14	161.990000000000009
+16	88	2	283.220000000000027
+25	43	7	931.350000000000023
+15	9	16	554.139999999999986
+16	92	9	679.620000000000005
+8	100	7	735.009999999999991
+7	3	19	902.690000000000055
+25	76	17	784.419999999999959
+4	72	19	50.0399999999999991
+22	64	7	957.32000000000005
+20	70	14	920.159999999999968
+26	100	0	687.169999999999959
+20	31	1	93.6899999999999977
+19	41	20	349.300000000000011
+16	56	13	618.610000000000014
+8	38	14	520.470000000000027
+3	50	7	314.939999999999998
+3	33	8	666.5
+3	61	9	764.879999999999995
+24	11	14	622.419999999999959
+5	7	6	969.549999999999955
+8	96	15	263.389999999999986
+14	79	6	616
+5	87	9	443.850000000000023
+20	17	8	477.699999999999989
+27	51	8	683.309999999999945
+5	23	1	899.580000000000041
+7	19	16	131.430000000000007
+25	60	17	35.5300000000000011
+4	24	12	225.349999999999994
+5	69	5	504.920000000000016
+9	29	15	612.980000000000018
+4	66	8	577.629999999999995
+18	41	10	510.310000000000002
+27	24	16	252.669999999999987
+26	15	19	684.789999999999964
+12	20	14	19.5799999999999983
+24	35	18	246.280000000000001
+19	18	18	349.449999999999989
+9	65	6	61.240000000000002
+9	44	12	712.669999999999959
+14	88	13	885.07000000000005
+1	49	10	10.1099999999999994
+11	67	15	604.240000000000009
+9	16	4	381.29000000000002
+9	91	0	641.57000000000005
+25	17	15	696.909999999999968
+8	20	0	49.5399999999999991
+19	65	3	776.710000000000036
+3	56	8	228.080000000000013
+3	74	13	220.990000000000009
+25	73	11	609.970000000000027
+5	67	12	497.920000000000016
+19	86	14	559.519999999999982
+12	86	7	646.17999999999995
+13	48	16	272.910000000000025
+12	68	8	80.6700000000000017
+28	75	4	342.569999999999993
+12	30	15	119.569999999999993
+21	5	2	537.42999999999995
+24	57	6	276.009999999999991
+8	16	4	111.879999999999995
+25	27	19	755.509999999999991
+25	18	6	688.450000000000045
+29	63	12	203.960000000000008
+3	40	5	117.430000000000007
+27	61	1	53.1400000000000006
+17	6	8	506.29000000000002
+19	26	12	458.120000000000005
+22	59	15	991.82000000000005
+24	92	6	921.289999999999964
+14	67	11	817.769999999999982
+20	73	11	57.5600000000000023
+23	96	3	437.430000000000007
+11	94	16	341.629999999999995
+24	93	17	82.0300000000000011
+30	49	19	757.789999999999964
+1	61	7	314.980000000000018
+25	30	19	923.860000000000014
+16	51	11	776.82000000000005
+5	49	12	76.2800000000000011
+5	66	9	392.360000000000014
+13	20	7	775.330000000000041
+20	71	0	858.840000000000032
+10	18	15	951.399999999999977
+2	96	15	871.210000000000036
+17	7	7	326.189999999999998
+7	30	1	113.329999999999998
+24	59	18	236.909999999999997
+3	44	15	427.490000000000009
+29	95	15	352.310000000000002
+10	7	10	236.419999999999987
+20	67	15	667.860000000000014
+16	24	15	387.620000000000005
+28	23	6	651.960000000000036
+25	4	2	553.649999999999977
+26	90	14	996.669999999999959
+16	59	1	946.07000000000005
+25	3	19	193.379999999999995
+7	61	13	82.1099999999999994
+3	87	3	487.689999999999998
+12	39	14	37.6599999999999966
+7	8	12	256.79000000000002
+29	69	14	529.169999999999959
+21	40	5	344.600000000000023
+11	37	20	95.0799999999999983
+11	64	12	516.210000000000036
+9	72	17	734.539999999999964
+30	66	7	513.129999999999995
+5	98	5	495.579999999999984
+15	58	3	682.629999999999995
+3	85	1	683.309999999999945
+6	79	8	700.789999999999964
+28	17	20	952.470000000000027
+2	43	15	310
+1	67	3	555.92999999999995
+16	98	10	167.139999999999986
+22	70	17	282.949999999999989
+14	97	7	171.449999999999989
+28	26	3	421.410000000000025
+24	71	2	403.769999999999982
+21	47	20	974.460000000000036
+27	44	4	820.039999999999964
+30	18	11	142.090000000000003
+30	54	19	270.779999999999973
+22	23	0	716.539999999999964
+2	90	20	46.3500000000000014
+12	78	11	329.199999999999989
+5	12	4	498.050000000000011
+1	100	4	699.759999999999991
+22	33	11	610.419999999999959
+20	47	2	525.509999999999991
+6	64	12	784.950000000000045
+23	50	11	77.6800000000000068
+3	55	5	642.42999999999995
+2	45	7	993.830000000000041
+16	84	8	330.730000000000018
+18	70	20	260.649999999999977
+26	72	8	366.95999999999998
+29	28	16	537.309999999999945
+24	38	7	895.059999999999945
+24	70	2	488.75
+11	52	6	947.529999999999973
+5	47	13	426.139999999999986
+28	80	5	503.70999999999998
+11	12	15	98.6500000000000057
+16	34	1	297.29000000000002
+4	43	3	986.740000000000009
+5	48	4	37.5300000000000011
+12	70	6	953.659999999999968
+20	26	18	352.519999999999982
+19	4	0	623.379999999999995
+12	76	14	800.289999999999964
+15	78	20	303.329999999999984
+2	64	5	98.1599999999999966
+14	13	1	12.2899999999999991
+12	2	9	572.720000000000027
+26	52	11	445.009999999999991
+4	21	0	822.470000000000027
+14	54	6	754.720000000000027
+2	21	3	310.110000000000014
+20	85	2	778.370000000000005
+27	3	11	59.509999999999998
+3	47	13	873.960000000000036
+17	65	17	285.810000000000002
+21	8	7	349.54000000000002
+21	100	14	819.110000000000014
+10	100	4	111.409999999999997
+6	61	3	554.789999999999964
+21	1	3	667.730000000000018
+5	73	3	831.700000000000045
+9	32	2	626.879999999999995
+27	31	15	209.830000000000013
+27	22	14	487.110000000000014
+18	81	17	352.569999999999993
+4	49	9	877.32000000000005
+12	100	2	975.470000000000027
+8	18	9	333.930000000000007
+13	21	18	282.240000000000009
+3	57	3	931.019999999999982
+19	37	12	69.2399999999999949
+16	81	16	633.92999999999995
+15	27	8	679.659999999999968
+28	28	0	322.740000000000009
+25	14	17	692.509999999999991
+4	27	8	913.659999999999968
+10	96	17	302.129999999999995
+28	46	7	542.32000000000005
+1	94	19	904.080000000000041
+19	35	19	754.730000000000018
+20	55	2	114.810000000000002
+23	77	0	132.870000000000005
+30	35	20	816.419999999999959
+15	37	4	75.25
+28	96	7	622.590000000000032
+1	95	15	68.8599999999999994
+29	30	0	421.910000000000025
+10	49	13	710.190000000000055
+27	32	5	73.7099999999999937
+29	8	0	804.710000000000036
+22	11	10	203.340000000000003
+8	21	18	118.730000000000004
+6	14	16	98.4200000000000017
+12	28	2	110.75
+29	32	19	690.860000000000014
+29	50	19	49.2000000000000028
+12	49	9	501.25
+3	19	3	658.309999999999945
+15	32	12	748.440000000000055
+10	76	11	67.4099999999999966
+16	18	8	69.769999999999996
+3	18	1	79.2000000000000028
+6	92	13	45.1000000000000014
+14	21	14	97.8700000000000045
+2	59	16	23.5899999999999999
+1	86	14	937.220000000000027
+3	91	17	93.9399999999999977
+14	61	0	648.360000000000014
+5	57	3	721.200000000000045
+8	70	20	19.0300000000000011
+3	1	15	945.159999999999968
+26	8	4	525.149999999999977
+19	78	18	128.319999999999993
+1	38	1	513.340000000000032
+19	29	18	752.590000000000032
+25	10	4	668.019999999999982
+5	94	2	841.299999999999955
+13	33	18	66.3700000000000045
+7	17	19	619.769999999999982
+23	91	2	185.620000000000005
+6	5	3	835.100000000000023
+6	70	4	331.920000000000016
+17	43	19	24.1600000000000001
+12	25	19	892.970000000000027
+13	97	10	511.819999999999993
+23	79	12	863.460000000000036
+9	7	13	77.9599999999999937
+23	52	5	632.370000000000005
+22	94	19	418.889999999999986
+24	3	17	94.519999999999996
+29	74	0	669.42999999999995
+4	26	0	232.199999999999989
+6	24	18	336.120000000000005
+16	52	9	428.120000000000005
+26	74	1	555.440000000000055
+29	82	12	624.389999999999986
+12	54	18	356.480000000000018
+1	88	7	968.629999999999995
+8	49	12	736.159999999999968
+26	57	16	165.490000000000009
+28	11	13	325.589999999999975
+9	41	4	652.519999999999982
+14	11	1	52.5399999999999991
+2	16	20	228.349999999999994
+27	9	6	969.200000000000045
+11	7	10	355.610000000000014
+22	5	15	608.100000000000023
+21	30	2	205.759999999999991
+27	85	15	241.449999999999989
+30	15	14	520.940000000000055
+20	13	12	292.370000000000005
+17	76	15	665.730000000000018
+20	68	13	63.3500000000000014
+27	25	4	850.740000000000009
+14	100	8	166.5
+8	67	19	119.5
+26	88	0	34.990000000000002
+27	69	5	520.389999999999986
+20	51	12	156.319999999999993
+13	25	18	531.549999999999955
+28	4	8	729.799999999999955
+22	12	2	434.860000000000014
+3	24	19	264.920000000000016
+13	56	6	455.54000000000002
+21	65	12	631.299999999999955
+3	89	6	409.819999999999993
+30	21	17	123.709999999999994
+21	83	16	692.529999999999973
+18	29	1	455.550000000000011
+7	95	7	826.860000000000014
+27	58	19	688.190000000000055
+2	9	17	813.799999999999955
+20	54	3	698.519999999999982
+16	65	6	979.399999999999977
+13	78	2	546.919999999999959
+8	63	4	93.2600000000000051
+9	8	0	282.480000000000018
+13	67	12	113.280000000000001
+11	55	4	856.990000000000009
+30	76	9	346.20999999999998
+27	37	15	779.389999999999986
+28	97	14	61.8900000000000006
+22	99	17	376.430000000000007
+13	39	11	782.720000000000027
+17	87	7	67.5300000000000011
+16	74	12	774.450000000000045
+2	46	7	297.740000000000009
+24	79	3	640.389999999999986
+9	75	14	631.139999999999986
+23	73	10	764.860000000000014
+13	93	4	580.57000000000005
+4	75	2	251.669999999999987
+25	36	6	572.629999999999995
+10	67	19	156.110000000000014
+7	94	9	303.120000000000005
+13	43	9	458.220000000000027
+15	81	10	948.950000000000045
+13	63	10	902.950000000000045
+8	44	11	953.009999999999991
+29	35	9	120.640000000000001
+9	31	3	585.850000000000023
+10	71	6	273.259999999999991
+2	91	13	80.6899999999999977
+22	67	14	693.5
+19	31	1	260.980000000000018
+14	3	5	227.490000000000009
+8	12	18	871.549999999999955
+8	84	13	66.1500000000000057
+4	33	6	482.689999999999998
+29	38	13	671.720000000000027
+14	68	7	980.460000000000036
+23	74	0	321.180000000000007
+15	68	0	789.259999999999991
+13	58	5	297.759999999999991
+6	94	2	644.620000000000005
+2	78	19	195.259999999999991
+11	34	1	376.829999999999984
+28	89	16	270.170000000000016
+13	35	20	690.279999999999973
+20	16	0	70.6700000000000017
+26	3	8	841.960000000000036
+16	2	9	10.5500000000000007
+22	44	4	913.799999999999955
+6	97	3	208.449999999999989
+12	13	12	676.340000000000032
+18	95	13	415.20999999999998
+2	80	2	475.990000000000009
+28	43	1	387.95999999999998
+10	55	15	473.629999999999995
+20	38	19	518.740000000000009
+13	38	10	949.549999999999955
+5	34	1	697.029999999999973
+17	31	12	320.04000000000002
+29	3	6	418.449999999999989
+27	18	0	337.730000000000018
+27	77	5	893.909999999999968
+26	35	3	877.139999999999986
+10	93	6	156.159999999999997
+8	61	2	875.769999999999982
+9	11	17	171.460000000000008
+28	22	12	553.549999999999955
+4	93	11	817.580000000000041
+28	6	12	943.139999999999986
+12	43	6	261.060000000000002
+13	81	20	196.469999999999999
+19	42	0	835.700000000000045
+17	37	19	137.629999999999995
+9	71	13	270.839999999999975
+27	26	20	552.039999999999964
+23	84	14	750.159999999999968
+6	22	9	607.710000000000036
+2	33	11	466.980000000000018
+2	17	19	376.810000000000002
+23	44	6	940.649999999999977
+25	79	15	674.370000000000005
+15	76	3	847.370000000000005
+11	68	17	913.139999999999986
+28	72	6	245.25
+29	76	0	761.509999999999991
+19	60	18	515.059999999999945
+19	63	10	729.580000000000041
+11	69	14	654.019999999999982
+6	35	0	34.8699999999999974
+18	44	18	349.050000000000011
+22	86	9	235.639999999999986
+3	11	9	676.950000000000045
+22	43	20	985.889999999999986
+11	61	7	376.899999999999977
+29	24	12	22.8599999999999994
+8	2	5	166.75
+23	100	3	703.879999999999995
+27	57	15	430.120000000000005
+19	54	12	520.25
+13	53	19	824.200000000000045
+20	61	7	35.8200000000000003
+27	80	14	767.139999999999986
+18	16	19	652.840000000000032
+6	84	16	257.089999999999975
+6	80	9	764.139999999999986
+17	2	14	226.819999999999993
+12	42	7	974.230000000000018
+7	23	3	771.909999999999968
+23	63	19	493.769999999999982
+18	39	7	974.389999999999986
+23	6	9	740.960000000000036
+3	76	17	998.129999999999995
+21	41	8	117.900000000000006
+3	86	7	947.110000000000014
+5	63	5	639.889999999999986
+16	29	11	288.75
+23	78	7	617.789999999999964
+7	28	12	822.870000000000005
+5	74	1	662.830000000000041
+7	82	8	129.960000000000008
+27	45	4	487.699999999999989
+6	91	19	886.789999999999964
+12	10	16	785.299999999999955
+11	27	11	752.019999999999982
+4	14	17	158.550000000000011
+21	3	0	993.909999999999968
+28	93	20	909.789999999999964
+21	61	14	203.990000000000009
+5	91	5	69.6899999999999977
+19	23	19	392.70999999999998
+6	33	9	856.17999999999995
+28	31	2	873.210000000000036
+13	61	14	645.950000000000045
+11	3	11	146.039999999999992
+16	66	11	468.54000000000002
+23	75	1	738.67999999999995
+27	67	19	826.860000000000014
+10	45	2	945.080000000000041
+28	10	17	872.590000000000032
+10	66	8	257.259999999999991
+15	97	5	691.899999999999977
+26	68	10	914.480000000000018
+2	18	2	143.849999999999994
+20	81	13	744.659999999999968
+8	15	3	549.82000000000005
+19	36	19	790.379999999999995
+29	40	5	675.899999999999977
+28	61	4	32.0200000000000031
+1	82	7	443.95999999999998
+24	32	17	210.800000000000011
+25	5	5	653.809999999999945
+19	89	3	687.399999999999977
+14	76	17	903.419999999999959
+15	82	11	520.710000000000036
+27	12	11	776.940000000000055
+23	10	18	719.200000000000045
+6	75	7	938.610000000000014
+19	98	11	74.2800000000000011
+3	36	14	478.569999999999993
+11	70	10	172.699999999999989
+27	99	3	436.04000000000002
+14	19	7	669.330000000000041
+5	39	15	152.949999999999989
+7	99	7	83.4399999999999977
+27	59	12	452.600000000000023
+14	75	14	273.879999999999995
+13	22	3	921
+27	7	4	121.879999999999995
+9	96	2	192.449999999999989
+30	64	15	466.129999999999995
+10	44	12	710.370000000000005
+22	47	10	709.759999999999991
+9	6	1	374.399999999999977
+7	89	16	117.260000000000005
+23	61	5	640.799999999999955
+8	1	0	111.739999999999995
+16	61	3	129.939999999999998
+8	54	7	708.92999999999995
+8	51	3	499.319999999999993
+30	90	12	838.840000000000032
+21	56	14	553.129999999999995
+27	79	7	938.799999999999955
+24	28	20	250.069999999999993
+6	69	14	115.280000000000001
+2	2	8	162.75
+30	7	8	625.32000000000005
+18	5	14	886.120000000000005
+4	94	12	437.240000000000009
+21	24	5	637.879999999999995
+27	1	3	347.470000000000027
+18	45	12	906.42999999999995
+27	11	19	982.769999999999982
+25	41	12	636.139999999999986
+7	35	20	387.389999999999986
+30	53	3	412.25
+11	49	11	852.559999999999945
+17	46	20	123.659999999999997
+10	92	7	527.049999999999955
+25	21	15	58.490000000000002
+17	35	19	338.480000000000018
+15	71	16	205.360000000000014
+17	69	2	731.899999999999977
+6	1	7	994.480000000000018
+26	82	10	975.850000000000023
+18	32	17	469.720000000000027
+8	74	14	105.140000000000001
+2	12	9	281.149999999999977
+2	92	20	135.030000000000001
+13	6	18	689.639999999999986
+4	82	18	726.110000000000014
+9	39	10	483.620000000000005
+9	20	1	110.400000000000006
+8	13	4	375.220000000000027
+5	77	6	901.960000000000036
+25	7	12	264.54000000000002
+26	39	20	733.529999999999973
+16	10	10	216.52000000000001
+29	10	20	405.139999999999986
+4	40	0	683.92999999999995
+26	32	16	929.059999999999945
+13	24	4	220.22999999999999
+29	45	2	388.20999999999998
+19	84	6	479.720000000000027
+17	77	12	712.600000000000023
+1	76	16	788.370000000000005
+21	12	7	828.690000000000055
+12	53	1	384.589999999999975
+20	93	18	429.899999999999977
+13	66	8	60.25
+29	53	2	771.57000000000005
+18	79	8	419.149999999999977
+22	50	9	717.330000000000041
+4	77	11	950.620000000000005
+15	51	8	724.440000000000055
+30	1	18	87.7099999999999937
+30	86	11	260.79000000000002
+22	20	18	685.649999999999977
+6	30	16	881.700000000000045
+25	55	10	203.430000000000007
+11	13	0	763.090000000000032
+12	84	11	95.3299999999999983
+22	39	19	415.980000000000018
+18	9	15	735.899999999999977
+6	31	4	181.879999999999995
+11	66	0	992.629999999999995
+25	12	7	397.810000000000002
+9	88	8	373.189999999999998
+24	49	11	157.990000000000009
+5	16	5	410.949999999999989
+1	69	9	346.810000000000002
+15	85	11	990.139999999999986
+8	19	0	858.110000000000014
+1	6	0	979.149999999999977
+29	85	10	49.1499999999999986
+6	45	2	249.629999999999995
+28	84	14	873.090000000000032
+12	3	3	839.600000000000023
+9	9	11	279.199999999999989
+16	97	2	196.97999999999999
+24	20	4	453.430000000000007
+24	6	15	459.649999999999977
+3	25	0	164.439999999999998
+26	53	16	436.449999999999989
+14	25	11	387.259999999999991
+13	2	13	355.410000000000025
+24	99	12	870.730000000000018
+2	61	0	267.95999999999998
+16	17	13	132.719999999999999
+24	8	19	604.399999999999977
+1	79	8	945.409999999999968
+30	41	15	103.930000000000007
+13	54	8	400.170000000000016
+30	59	8	793.559999999999945
+12	19	0	405.279999999999973
+23	8	4	338.120000000000005
+17	28	8	359.899999999999977
+10	12	5	292.860000000000014
+11	53	13	593.82000000000005
+3	54	0	927.519999999999982
+15	69	18	575.289999999999964
+26	41	19	515.190000000000055
+14	2	8	447.050000000000011
+11	39	20	381.170000000000016
+14	32	5	82.1599999999999966
+12	72	5	168.199999999999989
+12	75	4	281.990000000000009
+12	93	7	434.649999999999977
+1	32	20	829.950000000000045
+28	41	13	298.870000000000005
+17	67	3	37.6300000000000026
+24	33	15	281.490000000000009
+11	73	2	97.769999999999996
+5	42	14	772.690000000000055
+8	34	11	500.910000000000025
+24	66	8	900.549999999999955
+20	53	0	99.519999999999996
+4	58	20	925.470000000000027
+3	14	4	42.8699999999999974
+23	32	15	420.220000000000027
+30	82	8	18.1400000000000006
+2	48	14	577.629999999999995
+12	23	0	696.289999999999964
+29	46	3	375.860000000000014
+29	19	18	851.159999999999968
+12	9	13	52.2199999999999989
+29	5	3	614.639999999999986
+28	18	6	351.589999999999975
+8	76	0	822.450000000000045
+7	75	8	696.029999999999973
+11	47	10	149.490000000000009
+1	91	13	815.169999999999959
+16	45	3	948.309999999999945
+14	95	9	716.480000000000018
+5	14	12	210.840000000000003
+1	73	15	553.860000000000014
+23	54	4	739.440000000000055
+10	60	0	903.190000000000055
+15	36	9	916.460000000000036
+1	35	18	322.75
+21	51	2	45.1799999999999997
+17	34	3	107.430000000000007
+10	4	5	774.549999999999955
+13	69	11	986.42999999999995
+5	96	11	352.420000000000016
+30	91	14	535.919999999999959
+18	50	18	598.639999999999986
+24	43	12	548.330000000000041
+20	83	20	879.730000000000018
+3	70	19	147.090000000000003
+23	76	10	248.909999999999997
+16	90	5	559.67999999999995
+26	93	1	46.5900000000000034
+23	67	5	342.649999999999977
+7	2	15	120.430000000000007
+15	91	12	794.009999999999991
+21	2	16	782.42999999999995
+16	8	7	904.379999999999995
+1	66	15	186.159999999999997
+10	87	20	333.180000000000007
+13	32	8	530.970000000000027
+27	94	3	449.879999999999995
+27	92	6	307.420000000000016
+29	18	1	868.370000000000005
+20	95	19	848.700000000000045
+25	26	20	838.92999999999995
+25	53	11	262.730000000000018
+7	80	5	413.360000000000014
+18	35	3	389.069999999999993
+10	86	5	861.480000000000018
+18	57	17	295.110000000000014
+5	5	10	177.430000000000007
+8	35	10	681.659999999999968
+4	23	7	351.129999999999995
+15	22	14	687.75
+17	70	18	407.920000000000016
+16	41	20	956.990000000000009
+22	100	14	814.490000000000009
+20	97	4	195.310000000000002
+24	69	16	880.240000000000009
+19	44	8	769.669999999999959
+15	5	7	55.9799999999999969
+9	24	20	166.319999999999993
+17	32	12	430.680000000000007
+7	78	19	397.430000000000007
+15	59	18	639.740000000000009
+1	44	7	441.560000000000002
+17	1	2	735.879999999999995
+11	1	10	764.470000000000027
+14	17	0	821.539999999999964
+1	27	0	622.340000000000032
+10	52	15	41.8400000000000034
+6	68	13	342.639999999999986
+5	82	16	334.100000000000023
+4	70	1	742.840000000000032
+24	12	8	704.419999999999959
+28	73	15	237.360000000000014
+13	84	5	724.779999999999973
+23	45	2	972.799999999999955
+20	8	10	831.549999999999955
+5	65	15	135.050000000000011
+16	40	15	197.590000000000003
+30	47	11	298.240000000000009
+27	5	19	564.720000000000027
+11	14	14	668.92999999999995
+1	37	19	241.219999999999999
+2	29	12	194.919999999999987
+18	43	12	34.8299999999999983
+23	87	1	731.389999999999986
+4	37	6	257.810000000000002
+27	29	12	453.25
+11	2	0	670.200000000000045
+12	24	8	18.3200000000000003
+12	55	12	702.870000000000005
+15	61	15	912.580000000000041
+2	50	18	407.620000000000005
+6	27	0	575
+12	41	11	219.759999999999991
+18	69	4	161.870000000000005
+9	57	0	950.860000000000014
+19	49	0	581.669999999999959
+20	50	18	399.019999999999982
+24	37	0	263.54000000000002
+1	34	13	451.25
+23	2	12	643.330000000000041
+2	60	20	960.490000000000009
+30	80	6	320.560000000000002
+12	48	19	226.240000000000009
+12	85	17	487.920000000000016
+13	12	11	340.980000000000018
+2	35	14	12.3000000000000007
+9	67	4	791.629999999999995
+12	73	7	927.379999999999995
+\.
+
+
+--
+-- Data for Name: charging_station; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.charging_station (charging_station_id, price, latitide, longitude) FROM stdin;
+1	4	59.5730000000000004	29.7250000000000014
+2	1	60.3070000000000022	30.0030000000000001
+3	5	60.3170000000000002	29.9080000000000013
+4	2	59.6039999999999992	29.5079999999999991
+5	2	59.5290000000000035	29.7319999999999993
+6	2	59.8389999999999986	29.8850000000000016
+7	5	60.4410000000000025	30.4540000000000006
+8	5	60.1749999999999972	29.8460000000000001
+9	5	59.9450000000000003	29.9349999999999987
+10	4	60.402000000000001	29.9220000000000006
+\.
+
+
+--
+-- Data for Name: charging_station_plug; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.charging_station_plug (charging_station_id, plug_id, amount_of_available) FROM stdin;
+1	8	4
+1	7	3
+1	9	2
+2	1	5
+2	7	5
+3	7	5
+3	8	2
+4	9	5
+4	5	2
+4	3	3
+5	10	2
+5	8	3
+6	8	2
+6	7	5
+6	4	4
+7	5	2
+7	8	2
+8	10	3
+8	3	2
+8	8	5
+9	5	2
+9	3	3
+9	10	2
+10	6	5
+10	9	2
+10	7	2
+\.
+
+
+--
+-- Data for Name: customer; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.customer (phone_number, home_latitide, home_longitude, username) FROM stdin;
+19016220632	60.0529999999999973	30.0949999999999989	kathlyndotts
+40286245088	60.347999999999999	30.4819999999999993	kevenschuller
+69997470305	60.2890000000000015	30.2310000000000016	latinaphenix
+07426575206	60.2620000000000005	29.8919999999999995	louisalucio
+33779921302	60.3840000000000003	29.5479999999999983	springsergio
+28028542741	59.8960000000000008	29.629999999999999	kenyarumore
+62524168516	59.8960000000000008	29.629999999999999	eugenesacks
+70402331339	59.5850000000000009	30.2089999999999996	jerrodlupo
+18685757031	60.3840000000000003	29.5479999999999983	chungcottone
+68267604730	60.3689999999999998	30.4340000000000011	marcellusmagana
+02351359249	59.8960000000000008	29.629999999999999	shaynacropp
+86757046229	60.3840000000000003	29.5479999999999983	lerabreed
+55705577331	59.902000000000001	30.2010000000000005	kevinnuno
+76777511001	59.8109999999999999	30.2680000000000007	hershelsmullen
+03416732046	60.2890000000000015	30.2310000000000016	kashacallen
+01548393447	60.054000000000002	29.6660000000000004	nathanaelpaylor
+86953811060	60.2890000000000015	30.2409999999999997	ozelladay
+21875711654	59.6749999999999972	30.4149999999999991	beewommack
+25335792688	59.6060000000000016	30.4239999999999995	quentindelacruz
+03290175912	59.9350000000000023	30.1999999999999993	cedricguilford
+74828358478	60.1850000000000023	29.5539999999999985	sigridenger
+82243911346	59.5790000000000006	30.0519999999999996	masonmardis
+95502714811	60.0529999999999973	30.0670000000000002	taneshastruthers
+63836784147	60.054000000000002	29.6660000000000004	mitsuemcconico
+97241866472	60.3170000000000002	29.9080000000000013	timikanims
+82815687027	59.7629999999999981	29.5859999999999985	lillythorton
+\.
+
+
+--
+-- Data for Name: customer_issues; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.customer_issues (issue_id, status, creating_time, customer_username, manager_username) FROM stdin;
+\.
+
+
+--
+-- Data for Name: location; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.location (latitide, longitude, country, city, street, zip_code) FROM stdin;
+60.054000000000002	29.6660000000000004	Russia	Saint-Petersburg	5th Red Army Street	194294
+59.8049999999999997	29.5629999999999988	Russia	Saint-Petersburg	2nd Ray Street	195043
+60.2169999999999987	29.9899999999999984	Russia	Saint-Petersburg	Andrew Rzhevka st	190121
+60.3689999999999998	30.4340000000000011	Russia	Saint-Petersburg	Avtovskaya Street	196631
+60.4769999999999968	29.8490000000000002	Russia	Saint-Petersburg	20 Line IN	196066
+60.1850000000000023	29.5539999999999985	Russia	Saint-Petersburg	27 Line IN	194291
+60.0360000000000014	30.3140000000000001	Russia	Saint-Petersburg	Artillery Street	191014
+59.6920000000000002	30.2169999999999987	Russia	Saint-Petersburg	2nd Semenovskaya Str	192281
+60.0769999999999982	30.2920000000000016	Russia	Saint-Petersburg	Austrian square	194017
+60.4410000000000025	30.4540000000000006	Russia	Saint-Petersburg	Alexander Tovpeko pontoon st	193091
+59.8389999999999986	29.8850000000000016	Russia	Saint-Petersburg	6th Sovetskaya Street	196625
+60.0529999999999973	30.0949999999999989	Russia	Saint-Petersburg	Academician Konstantinov Street	196128
+59.8960000000000008	29.629999999999999	Russia	Saint-Petersburg	Agricultural lane	191086
+60.3049999999999997	29.8129999999999988	Russia	Saint-Petersburg	2nd Duck Street	193232
+59.9450000000000003	29.9349999999999987	Russia	Saint-Petersburg	Alexander Street Zelenogorsk	196066
+59.6469999999999985	30.1529999999999987	Russia	Saint-Petersburg	Artillery Street Pavlovsk	196641
+59.5889999999999986	29.9390000000000001	Russia	Saint-Petersburg	Alexandria highway Peterhof	192281
+59.5900000000000034	29.5130000000000017	Russia	Saint-Petersburg	25 October ave Mozhaisk	196066
+59.5159999999999982	29.5850000000000009	Russia	Saint-Petersburg	Apothecary per	195277
+59.5730000000000004	29.7250000000000014	Russia	Saint-Petersburg	Artisan Lane Peterhof	193313
+59.5290000000000035	29.7319999999999993	Russia	Saint-Petersburg	Alexander Station	197341
+60.4470000000000027	30.1320000000000014	Russia	Saint-Petersburg	Alexander Station	196654
+60.1910000000000025	29.8760000000000012	Russia	Saint-Petersburg	1st of May Street Pavlovsk	193313
+59.8890000000000029	29.7579999999999991	Russia	Saint-Petersburg	27 Line IN	196608
+60.2620000000000005	29.8919999999999995	Russia	Saint-Petersburg	Antonenko per	195256
+59.9350000000000023	30.1999999999999993	Russia	Saint-Petersburg	1st Ozerkovskaya lane	195030
+59.5309999999999988	30.2809999999999988	Russia	Saint-Petersburg	Alexandrovsky Park Pushkin	191036
+60.0579999999999998	29.5689999999999991	Russia	Saint-Petersburg	2nd Murinsky straight	188652
+60.2349999999999994	29.8000000000000007	Russia	Saint-Petersburg	Alexander Matrosov Street	194294
+59.6589999999999989	30.2139999999999986	Russia	Saint-Petersburg	8th top lane	191040
+60.304000000000002	30.4299999999999997	Russia	Saint-Petersburg	Academic Lebedev Str	195273
+59.6450000000000031	30.0180000000000007	Russia	Saint-Petersburg	Alexander Street Zelenogorsk	197022
+59.5420000000000016	29.5420000000000016	Russia	Saint-Petersburg	1st of May Street Sestroretsk	194354
+60.2629999999999981	29.7830000000000013	Russia	Saint-Petersburg	1-ya Sovetskaya Street Pavlovsk	195299
+59.5349999999999966	30.1960000000000015	Russia	Saint-Petersburg	6th Sovetskaya Street	193313
+59.5790000000000006	30.0519999999999996	Russia	Saint-Petersburg	1st Duck Street	196601
+60.3459999999999965	29.7850000000000001	Russia	Saint-Petersburg	8th Sovetskaya str	196653
+59.902000000000001	30.2010000000000005	Russia	Saint-Petersburg	Asafiev Street	191014
+59.8900000000000006	30.468	Russia	Saint-Petersburg	3rd line Sestroretsk	194214
+59.7939999999999969	29.6230000000000011	Russia	Saint-Petersburg	22th Line VO	193079
+60.2779999999999987	29.745000000000001	Russia	Saint-Petersburg	9th Line Sestroretsk	196643
+60.2539999999999978	30.2719999999999985	Russia	Saint-Petersburg	3 Line 1st half	195199
+60.4249999999999972	30.1799999999999997	Russia	Saint-Petersburg	25 Line IN	192212
+60.1409999999999982	29.9239999999999995	Russia	Saint-Petersburg	5th Sovetskaya str	196621
+59.9440000000000026	29.8419999999999987	Russia	Saint-Petersburg	2nd Borova Str Solar	196607
+60.3870000000000005	30.1009999999999991	Russia	Saint-Petersburg	7th Red Army Street	195267
+59.6749999999999972	30.4149999999999991	Russia	Saint-Petersburg	Apothecary per	192290
+60.0519999999999996	29.8249999999999993	Russia	Saint-Petersburg	1st of May Street Red Village	191014
+60.3070000000000022	30.0030000000000001	Russia	Saint-Petersburg	Alexander Nevsky Square	192283
+60.286999999999999	30.277000000000001	Russia	Saint-Petersburg	3rd Ozerkovskaya lane	196643
+60.3329999999999984	30.3909999999999982	Russia	Saint-Petersburg	Alexandria Park Peterhof	190098
+60.3840000000000003	29.5479999999999983	Russia	Saint-Petersburg	Artillery Lane	196655
+59.9799999999999969	30.0590000000000011	Russia	Saint-Petersburg	Alexander Street	196066
+60.0660000000000025	29.5700000000000003	Russia	Saint-Petersburg	Artisan Lane Peterhof	191002
+60.3340000000000032	29.5070000000000014	Russia	Saint-Petersburg	5th Upper Lane	195112
+60.2730000000000032	30.3170000000000002	Russia	Saint-Petersburg	1st Lower Street Lomonosov	196651
+59.8980000000000032	29.8939999999999984	Russia	Saint-Petersburg	Alexei Tolstoy blvd Pushkin	196609
+59.8800000000000026	30.3539999999999992	Russia	Saint-Petersburg	Artisan Lane Peterhof	195176
+60.078000000000003	29.9819999999999993	Russia	Saint-Petersburg	Admiralty Embankment	191002
+59.8109999999999999	30.2680000000000007	Russia	Saint-Petersburg	Azov lane	195275
+59.5260000000000034	29.6750000000000007	Russia	Saint-Petersburg	6th Sovetskaya Street	191144
+60.2890000000000015	30.2310000000000016	Russia	Saint-Petersburg	Akhmatova Street Pushkin	196609
+60.1749999999999972	29.8460000000000001	Russia	Saint-Petersburg	2nd Krasnoflotskaya Street Pavlovsk	196210
+60.0589999999999975	29.6359999999999992	Russia	Saint-Petersburg	Alexander Street Lomonosov	195275
+59.5840000000000032	30.1380000000000017	Russia	Saint-Petersburg	Andrew's Lane	196158
+60.0859999999999985	29.5779999999999994	Russia	Saint-Petersburg	3rd Cavalry Lahti	195221
+60.2890000000000015	30.2409999999999997	Russia	Saint-Petersburg	Admiralty nabk	192241
+59.7289999999999992	30.3599999999999994	Russia	Saint-Petersburg	Alexander Park	196605
+60.347999999999999	30.4819999999999993	Russia	Saint-Petersburg	4th Soviet street	191144
+59.6060000000000016	30.4239999999999995	Russia	Saint-Petersburg	Alexei Tolstoy blvd Pushkin	194100
+59.7629999999999981	29.5859999999999985	Russia	Saint-Petersburg	Afanasyevskaya Street	196233
+60.4939999999999998	30.0970000000000013	Russia	Saint-Petersburg	7 Line IN	191028
+59.9549999999999983	29.5459999999999994	Russia	Saint-Petersburg	Alexander Ulyanov Str	196233
+59.8400000000000034	29.8069999999999986	Russia	Saint-Petersburg	Alexei Lebedev Str Kronstadt	191038
+59.5850000000000009	30.2089999999999996	Russia	Saint-Petersburg	2nd Nikitinskaya Street	196651
+59.6379999999999981	30.4720000000000013	Russia	Saint-Petersburg	Amur Str	194362
+60.3430000000000035	30.4759999999999991	Russia	Saint-Petersburg	Alexander Nevsky Street	195221
+59.6330000000000027	29.8200000000000003	Russia	Saint-Petersburg	25 Line IN	194153
+60.0529999999999973	30.0670000000000002	Russia	Saint-Petersburg	2nd Meadow Street Sestroretsk	195213
+60.3170000000000002	29.9080000000000013	Russia	Saint-Petersburg	Academic ave Pushkin	188501
+59.9309999999999974	29.5199999999999996	Russia	Saint-Petersburg	3rd Red Army Street	193230
+59.6880000000000024	29.7040000000000006	Russia	Saint-Petersburg	Austrian square	195298
+60.0750000000000028	29.847999999999999	Russia	Saint-Petersburg	Agricultural st	195426
+60.0739999999999981	30.4229999999999983	Russia	Saint-Petersburg	Andreev Str Sestroretsk	197183
+60.2370000000000019	30.1509999999999998	Russia	Saint-Petersburg	3 Line IN	195221
+59.5290000000000035	30.4409999999999989	Russia	Saint-Petersburg	Alley Theatre Strelna	195248
+59.5429999999999993	30.3120000000000012	Russia	Saint-Petersburg	Academician Konstantinov Street	197110
+59.982999999999997	30.3290000000000006	Russia	Saint-Petersburg	Academician Konstantinov Street	190031
+59.7460000000000022	29.6090000000000018	Russia	Saint-Petersburg	1st of May Street Peterhof	194294
+59.6980000000000004	30.0120000000000005	Russia	Saint-Petersburg	3rd Sovetskaya str	191028
+59.9500000000000028	29.8290000000000006	Russia	Saint-Petersburg	Aerodrome Street	194017
+59.5589999999999975	29.8629999999999995	Russia	Saint-Petersburg	Alexei Tolstoy blvd Pushkin	190195
+59.6439999999999984	30.0199999999999996	Russia	Saint-Petersburg	Alexander Nevsky Street	196105
+59.7220000000000013	29.9080000000000013	Russia	Saint-Petersburg	2nd Alekseevskaya Street	192281
+59.5859999999999985	29.6539999999999999	Russia	Saint-Petersburg	Amur Str	191086
+59.828000000000003	30.4480000000000004	Russia	Saint-Petersburg	29th line VO	196652
+60.402000000000001	29.9220000000000006	Russia	Saint-Petersburg	26 Line IN	190098
+60.453000000000003	30.1389999999999993	Russia	Saint-Petersburg	Academician Konstantinov Street	195009
+59.8509999999999991	29.7089999999999996	Russia	Saint-Petersburg	Academician Szymanski Street	193382
+59.6039999999999992	29.5079999999999991	Russia	Saint-Petersburg	7 Line IN	190195
+\.
+
+
+--
+-- Data for Name: manager; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.manager (username) FROM stdin;
+shamekalachance
+judithvillareal
+lettybruner
+normangreb
+alexacory
+sabrinacoss
+ceolafazio
+valrieburr
+sierragingras
+joleenjefferis
+wilburjustiniano
+danillewhiteside
+julioned
+essiehempel
+nathanielgibb
+elfriededittmer
+madelainesing
+vimilani
+consuelotokarz
+debrahdeland
+chiamurphey
+pameliacavitt
+donniemaskell
+fidelshimkus
+\.
+
+
+--
+-- Data for Name: payment; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.payment (payment_id, car_order_id) FROM stdin;
+1	1
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+11	11
+12	12
+13	13
+14	14
+15	15
+16	16
+17	17
+18	18
+19	19
+20	20
+21	21
+22	22
+23	23
+24	24
+25	25
+26	26
+27	27
+28	28
+29	29
+30	30
+31	31
+32	32
+33	33
+34	34
+35	35
+36	36
+37	37
+38	38
+39	39
+40	40
+41	41
+42	42
+43	43
+44	44
+45	45
+46	46
+47	47
+48	48
+49	49
+50	50
+51	51
+52	52
+53	53
+54	54
+55	55
+56	56
+57	57
+58	58
+59	59
+60	60
+61	61
+62	62
+63	63
+64	64
+65	65
+66	66
+67	67
+68	68
+69	69
+70	70
+71	71
+72	72
+73	73
+74	74
+75	75
+76	76
+77	77
+78	78
+79	79
+80	80
+81	81
+82	82
+83	83
+84	84
+85	85
+86	86
+87	87
+88	88
+89	89
+90	90
+91	91
+92	92
+93	93
+94	94
+95	95
+96	96
+97	97
+98	98
+99	99
+100	100
+101	101
+102	102
+103	103
+104	104
+105	105
+106	106
+107	107
+108	108
+109	109
+110	110
+111	111
+112	112
+113	113
+114	114
+115	115
+116	116
+117	117
+118	118
+119	119
+120	120
+121	121
+122	122
+123	123
+124	124
+125	125
+126	126
+127	127
+128	128
+129	129
+130	130
+131	131
+132	132
+133	133
+134	134
+135	135
+136	136
+137	137
+138	138
+139	139
+140	140
+141	141
+142	142
+143	143
+144	144
+145	145
+146	146
+147	147
+148	148
+149	149
+150	150
+151	151
+152	152
+153	153
+154	154
+155	155
+156	156
+157	157
+158	158
+159	159
+160	160
+161	161
+162	162
+163	163
+164	164
+165	165
+166	166
+167	167
+168	168
+169	169
+170	170
+171	171
+172	172
+173	173
+174	174
+175	175
+176	176
+177	177
+178	178
+179	179
+180	180
+181	181
+182	182
+183	183
+184	184
+185	185
+186	186
+187	187
+188	188
+189	189
+190	190
+191	191
+192	192
+193	193
+194	194
+195	195
+196	196
+197	197
+198	198
+199	199
+200	200
+201	201
+202	202
+203	203
+204	204
+205	205
+206	206
+207	207
+208	208
+209	209
+210	210
+211	211
+212	212
+213	213
+214	214
+215	215
+216	216
+217	217
+218	218
+219	219
+220	220
+221	221
+222	222
+223	223
+224	224
+225	225
+226	226
+227	227
+228	228
+229	229
+230	230
+231	231
+232	232
+233	233
+234	234
+235	235
+236	236
+237	237
+238	238
+239	239
+240	240
+241	241
+242	242
+243	243
+244	244
+245	245
+246	246
+247	247
+248	248
+249	249
+250	250
+251	251
+252	252
+253	253
+254	254
+255	255
+256	256
+257	257
+258	258
+259	259
+260	260
+261	261
+262	262
+263	263
+264	264
+265	265
+266	266
+267	267
+268	268
+269	269
+270	270
+271	271
+272	272
+273	273
+274	274
+275	275
+276	276
+277	277
+278	278
+279	279
+280	280
+281	281
+282	282
+283	283
+284	284
+285	285
+286	286
+287	287
+288	288
+289	289
+290	290
+291	291
+292	292
+293	293
+294	294
+295	295
+296	296
+297	297
+298	298
+299	299
+300	300
+301	301
+302	302
+303	303
+304	304
+305	305
+306	306
+307	307
+308	308
+309	309
+310	310
+311	311
+312	312
+313	313
+314	314
+315	315
+316	316
+317	317
+318	318
+319	319
+320	320
+321	321
+322	322
+323	323
+324	324
+325	325
+326	326
+327	327
+328	328
+329	329
+330	330
+331	331
+332	332
+333	333
+334	334
+335	335
+336	336
+337	337
+338	338
+339	339
+340	340
+341	341
+342	342
+343	343
+344	344
+345	345
+346	346
+347	347
+348	348
+349	349
+350	350
+351	351
+352	352
+353	353
+354	354
+355	355
+356	356
+357	357
+358	358
+359	359
+360	360
+361	361
+362	362
+363	363
+364	364
+365	365
+366	366
+367	367
+368	368
+369	369
+370	370
+371	371
+372	372
+373	373
+374	374
+375	375
+376	376
+377	377
+378	378
+379	379
+380	380
+381	381
+382	382
+383	383
+384	384
+385	385
+386	386
+387	387
+388	388
+389	389
+390	390
+391	391
+392	392
+393	393
+394	394
+395	395
+396	396
+397	397
+398	398
+399	399
+400	400
+401	401
+402	402
+403	403
+404	404
+405	405
+406	406
+407	407
+408	408
+409	409
+410	410
+411	411
+412	412
+413	413
+414	414
+415	415
+416	416
+417	417
+418	418
+419	419
+420	420
+421	421
+422	422
+423	423
+424	424
+425	425
+426	426
+427	427
+428	428
+429	429
+430	430
+431	431
+432	432
+433	433
+434	434
+435	435
+436	436
+437	437
+438	438
+439	439
+440	440
+441	441
+442	442
+443	443
+444	444
+445	445
+446	446
+447	447
+448	448
+449	449
+450	450
+451	451
+452	452
+453	453
+454	454
+455	455
+456	456
+457	457
+458	458
+459	459
+460	460
+461	461
+462	462
+463	463
+464	464
+465	465
+466	466
+467	467
+468	468
+469	469
+470	470
+471	471
+472	472
+473	473
+474	474
+475	475
+476	476
+477	477
+478	478
+479	479
+480	480
+481	481
+482	482
+483	483
+484	484
+485	485
+486	486
+487	487
+488	488
+489	489
+490	490
+491	491
+492	492
+493	493
+494	494
+495	495
+496	496
+497	497
+498	498
+499	499
+500	500
+501	501
+502	502
+503	503
+504	504
+505	505
+506	506
+507	507
+508	508
+509	509
+510	510
+511	511
+512	512
+513	513
+514	514
+515	515
+516	516
+517	517
+518	518
+519	519
+520	520
+521	521
+522	522
+523	523
+524	524
+525	525
+526	526
+527	527
+528	528
+529	529
+530	530
+531	531
+532	532
+533	533
+534	534
+535	535
+536	536
+537	537
+538	538
+539	539
+540	540
+541	541
+542	542
+543	543
+544	544
+545	545
+546	546
+547	547
+548	548
+549	549
+550	550
+551	551
+552	552
+553	553
+554	554
+555	555
+556	556
+557	557
+558	558
+559	559
+560	560
+561	561
+562	562
+563	563
+564	564
+565	565
+566	566
+567	567
+568	568
+569	569
+570	570
+571	571
+572	572
+573	573
+574	574
+575	575
+576	576
+577	577
+578	578
+579	579
+580	580
+581	581
+582	582
+583	583
+584	584
+585	585
+586	586
+587	587
+588	588
+589	589
+590	590
+591	591
+592	592
+593	593
+594	594
+595	595
+596	596
+597	597
+598	598
+599	599
+600	600
+601	601
+602	602
+603	603
+604	604
+605	605
+606	606
+607	607
+608	608
+609	609
+610	610
+611	611
+612	612
+613	613
+614	614
+615	615
+616	616
+617	617
+618	618
+619	619
+620	620
+621	621
+622	622
+623	623
+624	624
+625	625
+626	626
+627	627
+628	628
+629	629
+630	630
+631	631
+632	632
+633	633
+634	634
+635	635
+636	636
+637	637
+638	638
+639	639
+640	640
+641	641
+642	642
+643	643
+644	644
+645	645
+646	646
+647	647
+648	648
+649	649
+650	650
+651	651
+652	652
+653	653
+654	654
+655	655
+656	656
+657	657
+658	658
+659	659
+660	660
+661	661
+662	662
+663	663
+664	664
+665	665
+666	666
+667	667
+668	668
+669	669
+670	670
+671	671
+672	672
+673	673
+674	674
+675	675
+676	676
+677	677
+678	678
+679	679
+680	680
+681	681
+682	682
+683	683
+684	684
+685	685
+686	686
+687	687
+688	688
+689	689
+690	690
+691	691
+692	692
+693	693
+694	694
+695	695
+696	696
+697	697
+698	698
+699	699
+700	700
+701	701
+702	702
+703	703
+704	704
+705	705
+706	706
+707	707
+708	708
+709	709
+710	710
+711	711
+712	712
+713	713
+714	714
+715	715
+716	716
+717	717
+718	718
+719	719
+720	720
+721	721
+722	722
+723	723
+724	724
+725	725
+726	726
+727	727
+728	728
+729	729
+730	730
+731	731
+732	732
+733	733
+734	734
+735	735
+736	736
+737	737
+738	738
+739	739
+740	740
+741	741
+742	742
+743	743
+744	744
+745	745
+746	746
+747	747
+748	748
+749	749
+750	750
+751	751
+752	752
+753	753
+754	754
+755	755
+756	756
+757	757
+758	758
+759	759
+760	760
+761	761
+762	762
+763	763
+764	764
+765	765
+766	766
+767	767
+768	768
+769	769
+770	770
+771	771
+772	772
+773	773
+774	774
+775	775
+776	776
+777	777
+778	778
+779	779
+780	780
+781	781
+782	782
+783	783
+784	784
+785	785
+786	786
+787	787
+788	788
+789	789
+790	790
+791	791
+792	792
+793	793
+794	794
+795	795
+796	796
+797	797
+798	798
+799	799
+800	800
+801	801
+802	802
+803	803
+804	804
+805	805
+806	806
+807	807
+808	808
+809	809
+810	810
+811	811
+812	812
+813	813
+814	814
+815	815
+816	816
+817	817
+818	818
+819	819
+820	820
+821	821
+822	822
+823	823
+824	824
+825	825
+826	826
+827	827
+828	828
+829	829
+830	830
+831	831
+832	832
+833	833
+834	834
+835	835
+836	836
+837	837
+838	838
+839	839
+840	840
+841	841
+842	842
+843	843
+844	844
+845	845
+846	846
+847	847
+848	848
+849	849
+850	850
+851	851
+852	852
+853	853
+854	854
+855	855
+856	856
+857	857
+858	858
+859	859
+860	860
+861	861
+862	862
+863	863
+864	864
+865	865
+866	866
+867	867
+868	868
+869	869
+870	870
+871	871
+872	872
+873	873
+874	874
+875	875
+876	876
+877	877
+878	878
+879	879
+880	880
+881	881
+882	882
+883	883
+884	884
+885	885
+886	886
+887	887
+888	888
+889	889
+890	890
+891	891
+892	892
+893	893
+894	894
+895	895
+896	896
+897	897
+898	898
+899	899
+900	900
+901	901
+902	902
+903	903
+904	904
+905	905
+906	906
+907	907
+908	908
+909	909
+910	910
+911	911
+912	912
+913	913
+914	914
+915	915
+916	916
+917	917
+918	918
+919	919
+920	920
+921	921
+922	922
+923	923
+924	924
+925	925
+926	926
+927	927
+928	928
+929	929
+930	930
+931	931
+932	932
+933	933
+934	934
+935	935
+936	936
+937	937
+938	938
+939	939
+940	940
+941	941
+942	942
+943	943
+944	944
+945	945
+946	946
+947	947
+948	948
+949	949
+950	950
+951	951
+952	952
+953	953
+954	954
+955	955
+956	956
+957	957
+958	958
+959	959
+960	960
+961	961
+962	962
+963	963
+964	964
+965	965
+966	966
+967	967
+968	968
+969	969
+970	970
+971	971
+972	972
+973	973
+974	974
+975	975
+976	976
+977	977
+978	978
+979	979
+980	980
+981	981
+982	982
+983	983
+984	984
+985	985
+986	986
+987	987
+988	988
+989	989
+990	990
+991	991
+992	992
+993	993
+994	994
+995	995
+996	996
+997	997
+998	998
+999	999
+1000	1000
+\.
+
+
+--
+-- Data for Name: plug; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.plug (plug_id, size, shape) FROM stdin;
+1	4	rectangle
+3	5	circle
+4	2	triangle
+5	1	circle
+6	3	triangle
+7	2	rectangle
+8	1	star
+9	5	star
+10	4	circle
+\.
+
+
+--
+-- Data for Name: user_account; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.user_account (username, email, full_name) FROM stdin;
+kashacallen	kashacallen@gmail.com	Kasha Callen\n
+marcellusmagana	marcellusmagana@gmail.com	Marcellus Magana\n
+nathanaelpaylor	nathanaelpaylor@gmail.com	Nathanael Paylor\n
+eugenesacks	eugenesacks@gmail.com	Eugene Sacks\n
+kevinnuno	kevinnuno@gmail.com	Kevin Nuno\n
+shamekalachance	shamekalachance@gmail.com	Shameka Lachance\n
+judithvillareal	judithvillareal@gmail.com	Judith Villareal\n
+kathlyndotts	kathlyndotts@gmail.com	Kathlyn Dotts\n
+springsergio	springsergio@gmail.com	Spring Sergio\n
+quentindelacruz	quentindelacruz@gmail.com	Quentin Delacruz\n
+lettybruner	lettybruner@gmail.com	Letty Bruner\n
+kenyarumore	kenyarumore@gmail.com	Kenya Rumore\n
+normangreb	normangreb@gmail.com	Norman Greb\n
+alexacory	alexacory@gmail.com	Alexa Cory\n
+timikanims	timikanims@gmail.com	Timika Nims\n
+lerabreed	lerabreed@gmail.com	Lera Breed\n
+beewommack	beewommack@gmail.com	Bee Wommack\n
+sabrinacoss	sabrinacoss@gmail.com	Sabrina Coss\n
+ceolafazio	ceolafazio@gmail.com	Ceola Fazio\n
+valrieburr	valrieburr@gmail.com	Valrie Burr\n
+sierragingras	sierragingras@gmail.com	Sierra Gingras\n
+hershelsmullen	hershelsmullen@gmail.com	Hershel Smullen\n
+joleenjefferis	joleenjefferis@gmail.com	Joleen Jefferis\n
+wilburjustiniano	wilburjustiniano@gmail.com	Wilbur Justiniano\n
+danillewhiteside	danillewhiteside@gmail.com	Danille Whiteside\n
+kevenschuller	kevenschuller@gmail.com	Keven Schuller\n
+julioned	julioned@gmail.com	Julio Ned\n
+essiehempel	essiehempel@gmail.com	Essie Hempel\n
+chungcottone	chungcottone@gmail.com	Chung Cottone\n
+mitsuemcconico	mitsuemcconico@gmail.com	Mitsue Mcconico\n
+nathanielgibb	nathanielgibb@gmail.com	Nathaniel Gibb\n
+elfriededittmer	elfriededittmer@gmail.com	Elfriede Dittmer\n
+masonmardis	masonmardis@gmail.com	Mason Mardis\n
+madelainesing	madelainesing@gmail.com	Madelaine Sing\n
+vimilani	vimilani@gmail.com	Vi Milani\n
+louisalucio	louisalucio@gmail.com	Louisa Lucio\n
+jerrodlupo	jerrodlupo@gmail.com	Jerrod Lupo\n
+shaynacropp	shaynacropp@gmail.com	Shayna Cropp\n
+taneshastruthers	taneshastruthers@gmail.com	Tanesha Struthers\n
+consuelotokarz	consuelotokarz@gmail.com	Consuelo Tokarz\n
+latinaphenix	latinaphenix@gmail.com	Latina Phenix\n
+cedricguilford	cedricguilford@gmail.com	Cedric Guilford\n
+sigridenger	sigridenger@gmail.com	Sigrid Enger\n
+debrahdeland	debrahdeland@gmail.com	Debrah Deland\n
+chiamurphey	chiamurphey@gmail.com	Chia Murphey\n
+lillythorton	lillythorton@gmail.com	Lilly Thorton\n
+pameliacavitt	pameliacavitt@gmail.com	Pamelia Cavitt\n
+ozelladay	ozelladay@gmail.com	Ozella Day\n
+donniemaskell	donniemaskell@gmail.com	Donnie Maskell\n
+fidelshimkus	fidelshimkus@gmail.com	Fidel Shimkus
+\.
+
+
+--
+-- Data for Name: workshop; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.workshop (workshop_id, open_time, close_time, latitide, longitude) FROM stdin;
+1	09:00:00	22:00:00	59.982999999999997	30.3290000000000006
+2	09:00:00	22:00:00	59.982999999999997	30.3290000000000006
+3	09:00:00	22:00:00	59.5589999999999975	29.8629999999999995
+4	09:00:00	22:00:00	60.2169999999999987	29.9899999999999984
+5	09:00:00	22:00:00	60.3689999999999998	30.4340000000000011
+6	09:00:00	22:00:00	60.453000000000003	30.1389999999999993
+7	09:00:00	22:00:00	59.7289999999999992	30.3599999999999994
+8	09:00:00	22:00:00	60.0360000000000014	30.3140000000000001
+9	09:00:00	22:00:00	60.1850000000000023	29.5539999999999985
+10	09:00:00	22:00:00	59.5420000000000016	29.5420000000000016
+11	09:00:00	22:00:00	59.5790000000000006	30.0519999999999996
+12	09:00:00	22:00:00	59.9500000000000028	29.8290000000000006
+13	09:00:00	22:00:00	60.2349999999999994	29.8000000000000007
+14	09:00:00	22:00:00	59.6749999999999972	30.4149999999999991
+15	09:00:00	22:00:00	60.2890000000000015	30.2310000000000016
+16	09:00:00	22:00:00	60.3340000000000032	29.5070000000000014
+17	09:00:00	22:00:00	60.304000000000002	30.4299999999999997
+18	09:00:00	22:00:00	59.7289999999999992	30.3599999999999994
+19	09:00:00	22:00:00	60.1409999999999982	29.9239999999999995
+20	09:00:00	22:00:00	60.2349999999999994	29.8000000000000007
+21	09:00:00	22:00:00	59.6330000000000027	29.8200000000000003
+22	09:00:00	22:00:00	59.5859999999999985	29.6539999999999999
+23	09:00:00	22:00:00	60.453000000000003	30.1389999999999993
+24	09:00:00	22:00:00	59.5159999999999982	29.5850000000000009
+25	09:00:00	22:00:00	60.3340000000000032	29.5070000000000014
+26	09:00:00	22:00:00	60.1850000000000023	29.5539999999999985
+27	09:00:00	22:00:00	60.3049999999999997	29.8129999999999988
+28	09:00:00	22:00:00	60.286999999999999	30.277000000000001
+29	09:00:00	22:00:00	60.1409999999999982	29.9239999999999995
+30	09:00:00	22:00:00	60.0739999999999981	30.4229999999999983
+\.
+
+
+--
+-- Name: car_order_car_order_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.car_order_car_order_id_seq', 1000, true);
+
+
+--
+-- Name: car_part_car_part_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.car_part_car_part_id_seq', 100, true);
+
+
+--
+-- Name: car_parts_order_car_parts_order_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.car_parts_order_car_parts_order_id_seq', 1, false);
+
+
+--
+-- Name: car_parts_provider_provider_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.car_parts_provider_provider_id_seq', 25, true);
+
+
+--
+-- Name: car_type_car_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.car_type_car_type_id_seq', 10, true);
+
+
+--
+-- Name: charging_station_charging_station_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.charging_station_charging_station_id_seq', 10, true);
+
+
+--
+-- Name: customer_issues_issue_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.customer_issues_issue_id_seq', 1, false);
+
+
+--
+-- Name: payment_payment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.payment_payment_id_seq', 1000, true);
+
+
+--
+-- Name: plug_plug_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.plug_plug_id_seq', 10, true);
+
+
+--
+-- Name: workshop_workshop_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.workshop_workshop_id_seq', 30, true);
+
+
+--
+-- Name: car_charging_log car_charging_log_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_charging_log
+    ADD CONSTRAINT car_charging_log_pkey PRIMARY KEY (creating_time, car_license_plate);
+
+
+--
+-- Name: car_order car_order_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_order
+    ADD CONSTRAINT car_order_pkey PRIMARY KEY (car_order_id);
+
+
+--
+-- Name: car_part car_part_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_part
+    ADD CONSTRAINT car_part_pkey PRIMARY KEY (car_part_id);
+
+
+--
+-- Name: car_parts_order car_parts_order_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_parts_order
+    ADD CONSTRAINT car_parts_order_pkey PRIMARY KEY (car_parts_order_id);
+
+
+--
+-- Name: car_parts_provider car_parts_provider_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_parts_provider
+    ADD CONSTRAINT car_parts_provider_pkey PRIMARY KEY (provider_id);
+
+
+--
+-- Name: car car_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car
+    ADD CONSTRAINT car_pkey PRIMARY KEY (car_license_plate);
+
+
+--
+-- Name: car_repairing_log car_repairing_log_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_repairing_log
+    ADD CONSTRAINT car_repairing_log_pkey PRIMARY KEY (car_license_plate, date);
+
+
+--
+-- Name: car_type car_type_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_type
+    ADD CONSTRAINT car_type_pkey PRIMARY KEY (car_type_id);
+
+
+--
+-- Name: car car_vin_key; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car
+    ADD CONSTRAINT car_vin_key UNIQUE (vin);
+
+
+--
+-- Name: catalogue_provider catalogue_provider_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.catalogue_provider
+    ADD CONSTRAINT catalogue_provider_pkey PRIMARY KEY (provider_id, car_part_id);
+
+
+--
+-- Name: catalogue_workshop catalogue_workshop_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.catalogue_workshop
+    ADD CONSTRAINT catalogue_workshop_pkey PRIMARY KEY (workshop_id, car_part_id);
+
+
+--
+-- Name: charging_station charging_station_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.charging_station
+    ADD CONSTRAINT charging_station_pkey PRIMARY KEY (charging_station_id);
+
+
+--
+-- Name: charging_station_plug charging_station_plug_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.charging_station_plug
+    ADD CONSTRAINT charging_station_plug_pkey PRIMARY KEY (charging_station_id, plug_id);
+
+
+--
+-- Name: customer_issues customer_issues_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.customer_issues
+    ADD CONSTRAINT customer_issues_pkey PRIMARY KEY (issue_id);
+
+
+--
+-- Name: customer customer_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.customer
+    ADD CONSTRAINT customer_pkey PRIMARY KEY (username);
+
+
+--
+-- Name: location location_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.location
+    ADD CONSTRAINT location_pkey PRIMARY KEY (latitide, longitude);
+
+
+--
+-- Name: manager manager_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.manager
+    ADD CONSTRAINT manager_pkey PRIMARY KEY (username);
+
+
+--
+-- Name: payment payment_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.payment
+    ADD CONSTRAINT payment_pkey PRIMARY KEY (payment_id);
+
+
+--
+-- Name: plug plug_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.plug
+    ADD CONSTRAINT plug_pkey PRIMARY KEY (plug_id);
+
+
+--
+-- Name: user_account user_account_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.user_account
+    ADD CONSTRAINT user_account_pkey PRIMARY KEY (username);
+
+
+--
+-- Name: workshop workshop_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.workshop
+    ADD CONSTRAINT workshop_pkey PRIMARY KEY (workshop_id);
+
+
+--
+-- Name: car car_car_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car
+    ADD CONSTRAINT car_car_type_id_fkey FOREIGN KEY (car_type_id) REFERENCES public.car_type(car_type_id);
+
+
+--
+-- Name: car_charging_log car_charging_log_car_license_plate_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_charging_log
+    ADD CONSTRAINT car_charging_log_car_license_plate_fkey FOREIGN KEY (car_license_plate) REFERENCES public.car(car_license_plate) ON UPDATE CASCADE;
+
+
+--
+-- Name: car_charging_log car_charging_log_charging_station_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_charging_log
+    ADD CONSTRAINT car_charging_log_charging_station_id_fkey FOREIGN KEY (charging_station_id) REFERENCES public.charging_station(charging_station_id);
+
+
+--
+-- Name: car_charging_log car_charging_log_plug_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_charging_log
+    ADD CONSTRAINT car_charging_log_plug_id_fkey FOREIGN KEY (plug_id) REFERENCES public.plug(plug_id);
+
+
+--
+-- Name: car_order car_order_car_license_plate_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_order
+    ADD CONSTRAINT car_order_car_license_plate_fkey FOREIGN KEY (car_license_plate) REFERENCES public.car(car_license_plate) ON UPDATE CASCADE;
+
+
+--
+-- Name: car_order car_order_customer_username_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_order
+    ADD CONSTRAINT car_order_customer_username_fkey FOREIGN KEY (customer_username) REFERENCES public.customer(username);
+
+
+--
+-- Name: car_order car_order_dist_latitide_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_order
+    ADD CONSTRAINT car_order_dist_latitide_fkey FOREIGN KEY (dist_latitide, dist_longitude) REFERENCES public.location(latitide, longitude);
+
+
+--
+-- Name: car_order car_order_manager_username_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_order
+    ADD CONSTRAINT car_order_manager_username_fkey FOREIGN KEY (manager_username) REFERENCES public.manager(username);
+
+
+--
+-- Name: car_order car_order_pick_up_latitide_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_order
+    ADD CONSTRAINT car_order_pick_up_latitide_fkey FOREIGN KEY (pick_up_latitide, pick_up_longitude) REFERENCES public.location(latitide, longitude);
+
+
+--
+-- Name: car_part car_part_car_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_part
+    ADD CONSTRAINT car_part_car_type_id_fkey FOREIGN KEY (car_type_id) REFERENCES public.car_type(car_type_id);
+
+
+--
+-- Name: car_parts_order car_parts_order_car_parts_provider_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_parts_order
+    ADD CONSTRAINT car_parts_order_car_parts_provider_id_fkey FOREIGN KEY (car_parts_provider_id) REFERENCES public.car_parts_provider(provider_id);
+
+
+--
+-- Name: car_parts_order car_parts_order_workshop_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_parts_order
+    ADD CONSTRAINT car_parts_order_workshop_id_fkey FOREIGN KEY (workshop_id) REFERENCES public.workshop(workshop_id);
+
+
+--
+-- Name: car_parts_provider car_parts_provider_latitide_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_parts_provider
+    ADD CONSTRAINT car_parts_provider_latitide_fkey FOREIGN KEY (latitide, longitude) REFERENCES public.location(latitide, longitude);
+
+
+--
+-- Name: car_repairing_log car_repairing_log_broken_car_part_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_repairing_log
+    ADD CONSTRAINT car_repairing_log_broken_car_part_id_fkey FOREIGN KEY (broken_car_part_id) REFERENCES public.car_part(car_part_id);
+
+
+--
+-- Name: car_repairing_log car_repairing_log_car_license_plate_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_repairing_log
+    ADD CONSTRAINT car_repairing_log_car_license_plate_fkey FOREIGN KEY (car_license_plate) REFERENCES public.car(car_license_plate) ON UPDATE CASCADE;
+
+
+--
+-- Name: car_repairing_log car_repairing_log_manager_username_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_repairing_log
+    ADD CONSTRAINT car_repairing_log_manager_username_fkey FOREIGN KEY (manager_username) REFERENCES public.manager(username);
+
+
+--
+-- Name: car_repairing_log car_repairing_log_workshop_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_repairing_log
+    ADD CONSTRAINT car_repairing_log_workshop_id_fkey FOREIGN KEY (workshop_id) REFERENCES public.workshop(workshop_id);
+
+
+--
+-- Name: catalogue_provider catalogue_provider_car_part_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.catalogue_provider
+    ADD CONSTRAINT catalogue_provider_car_part_id_fkey FOREIGN KEY (car_part_id) REFERENCES public.car_part(car_part_id);
+
+
+--
+-- Name: catalogue_provider catalogue_provider_provider_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.catalogue_provider
+    ADD CONSTRAINT catalogue_provider_provider_id_fkey FOREIGN KEY (provider_id) REFERENCES public.car_parts_provider(provider_id);
+
+
+--
+-- Name: catalogue_workshop catalogue_workshop_car_part_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.catalogue_workshop
+    ADD CONSTRAINT catalogue_workshop_car_part_id_fkey FOREIGN KEY (car_part_id) REFERENCES public.car_part(car_part_id);
+
+
+--
+-- Name: catalogue_workshop catalogue_workshop_workshop_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.catalogue_workshop
+    ADD CONSTRAINT catalogue_workshop_workshop_id_fkey FOREIGN KEY (workshop_id) REFERENCES public.workshop(workshop_id);
+
+
+--
+-- Name: charging_station charging_station_latitide_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.charging_station
+    ADD CONSTRAINT charging_station_latitide_fkey FOREIGN KEY (latitide, longitude) REFERENCES public.location(latitide, longitude);
+
+
+--
+-- Name: charging_station_plug charging_station_plug_charging_station_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.charging_station_plug
+    ADD CONSTRAINT charging_station_plug_charging_station_id_fkey FOREIGN KEY (charging_station_id) REFERENCES public.charging_station(charging_station_id);
+
+
+--
+-- Name: charging_station_plug charging_station_plug_plug_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.charging_station_plug
+    ADD CONSTRAINT charging_station_plug_plug_id_fkey FOREIGN KEY (plug_id) REFERENCES public.plug(plug_id);
+
+
+--
+-- Name: customer customer_home_latitide_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.customer
+    ADD CONSTRAINT customer_home_latitide_fkey FOREIGN KEY (home_latitide, home_longitude) REFERENCES public.location(latitide, longitude);
+
+
+--
+-- Name: customer_issues customer_issues_customer_username_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.customer_issues
+    ADD CONSTRAINT customer_issues_customer_username_fkey FOREIGN KEY (customer_username) REFERENCES public.customer(username);
+
+
+--
+-- Name: customer_issues customer_issues_manager_username_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.customer_issues
+    ADD CONSTRAINT customer_issues_manager_username_fkey FOREIGN KEY (manager_username) REFERENCES public.manager(username);
+
+
+--
+-- Name: customer customer_username_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.customer
+    ADD CONSTRAINT customer_username_fkey FOREIGN KEY (username) REFERENCES public.user_account(username);
+
+
+--
+-- Name: manager manager_username_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.manager
+    ADD CONSTRAINT manager_username_fkey FOREIGN KEY (username) REFERENCES public.user_account(username);
+
+
+--
+-- Name: payment payment_car_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.payment
+    ADD CONSTRAINT payment_car_order_id_fkey FOREIGN KEY (car_order_id) REFERENCES public.car_order(car_order_id);
+
+
+--
+-- Name: workshop workshop_latitide_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.workshop
+    ADD CONSTRAINT workshop_latitide_fkey FOREIGN KEY (latitide, longitude) REFERENCES public.location(latitide, longitude);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
