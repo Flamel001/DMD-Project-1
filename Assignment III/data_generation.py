@@ -67,6 +67,21 @@ def get_all_cars():
     return cursor.fetchall()
 
 
+def get_all_car_parts():
+    cursor.execute('SELECT car_part_id FROM car_part')
+    return cursor.fetchall()
+
+
+def get_all_providers():
+    cursor.execute('SELECT provider_id FROM car_parts_provider')
+    return cursor.fetchall()
+
+
+def get_all_workshops():
+    cursor.execute('SELECT workshop_id FROM workshop')
+    return cursor.fetchall()
+
+
 def gen_phone_number():
     return ''.join([random.choice(string.digits) for _ in range(11)])
 
@@ -240,5 +255,22 @@ cursor = connection.cursor()
 for co_id in get_all_car_orders():
     cursor.execute('INSERT INTO payment (car_order_id) '
                    'VALUES (%s)', [co_id])
+cursor.close()
+connection.commit()
+
+"""CATALOGUE PROVIDER"""
+cursor = connection.cursor()
+car_part_id = get_all_car_parts()
+car_provider_id = get_all_providers()
+workshop_id = get_all_workshops()
+for _ in range(10000):
+    cursor.execute('INSERT INTO catalogue_provider (provider_id, car_part_id, amount_of_available, cost) '
+                   'VALUES (%s, %s, %s, %s) ON CONFLICT DO NOTHING',
+                   [random.choice(car_provider_id), random.choice(car_part_id),
+                    random.randint(0, 20), round(random.uniform(10, 1000), 2)])
+    cursor.execute('INSERT INTO catalogue_workshop (workshop_id, car_part_id, amount_of_available, cost) '
+                   'VALUES (%s, %s, %s, %s) ON CONFLICT DO NOTHING',
+                   [random.choice(workshop_id), random.choice(car_part_id),
+                    random.randint(0, 20), round(random.uniform(10, 1000), 2)])
 cursor.close()
 connection.commit()

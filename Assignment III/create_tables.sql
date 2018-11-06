@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS location (
   longitude FLOAT,
   country   VARCHAR(32),
   city      VARCHAR(32),
-  street    VARCHAR(32),
+  street    VARCHAR(64),
   zip_code  VARCHAR(32),
   PRIMARY KEY (latitide, longitude)
 );
@@ -31,20 +31,20 @@ CREATE TABLE IF NOT EXISTS customer (
 
 
 CREATE TABLE IF NOT EXISTS car_type (
-  car_type_id INT PRIMARY KEY,
+  car_type_id SERIAL PRIMARY KEY,
   brand       VARCHAR(32),
   model       VARCHAR(32)
 );
 
 CREATE TABLE IF NOT EXISTS car_part (
-  car_part_id INT PRIMARY KEY,
+  car_part_id SERIAL PRIMARY KEY,
   part_name   VARCHAR(128),
   car_type_id INT REFERENCES car_type (car_type_id)
 );
 
 CREATE TABLE IF NOT EXISTS car_parts_provider (
-  provider_id  INT PRIMARY KEY,
-  name         VARCHAR(32),
+  provider_id  SERIAL PRIMARY KEY,
+  name         VARCHAR(64),
   phone_number VARCHAR(16),
   latitide     FLOAT,
   longitude    FLOAT,
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS car_parts_provider (
 );
 
 CREATE TABLE IF NOT EXISTS workshop (
-  workshop_id INT PRIMARY KEY,
+  workshop_id SERIAL PRIMARY KEY,
   open_time   TIME,
   close_time  TIME,
   latitide    FLOAT,
@@ -61,34 +61,38 @@ CREATE TABLE IF NOT EXISTS workshop (
 );
 
 CREATE TABLE IF NOT EXISTS catalogue_workshop (
-  workshop_id INT REFERENCES workshop (workshop_id),
-  car_part_id INT REFERENCES car_part (car_part_id),
+  workshop_id         INT REFERENCES workshop (workshop_id),
+  car_part_id         INT REFERENCES car_part (car_part_id),
+  amount_of_available INT,
+  cost                FLOAT,
   PRIMARY KEY (workshop_id, car_part_id)
 );
 
 CREATE TABLE IF NOT EXISTS catalogue_provider (
-  provider_id INT REFERENCES car_parts_provider (provider_id),
-  car_part_id INT REFERENCES car_part (car_part_id),
+  provider_id         INT REFERENCES car_parts_provider (provider_id),
+  car_part_id         INT REFERENCES car_part (car_part_id),
+  amount_of_available INT,
+  cost                FLOAT,
   PRIMARY KEY (provider_id, car_part_id)
 );
 
 CREATE TABLE IF NOT EXISTS car (
-  car_license_plate varchar(16) PRIMARY KEY,
-  vin               INT UNIQUE,
+  car_license_plate VARCHAR(16) PRIMARY KEY,
+  vin               VARCHAR(128) UNIQUE,
+  color             VARCHAR(16),
   car_type_id       INT REFERENCES car_type (car_type_id)
 );
 
 CREATE TABLE IF NOT EXISTS charging_station (
-  charging_station_id INT PRIMARY KEY,
+  charging_station_id SERIAL PRIMARY KEY,
   price               FLOAT,
-  time_of_charging    INT,
   latitide            FLOAT,
   longitude           FLOAT,
   FOREIGN KEY (latitide, longitude) REFERENCES location (latitide, longitude)
 );
 
 CREATE TABLE IF NOT EXISTS plug (
-  plug_id INT PRIMARY KEY,
+  plug_id SERIAL PRIMARY KEY,
   size    INT,
   shape   VARCHAR(32)
 );
@@ -101,36 +105,39 @@ CREATE TABLE IF NOT EXISTS charging_station_plug (
 );
 
 CREATE TABLE IF NOT EXISTS car_order (
-  car_order_id      INT PRIMARY KEY,
-  creating_time     TIMESTAMP,
-  status            INT,
+  car_order_id      SERIAL PRIMARY KEY,
+  creating_time     TIMESTAMP DEFAULT current_timestamp,
+  status            INT       DEFAULT 0,
   cost_of_ride      INT,
   pick_up_latitide  FLOAT,
   pick_up_longitude FLOAT,
-  car_license_plate VARCHAR(16) REFERENCES car (car_license_plate),
+  dist_latitide     FLOAT,
+  dist_longitude    FLOAT,
+  distance          FLOAT,
+  trip_duration     INT,
+  car_license_plate VARCHAR(16) REFERENCES car (car_license_plate) ON UPDATE CASCADE ,
   customer_username VARCHAR(32) REFERENCES customer (username),
   manager_username  VARCHAR(32) REFERENCES manager (username),
-  FOREIGN KEY (pick_up_latitide, pick_up_longitude) REFERENCES location (latitide, longitude)
+  FOREIGN KEY (pick_up_latitide, pick_up_longitude) REFERENCES location (latitide, longitude),
+  FOREIGN KEY (dist_latitide, dist_longitude) REFERENCES location (latitide, longitude)
 );
 
 CREATE TABLE IF NOT EXISTS payment (
-  payment_id   INT PRIMARY KEY,
-  time         TIMESTAMP,
-  amount       INT,
-  username     VARCHAR(32) REFERENCES customer (username),
+  payment_id   SERIAL PRIMARY KEY,
   car_order_id INT REFERENCES car_order (car_order_id)
 );
 
 CREATE TABLE IF NOT EXISTS car_repairing_log (
-  date              TIMESTAMP,
-  manager_username  VARCHAR(32) REFERENCES manager (username),
-  workshop_id       INT REFERENCES workshop (workshop_id),
-  car_license_plate VARCHAR(16) REFERENCES car (car_license_plate),
+  date               DATE,
+  manager_username   VARCHAR(32) REFERENCES manager (username),
+  workshop_id        INT REFERENCES workshop (workshop_id),
+  car_license_plate  VARCHAR(16) REFERENCES car (car_license_plate) ON UPDATE CASCADE,
+  broken_car_part_id INT REFERENCES car_part (car_part_id),
   PRIMARY KEY (car_license_plate, date)
 );
 
 CREATE TABLE IF NOT EXISTS car_parts_order (
-  car_parts_order_id    INT PRIMARY KEY,
+  car_parts_order_id    SERIAL PRIMARY KEY,
   description           VARCHAR(512),
   status                INT,
   creating_time         TIMESTAMP,
@@ -140,19 +147,20 @@ CREATE TABLE IF NOT EXISTS car_parts_order (
 
 CREATE TABLE IF NOT EXISTS car_charging_log (
   creating_time       TIMESTAMP,
-  car_license_plate   VARCHAR(16) REFERENCES car (car_license_plate),
+  time_of_charging    INT,
+  plug_id             INT REFERENCES plug (plug_id),
+  car_license_plate   VARCHAR(16) REFERENCES car (car_license_plate) ON UPDATE CASCADE,
   charging_station_id INT REFERENCES charging_station (charging_station_id),
   PRIMARY KEY (creating_time, car_license_plate)
 );
 
 CREATE TABLE IF NOT EXISTS customer_issues (
-  issue_id          INT PRIMARY KEY,
+  issue_id          SERIAL PRIMARY KEY,
   status            INT,
   creating_time     TIMESTAMP,
   customer_username VARCHAR(32) REFERENCES customer (username),
   manager_username  VARCHAR(32) REFERENCES manager (username)
 )
-
 
 
 
