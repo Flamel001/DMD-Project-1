@@ -35,14 +35,18 @@ services:
       options:
         max-size: "200k"
         max-file: "1"
+#    command: bash -c "python manage.py makemigrations && python manage.py migrate &&
+#      python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - 8000:8000
     depends_on:
-      - db
+    - db
     volumes:
-      - .:/app
+    - .:/app
     env_file:
-      - dev.env
+    - dev.env
     networks:
-      - project
+    - project
 
 
 
