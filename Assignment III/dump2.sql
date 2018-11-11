@@ -1,0 +1,20054 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 11.0 (Debian 11.0-1.pgdg90+2)
+-- Dumped by pg_dump version 11.0 (Debian 11.0-1.pgdg90+2)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: car; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.car (
+    car_license_plate character varying(16) NOT NULL,
+    vin character varying(128),
+    color character varying(16),
+    car_type_id integer
+);
+
+
+ALTER TABLE public.car OWNER TO root;
+
+--
+-- Name: car_charging_log; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.car_charging_log (
+    creating_time timestamp without time zone NOT NULL,
+    price integer,
+    plug_id integer,
+    car_license_plate character varying(16) NOT NULL,
+    charging_station_id integer
+);
+
+
+ALTER TABLE public.car_charging_log OWNER TO root;
+
+--
+-- Name: car_order; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.car_order (
+    car_order_id integer NOT NULL,
+    creating_time timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    status integer DEFAULT 0,
+    cost_of_ride integer,
+    pick_up_latitide double precision,
+    pick_up_longitude double precision,
+    dist_latitide double precision,
+    dist_longitude double precision,
+    distance double precision,
+    trip_duration integer,
+    car_license_plate character varying(16),
+    customer_username character varying(32),
+    manager_username character varying(32)
+);
+
+
+ALTER TABLE public.car_order OWNER TO root;
+
+--
+-- Name: car_order_car_order_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.car_order_car_order_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.car_order_car_order_id_seq OWNER TO root;
+
+--
+-- Name: car_order_car_order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.car_order_car_order_id_seq OWNED BY public.car_order.car_order_id;
+
+
+--
+-- Name: car_part; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.car_part (
+    car_part_id integer NOT NULL,
+    part_name character varying(128),
+    car_type_id integer
+);
+
+
+ALTER TABLE public.car_part OWNER TO root;
+
+--
+-- Name: car_part_car_part_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.car_part_car_part_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.car_part_car_part_id_seq OWNER TO root;
+
+--
+-- Name: car_part_car_part_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.car_part_car_part_id_seq OWNED BY public.car_part.car_part_id;
+
+
+--
+-- Name: car_parts_order; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.car_parts_order (
+    car_parts_order_id integer NOT NULL,
+    description character varying(512),
+    status integer,
+    creating_time date,
+    amount integer,
+    car_part_id integer,
+    workshop_id integer,
+    car_parts_provider_id integer
+);
+
+
+ALTER TABLE public.car_parts_order OWNER TO root;
+
+--
+-- Name: car_parts_order_car_parts_order_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.car_parts_order_car_parts_order_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.car_parts_order_car_parts_order_id_seq OWNER TO root;
+
+--
+-- Name: car_parts_order_car_parts_order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.car_parts_order_car_parts_order_id_seq OWNED BY public.car_parts_order.car_parts_order_id;
+
+
+--
+-- Name: car_parts_provider; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.car_parts_provider (
+    provider_id integer NOT NULL,
+    name character varying(64),
+    phone_number character varying(16),
+    latitide double precision,
+    longitude double precision
+);
+
+
+ALTER TABLE public.car_parts_provider OWNER TO root;
+
+--
+-- Name: car_parts_provider_provider_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.car_parts_provider_provider_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.car_parts_provider_provider_id_seq OWNER TO root;
+
+--
+-- Name: car_parts_provider_provider_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.car_parts_provider_provider_id_seq OWNED BY public.car_parts_provider.provider_id;
+
+
+--
+-- Name: car_repairing_log; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.car_repairing_log (
+    date date NOT NULL,
+    manager_username character varying(32),
+    workshop_id integer,
+    car_license_plate character varying(16) NOT NULL,
+    broken_car_part_id integer NOT NULL
+);
+
+
+ALTER TABLE public.car_repairing_log OWNER TO root;
+
+--
+-- Name: car_type; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.car_type (
+    car_type_id integer NOT NULL,
+    brand character varying(32),
+    model character varying(32)
+);
+
+
+ALTER TABLE public.car_type OWNER TO root;
+
+--
+-- Name: car_type_car_type_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.car_type_car_type_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.car_type_car_type_id_seq OWNER TO root;
+
+--
+-- Name: car_type_car_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.car_type_car_type_id_seq OWNED BY public.car_type.car_type_id;
+
+
+--
+-- Name: catalogue_provider; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.catalogue_provider (
+    provider_id integer NOT NULL,
+    car_part_id integer NOT NULL,
+    amount_of_available integer,
+    cost double precision
+);
+
+
+ALTER TABLE public.catalogue_provider OWNER TO root;
+
+--
+-- Name: catalogue_workshop; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.catalogue_workshop (
+    workshop_id integer NOT NULL,
+    car_part_id integer NOT NULL,
+    amount_of_available integer,
+    cost double precision
+);
+
+
+ALTER TABLE public.catalogue_workshop OWNER TO root;
+
+--
+-- Name: charging_station; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.charging_station (
+    charging_station_id integer NOT NULL,
+    price double precision,
+    latitide double precision,
+    longitude double precision
+);
+
+
+ALTER TABLE public.charging_station OWNER TO root;
+
+--
+-- Name: charging_station_charging_station_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.charging_station_charging_station_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.charging_station_charging_station_id_seq OWNER TO root;
+
+--
+-- Name: charging_station_charging_station_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.charging_station_charging_station_id_seq OWNED BY public.charging_station.charging_station_id;
+
+
+--
+-- Name: charging_station_plug; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.charging_station_plug (
+    charging_station_id integer NOT NULL,
+    plug_id integer NOT NULL,
+    amount_of_available integer
+);
+
+
+ALTER TABLE public.charging_station_plug OWNER TO root;
+
+--
+-- Name: customer; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.customer (
+    phone_number character varying(16),
+    home_latitide double precision,
+    home_longitude double precision,
+    username character varying(32) NOT NULL
+);
+
+
+ALTER TABLE public.customer OWNER TO root;
+
+--
+-- Name: customer_issues; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.customer_issues (
+    issue_id integer NOT NULL,
+    status integer,
+    creating_time timestamp without time zone,
+    customer_username character varying(32),
+    manager_username character varying(32)
+);
+
+
+ALTER TABLE public.customer_issues OWNER TO root;
+
+--
+-- Name: customer_issues_issue_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.customer_issues_issue_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.customer_issues_issue_id_seq OWNER TO root;
+
+--
+-- Name: customer_issues_issue_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.customer_issues_issue_id_seq OWNED BY public.customer_issues.issue_id;
+
+
+--
+-- Name: location; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.location (
+    latitide double precision NOT NULL,
+    longitude double precision NOT NULL,
+    country character varying(32),
+    city character varying(32),
+    street character varying(64),
+    zip_code character varying(32)
+);
+
+
+ALTER TABLE public.location OWNER TO root;
+
+--
+-- Name: manager; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.manager (
+    username character varying(32) NOT NULL
+);
+
+
+ALTER TABLE public.manager OWNER TO root;
+
+--
+-- Name: payment; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.payment (
+    payment_id integer NOT NULL,
+    car_order_id integer
+);
+
+
+ALTER TABLE public.payment OWNER TO root;
+
+--
+-- Name: payment_payment_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.payment_payment_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.payment_payment_id_seq OWNER TO root;
+
+--
+-- Name: payment_payment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.payment_payment_id_seq OWNED BY public.payment.payment_id;
+
+
+--
+-- Name: plug; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.plug (
+    plug_id integer NOT NULL,
+    size integer,
+    shape character varying(32)
+);
+
+
+ALTER TABLE public.plug OWNER TO root;
+
+--
+-- Name: plug_plug_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.plug_plug_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.plug_plug_id_seq OWNER TO root;
+
+--
+-- Name: plug_plug_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.plug_plug_id_seq OWNED BY public.plug.plug_id;
+
+
+--
+-- Name: user_account; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.user_account (
+    username character varying(32) NOT NULL,
+    email character varying(32),
+    full_name character varying(64)
+);
+
+
+ALTER TABLE public.user_account OWNER TO root;
+
+--
+-- Name: workshop; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.workshop (
+    workshop_id integer NOT NULL,
+    open_time time without time zone,
+    close_time time without time zone,
+    latitide double precision,
+    longitude double precision
+);
+
+
+ALTER TABLE public.workshop OWNER TO root;
+
+--
+-- Name: workshop_workshop_id_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.workshop_workshop_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.workshop_workshop_id_seq OWNER TO root;
+
+--
+-- Name: workshop_workshop_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.workshop_workshop_id_seq OWNED BY public.workshop.workshop_id;
+
+
+--
+-- Name: car_order car_order_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_order ALTER COLUMN car_order_id SET DEFAULT nextval('public.car_order_car_order_id_seq'::regclass);
+
+
+--
+-- Name: car_part car_part_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_part ALTER COLUMN car_part_id SET DEFAULT nextval('public.car_part_car_part_id_seq'::regclass);
+
+
+--
+-- Name: car_parts_order car_parts_order_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_parts_order ALTER COLUMN car_parts_order_id SET DEFAULT nextval('public.car_parts_order_car_parts_order_id_seq'::regclass);
+
+
+--
+-- Name: car_parts_provider provider_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_parts_provider ALTER COLUMN provider_id SET DEFAULT nextval('public.car_parts_provider_provider_id_seq'::regclass);
+
+
+--
+-- Name: car_type car_type_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_type ALTER COLUMN car_type_id SET DEFAULT nextval('public.car_type_car_type_id_seq'::regclass);
+
+
+--
+-- Name: charging_station charging_station_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.charging_station ALTER COLUMN charging_station_id SET DEFAULT nextval('public.charging_station_charging_station_id_seq'::regclass);
+
+
+--
+-- Name: customer_issues issue_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.customer_issues ALTER COLUMN issue_id SET DEFAULT nextval('public.customer_issues_issue_id_seq'::regclass);
+
+
+--
+-- Name: payment payment_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.payment ALTER COLUMN payment_id SET DEFAULT nextval('public.payment_payment_id_seq'::regclass);
+
+
+--
+-- Name: plug plug_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.plug ALTER COLUMN plug_id SET DEFAULT nextval('public.plug_plug_id_seq'::regclass);
+
+
+--
+-- Name: workshop workshop_id; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.workshop ALTER COLUMN workshop_id SET DEFAULT nextval('public.workshop_workshop_id_seq'::regclass);
+
+
+--
+-- Data for Name: car; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.car (car_license_plate, vin, color, car_type_id) FROM stdin;
+MA491	F2MLA843TN7X1X15H	red	7
+NB353	VGLL3NOH9H87TSACW	white	8
+WT994	QP1PZTHCVN3ZP7NN4	brown	4
+FZ573	98EYR37HJNGJDOZM5	red	9
+UB128	C2420VGF2QI99M1P8	black	1
+SG947	XX2WULCFLYR1J2SG7	blue	8
+CZ751	WJ6Y1WYKIDAPSRRA1	brown	3
+PL420	TMERBS8PFXYWD8PC6	blue	8
+HT034	CVUTPUY0TRNUKW4TK	blue	2
+XO182	WUQI61MIMZBH6AUU7	blue	8
+IM965	WMZBLRG461AS4Y2QQ	brown	4
+RI764	WM9NLD88FJQCQXESY	white	3
+GJ528	JV8PTZLAIUTPRRULU	red	5
+EI983	UJPPXLOJPJGHFYT0H	brown	6
+QL886	EJEBISGSO8MU7IQGC	brown	7
+PB088	G3AB2UMPNFLUPSYUQ	blue	5
+GJ624	KX0KPTV24ZB0DHSGY	red	5
+IM002	9NJTQDH44IPZEQTH3	black	9
+PD533	3MXULBQWP38GVEUX1	blue	1
+AN916	IG1UKLVNI4O29VWVV	red	6
+\.
+
+
+--
+-- Data for Name: car_charging_log; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.car_charging_log (creating_time, price, plug_id, car_license_plate, charging_station_id) FROM stdin;
+2018-02-09 09:26:00	13	4	GJ528	1
+2018-01-23 21:59:00	8	3	IM002	9
+2018-02-05 21:51:00	13	3	HT034	1
+2018-01-01 06:43:00	14	8	EI983	7
+2018-01-18 18:29:00	11	9	RI764	5
+2018-02-23 12:34:00	6	3	SG947	9
+2018-02-10 03:23:00	8	4	GJ624	4
+2018-02-23 13:58:00	8	3	UB128	6
+2018-01-27 18:39:00	10	9	XO182	9
+2018-02-08 22:46:00	9	3	PB088	4
+2018-02-24 08:09:00	14	2	RI764	3
+2018-02-18 21:09:00	6	1	HT034	8
+2018-02-05 17:11:00	7	6	WT994	4
+2018-02-26 05:40:00	12	4	IM965	4
+2018-01-04 17:22:00	5	8	IM965	1
+2018-02-27 02:09:00	10	10	CZ751	7
+2018-02-26 08:49:00	5	10	UB128	1
+2018-02-25 17:12:00	7	6	NB353	8
+2018-02-18 05:08:00	12	8	XO182	8
+2018-01-16 07:09:00	12	3	UB128	5
+2018-02-25 01:35:00	10	2	HT034	6
+2018-01-27 19:20:00	13	9	UB128	9
+2018-02-06 14:45:00	13	2	SG947	4
+2018-01-02 02:50:00	12	8	WT994	1
+2018-02-01 18:02:00	8	6	PL420	1
+2018-01-25 21:47:00	6	10	SG947	2
+2018-01-13 16:21:00	13	8	PB088	9
+2018-02-19 00:24:00	6	3	PL420	8
+2018-01-12 18:07:00	11	10	FZ573	2
+2018-02-11 00:42:00	11	4	PD533	5
+2018-01-19 03:02:00	5	6	RI764	4
+2018-01-03 00:04:00	9	6	SG947	7
+2018-01-16 12:16:00	8	6	MA491	2
+2018-02-08 00:23:00	5	6	IM965	6
+2018-02-15 07:48:00	10	3	IM002	8
+2018-01-05 10:38:00	10	4	MA491	5
+2018-02-05 17:53:00	15	1	IM965	9
+2018-01-28 04:46:00	8	6	PL420	5
+2018-02-09 05:28:00	10	10	UB128	9
+2018-02-27 22:51:00	13	2	UB128	7
+2018-02-11 03:23:00	9	9	MA491	5
+2018-01-01 13:33:00	15	9	IM002	10
+2018-01-18 06:14:00	9	3	NB353	7
+2018-01-29 20:18:00	14	9	GJ624	2
+2018-02-28 05:08:00	14	10	XO182	9
+2018-02-17 05:46:00	7	6	FZ573	5
+2018-02-13 10:41:00	13	9	RI764	5
+2018-02-28 13:46:00	5	2	IM965	2
+2018-01-21 14:37:00	7	10	IM002	1
+2018-01-29 09:57:00	11	6	MA491	9
+2018-01-25 13:55:00	5	9	NB353	1
+2018-01-06 12:47:00	10	10	IM965	8
+2018-01-17 21:34:00	14	3	IM002	7
+2018-01-02 03:06:00	14	2	PD533	6
+2018-02-21 19:52:00	10	1	PB088	10
+2018-01-29 19:55:00	5	3	HT034	3
+2018-01-13 11:12:00	7	6	IM965	7
+2018-01-22 20:56:00	5	8	CZ751	9
+2018-01-10 23:04:00	14	2	IM965	3
+2018-02-26 02:45:00	10	4	PL420	2
+2018-02-12 01:07:00	13	3	IM002	5
+2018-01-25 01:15:00	6	6	MA491	5
+2018-02-01 19:50:00	10	1	GJ624	5
+2018-01-28 06:24:00	12	10	CZ751	5
+2018-01-17 12:45:00	5	8	XO182	4
+2018-02-11 19:01:00	7	8	IM002	7
+2018-01-13 21:57:00	10	9	IM002	4
+2018-01-01 14:39:00	9	2	FZ573	4
+2018-01-09 08:16:00	9	6	NB353	3
+2018-02-11 22:53:00	8	4	IM002	9
+2018-02-24 02:20:00	14	8	IM965	3
+2018-01-01 19:25:00	9	2	HT034	3
+2018-01-13 18:53:00	9	9	FZ573	4
+2018-01-15 14:15:00	12	9	WT994	7
+2018-02-07 12:35:00	14	4	IM965	6
+2018-02-17 06:40:00	14	6	MA491	7
+2018-01-02 18:45:00	11	10	NB353	7
+2018-01-20 09:56:00	8	8	GJ624	1
+2018-02-10 17:07:00	7	4	EI983	9
+2018-02-20 19:06:00	14	9	NB353	3
+2018-02-24 06:09:00	10	2	WT994	6
+2018-01-27 01:01:00	6	6	XO182	6
+2018-01-14 04:03:00	12	1	CZ751	4
+2018-01-07 08:15:00	13	9	PL420	4
+2018-01-30 23:51:00	9	8	RI764	3
+2018-01-23 23:34:00	11	4	GJ528	5
+2018-02-19 04:21:00	7	1	GJ624	5
+2018-02-05 04:12:00	10	6	WT994	3
+2018-02-10 19:13:00	12	2	MA491	7
+2018-01-23 12:46:00	11	1	FZ573	8
+2018-02-11 15:43:00	7	3	IM002	7
+2018-01-15 09:43:00	15	6	GJ528	7
+2018-02-16 07:16:00	14	3	GJ624	10
+2018-02-14 01:50:00	10	9	SG947	8
+2018-01-21 05:36:00	14	6	IM965	2
+2018-02-26 21:58:00	12	2	XO182	8
+2018-02-20 21:05:00	10	6	FZ573	1
+2018-02-28 18:18:00	14	4	IM965	5
+2018-02-26 09:29:00	6	10	HT034	7
+2018-01-27 00:06:00	10	3	PB088	2
+2018-02-17 11:17:00	9	1	PB088	7
+2018-02-21 20:53:00	15	6	IM965	7
+2018-01-17 14:03:00	14	10	WT994	3
+2018-02-23 05:06:00	6	9	UB128	6
+2018-01-19 11:28:00	11	2	EI983	8
+2018-01-31 04:21:00	9	8	IM002	6
+2018-02-13 12:58:00	15	1	EI983	8
+2018-02-28 16:08:00	13	4	NB353	2
+2018-01-02 15:18:00	5	6	PL420	10
+2018-02-22 06:45:00	6	2	GJ528	3
+2018-01-24 22:40:00	10	3	CZ751	4
+2018-01-12 22:20:00	13	4	RI764	5
+2018-01-11 20:05:00	5	8	IM002	2
+2018-01-21 10:50:00	11	3	HT034	10
+2018-01-12 08:23:00	5	9	GJ528	6
+2018-02-17 05:07:00	11	3	RI764	3
+2018-01-04 17:07:00	8	6	EI983	5
+2018-02-08 15:05:00	12	10	WT994	3
+2018-01-06 16:51:00	7	9	IM965	10
+2018-01-13 01:09:00	8	8	IM002	7
+2018-01-15 14:21:00	14	1	NB353	4
+2018-02-17 21:57:00	5	8	PL420	2
+2018-01-26 14:39:00	13	10	PL420	4
+2018-01-21 08:21:00	11	8	IM965	5
+2018-02-11 10:11:00	9	1	FZ573	7
+2018-01-19 16:38:00	15	6	PL420	2
+2018-01-02 01:33:00	13	9	RI764	2
+2018-01-28 17:14:00	15	9	HT034	4
+2018-01-16 00:38:00	11	3	XO182	7
+2018-02-07 22:59:00	13	6	FZ573	6
+2018-02-19 17:17:00	13	10	FZ573	4
+2018-02-17 17:56:00	11	8	PB088	6
+2018-01-02 22:06:00	10	10	NB353	8
+2018-02-23 13:31:00	9	10	IM002	3
+2018-02-09 08:39:00	15	4	PD533	6
+2018-01-24 05:34:00	5	1	RI764	6
+2018-02-20 04:57:00	5	1	PB088	9
+2018-01-31 22:57:00	12	2	PL420	7
+2018-01-05 16:04:00	6	10	IM002	10
+2018-02-13 08:21:00	15	8	GJ528	5
+2018-01-18 22:43:00	10	3	IM965	3
+2018-02-15 07:35:00	8	1	IM002	2
+2018-02-21 10:52:00	9	2	PD533	2
+2018-01-04 08:25:00	14	4	IM002	9
+2018-02-02 01:06:00	14	1	GJ528	10
+2018-02-20 13:16:00	15	10	RI764	6
+2018-02-04 18:42:00	12	10	PD533	10
+2018-01-25 12:34:00	10	8	NB353	4
+2018-01-07 06:52:00	8	10	IM002	8
+2018-01-31 20:53:00	15	8	QL886	4
+2018-02-27 11:45:00	8	6	EI983	10
+2018-02-04 10:04:00	9	2	IM002	8
+2018-02-19 19:18:00	5	10	EI983	8
+2018-01-10 20:13:00	9	1	FZ573	7
+2018-02-23 16:04:00	11	8	UB128	4
+2018-02-17 00:11:00	6	1	UB128	6
+2018-02-10 08:04:00	6	9	WT994	7
+2018-02-22 22:37:00	10	9	NB353	4
+2018-02-09 00:21:00	10	8	HT034	4
+2018-01-14 17:37:00	8	9	SG947	6
+2018-02-05 09:31:00	13	3	HT034	5
+2018-01-18 01:39:00	8	8	PD533	5
+2018-01-08 03:17:00	8	3	XO182	7
+2018-02-18 20:56:00	12	1	NB353	3
+2018-02-10 06:38:00	12	9	GJ624	4
+2018-02-27 00:54:00	10	8	EI983	10
+2018-01-20 06:00:00	15	10	PD533	4
+2018-01-28 05:17:00	7	9	PL420	6
+2018-01-22 18:58:00	13	4	RI764	8
+2018-02-21 12:40:00	12	3	UB128	9
+2018-02-09 17:00:00	14	10	CZ751	1
+2018-02-08 00:20:00	10	4	PB088	3
+2018-02-19 08:43:00	5	8	CZ751	5
+2018-02-28 14:38:00	10	8	QL886	10
+2018-02-20 01:02:00	10	4	XO182	7
+2018-02-17 06:56:00	11	3	EI983	4
+2018-02-05 08:13:00	12	10	RI764	8
+2018-02-11 15:07:00	7	10	XO182	6
+2018-01-29 19:03:00	8	9	EI983	3
+2018-01-23 20:47:00	5	4	PB088	8
+2018-01-26 02:23:00	6	8	FZ573	9
+2018-02-09 06:20:00	11	1	EI983	1
+2018-01-28 15:24:00	14	8	PB088	8
+2018-01-04 23:42:00	15	3	CZ751	2
+2018-02-24 19:30:00	9	6	PB088	3
+2018-02-12 22:38:00	9	9	PB088	2
+2018-01-01 20:02:00	8	6	EI983	1
+2018-01-17 14:44:00	7	1	PB088	4
+2018-01-16 15:37:00	15	1	WT994	10
+2018-02-07 14:29:00	10	1	RI764	8
+2018-02-16 02:09:00	15	3	PD533	8
+2018-01-07 06:52:00	12	3	XO182	8
+2018-01-13 02:16:00	9	2	MA491	9
+2018-01-16 19:36:00	10	10	NB353	9
+2018-01-31 02:53:00	6	9	QL886	4
+2018-02-05 12:05:00	7	1	PD533	3
+2018-01-28 04:14:00	12	2	GJ624	5
+2018-02-14 08:00:00	14	6	QL886	2
+2018-02-25 07:31:00	6	6	IM002	9
+2018-02-14 04:14:00	12	2	IM002	2
+2018-01-04 05:21:00	14	4	IM965	7
+2018-01-28 17:28:00	15	9	HT034	6
+2018-01-05 10:41:00	5	4	GJ528	6
+2018-02-26 01:22:00	7	6	GJ624	4
+2018-02-08 13:24:00	5	6	PB088	9
+2018-01-31 12:03:00	13	9	GJ624	7
+2018-02-04 13:24:00	9	4	UB128	9
+2018-01-06 02:21:00	12	8	UB128	2
+2018-01-06 03:11:00	8	4	UB128	7
+2018-02-23 00:12:00	10	6	HT034	8
+2018-02-27 10:51:00	12	9	UB128	8
+2018-01-29 15:52:00	7	1	UB128	1
+2018-01-31 07:32:00	8	9	CZ751	3
+2018-02-21 07:54:00	13	1	PB088	8
+2018-01-18 18:40:00	12	2	PD533	9
+2018-01-22 21:12:00	5	8	PL420	10
+2018-02-14 06:17:00	10	8	IM002	2
+2018-01-25 18:00:00	9	1	PB088	2
+2018-02-01 16:51:00	8	6	IM965	2
+2018-01-27 00:06:00	6	9	QL886	2
+2018-01-25 07:53:00	8	4	IM002	10
+2018-01-03 13:01:00	5	4	NB353	8
+2018-01-24 17:27:00	5	10	GJ528	7
+2018-02-11 05:58:00	15	4	GJ624	1
+2018-01-08 03:19:00	13	3	EI983	5
+2018-02-03 18:12:00	10	2	IM002	4
+2018-01-19 21:50:00	13	3	RI764	5
+2018-02-17 22:52:00	12	10	UB128	1
+2018-02-02 22:33:00	5	1	PB088	7
+2018-01-01 14:08:00	10	9	IM002	4
+2018-01-26 12:33:00	11	2	GJ528	5
+2018-02-20 07:10:00	13	2	FZ573	8
+2018-02-10 00:20:00	9	6	EI983	7
+2018-01-22 03:04:00	7	2	CZ751	1
+2018-02-16 17:27:00	5	9	QL886	8
+2018-01-01 12:36:00	9	6	QL886	6
+2018-01-13 12:42:00	9	8	XO182	10
+2018-01-18 06:12:00	10	4	PD533	9
+2018-01-26 05:40:00	8	2	FZ573	1
+2018-01-08 08:29:00	12	3	CZ751	4
+2018-02-25 16:21:00	8	10	PB088	6
+2018-01-12 00:17:00	8	6	RI764	1
+2018-01-13 19:24:00	6	8	IM965	7
+2018-01-03 07:40:00	13	9	GJ624	8
+2018-02-02 08:05:00	7	8	PL420	4
+2018-01-16 15:21:00	5	10	PB088	2
+2018-02-27 11:33:00	7	2	XO182	3
+2018-02-05 22:02:00	7	8	RI764	5
+2018-01-28 17:20:00	7	1	UB128	6
+2018-02-26 04:57:00	7	1	XO182	3
+2018-01-30 17:15:00	5	6	NB353	4
+2018-02-03 03:45:00	9	10	MA491	8
+2018-02-01 15:58:00	6	10	WT994	5
+2018-01-07 03:08:00	7	9	EI983	6
+2018-02-02 01:10:00	13	6	MA491	10
+2018-01-02 01:48:00	5	4	FZ573	3
+2018-01-12 09:13:00	15	4	HT034	2
+2018-02-11 06:11:00	10	10	RI764	10
+2018-01-04 18:24:00	7	9	EI983	2
+2018-01-25 18:33:00	10	2	HT034	9
+2018-02-14 22:06:00	10	1	PD533	2
+2018-02-04 01:59:00	9	4	XO182	4
+2018-01-17 20:26:00	12	10	IM002	5
+2018-02-03 08:07:00	8	10	XO182	7
+2018-01-22 18:19:00	6	8	HT034	3
+2018-01-18 10:54:00	15	3	EI983	7
+2018-01-16 08:34:00	9	4	XO182	6
+2018-02-05 03:24:00	15	9	FZ573	9
+2018-02-08 10:51:00	13	10	PL420	8
+2018-02-09 07:22:00	6	8	HT034	4
+2018-02-16 09:59:00	9	6	PB088	3
+2018-02-14 19:36:00	7	9	XO182	2
+2018-02-01 13:44:00	7	3	PB088	1
+2018-01-15 03:23:00	11	2	IM965	1
+2018-01-18 01:33:00	10	4	PL420	1
+2018-02-16 19:10:00	13	4	EI983	5
+2018-02-16 14:39:00	11	10	QL886	9
+2018-01-02 20:32:00	10	1	PL420	10
+2018-02-17 17:59:00	11	3	GJ528	6
+2018-01-02 19:06:00	8	10	SG947	3
+2018-02-07 12:03:00	12	10	WT994	9
+2018-01-14 02:08:00	9	2	XO182	10
+2018-01-23 00:32:00	7	8	PB088	2
+2018-02-14 15:19:00	5	10	IM965	9
+2018-02-20 09:58:00	14	9	CZ751	6
+2018-01-17 17:49:00	13	8	UB128	9
+2018-02-20 14:01:00	13	4	EI983	8
+2018-02-27 17:32:00	14	1	PD533	3
+2018-02-02 21:09:00	12	1	PL420	10
+2018-01-10 07:28:00	15	8	RI764	10
+2018-01-22 17:08:00	10	9	GJ624	1
+2018-02-03 13:47:00	7	8	PB088	7
+2018-02-07 06:40:00	5	8	UB128	9
+2018-01-18 16:17:00	14	8	PB088	8
+2018-01-30 03:57:00	12	6	IM002	5
+2018-02-25 13:29:00	5	9	XO182	9
+2018-01-21 11:35:00	10	2	GJ624	5
+2018-02-09 14:42:00	9	3	WT994	5
+2018-02-28 20:12:00	6	9	EI983	2
+2018-02-01 03:45:00	8	1	IM002	8
+2018-02-12 14:08:00	15	3	IM002	2
+2018-02-02 12:32:00	5	2	EI983	4
+2018-01-15 14:27:00	11	6	FZ573	4
+2018-02-11 12:52:00	15	2	WT994	9
+2018-01-27 23:02:00	14	6	EI983	1
+2018-02-26 17:50:00	14	6	IM002	6
+2018-02-22 04:57:00	15	8	UB128	6
+2018-02-12 17:38:00	13	4	RI764	2
+2018-02-18 02:23:00	13	9	PL420	2
+2018-01-25 09:00:00	6	10	PL420	1
+2018-02-10 04:44:00	6	4	CZ751	9
+2018-01-17 09:52:00	7	10	QL886	8
+2018-02-26 14:55:00	14	10	PD533	10
+2018-01-23 15:58:00	13	1	NB353	9
+2018-02-18 00:19:00	13	8	IM002	5
+2018-02-20 09:23:00	10	8	RI764	8
+2018-01-09 19:36:00	11	9	IM002	3
+2018-02-25 12:03:00	12	8	PD533	7
+2018-02-04 14:28:00	8	2	CZ751	1
+2018-01-02 09:56:00	6	1	PD533	6
+2018-01-21 11:07:00	6	3	GJ528	8
+2018-02-08 07:23:00	11	1	CZ751	8
+2018-02-14 18:15:00	9	10	GJ624	3
+2018-02-08 23:33:00	14	8	HT034	3
+2018-02-28 12:36:00	11	4	HT034	1
+2018-01-24 18:12:00	5	1	PD533	8
+2018-02-13 19:05:00	6	3	QL886	10
+2018-02-23 18:30:00	6	1	NB353	1
+2018-02-20 04:33:00	6	2	WT994	2
+2018-01-16 20:35:00	8	6	RI764	7
+2018-02-26 03:52:00	8	1	GJ528	3
+2018-01-13 17:06:00	7	6	SG947	1
+2018-02-16 11:31:00	11	6	UB128	2
+2018-01-07 03:04:00	10	1	FZ573	2
+2018-02-03 20:02:00	8	3	UB128	6
+2018-02-27 11:40:00	6	8	CZ751	10
+2018-02-28 00:40:00	7	8	XO182	3
+2018-01-20 08:51:00	15	9	HT034	10
+2018-01-31 10:19:00	12	6	IM965	3
+2018-01-04 18:01:00	7	4	SG947	9
+2018-01-14 19:14:00	8	4	EI983	9
+2018-02-16 11:07:00	14	4	IM965	2
+2018-02-17 14:14:00	8	3	FZ573	9
+2018-01-11 06:37:00	11	8	RI764	2
+2018-02-11 16:39:00	14	10	PL420	3
+2018-02-13 19:39:00	9	8	PB088	4
+2018-02-12 10:16:00	9	2	SG947	7
+2018-02-21 05:27:00	15	9	FZ573	2
+2018-01-07 07:43:00	13	9	UB128	4
+2018-02-19 13:28:00	9	2	NB353	2
+2018-01-27 02:25:00	6	10	XO182	5
+2018-02-03 19:08:00	8	9	XO182	10
+2018-01-02 22:02:00	5	8	FZ573	2
+2018-02-24 22:59:00	10	10	HT034	6
+2018-02-25 12:52:00	15	9	PD533	6
+2018-02-08 08:04:00	12	4	XO182	1
+2018-02-28 16:14:00	5	6	XO182	7
+2018-02-01 14:19:00	5	4	PB088	8
+2018-02-17 10:07:00	6	10	HT034	5
+2018-01-28 13:57:00	9	10	IM965	5
+2018-02-06 16:23:00	11	4	HT034	5
+2018-01-06 03:55:00	13	4	PB088	8
+2018-02-28 21:20:00	5	4	IM002	9
+2018-01-27 15:44:00	5	3	XO182	2
+2018-01-29 12:17:00	15	4	UB128	9
+2018-02-12 05:58:00	10	6	QL886	2
+2018-02-02 10:45:00	15	2	MA491	3
+2018-01-08 07:45:00	15	2	UB128	4
+2018-01-15 19:36:00	9	2	QL886	1
+2018-01-19 13:33:00	8	6	QL886	5
+2018-02-24 06:56:00	7	1	WT994	8
+2018-01-02 22:34:00	11	10	QL886	5
+2018-02-19 12:31:00	12	10	MA491	1
+2018-02-02 16:05:00	13	2	PB088	1
+2018-02-15 05:13:00	10	9	PB088	7
+2018-02-21 07:50:00	5	2	SG947	5
+2018-01-18 10:27:00	12	1	UB128	6
+2018-01-17 22:32:00	5	3	HT034	6
+2018-01-02 16:42:00	15	4	IM002	2
+2018-01-12 12:50:00	13	9	GJ528	2
+2018-02-07 14:05:00	7	9	IM965	10
+2018-01-29 18:19:00	13	8	GJ624	7
+2018-01-21 11:14:00	15	9	XO182	2
+2018-02-21 06:43:00	12	10	FZ573	7
+2018-01-24 08:34:00	6	1	PD533	1
+2018-01-31 21:06:00	14	6	SG947	1
+2018-01-11 03:12:00	8	6	GJ624	8
+2018-01-28 22:36:00	15	9	GJ624	1
+2018-01-19 02:21:00	7	8	QL886	3
+2018-02-02 12:52:00	12	10	CZ751	2
+2018-02-01 05:20:00	10	6	NB353	3
+2018-01-25 16:32:00	13	8	NB353	5
+2018-01-19 13:22:00	6	3	HT034	10
+2018-02-05 15:46:00	5	8	HT034	1
+2018-01-31 03:12:00	12	3	PD533	8
+2018-02-22 19:15:00	11	2	GJ624	10
+2018-01-25 17:56:00	8	4	QL886	1
+2018-01-04 09:23:00	8	1	GJ624	2
+2018-02-12 04:47:00	15	10	WT994	3
+2018-02-09 13:38:00	13	9	IM965	4
+2018-02-19 13:28:00	12	10	HT034	10
+2018-01-10 07:47:00	13	10	IM965	2
+2018-02-06 21:59:00	12	4	NB353	3
+2018-02-06 16:36:00	14	1	PL420	8
+2018-02-14 09:29:00	8	8	SG947	1
+2018-02-14 06:35:00	7	6	FZ573	4
+2018-01-23 18:44:00	13	6	MA491	2
+2018-02-15 03:24:00	8	4	XO182	10
+2018-01-04 01:26:00	5	1	QL886	5
+2018-01-18 15:55:00	8	6	UB128	8
+2018-01-17 16:04:00	6	3	UB128	8
+2018-02-23 13:30:00	7	8	WT994	4
+2018-01-20 18:32:00	9	4	SG947	2
+2018-01-17 09:52:00	13	2	GJ528	9
+2018-02-22 22:00:00	9	4	GJ624	9
+2018-01-02 23:31:00	9	4	FZ573	8
+2018-01-13 20:32:00	10	4	QL886	3
+2018-02-20 21:58:00	13	3	XO182	7
+2018-01-24 05:17:00	5	9	UB128	5
+2018-02-14 06:47:00	14	9	EI983	9
+2018-01-28 22:32:00	10	10	PD533	10
+2018-01-18 05:14:00	11	2	UB128	9
+2018-01-28 13:54:00	5	1	GJ624	5
+2018-02-03 05:08:00	11	2	UB128	4
+2018-01-25 13:55:00	7	1	GJ528	7
+2018-01-01 12:07:00	7	8	PB088	2
+2018-01-25 23:47:00	5	1	GJ624	1
+2018-01-08 07:53:00	8	3	MA491	2
+2018-01-05 13:44:00	10	8	RI764	7
+2018-02-16 08:51:00	8	10	XO182	7
+2018-01-02 21:15:00	13	3	WT994	9
+2018-02-27 02:38:00	11	2	IM002	4
+2018-01-21 19:10:00	9	4	IM002	1
+2018-01-08 00:19:00	6	4	RI764	2
+2018-02-18 19:27:00	15	4	PD533	7
+2018-02-12 23:41:00	14	1	PD533	1
+2018-01-12 14:51:00	13	10	CZ751	3
+2018-02-23 03:34:00	12	2	GJ624	4
+2018-02-26 02:59:00	11	3	NB353	10
+2018-02-22 21:23:00	13	8	PD533	10
+2018-01-25 06:18:00	15	10	WT994	1
+2018-02-20 20:53:00	14	4	FZ573	2
+2018-01-01 19:17:00	6	9	CZ751	7
+2018-01-05 03:39:00	14	6	PD533	3
+2018-01-20 22:04:00	12	6	PB088	4
+2018-02-23 03:25:00	10	3	GJ624	10
+2018-01-25 22:10:00	12	4	PB088	6
+2018-02-21 18:47:00	14	9	GJ528	1
+2018-01-27 08:06:00	8	10	SG947	2
+2018-01-04 22:20:00	6	4	PD533	9
+2018-02-28 11:06:00	14	10	IM965	6
+2018-02-09 09:16:00	12	10	PB088	8
+2018-01-10 16:17:00	6	8	PL420	9
+2018-01-10 19:17:00	14	4	PD533	2
+2018-01-02 19:38:00	8	8	PD533	3
+2018-02-25 02:50:00	7	1	NB353	6
+2018-01-28 14:21:00	13	6	IM965	9
+2018-02-10 22:41:00	9	1	PB088	5
+2018-02-17 20:25:00	12	2	IM965	5
+2018-02-19 00:02:00	13	9	WT994	5
+2018-01-25 21:43:00	9	2	GJ624	5
+2018-02-19 22:36:00	8	3	HT034	5
+2018-01-16 04:31:00	5	6	PL420	1
+2018-01-02 22:32:00	10	4	RI764	6
+2018-01-15 11:04:00	13	2	HT034	3
+2018-01-08 10:59:00	8	1	EI983	1
+2018-01-11 18:58:00	14	4	QL886	10
+2018-02-06 04:11:00	11	8	IM965	10
+2018-02-01 19:31:00	7	3	PL420	6
+2018-01-23 13:35:00	9	4	NB353	8
+2018-02-28 23:23:00	8	4	NB353	5
+2018-01-19 18:11:00	5	2	EI983	6
+2018-02-01 03:50:00	8	2	FZ573	8
+2018-01-19 21:53:00	14	10	QL886	9
+2018-02-03 17:54:00	7	8	GJ528	4
+2018-01-13 09:41:00	8	9	PD533	1
+2018-01-31 01:04:00	8	9	CZ751	10
+2018-01-12 21:22:00	15	1	SG947	1
+2018-01-28 00:16:00	10	9	PL420	8
+2018-02-03 16:55:00	7	6	QL886	5
+2018-01-04 23:02:00	10	4	XO182	1
+2018-01-03 20:04:00	11	1	HT034	4
+2018-02-06 05:28:00	7	8	XO182	2
+2018-01-13 11:17:00	15	9	EI983	6
+2018-01-15 23:06:00	6	6	MA491	7
+2018-02-09 07:29:00	14	3	EI983	4
+2018-02-13 03:57:00	11	2	MA491	5
+2018-01-29 22:07:00	15	2	IM965	2
+2018-02-10 10:26:00	7	2	FZ573	9
+2018-02-02 06:38:00	13	2	MA491	5
+2018-01-16 12:16:00	11	3	WT994	3
+2018-01-06 07:47:00	13	4	IM002	2
+2018-01-05 00:52:00	14	6	RI764	9
+2018-01-01 17:48:00	9	3	EI983	6
+2018-01-26 21:24:00	8	10	XO182	5
+2018-01-05 10:59:00	8	4	HT034	10
+2018-02-11 00:02:00	12	9	HT034	4
+2018-02-16 07:49:00	5	1	HT034	10
+2018-01-28 19:55:00	6	8	PL420	5
+2018-01-14 03:35:00	6	6	CZ751	3
+2018-02-12 03:40:00	5	3	GJ528	4
+2018-02-08 01:24:00	8	1	FZ573	2
+2018-02-25 16:53:00	12	10	MA491	6
+2018-02-22 20:04:00	10	9	GJ528	4
+2018-02-25 12:40:00	14	9	PD533	10
+2018-01-13 07:49:00	15	2	EI983	3
+2018-01-07 09:46:00	13	3	NB353	3
+2018-01-18 14:14:00	5	10	EI983	9
+2018-02-06 07:52:00	5	4	QL886	7
+2018-01-28 15:14:00	9	2	SG947	5
+2018-01-27 19:48:00	5	3	IM002	3
+2018-01-26 00:52:00	9	2	RI764	6
+2018-01-19 07:06:00	10	4	XO182	3
+2018-01-19 04:10:00	9	6	WT994	2
+2018-02-06 17:36:00	14	8	SG947	9
+2018-02-14 01:57:00	14	6	MA491	8
+2018-02-06 14:30:00	7	1	UB128	1
+2018-02-22 13:28:00	6	10	SG947	5
+2018-01-19 12:47:00	14	6	GJ624	5
+2018-02-15 05:44:00	11	8	RI764	10
+2018-01-31 05:00:00	12	1	PB088	5
+2018-02-25 04:26:00	8	10	IM002	9
+2018-02-21 04:28:00	7	10	SG947	6
+2018-01-24 16:57:00	7	4	IM002	6
+2018-02-08 16:28:00	11	4	QL886	9
+2018-02-15 02:45:00	11	10	XO182	8
+2018-01-02 16:09:00	11	6	UB128	4
+2018-01-22 21:30:00	15	2	FZ573	9
+2018-01-05 21:40:00	10	10	RI764	5
+2018-02-06 01:01:00	9	1	RI764	3
+2018-01-22 16:38:00	6	10	WT994	1
+2018-01-09 18:54:00	15	10	WT994	3
+2018-01-29 00:17:00	6	9	CZ751	10
+2018-02-12 11:37:00	14	9	PD533	10
+2018-01-04 20:10:00	15	10	IM965	8
+2018-02-20 16:54:00	6	4	WT994	9
+2018-01-22 13:07:00	15	10	CZ751	9
+2018-01-29 18:56:00	7	1	IM002	7
+2018-02-06 18:40:00	5	8	PB088	1
+2018-01-23 12:36:00	10	4	IM965	5
+2018-01-20 13:53:00	13	4	GJ528	6
+2018-01-25 16:24:00	10	6	XO182	6
+2018-01-19 05:43:00	6	1	WT994	3
+2018-02-24 15:36:00	14	1	PL420	9
+2018-02-07 22:46:00	8	1	MA491	3
+2018-01-23 07:17:00	14	2	SG947	8
+2018-01-12 01:17:00	5	10	UB128	3
+2018-02-01 12:13:00	12	4	WT994	4
+2018-01-22 05:49:00	6	3	HT034	6
+2018-02-02 20:54:00	10	2	HT034	7
+2018-01-31 22:18:00	15	10	QL886	3
+2018-02-25 14:34:00	5	2	QL886	4
+2018-02-06 18:21:00	9	4	RI764	3
+2018-01-10 00:07:00	13	4	WT994	6
+2018-01-11 13:22:00	12	10	IM965	10
+2018-02-02 04:40:00	10	8	PL420	9
+2018-02-07 18:56:00	5	1	XO182	10
+2018-02-15 15:30:00	10	1	QL886	2
+2018-02-03 11:04:00	9	2	IM002	1
+2018-02-01 10:35:00	12	8	UB128	7
+2018-02-10 18:52:00	7	2	PD533	9
+2018-01-12 08:54:00	11	1	UB128	5
+2018-01-26 14:01:00	6	2	XO182	4
+2018-01-16 06:42:00	5	8	GJ624	3
+2018-01-06 15:18:00	15	3	MA491	9
+2018-02-19 17:31:00	15	4	CZ751	8
+2018-01-22 07:50:00	14	10	UB128	4
+2018-01-26 07:55:00	12	6	PD533	10
+2018-02-26 04:20:00	6	10	PD533	9
+2018-01-09 16:39:00	5	8	NB353	5
+2018-02-26 12:54:00	15	9	SG947	8
+2018-01-14 03:14:00	11	4	PD533	3
+2018-01-10 16:42:00	6	8	WT994	3
+2018-01-25 05:20:00	14	9	GJ528	9
+2018-01-13 17:16:00	6	4	XO182	9
+2018-02-12 08:32:00	9	3	CZ751	9
+2018-02-26 08:37:00	6	2	IM965	3
+2018-01-17 06:35:00	9	9	PB088	7
+2018-02-13 07:31:00	12	8	SG947	9
+2018-01-17 10:12:00	9	9	FZ573	5
+2018-02-01 02:11:00	11	6	PB088	4
+2018-02-05 15:17:00	14	1	NB353	8
+2018-02-17 21:35:00	9	8	IM002	8
+2018-01-31 16:48:00	10	1	HT034	10
+2018-01-12 04:34:00	10	4	GJ624	7
+2018-01-03 22:38:00	14	9	PD533	1
+2018-02-09 03:47:00	15	4	SG947	4
+2018-02-08 07:55:00	5	2	GJ624	4
+2018-02-21 17:31:00	8	8	HT034	6
+2018-02-02 09:50:00	5	2	UB128	2
+2018-02-27 07:15:00	15	10	FZ573	6
+2018-02-21 00:33:00	15	3	RI764	6
+2018-02-26 18:05:00	11	1	NB353	3
+2018-02-20 10:43:00	12	6	IM002	6
+2018-02-05 04:42:00	7	2	XO182	10
+2018-02-15 01:57:00	7	2	GJ624	10
+2018-01-05 09:33:00	9	3	NB353	2
+2018-02-05 09:20:00	13	1	FZ573	1
+2018-01-24 07:38:00	8	10	PB088	7
+2018-01-14 14:41:00	8	4	MA491	4
+2018-01-04 20:04:00	12	9	FZ573	7
+2018-02-21 12:01:00	8	10	NB353	5
+2018-02-22 05:30:00	6	4	FZ573	1
+2018-02-15 07:22:00	8	6	GJ528	9
+2018-02-12 19:27:00	7	4	RI764	3
+2018-02-12 05:45:00	9	9	WT994	2
+2018-01-16 07:10:00	15	9	QL886	7
+2018-02-13 18:59:00	8	3	MA491	7
+2018-02-28 02:46:00	5	4	UB128	9
+2018-01-30 09:28:00	10	1	PL420	9
+2018-02-14 05:04:00	7	10	XO182	5
+2018-01-26 15:19:00	7	3	CZ751	10
+2018-02-19 07:38:00	7	1	RI764	1
+2018-01-04 09:21:00	8	3	XO182	10
+2018-01-20 18:37:00	13	10	GJ528	4
+2018-01-21 06:59:00	6	2	PB088	10
+2018-02-19 18:05:00	9	1	CZ751	7
+2018-02-28 22:07:00	8	3	NB353	1
+2018-01-27 21:29:00	13	8	EI983	1
+2018-02-26 09:51:00	6	10	SG947	5
+2018-01-08 05:16:00	13	10	PD533	4
+2018-02-10 10:43:00	13	4	HT034	9
+2018-01-15 04:34:00	14	9	MA491	7
+2018-02-27 12:29:00	8	10	RI764	5
+2018-01-23 08:46:00	9	2	RI764	2
+2018-01-09 05:58:00	6	4	WT994	5
+2018-02-09 13:47:00	5	1	GJ528	8
+2018-02-19 22:32:00	14	2	IM965	1
+2018-01-03 09:17:00	6	8	PD533	6
+2018-02-28 17:34:00	11	2	MA491	9
+2018-01-19 19:47:00	10	8	MA491	1
+2018-02-03 02:10:00	13	2	PB088	2
+2018-01-30 10:09:00	12	6	PL420	4
+2018-02-11 08:44:00	8	9	HT034	9
+2018-01-02 13:36:00	14	9	UB128	7
+2018-01-06 23:30:00	13	1	WT994	4
+2018-02-07 17:48:00	13	2	IM002	1
+2018-02-07 12:05:00	15	4	PB088	3
+2018-01-18 17:14:00	14	8	PD533	8
+2018-02-20 04:16:00	12	9	HT034	10
+2018-01-12 03:44:00	15	10	UB128	10
+2018-01-22 17:30:00	11	4	FZ573	9
+2018-01-17 15:21:00	13	8	GJ624	3
+2018-02-16 21:20:00	5	8	IM002	3
+2018-01-15 02:33:00	14	2	FZ573	3
+2018-02-07 08:50:00	13	6	PD533	8
+2018-01-13 00:31:00	8	1	HT034	10
+2018-01-30 04:10:00	11	9	GJ528	9
+2018-01-15 15:24:00	12	10	PB088	9
+2018-01-27 01:51:00	14	8	NB353	1
+2018-02-05 05:37:00	9	10	XO182	7
+2018-01-28 23:56:00	7	10	GJ624	2
+2018-01-08 03:57:00	15	1	IM965	10
+2018-02-26 19:44:00	14	1	GJ528	10
+2018-01-31 09:58:00	14	3	RI764	6
+2018-02-02 14:24:00	8	3	IM965	7
+2018-02-24 04:51:00	15	9	IM965	1
+2018-01-30 18:36:00	6	3	CZ751	1
+2018-02-22 20:34:00	14	4	HT034	2
+2018-02-07 17:26:00	11	6	QL886	3
+2018-01-16 20:06:00	11	8	RI764	1
+2018-01-07 15:29:00	12	3	WT994	4
+2018-01-13 03:01:00	15	1	SG947	2
+2018-01-28 14:43:00	7	2	IM002	8
+2018-02-24 05:18:00	10	4	UB128	7
+2018-02-09 10:28:00	11	3	FZ573	9
+2018-02-18 14:35:00	8	1	GJ528	3
+2018-01-08 10:05:00	15	4	WT994	4
+2018-01-28 12:07:00	11	3	SG947	1
+2018-01-07 09:38:00	15	4	NB353	1
+2018-01-31 04:35:00	13	4	MA491	4
+2018-01-09 12:53:00	14	4	RI764	4
+2018-01-24 10:29:00	11	3	PD533	8
+2018-02-20 18:45:00	14	6	XO182	7
+2018-02-09 18:38:00	11	9	FZ573	3
+2018-02-17 01:23:00	15	9	NB353	5
+2018-01-13 08:57:00	8	6	SG947	5
+2018-01-10 16:26:00	7	10	NB353	1
+2018-02-08 22:02:00	14	3	XO182	2
+2018-02-12 13:51:00	11	10	XO182	9
+2018-02-26 18:01:00	10	8	PD533	2
+2018-01-08 20:16:00	8	8	IM965	4
+2018-01-14 15:49:00	8	9	PD533	2
+2018-01-04 19:15:00	8	10	SG947	8
+2018-02-20 20:32:00	5	1	XO182	3
+2018-01-30 20:00:00	5	9	QL886	9
+2018-02-15 04:52:00	11	2	WT994	3
+2018-02-17 20:57:00	15	3	PL420	4
+2018-02-23 14:38:00	8	10	XO182	6
+2018-02-02 17:03:00	8	8	NB353	7
+2018-01-05 12:03:00	10	6	IM965	8
+2018-02-06 05:47:00	11	8	PD533	1
+2018-02-15 18:28:00	12	3	QL886	9
+2018-02-14 04:03:00	6	8	GJ528	10
+2018-02-02 09:26:00	8	10	PB088	1
+2018-02-14 08:49:00	6	2	CZ751	2
+2018-01-13 20:49:00	13	9	FZ573	2
+2018-02-18 17:47:00	13	4	NB353	5
+2018-02-06 13:49:00	7	3	GJ528	7
+2018-01-10 05:25:00	14	4	SG947	4
+2018-02-06 21:24:00	9	10	QL886	3
+2018-01-10 14:45:00	15	10	IM002	3
+2018-02-10 11:50:00	13	2	RI764	3
+2018-01-07 12:26:00	13	6	UB128	8
+2018-02-12 16:57:00	14	8	IM965	4
+2018-02-21 14:50:00	15	6	FZ573	3
+2018-01-22 08:48:00	9	6	FZ573	6
+2018-02-23 14:43:00	13	8	EI983	3
+2018-02-21 18:48:00	11	10	PL420	1
+2018-02-18 21:55:00	13	1	PB088	1
+2018-02-01 13:04:00	7	2	WT994	4
+2018-01-10 09:03:00	5	10	IM965	2
+2018-01-21 11:02:00	12	9	CZ751	3
+2018-02-27 23:58:00	10	6	CZ751	8
+2018-02-10 04:47:00	10	6	PL420	8
+2018-01-12 11:52:00	5	9	PB088	4
+2018-02-19 16:16:00	13	8	PD533	6
+2018-01-29 09:53:00	11	9	IM002	8
+2018-01-12 07:30:00	8	3	NB353	2
+2018-01-10 05:40:00	9	3	PL420	9
+2018-02-09 09:32:00	7	4	XO182	9
+2018-02-10 00:32:00	13	6	QL886	9
+2018-02-08 18:08:00	9	8	XO182	1
+2018-02-17 23:21:00	14	9	CZ751	6
+2018-02-01 23:14:00	11	10	UB128	4
+2018-01-08 06:20:00	10	9	QL886	1
+2018-02-24 18:43:00	13	10	PL420	2
+2018-01-26 15:25:00	10	4	SG947	5
+2018-01-07 23:47:00	9	1	XO182	5
+2018-01-21 10:52:00	11	4	UB128	6
+2018-02-28 10:45:00	7	10	PL420	9
+2018-01-02 02:44:00	13	9	NB353	2
+2018-01-23 22:46:00	5	3	WT994	2
+2018-01-15 21:14:00	10	10	UB128	8
+2018-01-11 06:21:00	7	1	QL886	5
+2018-02-13 08:46:00	12	6	PL420	7
+2018-01-08 04:10:00	9	10	IM002	2
+2018-02-28 03:29:00	14	3	RI764	6
+2018-01-10 08:53:00	13	10	PL420	5
+2018-02-03 15:02:00	9	9	GJ624	2
+2018-01-02 17:52:00	15	2	IM002	2
+2018-01-14 23:24:00	15	10	PB088	5
+2018-01-22 22:33:00	12	3	SG947	5
+2018-02-07 11:57:00	10	1	MA491	9
+2018-02-15 20:44:00	11	10	PD533	2
+2018-02-27 02:55:00	13	4	IM002	1
+2018-02-02 01:30:00	15	3	IM002	8
+2018-01-18 05:32:00	7	8	IM002	7
+2018-02-14 21:00:00	9	3	CZ751	5
+2018-01-19 21:28:00	9	3	FZ573	1
+2018-01-24 07:42:00	8	9	CZ751	4
+2018-01-19 23:44:00	14	2	GJ624	7
+2018-02-21 18:13:00	9	6	GJ624	5
+2018-02-04 19:00:00	6	2	UB128	6
+2018-02-25 07:32:00	8	4	PD533	9
+2018-02-10 16:24:00	13	8	CZ751	4
+2018-01-13 01:18:00	5	4	QL886	10
+2018-02-07 11:07:00	11	8	IM002	1
+2018-02-01 02:20:00	12	8	EI983	10
+2018-02-24 11:42:00	11	3	PD533	3
+2018-01-29 00:35:00	10	10	RI764	10
+2018-02-10 23:48:00	6	4	WT994	1
+2018-01-25 10:45:00	9	2	RI764	8
+2018-02-27 03:22:00	9	6	QL886	7
+2018-01-23 07:44:00	12	2	EI983	4
+2018-02-02 12:27:00	13	8	WT994	5
+2018-01-17 22:47:00	11	9	WT994	1
+2018-01-25 22:24:00	9	6	SG947	9
+2018-01-29 18:30:00	11	1	PD533	6
+2018-01-20 19:53:00	13	2	WT994	8
+2018-02-21 12:44:00	9	1	NB353	8
+2018-02-05 15:57:00	10	10	GJ528	4
+2018-02-19 09:16:00	15	2	UB128	4
+2018-02-03 16:42:00	13	3	GJ528	9
+2018-01-17 04:55:00	7	2	PL420	5
+2018-02-10 16:19:00	11	4	NB353	6
+2018-01-06 10:58:00	6	1	EI983	9
+2018-01-17 10:51:00	9	1	NB353	7
+2018-01-04 03:02:00	10	4	PD533	9
+2018-02-04 21:16:00	14	10	XO182	1
+2018-01-30 11:10:00	5	10	RI764	2
+2018-01-05 18:04:00	7	8	EI983	7
+2018-02-11 18:31:00	6	2	UB128	5
+2018-02-24 05:07:00	9	3	PB088	1
+2018-01-15 07:38:00	8	3	IM965	6
+2018-01-22 10:26:00	8	6	XO182	5
+2018-01-08 19:31:00	13	2	FZ573	9
+2018-02-03 04:09:00	15	1	HT034	4
+2018-02-20 01:37:00	9	9	XO182	10
+2018-02-13 22:15:00	12	6	WT994	6
+2018-01-13 15:19:00	5	6	MA491	1
+2018-02-27 10:01:00	10	10	QL886	5
+2018-02-27 03:47:00	11	10	UB128	10
+2018-01-24 11:41:00	11	1	NB353	5
+2018-01-29 09:33:00	8	6	GJ624	5
+2018-02-01 21:21:00	12	6	RI764	8
+2018-02-15 08:51:00	7	1	PB088	3
+2018-01-10 18:25:00	9	3	IM002	3
+2018-01-09 12:16:00	12	10	IM965	6
+2018-01-18 18:27:00	9	4	XO182	7
+2018-01-09 00:18:00	5	1	EI983	5
+2018-02-17 11:01:00	8	6	XO182	3
+2018-01-27 04:07:00	7	10	SG947	5
+2018-01-28 19:18:00	11	3	IM965	1
+2018-01-23 03:57:00	13	6	GJ624	7
+2018-01-04 06:25:00	11	9	IM002	6
+2018-01-19 00:00:00	9	2	PB088	5
+2018-01-28 06:03:00	7	3	PD533	1
+2018-02-01 16:22:00	11	8	PL420	10
+2018-01-09 07:11:00	7	10	WT994	7
+2018-02-27 06:21:00	10	3	NB353	1
+2018-01-29 09:28:00	6	10	WT994	3
+2018-01-27 02:40:00	12	2	XO182	9
+2018-02-06 06:59:00	15	3	MA491	5
+2018-01-22 16:53:00	10	10	PB088	2
+2018-01-28 10:15:00	5	2	PB088	3
+2018-02-07 02:43:00	13	4	PB088	10
+2018-01-06 01:02:00	12	8	NB353	7
+2018-02-08 10:11:00	10	10	UB128	5
+2018-02-17 09:20:00	14	2	PB088	3
+2018-02-08 13:08:00	11	6	IM002	10
+2018-02-10 20:52:00	6	3	RI764	8
+2018-01-02 21:35:00	7	8	PL420	10
+2018-02-14 09:37:00	8	3	QL886	6
+2018-01-20 11:19:00	13	2	HT034	3
+2018-01-29 17:45:00	7	1	NB353	7
+2018-02-18 12:41:00	10	6	GJ624	8
+2018-01-14 00:56:00	5	4	FZ573	9
+2018-02-25 20:28:00	14	3	QL886	4
+2018-01-10 03:29:00	12	3	CZ751	8
+2018-01-28 20:02:00	12	6	GJ528	5
+2018-02-23 20:31:00	6	10	PD533	5
+2018-02-21 04:40:00	8	8	XO182	3
+2018-01-29 10:58:00	11	2	PL420	2
+2018-02-25 09:59:00	13	3	IM002	4
+2018-01-03 00:39:00	11	9	WT994	3
+2018-01-10 19:52:00	14	2	QL886	3
+2018-02-28 09:39:00	14	1	NB353	3
+2018-02-28 08:06:00	12	2	IM965	4
+2018-01-06 07:10:00	11	6	SG947	9
+2018-02-06 19:00:00	5	9	WT994	5
+2018-02-20 00:19:00	9	10	RI764	10
+2018-02-14 04:33:00	6	1	HT034	8
+2018-01-02 07:16:00	14	9	NB353	10
+2018-01-23 20:37:00	13	3	WT994	2
+2018-02-27 03:47:00	11	9	IM965	6
+2018-01-09 11:20:00	14	10	HT034	5
+2018-02-20 11:34:00	15	2	QL886	6
+2018-01-17 19:43:00	5	2	PD533	5
+2018-01-03 09:59:00	15	10	UB128	8
+2018-02-27 21:56:00	9	8	FZ573	5
+2018-01-01 18:09:00	7	9	EI983	3
+2018-01-31 11:26:00	15	6	GJ624	10
+2018-01-20 21:56:00	9	6	QL886	5
+2018-02-02 06:41:00	9	1	RI764	2
+2018-01-11 07:08:00	12	9	QL886	2
+2018-01-08 16:27:00	10	9	WT994	10
+2018-01-11 11:23:00	10	6	GJ624	8
+2018-01-22 18:48:00	12	6	MA491	10
+2018-01-17 14:37:00	13	3	QL886	6
+2018-01-26 19:57:00	7	8	CZ751	4
+2018-02-01 08:55:00	7	1	IM965	8
+2018-01-11 03:44:00	6	2	SG947	2
+2018-01-29 08:16:00	14	8	PL420	7
+2018-02-16 15:10:00	10	2	GJ528	5
+2018-02-27 20:35:00	11	4	IM965	8
+2018-02-19 08:25:00	11	9	HT034	3
+2018-02-28 09:48:00	7	2	CZ751	3
+2018-01-03 01:26:00	13	8	RI764	8
+2018-01-24 23:20:00	8	2	CZ751	2
+2018-01-14 07:58:00	14	8	CZ751	2
+2018-02-25 15:57:00	8	2	NB353	10
+2018-02-27 00:57:00	14	4	PD533	3
+2018-02-27 16:01:00	10	9	GJ624	8
+2018-01-28 19:04:00	12	8	EI983	6
+2018-01-06 03:44:00	11	10	PD533	8
+2018-01-06 19:04:00	15	10	XO182	6
+2018-02-14 20:01:00	10	8	PL420	10
+2018-01-24 21:59:00	15	3	RI764	3
+2018-01-11 15:42:00	8	1	GJ624	2
+2018-02-17 17:48:00	8	9	IM002	4
+2018-01-04 12:44:00	10	2	IM965	7
+2018-01-22 02:57:00	9	1	EI983	1
+2018-01-14 15:16:00	9	2	PB088	9
+2018-02-28 12:58:00	7	4	IM002	4
+2018-01-17 13:25:00	14	2	SG947	4
+2018-01-12 21:49:00	8	3	RI764	6
+2018-01-16 01:21:00	9	8	NB353	3
+2018-01-13 23:12:00	7	3	FZ573	2
+2018-02-22 11:07:00	9	6	RI764	7
+2018-02-09 16:30:00	5	1	EI983	1
+2018-01-29 23:16:00	7	2	PB088	5
+2018-02-19 22:59:00	12	8	PB088	2
+2018-02-10 23:02:00	6	9	SG947	8
+2018-01-28 14:14:00	10	6	MA491	8
+2018-01-17 20:16:00	14	9	FZ573	10
+2018-02-24 17:21:00	5	1	WT994	5
+2018-01-03 21:16:00	8	2	QL886	6
+2018-01-05 02:37:00	15	3	PD533	1
+2018-01-07 10:07:00	8	8	HT034	4
+2018-02-25 20:53:00	14	9	UB128	3
+2018-01-02 14:00:00	9	3	NB353	6
+2018-02-27 06:23:00	12	9	RI764	1
+2018-01-18 17:22:00	12	10	CZ751	6
+2018-01-27 22:04:00	5	6	FZ573	9
+2018-02-09 22:54:00	9	8	GJ528	1
+2018-01-21 08:45:00	8	1	UB128	6
+2018-02-06 02:19:00	10	6	HT034	1
+2018-01-24 16:02:00	9	6	HT034	3
+2018-02-15 09:10:00	12	10	PL420	5
+2018-02-04 17:58:00	14	6	HT034	9
+2018-01-25 08:09:00	15	1	WT994	8
+2018-01-28 19:09:00	9	1	PL420	7
+2018-02-07 06:07:00	15	6	XO182	2
+2018-02-22 07:48:00	11	8	UB128	4
+2018-01-07 13:57:00	8	3	PD533	8
+2018-01-27 11:23:00	13	2	UB128	2
+2018-01-05 11:35:00	12	8	IM965	5
+2018-01-30 00:52:00	15	10	IM965	9
+2018-02-06 15:20:00	15	2	GJ528	3
+2018-02-28 22:34:00	6	4	GJ624	7
+2018-02-17 07:00:00	10	1	PL420	8
+2018-02-01 14:54:00	10	6	WT994	3
+2018-02-21 15:57:00	7	3	MA491	4
+2018-02-14 04:56:00	7	9	PL420	2
+2018-01-06 20:33:00	6	9	GJ528	8
+2018-02-06 02:26:00	9	8	RI764	10
+2018-02-23 11:58:00	11	10	PD533	2
+2018-01-20 13:07:00	6	2	MA491	5
+2018-02-16 18:44:00	13	9	PL420	9
+2018-01-12 19:44:00	9	6	MA491	10
+2018-01-09 05:56:00	14	2	RI764	7
+2018-02-26 06:53:00	12	8	FZ573	3
+2018-01-31 22:31:00	5	8	RI764	8
+2018-01-28 07:43:00	7	2	PB088	4
+2018-01-29 04:14:00	14	4	IM965	8
+2018-01-17 06:49:00	5	3	WT994	5
+2018-01-17 15:09:00	9	2	QL886	1
+2018-01-09 05:42:00	15	1	EI983	7
+2018-02-07 02:22:00	15	9	SG947	9
+2018-02-09 19:07:00	13	10	WT994	7
+2018-01-22 15:45:00	7	1	AN916	9
+2018-01-16 13:57:00	13	2	AN916	4
+2018-02-09 20:28:00	6	2	AN916	6
+2018-01-09 12:36:00	9	2	AN916	7
+2018-02-14 21:41:00	5	3	AN916	4
+2018-02-13 20:20:00	10	8	AN916	5
+2018-02-03 18:17:00	6	8	AN916	6
+2018-02-07 04:06:00	6	6	AN916	2
+2018-02-28 05:29:00	5	6	AN916	8
+2018-01-22 15:31:00	6	1	AN916	8
+2018-01-16 11:38:00	14	2	AN916	3
+2018-01-04 15:38:00	14	10	AN916	3
+2018-01-17 15:30:00	5	9	AN916	6
+2018-01-19 13:23:00	14	4	AN916	3
+2018-01-01 08:37:00	8	2	AN916	4
+2018-02-21 07:30:00	15	8	AN916	10
+2018-01-01 10:09:00	15	10	AN916	10
+2018-01-04 04:42:00	8	8	AN916	5
+2018-01-27 00:14:00	10	8	AN916	1
+2018-01-02 12:00:00	14	2	AN916	5
+2018-01-23 09:14:00	15	9	AN916	9
+2018-02-13 10:00:00	11	4	AN916	9
+2018-01-29 07:10:00	9	10	AN916	9
+2018-02-04 22:32:00	9	1	AN916	7
+2018-01-30 12:48:00	15	6	AN916	6
+2018-02-22 09:33:00	10	4	AN916	5
+2018-01-07 20:44:00	5	2	AN916	7
+2018-01-28 18:44:00	12	8	AN916	4
+2018-02-08 22:30:00	15	3	AN916	4
+2018-02-10 20:57:00	15	10	AN916	8
+2018-02-26 16:32:00	13	1	AN916	10
+2018-01-26 02:36:00	8	6	AN916	3
+2018-01-21 23:53:00	14	4	AN916	8
+2018-01-06 17:30:00	15	10	AN916	1
+2018-01-31 10:16:00	10	1	AN916	9
+2018-01-09 15:10:00	7	1	AN916	2
+2018-01-26 11:31:00	6	2	AN916	4
+2018-01-13 07:24:00	15	10	AN916	6
+2018-01-01 08:46:00	8	9	AN916	4
+2018-01-14 15:46:00	9	6	AN916	8
+2018-02-13 16:45:00	13	10	AN916	2
+2018-01-14 17:22:00	9	2	AN916	6
+2018-01-02 00:24:00	12	9	AN916	6
+2018-02-25 08:48:00	8	1	AN916	4
+2018-01-28 19:24:00	9	4	AN916	10
+2018-02-08 05:35:00	13	9	AN916	9
+2018-02-27 20:23:00	9	2	AN916	4
+2018-02-13 16:01:00	12	3	AN916	5
+2018-01-08 21:26:00	9	9	AN916	2
+2018-01-21 14:52:00	6	2	AN916	5
+2018-01-21 17:36:00	14	3	AN916	6
+2018-02-06 08:16:00	10	3	AN916	6
+2018-01-22 04:47:00	11	1	AN916	7
+2018-02-08 15:19:00	5	1	AN916	7
+2018-02-06 05:41:00	5	1	AN916	5
+2018-01-07 14:09:00	5	1	AN916	1
+2018-02-08 07:57:00	9	4	AN916	2
+2018-01-11 08:56:00	12	8	AN916	6
+2018-02-14 14:31:00	6	8	AN916	3
+\.
+
+
+--
+-- Data for Name: car_order; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.car_order (car_order_id, creating_time, status, cost_of_ride, pick_up_latitide, pick_up_longitude, dist_latitide, dist_longitude, distance, trip_duration, car_license_plate, customer_username, manager_username) FROM stdin;
+1	2018-02-23 11:40:00	0	69	59.8200000000000003	30.3520000000000003	60.1000000000000014	30.4289999999999985	14	48	CZ751	pameliacavitt	vimilani
+2	2018-02-02 11:32:00	0	44	60.017000000000003	30.2850000000000001	59.9560000000000031	30.2519999999999989	17	70	MA491	kathlyndotts	shaynacropp
+3	2018-02-20 11:45:00	0	46	60.0159999999999982	30.4849999999999994	60.4440000000000026	29.5249999999999986	21	84	WT994	madelainesing	ceolafazio
+6	2018-02-16 09:07:00	0	14	59.7359999999999971	29.6469999999999985	60.357999999999997	29.6729999999999983	17	37	WT994	springsergio	chiamurphey
+7	2018-01-18 20:56:00	0	68	60.2700000000000031	30.2590000000000003	60.357999999999997	29.6729999999999983	25	70	PD533	donniemaskell	ceolafazio
+8	2018-01-20 05:43:00	0	95	59.7280000000000015	30.4710000000000001	59.9099999999999966	30	27	73	RI764	chungcottone	lettybruner
+9	2018-01-07 23:44:00	0	56	59.6769999999999996	30.1829999999999998	59.5670000000000002	29.7360000000000007	7	80	UB128	taneshastruthers	ceolafazio
+10	2018-02-26 10:27:00	0	90	59.7340000000000018	30.463000000000001	59.8629999999999995	30.1000000000000014	22	17	CZ751	alexacory	kenyarumore
+11	2018-01-27 09:44:00	0	33	60.4969999999999999	29.9959999999999987	59.9059999999999988	30.2729999999999997	24	12	XO182	consuelotokarz	kevenschuller
+12	2018-01-25 12:57:00	0	81	60.4050000000000011	29.8590000000000018	60.3100000000000023	29.7560000000000002	20	85	SG947	valrieburr	debrahdeland
+13	2018-02-05 03:57:00	0	87	59.8089999999999975	29.9349999999999987	60.3930000000000007	29.6000000000000014	28	93	GJ624	kathlyndotts	shamekalachance
+14	2018-01-20 07:07:00	0	70	60.4549999999999983	29.5169999999999995	59.7520000000000024	29.8150000000000013	16	40	XO182	lillythorton	beewommack
+15	2018-01-11 13:04:00	0	35	59.7439999999999998	30.4009999999999998	59.7419999999999973	30.2439999999999998	14	84	FZ573	ozelladay	ceolafazio
+16	2018-01-24 20:20:00	0	41	59.7539999999999978	29.9490000000000016	59.6989999999999981	30.375	27	28	XO182	kathlyndotts	kevenschuller
+17	2018-01-25 20:09:00	0	53	60.1779999999999973	29.8569999999999993	60.1000000000000014	29.9540000000000006	14	49	NB353	quentindelacruz	sigridenger
+18	2018-01-25 07:38:00	0	20	59.9260000000000019	29.9009999999999998	60.0510000000000019	30.3359999999999985	10	94	PB088	mitsuemcconico	joleenjefferis
+19	2018-01-01 12:02:00	0	92	60.2740000000000009	29.6400000000000006	59.8200000000000003	30.3520000000000003	9	112	EI983	donniemaskell	fidelshimkus
+20	2018-01-28 16:47:00	0	28	59.8170000000000002	29.8530000000000015	59.6910000000000025	29.9200000000000017	23	34	UB128	madelainesing	masonmardis
+21	2018-01-15 01:11:00	0	80	60.4969999999999999	29.9959999999999987	59.5739999999999981	29.9860000000000007	15	37	GJ624	eugenesacks	essiehempel
+22	2018-02-22 03:21:00	0	77	59.7560000000000002	30.4310000000000009	59.6769999999999996	30.1829999999999998	13	51	WT994	cedricguilford	kenyarumore
+23	2018-01-09 15:18:00	0	55	60.4510000000000005	29.7890000000000015	60.3100000000000023	29.7560000000000002	17	24	CZ751	kathlyndotts	sigridenger
+25	2018-02-11 07:23:00	0	51	59.6319999999999979	30.1580000000000013	60.1030000000000015	29.9540000000000006	17	31	XO182	cedricguilford	sigridenger
+26	2018-01-08 05:57:00	0	24	60.0510000000000019	30.3359999999999985	59.8250000000000028	30.1980000000000004	9	52	MA491	ozelladay	lerabreed
+27	2018-01-05 14:37:00	0	69	59.8250000000000028	30.1980000000000004	60.2349999999999994	30.3249999999999993	27	49	IM002	lillythorton	chiamurphey
+28	2018-01-27 17:42:00	0	13	59.8089999999999975	29.9349999999999987	59.8200000000000003	30.3520000000000003	18	115	GJ624	hershelsmullen	sigridenger
+29	2018-02-13 03:48:00	0	63	59.8170000000000002	29.8530000000000015	59.722999999999999	30.4160000000000004	7	33	HT034	hershelsmullen	kashacallen
+30	2018-01-20 11:13:00	0	30	59.8740000000000023	30.2360000000000007	60.0510000000000019	30.3359999999999985	5	35	IM002	cedricguilford	shaynacropp
+31	2018-01-07 05:04:00	0	37	59.9560000000000031	30.2519999999999989	59.9870000000000019	30.2970000000000006	5	54	GJ624	kevinnuno	shaynacropp
+32	2018-01-19 22:54:00	0	14	59.722999999999999	30.4160000000000004	60.4189999999999969	29.5549999999999997	20	106	GJ624	nathanaelpaylor	shaynacropp
+33	2018-02-19 13:45:00	0	61	60.2530000000000001	30.0229999999999997	59.7520000000000024	29.8150000000000013	25	72	CZ751	kevinnuno	julioned
+34	2018-01-09 06:08:00	0	25	60.1779999999999973	29.8569999999999993	60.4189999999999969	29.5549999999999997	8	68	MA491	chungcottone	masonmardis
+35	2018-01-18 07:45:00	0	88	60.4949999999999974	29.6119999999999983	60.1030000000000015	29.9540000000000006	25	63	SG947	sabrinacoss	kenyarumore
+36	2018-02-24 09:53:00	0	38	60.0159999999999982	30.4849999999999994	59.9680000000000035	30.4170000000000016	25	110	PD533	kathlyndotts	ceolafazio
+37	2018-01-24 06:54:00	0	83	60.3140000000000001	29.9059999999999988	59.6319999999999979	29.7600000000000016	28	44	QL886	normangreb	shamekalachance
+38	2018-01-24 17:24:00	0	34	60.1310000000000002	30.3219999999999992	59.5189999999999984	30.2280000000000015	12	61	IM965	normangreb	lerabreed
+39	2018-01-23 00:30:00	0	83	59.703000000000003	29.6750000000000007	59.6540000000000035	30.2199999999999989	13	61	NB353	mitsuemcconico	elfriededittmer
+40	2018-02-23 13:54:00	0	55	59.6910000000000025	29.9200000000000017	60.2740000000000009	29.6400000000000006	6	21	EI983	jerrodlupo	timikanims
+41	2018-01-05 22:53:00	0	96	59.9560000000000031	30.2519999999999989	60.3569999999999993	30.338000000000001	8	105	GJ624	madelainesing	joleenjefferis
+42	2018-02-13 23:59:00	0	18	59.6319999999999979	30.1580000000000013	59.6769999999999996	30.1829999999999998	15	119	GJ528	jerrodlupo	judithvillareal
+43	2018-02-11 16:50:00	0	73	59.5240000000000009	30.411999999999999	59.6259999999999977	29.5889999999999986	26	93	GJ528	cedricguilford	ceolafazio
+44	2018-02-14 11:06:00	0	39	60.2740000000000009	29.6400000000000006	60.4949999999999974	29.6119999999999983	18	83	PB088	ozelladay	kevenschuller
+46	2018-01-09 12:36:00	0	57	59.9059999999999988	30.2729999999999997	59.7520000000000024	29.8150000000000013	22	109	IM965	latinaphenix	beewommack
+47	2018-02-13 14:03:00	0	43	60.017000000000003	30.2850000000000001	60.0510000000000019	30.3359999999999985	7	114	HT034	donniemaskell	danillewhiteside
+48	2018-02-11 02:02:00	0	20	59.5739999999999981	29.9860000000000007	59.7419999999999973	30.2439999999999998	19	120	MA491	jerrodlupo	ceolafazio
+49	2018-01-05 17:10:00	0	77	60.2349999999999994	30.3249999999999993	59.9560000000000031	30.2519999999999989	8	89	PD533	hershelsmullen	joleenjefferis
+50	2018-01-09 08:47:00	0	61	59.8200000000000003	30.3520000000000003	59.8440000000000012	30.3120000000000012	29	39	WT994	consuelotokarz	judithvillareal
+51	2018-02-06 10:33:00	0	25	59.6319999999999979	29.7600000000000016	59.6049999999999969	30.3270000000000017	5	45	SG947	kevinnuno	joleenjefferis
+52	2018-01-31 04:31:00	0	29	60.4549999999999983	29.5169999999999995	60.3930000000000007	29.6000000000000014	21	61	CZ751	taneshastruthers	marcellusmagana
+53	2018-02-07 00:47:00	0	19	60.357999999999997	29.6729999999999983	59.7419999999999973	30.2439999999999998	5	47	XO182	hershelsmullen	masonmardis
+54	2018-02-02 09:49:00	0	51	60.4050000000000011	29.8590000000000018	60.222999999999999	30.3500000000000014	13	30	CZ751	cedricguilford	sigridenger
+55	2018-01-25 14:59:00	0	27	60.017000000000003	30.2850000000000001	60.1030000000000015	29.9540000000000006	20	68	GJ624	cedricguilford	debrahdeland
+56	2018-02-21 13:05:00	0	16	59.9870000000000019	30.2970000000000006	60.2700000000000031	30.2590000000000003	30	78	QL886	chungcottone	fidelshimkus
+57	2018-02-24 05:38:00	0	37	59.8440000000000012	30.3120000000000012	59.7629999999999981	30.3230000000000004	26	55	WT994	nathanaelpaylor	kashacallen
+58	2018-01-18 15:16:00	0	28	59.9549999999999983	29.6080000000000005	59.7629999999999981	30.3230000000000004	28	105	FZ573	nathanaelpaylor	sierragingras
+59	2018-02-24 02:15:00	0	96	59.7659999999999982	29.7689999999999984	60.1310000000000002	30.3219999999999992	23	33	MA491	madelainesing	lerabreed
+60	2018-02-08 07:07:00	0	57	59.9819999999999993	29.5809999999999995	59.6769999999999996	30.1829999999999998	21	82	IM965	valrieburr	joleenjefferis
+61	2018-01-11 20:43:00	0	22	60.0159999999999982	30.4849999999999994	59.9549999999999983	29.6080000000000005	20	39	IM965	hershelsmullen	kashacallen
+62	2018-01-16 08:47:00	0	83	59.9560000000000031	30.2519999999999989	60.2740000000000009	29.6400000000000006	5	42	NB353	eugenesacks	julioned
+63	2018-02-11 03:03:00	0	90	59.9099999999999966	30	59.6159999999999997	30.4229999999999983	30	109	CZ751	jerrodlupo	shamekalachance
+64	2018-01-16 07:25:00	0	68	59.9849999999999994	30.222999999999999	59.6319999999999979	29.7600000000000016	27	31	IM965	jerrodlupo	ceolafazio
+65	2018-01-01 03:06:00	0	84	60.3659999999999997	30.3440000000000012	59.9849999999999994	30.222999999999999	15	116	GJ528	normangreb	danillewhiteside
+66	2018-01-22 02:30:00	0	88	59.5309999999999988	29.7059999999999995	59.7079999999999984	29.6479999999999997	10	46	EI983	valrieburr	lettybruner
+67	2018-01-02 05:17:00	0	97	60.4549999999999983	29.5169999999999995	60.222999999999999	30.3500000000000014	20	105	IM002	alexacory	timikanims
+68	2018-01-18 07:37:00	0	90	59.5060000000000002	29.7040000000000006	59.865000000000002	30.1849999999999987	25	84	EI983	lillythorton	sierragingras
+69	2018-02-01 09:11:00	0	53	59.9059999999999988	30.2729999999999997	60.2409999999999997	29.5749999999999993	17	107	PL420	chungcottone	julioned
+70	2018-02-09 01:49:00	0	16	59.6540000000000035	30.2199999999999989	60.4050000000000011	29.8590000000000018	5	21	WT994	alexacory	kenyarumore
+71	2018-02-03 07:38:00	0	74	60.1340000000000003	30.338000000000001	60.3569999999999993	30.338000000000001	6	112	XO182	nathanielgibb	beewommack
+72	2018-01-28 06:53:00	0	80	60.017000000000003	30.2850000000000001	59.9849999999999994	30.222999999999999	19	70	HT034	chungcottone	judithvillareal
+73	2018-01-04 21:18:00	0	94	59.5240000000000009	30.411999999999999	60.2530000000000001	30.0229999999999997	30	80	SG947	kevinnuno	masonmardis
+74	2018-01-26 17:30:00	0	64	60.1310000000000002	30.3219999999999992	59.5189999999999984	30.2280000000000015	16	99	CZ751	consuelotokarz	kevenschuller
+75	2018-02-14 15:42:00	0	45	59.9849999999999994	30.222999999999999	59.6540000000000035	30.2199999999999989	7	39	NB353	nathanaelpaylor	lettybruner
+76	2018-01-12 06:59:00	0	28	59.9560000000000031	30.2519999999999989	60.357999999999997	29.6729999999999983	7	119	RI764	hershelsmullen	vimilani
+77	2018-01-22 00:46:00	0	38	59.8200000000000003	30.3520000000000003	59.9450000000000003	30.1119999999999983	29	39	UB128	mitsuemcconico	kashacallen
+78	2018-02-17 16:37:00	0	31	60.0840000000000032	29.5899999999999999	59.8320000000000007	29.588000000000001	20	27	IM002	lillythorton	lettybruner
+79	2018-02-21 20:51:00	0	58	60.0510000000000019	30.3359999999999985	60.3840000000000003	29.9649999999999999	6	38	IM965	consuelotokarz	shamekalachance
+80	2018-02-27 05:36:00	0	98	59.7040000000000006	29.7330000000000005	59.7680000000000007	30.3200000000000003	11	52	NB353	kevinnuno	sigridenger
+81	2018-02-27 22:01:00	0	98	60.2530000000000001	30.0229999999999997	60.3140000000000001	29.9059999999999988	28	70	PL420	consuelotokarz	lettybruner
+82	2018-02-10 11:43:00	0	10	59.8059999999999974	29.8730000000000011	59.6989999999999981	30.375	30	17	FZ573	jerrodlupo	kevenschuller
+83	2018-02-09 20:57:00	0	57	59.7560000000000002	30.4310000000000009	60.3140000000000001	29.9059999999999988	12	63	WT994	donniemaskell	vimilani
+84	2018-02-10 16:52:00	0	99	59.7079999999999984	29.6479999999999997	59.5549999999999997	30.1170000000000009	5	109	SG947	jerrodlupo	kenyarumore
+85	2018-01-21 20:17:00	0	96	60.2409999999999997	29.5749999999999993	59.6319999999999979	30.1580000000000013	9	51	NB353	mitsuemcconico	debrahdeland
+86	2018-01-01 15:41:00	0	23	60.1000000000000014	30.4289999999999985	59.8629999999999995	30.1000000000000014	10	104	GJ624	consuelotokarz	elfriededittmer
+87	2018-01-22 04:51:00	0	18	60.0840000000000032	29.5899999999999999	60.2530000000000001	30.0229999999999997	5	103	WT994	latinaphenix	chiamurphey
+88	2018-01-04 20:00:00	0	92	60.2409999999999997	29.5749999999999993	59.9680000000000035	29.8099999999999987	15	58	EI983	cedricguilford	chiamurphey
+89	2018-02-05 04:43:00	0	45	59.546999999999997	30.2779999999999987	60.3639999999999972	29.9089999999999989	18	107	XO182	hershelsmullen	joleenjefferis
+90	2018-01-11 10:53:00	0	90	59.5549999999999997	30.1170000000000009	60.3100000000000023	29.7560000000000002	21	46	PL420	jerrodlupo	beewommack
+91	2018-01-18 06:53:00	0	84	59.6769999999999996	30.1829999999999998	59.9870000000000019	30.2970000000000006	24	120	UB128	madelainesing	kashacallen
+92	2018-02-07 01:11:00	0	50	59.9819999999999993	29.5809999999999995	60.4440000000000026	29.5249999999999986	10	83	CZ751	nathanaelpaylor	fidelshimkus
+93	2018-01-11 13:05:00	0	17	59.8250000000000028	30.1980000000000004	60.1670000000000016	29.5609999999999999	11	31	FZ573	eugenesacks	masonmardis
+94	2018-01-10 00:16:00	0	72	59.9560000000000031	30.2519999999999989	60.2010000000000005	29.6460000000000008	27	62	PB088	nathanielgibb	beewommack
+95	2018-01-27 22:22:00	0	90	59.5240000000000009	30.411999999999999	59.7439999999999998	30.4009999999999998	25	47	NB353	taneshastruthers	kashacallen
+97	2018-01-14 23:46:00	0	56	59.7520000000000024	29.8150000000000013	59.7359999999999971	29.6469999999999985	28	28	EI983	eugenesacks	danillewhiteside
+98	2018-01-18 15:14:00	0	22	60.0840000000000032	29.5899999999999999	59.8440000000000012	30.3120000000000012	12	73	GJ528	normangreb	shamekalachance
+99	2018-01-13 13:37:00	0	65	59.8440000000000012	30.3120000000000012	60.3569999999999993	30.338000000000001	15	46	CZ751	mitsuemcconico	elfriededittmer
+100	2018-01-06 15:59:00	0	20	60.2439999999999998	29.9899999999999984	59.7280000000000015	30.4710000000000001	12	35	NB353	springsergio	masonmardis
+101	2018-01-31 17:37:00	0	16	60.0510000000000019	30.3359999999999985	59.9099999999999966	30	30	20	SG947	mitsuemcconico	sigridenger
+102	2018-02-09 22:08:00	0	15	60.2409999999999997	29.5749999999999993	60.1689999999999969	30.1859999999999999	11	101	QL886	valrieburr	essiehempel
+103	2018-01-24 13:26:00	0	62	59.7079999999999984	29.6479999999999997	59.9260000000000019	29.9009999999999998	6	81	PB088	lillythorton	chiamurphey
+104	2018-01-26 15:24:00	0	55	60.2010000000000005	29.6460000000000008	59.5189999999999984	30.2280000000000015	5	106	SG947	mitsuemcconico	danillewhiteside
+105	2018-02-15 21:52:00	0	30	59.7040000000000006	29.7330000000000005	60.3569999999999993	30.338000000000001	7	66	QL886	eugenesacks	kenyarumore
+107	2018-02-23 01:35:00	0	40	59.5670000000000002	29.7360000000000007	59.7629999999999981	30.3230000000000004	5	73	XO182	springsergio	sierragingras
+108	2018-02-10 19:33:00	0	52	59.6259999999999977	29.5889999999999986	60.4440000000000026	29.5249999999999986	20	77	IM002	kathlyndotts	shamekalachance
+110	2018-01-18 02:16:00	0	24	60.1000000000000014	30.4289999999999985	59.8089999999999975	29.9349999999999987	20	51	PB088	ozelladay	beewommack
+111	2018-01-16 04:00:00	0	58	60.3569999999999993	30.338000000000001	59.7359999999999971	29.6469999999999985	6	59	NB353	normangreb	essiehempel
+112	2018-02-24 10:05:00	0	60	60.4440000000000026	29.5249999999999986	59.5189999999999984	30.2280000000000015	8	22	EI983	hershelsmullen	lettybruner
+113	2018-02-25 23:26:00	0	72	59.8089999999999975	29.9349999999999987	60.2530000000000001	30.0229999999999997	30	114	GJ624	latinaphenix	chiamurphey
+114	2018-02-24 20:47:00	0	60	59.703000000000003	29.6750000000000007	60.1030000000000015	29.9540000000000006	13	17	IM002	cedricguilford	chiamurphey
+115	2018-01-29 13:13:00	0	35	60.2349999999999994	30.3249999999999993	60.0510000000000019	30.3359999999999985	23	102	QL886	sabrinacoss	beewommack
+116	2018-01-21 05:56:00	0	79	59.8440000000000012	30.3120000000000012	59.8629999999999995	30.1000000000000014	14	12	HT034	latinaphenix	sierragingras
+117	2018-02-10 04:46:00	0	17	60.1310000000000002	30.3219999999999992	60.3569999999999993	30.338000000000001	25	84	FZ573	cedricguilford	chiamurphey
+118	2018-02-14 20:01:00	0	49	59.6769999999999996	30.1829999999999998	59.8320000000000007	29.588000000000001	6	16	SG947	springsergio	elfriededittmer
+119	2018-01-03 23:29:00	0	63	59.9859999999999971	30.1559999999999988	60.0159999999999982	30.4849999999999994	6	45	HT034	alexacory	lerabreed
+120	2018-01-13 10:21:00	0	66	59.9870000000000019	30.2970000000000006	59.7079999999999984	29.6479999999999997	22	12	GJ528	madelainesing	wilburjustiniano
+121	2018-02-22 06:32:00	0	59	59.5670000000000002	29.7360000000000007	60.1760000000000019	29.6409999999999982	19	37	UB128	quentindelacruz	danillewhiteside
+122	2018-01-29 05:19:00	0	52	59.9819999999999993	29.5809999999999995	60.3639999999999972	29.9089999999999989	26	63	UB128	ozelladay	danillewhiteside
+123	2018-02-22 02:06:00	0	48	60.4669999999999987	30.4989999999999988	60.0159999999999982	30.4849999999999994	25	77	UB128	chungcottone	essiehempel
+124	2018-01-30 11:47:00	0	18	59.546999999999997	30.2779999999999987	60.1340000000000003	30.338000000000001	12	50	CZ751	normangreb	julioned
+125	2018-01-20 08:51:00	0	80	60.1289999999999978	30.4110000000000014	60.0510000000000019	30.3359999999999985	16	113	PL420	nathanielgibb	sierragingras
+126	2018-02-01 01:30:00	0	86	60.4390000000000001	30.2250000000000014	59.8250000000000028	30.1980000000000004	14	91	IM965	springsergio	kenyarumore
+127	2018-01-18 15:53:00	0	30	60.0159999999999982	30.4849999999999994	59.8250000000000028	30.1980000000000004	7	97	EI983	quentindelacruz	joleenjefferis
+128	2018-01-05 04:15:00	0	65	59.8059999999999974	29.8730000000000011	59.7040000000000006	29.7330000000000005	10	30	PB088	normangreb	julioned
+129	2018-01-31 16:12:00	0	71	60.1030000000000015	29.9540000000000006	59.9260000000000019	29.9009999999999998	23	68	RI764	quentindelacruz	kenyarumore
+130	2018-01-26 00:30:00	0	86	59.9680000000000035	30.4170000000000016	60.3639999999999972	29.9089999999999989	23	35	QL886	mitsuemcconico	timikanims
+131	2018-01-17 12:04:00	0	10	59.6319999999999979	29.7600000000000016	60.2730000000000032	29.5990000000000002	14	63	IM965	pameliacavitt	lerabreed
+132	2018-01-16 04:15:00	0	86	60.3930000000000007	29.6000000000000014	59.722999999999999	30.4160000000000004	18	87	PD533	kevinnuno	shamekalachance
+133	2018-01-25 07:23:00	0	26	59.9450000000000003	30.1119999999999983	59.9870000000000019	30.2970000000000006	17	51	QL886	nathanielgibb	marcellusmagana
+134	2018-01-31 22:34:00	0	62	59.5060000000000002	29.7040000000000006	59.6319999999999979	29.7600000000000016	27	110	CZ751	normangreb	louisalucio
+135	2018-01-23 12:17:00	0	78	60.1670000000000016	29.5609999999999999	59.9680000000000035	29.8099999999999987	11	78	GJ528	cedricguilford	lerabreed
+136	2018-01-13 23:28:00	0	39	59.7340000000000018	30.463000000000001	60.4390000000000001	30.2250000000000014	8	84	WT994	ozelladay	julioned
+137	2018-01-20 02:33:00	0	26	59.6049999999999969	30.3270000000000017	59.6289999999999978	29.6780000000000008	29	55	GJ528	taneshastruthers	vimilani
+138	2018-02-18 10:59:00	0	45	60.4969999999999999	29.9959999999999987	60.4510000000000005	29.7890000000000015	7	62	SG947	consuelotokarz	beewommack
+140	2018-01-11 01:20:00	0	70	60.1199999999999974	30.254999999999999	60.222999999999999	30.3500000000000014	27	100	FZ573	chungcottone	louisalucio
+141	2018-01-18 08:05:00	0	56	59.9849999999999994	30.222999999999999	59.7539999999999978	29.9490000000000016	22	75	WT994	sabrinacoss	kevenschuller
+143	2018-02-05 11:51:00	0	19	59.9819999999999993	29.5809999999999995	59.9099999999999966	30	20	45	IM965	sabrinacoss	chiamurphey
+144	2018-01-28 23:53:00	0	76	59.8250000000000028	30.1980000000000004	59.9059999999999988	30.2729999999999997	20	85	UB128	jerrodlupo	lerabreed
+145	2018-02-28 16:45:00	0	57	60.017000000000003	30.2850000000000001	60.3569999999999993	30.338000000000001	13	53	UB128	mitsuemcconico	lerabreed
+146	2018-01-25 17:41:00	0	99	60.1760000000000019	29.6409999999999982	59.9859999999999971	30.1559999999999988	13	66	GJ528	chungcottone	lettybruner
+148	2018-01-07 08:11:00	0	36	60.2439999999999998	29.9899999999999984	59.7079999999999984	29.6479999999999997	18	102	GJ528	cedricguilford	shaynacropp
+149	2018-01-21 12:19:00	0	63	60.3639999999999972	29.9089999999999989	60.357999999999997	29.6729999999999983	22	108	WT994	donniemaskell	vimilani
+150	2018-01-28 11:57:00	0	90	60.2530000000000001	30.0229999999999997	60.2349999999999994	30.3249999999999993	21	71	EI983	pameliacavitt	masonmardis
+151	2018-02-10 01:03:00	0	34	59.7040000000000006	29.7330000000000005	59.7659999999999982	29.7689999999999984	23	12	QL886	hershelsmullen	kenyarumore
+152	2018-02-20 15:24:00	0	77	60.2439999999999998	29.9899999999999984	59.5549999999999997	30.1170000000000009	24	18	FZ573	nathanielgibb	kenyarumore
+153	2018-01-06 22:57:00	0	96	59.5670000000000002	29.7360000000000007	60.3840000000000003	29.9649999999999999	9	64	PB088	ozelladay	ceolafazio
+154	2018-01-04 02:07:00	0	77	60.2700000000000031	30.2590000000000003	59.884999999999998	29.7390000000000008	13	91	WT994	normangreb	marcellusmagana
+155	2018-02-24 15:55:00	0	76	59.7439999999999998	30.4009999999999998	59.9849999999999994	30.222999999999999	10	70	WT994	nathanaelpaylor	elfriededittmer
+156	2018-01-16 08:30:00	0	76	59.9870000000000019	30.2970000000000006	59.7520000000000024	29.8150000000000013	21	108	XO182	chungcottone	judithvillareal
+157	2018-02-17 02:39:00	0	59	60.1030000000000015	29.9540000000000006	60.3100000000000023	29.7560000000000002	14	97	UB128	alexacory	judithvillareal
+159	2018-02-09 08:29:00	0	77	60.3140000000000001	29.9059999999999988	59.5189999999999984	30.2280000000000015	28	28	MA491	jerrodlupo	danillewhiteside
+160	2018-02-23 04:51:00	0	71	59.9549999999999983	29.6080000000000005	59.7539999999999978	29.9490000000000016	10	114	EI983	eugenesacks	kevenschuller
+161	2018-02-28 06:22:00	0	29	60.3100000000000023	29.7560000000000002	59.8870000000000005	29.5850000000000009	27	68	GJ624	kevinnuno	shamekalachance
+162	2018-02-10 04:44:00	0	27	60.1199999999999974	30.254999999999999	60.2700000000000031	30.2590000000000003	23	93	GJ528	chungcottone	elfriededittmer
+163	2018-01-20 18:00:00	0	20	59.5549999999999997	30.1170000000000009	59.7539999999999978	29.9490000000000016	13	60	IM965	latinaphenix	shaynacropp
+164	2018-02-16 19:09:00	0	61	59.6289999999999978	29.6780000000000008	60.2010000000000005	29.6460000000000008	30	23	SG947	cedricguilford	lerabreed
+165	2018-01-19 08:23:00	0	93	59.6259999999999977	29.5889999999999986	60.1000000000000014	29.9540000000000006	11	110	SG947	cedricguilford	beewommack
+166	2018-01-19 15:46:00	0	11	59.5670000000000002	29.7360000000000007	59.6159999999999997	30.4229999999999983	28	116	NB353	consuelotokarz	kenyarumore
+167	2018-01-31 18:06:00	0	66	60.357999999999997	29.6729999999999983	60.3930000000000007	29.6000000000000014	15	49	FZ573	cedricguilford	timikanims
+168	2018-02-01 20:05:00	0	56	59.9059999999999988	30.2729999999999997	60.3140000000000001	29.9059999999999988	6	98	SG947	nathanielgibb	elfriededittmer
+169	2018-01-24 16:38:00	0	31	60.017000000000003	30.2850000000000001	59.6259999999999977	29.5889999999999986	13	26	GJ528	chungcottone	debrahdeland
+170	2018-01-14 00:59:00	0	14	60.2439999999999998	29.9899999999999984	59.7629999999999981	30.3230000000000004	6	36	PB088	sabrinacoss	timikanims
+171	2018-01-18 00:57:00	0	12	59.6769999999999996	30.1829999999999998	60.3840000000000003	29.9649999999999999	22	21	MA491	normangreb	sigridenger
+172	2018-01-17 12:45:00	0	15	60.2530000000000001	30.0229999999999997	60.1340000000000003	30.338000000000001	25	78	XO182	eugenesacks	essiehempel
+173	2018-01-13 10:09:00	0	60	59.9099999999999966	30	60.0510000000000019	30.3359999999999985	21	71	MA491	alexacory	marcellusmagana
+174	2018-01-20 07:04:00	0	34	60.4390000000000001	30.2250000000000014	59.5670000000000002	29.7360000000000007	7	78	NB353	chungcottone	joleenjefferis
+176	2018-01-09 15:38:00	0	54	59.6989999999999981	30.375	60.1000000000000014	29.9540000000000006	16	37	IM002	kevinnuno	shamekalachance
+177	2018-02-08 09:50:00	0	19	60.4390000000000001	30.2250000000000014	59.8200000000000003	30.3520000000000003	12	78	CZ751	nathanielgibb	kevenschuller
+178	2018-02-27 13:01:00	0	81	59.7280000000000015	30.4710000000000001	59.9549999999999983	29.6080000000000005	9	105	PL420	donniemaskell	lerabreed
+179	2018-01-08 20:46:00	0	50	60.1310000000000002	30.3219999999999992	59.865000000000002	30.1849999999999987	28	43	PD533	latinaphenix	shamekalachance
+180	2018-02-04 13:25:00	0	69	60.1689999999999969	30.1859999999999999	59.7280000000000015	30.4710000000000001	9	99	RI764	madelainesing	shamekalachance
+181	2018-01-22 21:05:00	0	99	60.4390000000000001	30.2250000000000014	59.9870000000000019	30.2970000000000006	7	48	GJ528	kathlyndotts	timikanims
+182	2018-01-06 00:46:00	0	13	60.2010000000000005	29.6460000000000008	59.5309999999999988	29.7059999999999995	11	118	FZ573	quentindelacruz	sierragingras
+183	2018-01-07 22:47:00	0	59	59.5549999999999997	30.1170000000000009	59.884999999999998	29.7390000000000008	26	107	GJ528	chungcottone	masonmardis
+184	2018-01-06 21:09:00	0	49	60.4440000000000026	29.5249999999999986	60.1199999999999974	30.254999999999999	24	116	WT994	jerrodlupo	danillewhiteside
+185	2018-01-06 07:13:00	0	57	59.7340000000000018	30.463000000000001	59.5189999999999984	30.2280000000000015	12	38	HT034	normangreb	beewommack
+186	2018-02-14 06:39:00	0	63	59.5940000000000012	29.8760000000000012	59.9849999999999994	30.222999999999999	22	77	WT994	springsergio	masonmardis
+187	2018-01-24 09:56:00	0	75	60.2439999999999998	29.9899999999999984	59.9560000000000031	30.2519999999999989	10	18	GJ528	alexacory	louisalucio
+188	2018-01-06 18:00:00	0	30	59.9819999999999993	29.5809999999999995	59.9549999999999983	29.6080000000000005	18	66	CZ751	ozelladay	vimilani
+189	2018-01-27 02:10:00	0	16	60.4390000000000001	30.2250000000000014	59.5739999999999981	29.9860000000000007	24	74	PB088	lillythorton	debrahdeland
+190	2018-01-18 23:37:00	0	48	60.3140000000000001	29.9059999999999988	59.7079999999999984	29.6479999999999997	6	101	EI983	pameliacavitt	judithvillareal
+191	2018-02-17 02:39:00	0	55	59.7340000000000018	30.463000000000001	60.222999999999999	30.3500000000000014	14	21	IM965	eugenesacks	chiamurphey
+192	2018-02-14 11:01:00	0	90	59.7079999999999984	29.6479999999999997	59.9099999999999966	30	21	92	PL420	donniemaskell	kenyarumore
+193	2018-02-08 16:23:00	0	38	60.1760000000000019	29.6409999999999982	59.5549999999999997	30.1170000000000009	13	104	CZ751	consuelotokarz	shamekalachance
+194	2018-02-27 10:28:00	0	64	59.7040000000000006	29.7330000000000005	59.6289999999999978	29.6780000000000008	26	92	FZ573	hershelsmullen	shamekalachance
+195	2018-01-04 23:44:00	0	58	60.4080000000000013	29.625	59.5670000000000002	29.7360000000000007	20	58	MA491	kevinnuno	sierragingras
+196	2018-01-12 12:14:00	0	10	59.9549999999999983	29.6080000000000005	59.8089999999999975	29.9349999999999987	27	16	XO182	lillythorton	sierragingras
+197	2018-01-31 05:52:00	0	41	60.2730000000000032	29.5990000000000002	59.8440000000000012	30.3120000000000012	7	42	FZ573	madelainesing	chiamurphey
+198	2018-01-21 06:59:00	0	85	59.8250000000000028	30.1980000000000004	60.4549999999999983	29.5169999999999995	7	108	MA491	nathanaelpaylor	masonmardis
+199	2018-01-01 23:29:00	0	16	60.1760000000000019	29.6409999999999982	59.6540000000000035	30.2199999999999989	26	30	WT994	consuelotokarz	joleenjefferis
+200	2018-02-20 04:11:00	0	84	59.5189999999999984	30.2280000000000015	60.3569999999999993	30.338000000000001	22	105	NB353	alexacory	lerabreed
+201	2018-01-21 07:36:00	0	68	60.2409999999999997	29.5749999999999993	59.6769999999999996	30.1829999999999998	11	12	SG947	kathlyndotts	essiehempel
+202	2018-02-21 12:37:00	0	47	59.7359999999999971	29.6469999999999985	59.7560000000000002	30.4310000000000009	16	81	IM965	eugenesacks	timikanims
+203	2018-02-08 13:28:00	0	30	60.3569999999999993	30.338000000000001	59.8870000000000005	29.5850000000000009	28	12	IM965	latinaphenix	elfriededittmer
+204	2018-02-26 11:36:00	0	68	59.7359999999999971	29.6469999999999985	59.8200000000000003	30.3520000000000003	16	10	NB353	springsergio	sierragingras
+205	2018-02-28 02:04:00	0	72	60.2700000000000031	30.2590000000000003	59.722999999999999	30.4160000000000004	10	54	PB088	jerrodlupo	vimilani
+206	2018-01-23 00:36:00	0	36	59.6989999999999981	30.375	60.0840000000000032	29.5899999999999999	9	38	WT994	hershelsmullen	debrahdeland
+207	2018-01-17 23:49:00	0	69	59.8440000000000012	30.3120000000000012	60.017000000000003	30.2850000000000001	10	93	MA491	nathanaelpaylor	louisalucio
+208	2018-01-01 08:32:00	0	75	59.8440000000000012	30.3120000000000012	60.1689999999999969	30.1859999999999999	5	94	IM965	lillythorton	marcellusmagana
+209	2018-02-07 21:13:00	0	84	59.9099999999999966	30	59.6319999999999979	29.7600000000000016	8	15	RI764	taneshastruthers	elfriededittmer
+210	2018-02-09 06:27:00	0	73	59.7079999999999984	29.6479999999999997	59.6989999999999981	30.375	10	117	XO182	valrieburr	danillewhiteside
+211	2018-02-27 10:14:00	0	65	60.1779999999999973	29.8569999999999993	60.3639999999999972	29.9089999999999989	19	71	QL886	hershelsmullen	judithvillareal
+212	2018-01-13 01:07:00	0	20	59.9059999999999988	30.2729999999999997	59.7359999999999971	29.6469999999999985	19	37	IM002	kevinnuno	elfriededittmer
+213	2018-01-12 19:31:00	0	86	60.1000000000000014	29.9540000000000006	59.6989999999999981	30.375	30	32	EI983	latinaphenix	ceolafazio
+214	2018-01-16 14:06:00	0	31	59.6259999999999977	29.5889999999999986	60.2010000000000005	29.6460000000000008	28	38	GJ528	cedricguilford	shaynacropp
+215	2018-02-05 09:53:00	0	12	59.8629999999999995	30.1000000000000014	59.6289999999999978	29.6780000000000008	12	11	PL420	chungcottone	masonmardis
+216	2018-01-22 10:39:00	0	81	60.0510000000000019	30.3359999999999985	59.9260000000000019	29.9009999999999998	8	16	CZ751	mitsuemcconico	kenyarumore
+217	2018-01-03 20:58:00	0	81	60.357999999999997	29.6729999999999983	59.722999999999999	30.4160000000000004	15	45	EI983	lillythorton	kashacallen
+218	2018-02-17 16:10:00	0	32	60.4549999999999983	29.5169999999999995	60.4549999999999983	29.5169999999999995	5	61	MA491	springsergio	marcellusmagana
+219	2018-02-25 22:50:00	0	32	60.4549999999999983	29.5169999999999995	60.017000000000003	30.2850000000000001	20	56	PB088	springsergio	shamekalachance
+220	2018-02-12 03:09:00	0	26	60.4189999999999969	29.5549999999999997	59.7680000000000007	30.3200000000000003	27	79	MA491	hershelsmullen	marcellusmagana
+221	2018-01-17 07:02:00	0	73	60.222999999999999	30.3500000000000014	60.2439999999999998	29.9899999999999984	30	74	GJ624	sabrinacoss	kashacallen
+222	2018-02-14 17:37:00	0	97	60.1779999999999973	29.8569999999999993	59.7439999999999998	30.4009999999999998	24	56	MA491	kathlyndotts	judithvillareal
+223	2018-01-17 20:09:00	0	56	59.8170000000000002	29.8530000000000015	59.6319999999999979	29.7600000000000016	27	101	IM965	ozelladay	kenyarumore
+224	2018-02-15 04:45:00	0	11	60.1310000000000002	30.3219999999999992	59.9260000000000019	29.9009999999999998	11	85	FZ573	valrieburr	wilburjustiniano
+225	2018-01-16 00:24:00	0	72	59.6989999999999981	30.375	59.5739999999999981	29.9860000000000007	12	27	XO182	mitsuemcconico	beewommack
+226	2018-02-26 04:54:00	0	94	59.8740000000000023	30.2360000000000007	60.2530000000000001	30.0229999999999997	5	50	CZ751	ozelladay	vimilani
+227	2018-01-08 12:15:00	0	45	59.7419999999999973	30.2439999999999998	59.5940000000000012	29.8760000000000012	27	95	UB128	normangreb	kenyarumore
+228	2018-02-01 16:50:00	0	50	60.3569999999999993	30.338000000000001	60.4949999999999974	29.6119999999999983	20	35	WT994	pameliacavitt	wilburjustiniano
+229	2018-02-14 13:40:00	0	39	59.703000000000003	29.6750000000000007	59.6159999999999997	30.4229999999999983	10	85	PB088	nathanaelpaylor	kevenschuller
+230	2018-02-08 11:18:00	0	69	59.703000000000003	29.6750000000000007	60.4390000000000001	30.2250000000000014	7	92	UB128	pameliacavitt	sigridenger
+231	2018-01-20 15:21:00	0	58	59.6319999999999979	30.1580000000000013	60.2530000000000001	30.0229999999999997	23	110	XO182	nathanielgibb	sigridenger
+232	2018-01-04 23:04:00	0	59	60.1310000000000002	30.3219999999999992	59.722999999999999	30.4160000000000004	30	38	PD533	kathlyndotts	fidelshimkus
+233	2018-01-31 09:19:00	0	53	59.8440000000000012	30.3120000000000012	59.5309999999999988	29.7059999999999995	8	30	SG947	springsergio	elfriededittmer
+234	2018-02-05 01:20:00	0	42	59.9059999999999988	30.2729999999999997	59.7280000000000015	30.4710000000000001	24	36	PL420	kevinnuno	debrahdeland
+235	2018-02-21 22:02:00	0	77	60.3659999999999997	30.3440000000000012	59.9870000000000019	30.2970000000000006	21	71	PD533	lillythorton	sigridenger
+236	2018-01-27 10:20:00	0	79	59.5670000000000002	29.7360000000000007	60.3840000000000003	29.9649999999999999	9	58	GJ624	nathanaelpaylor	ceolafazio
+237	2018-02-06 16:38:00	0	41	60.2010000000000005	29.6460000000000008	59.6289999999999978	29.6780000000000008	19	66	QL886	kevinnuno	kevenschuller
+238	2018-01-30 18:58:00	0	76	59.884999999999998	29.7390000000000008	59.8320000000000007	29.588000000000001	21	27	PB088	sabrinacoss	chiamurphey
+239	2018-01-24 22:30:00	0	11	60.1779999999999973	29.8569999999999993	59.7539999999999978	29.9490000000000016	22	13	HT034	nathanaelpaylor	vimilani
+240	2018-01-20 07:04:00	0	98	59.7419999999999973	30.2439999999999998	60.4969999999999999	29.9959999999999987	7	42	XO182	ozelladay	lerabreed
+241	2018-01-05 08:11:00	0	29	59.5670000000000002	29.7360000000000007	60.4050000000000011	29.8590000000000018	13	104	GJ624	eugenesacks	joleenjefferis
+242	2018-01-28 05:09:00	0	97	60.1199999999999974	30.254999999999999	60.2700000000000031	30.2590000000000003	20	24	WT994	valrieburr	shaynacropp
+243	2018-02-06 13:51:00	0	60	60.3639999999999972	29.9089999999999989	59.9680000000000035	29.8099999999999987	5	111	FZ573	taneshastruthers	marcellusmagana
+244	2018-01-10 10:05:00	0	30	60.2700000000000031	30.2590000000000003	59.9849999999999994	30.222999999999999	15	36	MA491	kathlyndotts	elfriededittmer
+245	2018-02-25 06:31:00	0	38	60.3930000000000007	29.6000000000000014	60.1000000000000014	30.4289999999999985	30	83	PB088	madelainesing	sigridenger
+246	2018-01-10 18:10:00	0	92	59.6540000000000035	30.2199999999999989	59.722999999999999	30.4160000000000004	29	41	NB353	mitsuemcconico	kevenschuller
+247	2018-01-28 13:22:00	0	96	59.5670000000000002	29.7360000000000007	60.1030000000000015	29.9540000000000006	25	87	GJ624	pameliacavitt	marcellusmagana
+248	2018-02-09 10:06:00	0	77	60.0510000000000019	30.3359999999999985	59.7359999999999971	29.6469999999999985	6	35	SG947	mitsuemcconico	masonmardis
+249	2018-02-21 23:12:00	0	15	59.9450000000000003	30.1119999999999983	60.3659999999999997	30.3440000000000012	18	10	GJ624	nathanaelpaylor	marcellusmagana
+250	2018-02-24 17:46:00	0	73	60.3140000000000001	29.9059999999999988	60.4390000000000001	30.2250000000000014	16	37	FZ573	consuelotokarz	julioned
+251	2018-01-06 17:30:00	0	83	59.7040000000000006	29.7330000000000005	59.6540000000000035	30.2199999999999989	17	52	PL420	cedricguilford	debrahdeland
+252	2018-02-11 21:21:00	0	80	60.1779999999999973	29.8569999999999993	59.7079999999999984	29.6479999999999997	8	97	GJ624	kevinnuno	kashacallen
+253	2018-02-24 14:55:00	0	72	59.9859999999999971	30.1559999999999988	59.6910000000000025	29.9200000000000017	17	116	SG947	springsergio	elfriededittmer
+254	2018-01-05 16:02:00	0	48	59.6769999999999996	30.1829999999999998	59.9859999999999971	30.1559999999999988	8	58	GJ528	kevinnuno	fidelshimkus
+255	2018-02-28 07:22:00	0	87	60.017000000000003	30.2850000000000001	60.1310000000000002	30.3219999999999992	21	29	XO182	quentindelacruz	sierragingras
+256	2018-01-06 15:33:00	0	80	59.7680000000000007	30.3200000000000003	59.7629999999999981	30.3230000000000004	25	68	PL420	lillythorton	debrahdeland
+257	2018-01-29 10:22:00	0	41	60.1689999999999969	30.1859999999999999	59.9099999999999966	30	7	45	NB353	chungcottone	joleenjefferis
+258	2018-02-19 01:03:00	0	80	59.9680000000000035	30.4170000000000016	59.7280000000000015	30.4710000000000001	21	100	GJ528	donniemaskell	julioned
+259	2018-01-29 09:33:00	0	87	60.0510000000000019	30.3359999999999985	59.6769999999999996	30.1829999999999998	28	103	GJ624	nathanaelpaylor	chiamurphey
+260	2018-01-06 07:49:00	0	26	59.5309999999999988	29.7059999999999995	59.6289999999999978	29.6780000000000008	9	69	FZ573	jerrodlupo	marcellusmagana
+261	2018-01-16 10:50:00	0	88	60.3569999999999993	30.338000000000001	59.5060000000000002	29.7040000000000006	13	78	CZ751	lillythorton	kenyarumore
+262	2018-01-06 17:28:00	0	93	59.7359999999999971	29.6469999999999985	59.7560000000000002	30.4310000000000009	17	21	NB353	kevinnuno	timikanims
+263	2018-01-21 03:53:00	0	97	59.8089999999999975	29.9349999999999987	59.8440000000000012	30.3120000000000012	5	115	GJ624	lillythorton	wilburjustiniano
+264	2018-02-24 09:23:00	0	76	59.5189999999999984	30.2280000000000015	59.5309999999999988	29.7059999999999995	13	43	CZ751	sabrinacoss	danillewhiteside
+265	2018-01-03 15:16:00	0	17	60.2349999999999994	30.3249999999999993	60.1199999999999974	30.254999999999999	18	60	NB353	donniemaskell	fidelshimkus
+266	2018-01-18 00:05:00	0	79	59.5060000000000002	29.7040000000000006	60.4969999999999999	29.9959999999999987	20	78	CZ751	hershelsmullen	sierragingras
+267	2018-01-10 21:34:00	0	17	60.4440000000000026	29.5249999999999986	60.2010000000000005	29.6460000000000008	19	48	SG947	donniemaskell	lettybruner
+268	2018-02-20 09:58:00	0	73	59.9099999999999966	30	59.8870000000000005	29.5850000000000009	29	76	PL420	normangreb	lerabreed
+269	2018-02-18 02:25:00	0	88	60.1689999999999969	30.1859999999999999	60.0159999999999982	30.4849999999999994	30	77	MA491	kevinnuno	judithvillareal
+270	2018-02-24 23:21:00	0	86	60.3840000000000003	29.9649999999999999	60.1199999999999974	30.254999999999999	27	64	FZ573	normangreb	wilburjustiniano
+271	2018-01-01 20:07:00	0	84	59.7079999999999984	29.6479999999999997	59.9870000000000019	30.2970000000000006	12	62	GJ528	lillythorton	beewommack
+272	2018-01-25 15:23:00	0	46	59.865000000000002	30.1849999999999987	60.2730000000000032	29.5990000000000002	17	87	PB088	jerrodlupo	debrahdeland
+273	2018-01-24 13:55:00	0	10	60.4050000000000011	29.8590000000000018	60.2010000000000005	29.6460000000000008	25	31	XO182	taneshastruthers	kashacallen
+274	2018-01-21 12:11:00	0	72	60.2439999999999998	29.9899999999999984	60.3639999999999972	29.9089999999999989	15	103	XO182	donniemaskell	marcellusmagana
+275	2018-02-28 02:39:00	0	99	59.9549999999999983	29.6080000000000005	59.703000000000003	29.6750000000000007	13	83	HT034	sabrinacoss	danillewhiteside
+276	2018-01-12 08:09:00	0	62	59.8089999999999975	29.9349999999999987	60.2010000000000005	29.6460000000000008	10	59	EI983	quentindelacruz	lerabreed
+277	2018-01-08 15:13:00	0	79	60.3930000000000007	29.6000000000000014	60.1760000000000019	29.6409999999999982	29	19	EI983	pameliacavitt	danillewhiteside
+278	2018-01-29 15:58:00	0	47	60.2530000000000001	30.0229999999999997	59.5240000000000009	30.411999999999999	26	117	PL420	nathanielgibb	judithvillareal
+279	2018-01-23 19:41:00	0	85	60.2349999999999994	30.3249999999999993	60.4440000000000026	29.5249999999999986	11	85	RI764	latinaphenix	essiehempel
+280	2018-01-27 17:37:00	0	32	60.4510000000000005	29.7890000000000015	60.2730000000000032	29.5990000000000002	17	17	FZ573	kevinnuno	shaynacropp
+281	2018-01-09 14:17:00	0	64	59.7340000000000018	30.463000000000001	59.8200000000000003	30.3520000000000003	29	55	EI983	hershelsmullen	judithvillareal
+282	2018-02-17 08:43:00	0	34	60.4669999999999987	30.4989999999999988	59.9819999999999993	29.5809999999999995	7	66	IM002	kevinnuno	timikanims
+283	2018-01-14 14:50:00	0	64	59.9560000000000031	30.2519999999999989	59.9260000000000019	29.9009999999999998	22	56	FZ573	springsergio	lerabreed
+284	2018-01-20 15:44:00	0	54	60.1000000000000014	29.9540000000000006	59.7280000000000015	30.4710000000000001	23	84	WT994	mitsuemcconico	masonmardis
+285	2018-01-23 00:02:00	0	83	59.6159999999999997	30.4229999999999983	60.1670000000000016	29.5609999999999999	24	74	RI764	mitsuemcconico	beewommack
+286	2018-01-13 19:15:00	0	56	60.1289999999999978	30.4110000000000014	59.7359999999999971	29.6469999999999985	28	19	GJ624	mitsuemcconico	ceolafazio
+287	2018-02-19 19:11:00	0	78	59.9849999999999994	30.222999999999999	59.7340000000000018	30.463000000000001	8	50	SG947	madelainesing	judithvillareal
+288	2018-01-18 17:33:00	0	36	60.1000000000000014	29.9540000000000006	59.5739999999999981	29.9860000000000007	29	83	PL420	nathanielgibb	sigridenger
+289	2018-02-21 02:07:00	0	36	59.8170000000000002	29.8530000000000015	59.884999999999998	29.7390000000000008	9	90	RI764	normangreb	beewommack
+290	2018-01-17 13:31:00	0	74	60.2700000000000031	30.2590000000000003	59.8740000000000023	30.2360000000000007	19	21	UB128	consuelotokarz	marcellusmagana
+291	2018-02-08 08:27:00	0	66	60.4440000000000026	29.5249999999999986	59.6319999999999979	30.1580000000000013	24	120	NB353	nathanielgibb	elfriededittmer
+292	2018-01-25 19:30:00	0	33	59.9819999999999993	29.5809999999999995	60.1779999999999973	29.8569999999999993	12	77	IM002	quentindelacruz	essiehempel
+293	2018-01-11 21:23:00	0	96	59.5309999999999988	29.7059999999999995	59.9680000000000035	29.8099999999999987	6	91	WT994	jerrodlupo	julioned
+294	2018-02-09 23:27:00	0	93	60.4440000000000026	29.5249999999999986	60.0840000000000032	29.5899999999999999	11	17	UB128	latinaphenix	masonmardis
+295	2018-01-06 20:01:00	0	12	59.7680000000000007	30.3200000000000003	59.5240000000000009	30.411999999999999	11	107	PL420	pameliacavitt	kashacallen
+296	2018-01-16 20:16:00	0	87	59.5940000000000012	29.8760000000000012	59.5670000000000002	29.7360000000000007	20	82	EI983	pameliacavitt	louisalucio
+297	2018-02-05 11:16:00	0	15	59.6540000000000035	30.2199999999999989	59.5060000000000002	29.7040000000000006	8	83	SG947	jerrodlupo	sierragingras
+298	2018-01-07 08:34:00	0	84	60.3930000000000007	29.6000000000000014	60.4390000000000001	30.2250000000000014	18	100	IM965	alexacory	kenyarumore
+299	2018-01-15 00:13:00	0	54	59.8440000000000012	30.3120000000000012	60.0510000000000019	30.3359999999999985	8	116	GJ528	nathanielgibb	elfriededittmer
+300	2018-01-04 23:50:00	0	23	59.6289999999999978	29.6780000000000008	59.7340000000000018	30.463000000000001	7	28	IM002	eugenesacks	timikanims
+301	2018-02-18 11:08:00	0	75	59.6049999999999969	30.3270000000000017	59.5060000000000002	29.7040000000000006	28	79	WT994	latinaphenix	elfriededittmer
+302	2018-02-24 08:30:00	0	75	60.4189999999999969	29.5549999999999997	60.357999999999997	29.6729999999999983	22	84	EI983	sabrinacoss	lerabreed
+303	2018-01-31 22:43:00	0	60	59.9450000000000003	30.1119999999999983	59.884999999999998	29.7390000000000008	25	58	IM002	springsergio	shamekalachance
+304	2018-01-12 17:32:00	0	24	60.1000000000000014	29.9540000000000006	59.9859999999999971	30.1559999999999988	24	40	IM965	lillythorton	sigridenger
+305	2018-01-05 21:03:00	0	93	59.5240000000000009	30.411999999999999	60.1289999999999978	30.4110000000000014	8	20	IM965	donniemaskell	ceolafazio
+306	2018-01-10 02:15:00	0	55	59.7520000000000024	29.8150000000000013	59.546999999999997	30.2779999999999987	10	37	EI983	hershelsmullen	essiehempel
+307	2018-01-11 05:14:00	0	26	60.1670000000000016	29.5609999999999999	59.6989999999999981	30.375	25	114	HT034	nathanielgibb	fidelshimkus
+308	2018-01-11 08:48:00	0	30	59.9859999999999971	30.1559999999999988	59.9450000000000003	30.1119999999999983	17	24	HT034	donniemaskell	shamekalachance
+309	2018-02-11 15:08:00	0	15	60.4080000000000013	29.625	59.9549999999999983	29.6080000000000005	14	38	EI983	madelainesing	ceolafazio
+310	2018-01-25 19:34:00	0	39	60.1000000000000014	29.9540000000000006	59.9859999999999971	30.1559999999999988	14	102	CZ751	ozelladay	kevenschuller
+311	2018-02-02 13:48:00	0	58	59.9819999999999993	29.5809999999999995	59.9849999999999994	30.222999999999999	6	47	GJ528	ozelladay	marcellusmagana
+312	2018-01-27 08:13:00	0	53	60.3930000000000007	29.6000000000000014	60.1000000000000014	29.9540000000000006	19	14	IM965	taneshastruthers	judithvillareal
+313	2018-01-12 21:04:00	0	52	60.357999999999997	29.6729999999999983	59.7359999999999971	29.6469999999999985	20	38	EI983	sabrinacoss	debrahdeland
+314	2018-01-14 01:35:00	0	44	59.8320000000000007	29.588000000000001	59.7340000000000018	30.463000000000001	24	20	PL420	chungcottone	joleenjefferis
+315	2018-02-09 16:53:00	0	76	59.6159999999999997	30.4229999999999983	59.9680000000000035	29.8099999999999987	6	25	NB353	normangreb	shamekalachance
+316	2018-02-28 13:58:00	0	99	59.9819999999999993	29.5809999999999995	59.8170000000000002	29.8530000000000015	7	105	EI983	kevinnuno	ceolafazio
+317	2018-01-24 00:30:00	0	93	59.8440000000000012	30.3120000000000012	59.9870000000000019	30.2970000000000006	19	53	IM965	nathanaelpaylor	lettybruner
+318	2018-02-07 00:12:00	0	33	59.9099999999999966	30	59.6910000000000025	29.9200000000000017	18	86	HT034	pameliacavitt	lerabreed
+320	2018-02-01 22:43:00	0	27	60.2439999999999998	29.9899999999999984	60.1340000000000003	30.338000000000001	13	28	UB128	consuelotokarz	beewommack
+321	2018-01-28 01:04:00	0	60	60.2439999999999998	29.9899999999999984	59.9059999999999988	30.2729999999999997	14	61	FZ573	jerrodlupo	sigridenger
+323	2018-02-20 17:56:00	0	46	60.2349999999999994	30.3249999999999993	60.4390000000000001	30.2250000000000014	16	54	PB088	alexacory	chiamurphey
+324	2018-02-02 05:14:00	0	22	59.7520000000000024	29.8150000000000013	60.4390000000000001	30.2250000000000014	13	57	FZ573	taneshastruthers	chiamurphey
+325	2018-01-08 18:14:00	0	93	60.3639999999999972	29.9089999999999989	60.0159999999999982	30.4849999999999994	23	74	EI983	consuelotokarz	kashacallen
+326	2018-01-30 18:54:00	0	92	59.5309999999999988	29.7059999999999995	59.6049999999999969	30.3270000000000017	23	27	IM002	sabrinacoss	julioned
+327	2018-02-21 03:12:00	0	100	60.4050000000000011	29.8590000000000018	59.9680000000000035	30.4170000000000016	26	79	SG947	jerrodlupo	sigridenger
+328	2018-01-04 23:06:00	0	27	59.5549999999999997	30.1170000000000009	59.8250000000000028	30.1980000000000004	20	54	EI983	springsergio	elfriededittmer
+329	2018-01-21 06:15:00	0	37	59.8870000000000005	29.5850000000000009	59.7629999999999981	30.3230000000000004	20	33	CZ751	consuelotokarz	wilburjustiniano
+330	2018-02-16 16:41:00	0	30	59.9859999999999971	30.1559999999999988	60.2409999999999997	29.5749999999999993	9	92	NB353	jerrodlupo	timikanims
+331	2018-01-31 18:57:00	0	46	59.6159999999999997	30.4229999999999983	59.6989999999999981	30.375	25	30	WT994	valrieburr	shamekalachance
+332	2018-02-23 12:10:00	0	42	59.546999999999997	30.2779999999999987	60.0510000000000019	30.3359999999999985	27	95	GJ624	lillythorton	timikanims
+333	2018-01-13 18:34:00	0	43	60.0510000000000019	30.3359999999999985	60.4549999999999983	29.5169999999999995	30	113	QL886	latinaphenix	sigridenger
+334	2018-01-03 19:26:00	0	27	60.1340000000000003	30.338000000000001	60.2439999999999998	29.9899999999999984	9	35	MA491	kevinnuno	julioned
+335	2018-02-12 21:16:00	0	96	59.5670000000000002	29.7360000000000007	59.7419999999999973	30.2439999999999998	10	28	QL886	pameliacavitt	elfriededittmer
+336	2018-02-12 23:22:00	0	86	60.3100000000000023	29.7560000000000002	59.5739999999999981	29.9860000000000007	20	36	RI764	donniemaskell	elfriededittmer
+337	2018-02-02 15:01:00	0	93	60.2409999999999997	29.5749999999999993	60.1779999999999973	29.8569999999999993	27	31	HT034	hershelsmullen	ceolafazio
+338	2018-02-23 07:08:00	0	23	59.8089999999999975	29.9349999999999987	60.2530000000000001	30.0229999999999997	22	13	PB088	donniemaskell	chiamurphey
+339	2018-01-04 23:07:00	0	60	60.3930000000000007	29.6000000000000014	59.6540000000000035	30.2199999999999989	15	116	GJ624	madelainesing	fidelshimkus
+340	2018-01-01 17:48:00	0	97	60.2530000000000001	30.0229999999999997	60.4969999999999999	29.9959999999999987	26	78	CZ751	normangreb	kashacallen
+341	2018-02-03 21:48:00	0	74	59.5549999999999997	30.1170000000000009	60.3840000000000003	29.9649999999999999	18	52	FZ573	nathanaelpaylor	julioned
+342	2018-02-26 14:15:00	0	70	60.3140000000000001	29.9059999999999988	60.0510000000000019	30.3359999999999985	22	19	GJ528	cedricguilford	sigridenger
+343	2018-02-23 00:48:00	0	96	60.3840000000000003	29.9649999999999999	59.9059999999999988	30.2729999999999997	27	56	SG947	hershelsmullen	essiehempel
+344	2018-01-29 21:45:00	0	46	59.6289999999999978	29.6780000000000008	59.6769999999999996	30.1829999999999998	26	79	XO182	eugenesacks	debrahdeland
+345	2018-02-11 22:08:00	0	50	60.1000000000000014	30.4289999999999985	59.5309999999999988	29.7059999999999995	24	11	NB353	springsergio	julioned
+346	2018-01-22 10:34:00	0	23	59.9059999999999988	30.2729999999999997	60.3930000000000007	29.6000000000000014	30	67	MA491	nathanielgibb	lerabreed
+347	2018-01-03 04:15:00	0	13	60.2409999999999997	29.5749999999999993	59.8320000000000007	29.588000000000001	18	57	XO182	sabrinacoss	essiehempel
+348	2018-02-04 20:54:00	0	72	59.7280000000000015	30.4710000000000001	60.4189999999999969	29.5549999999999997	30	85	GJ528	madelainesing	kevenschuller
+349	2018-01-06 22:52:00	0	60	60.4510000000000005	29.7890000000000015	60.4669999999999987	30.4989999999999988	21	27	GJ624	pameliacavitt	vimilani
+350	2018-02-28 09:37:00	0	39	59.6289999999999978	29.6780000000000008	60.2700000000000031	30.2590000000000003	16	97	QL886	cedricguilford	danillewhiteside
+351	2018-02-17 08:04:00	0	64	60.4549999999999983	29.5169999999999995	59.9680000000000035	30.4170000000000016	30	106	UB128	springsergio	sigridenger
+352	2018-02-11 03:02:00	0	50	59.546999999999997	30.2779999999999987	59.7680000000000007	30.3200000000000003	9	107	QL886	quentindelacruz	kenyarumore
+353	2018-01-12 00:27:00	0	91	59.9849999999999994	30.222999999999999	60.3100000000000023	29.7560000000000002	17	59	CZ751	pameliacavitt	shaynacropp
+354	2018-02-14 08:03:00	0	11	59.7439999999999998	30.4009999999999998	59.8059999999999974	29.8730000000000011	16	41	PD533	springsergio	chiamurphey
+355	2018-02-12 09:29:00	0	65	60.4050000000000011	29.8590000000000018	59.8740000000000023	30.2360000000000007	16	98	PL420	nathanaelpaylor	kashacallen
+356	2018-01-30 16:48:00	0	93	60.0840000000000032	29.5899999999999999	59.546999999999997	30.2779999999999987	24	70	IM965	mitsuemcconico	kevenschuller
+357	2018-02-26 07:29:00	0	63	59.8089999999999975	29.9349999999999987	59.9819999999999993	29.5809999999999995	23	29	XO182	eugenesacks	shamekalachance
+358	2018-01-19 04:14:00	0	73	60.4949999999999974	29.6119999999999983	59.6259999999999977	29.5889999999999986	21	47	CZ751	chungcottone	danillewhiteside
+359	2018-02-13 05:26:00	0	38	60.3659999999999997	30.3440000000000012	60.4969999999999999	29.9959999999999987	10	59	PL420	chungcottone	kenyarumore
+360	2018-01-03 15:15:00	0	88	59.5060000000000002	29.7040000000000006	60.4969999999999999	29.9959999999999987	13	66	GJ528	consuelotokarz	kenyarumore
+361	2018-01-27 14:38:00	0	31	59.8629999999999995	30.1000000000000014	59.9859999999999971	30.1559999999999988	17	119	FZ573	latinaphenix	essiehempel
+362	2018-02-13 04:18:00	0	16	59.6540000000000035	30.2199999999999989	59.9819999999999993	29.5809999999999995	5	99	RI764	jerrodlupo	kenyarumore
+363	2018-01-31 00:13:00	0	31	60.3840000000000003	29.9649999999999999	60.4969999999999999	29.9959999999999987	21	32	PL420	taneshastruthers	judithvillareal
+364	2018-01-24 19:01:00	0	72	59.7340000000000018	30.463000000000001	60.1340000000000003	30.338000000000001	22	58	IM002	consuelotokarz	fidelshimkus
+365	2018-02-28 04:08:00	0	67	59.5670000000000002	29.7360000000000007	59.884999999999998	29.7390000000000008	23	103	PD533	springsergio	vimilani
+366	2018-01-13 16:03:00	0	42	59.7040000000000006	29.7330000000000005	60.4050000000000011	29.8590000000000018	6	95	PL420	pameliacavitt	ceolafazio
+367	2018-01-09 18:47:00	0	13	60.2409999999999997	29.5749999999999993	59.6540000000000035	30.2199999999999989	7	21	GJ528	quentindelacruz	shaynacropp
+368	2018-02-05 11:30:00	0	34	60.1760000000000019	29.6409999999999982	59.9450000000000003	30.1119999999999983	8	85	HT034	jerrodlupo	chiamurphey
+369	2018-02-25 17:44:00	0	39	60.2439999999999998	29.9899999999999984	60.1030000000000015	29.9540000000000006	26	19	IM965	normangreb	julioned
+370	2018-01-03 21:49:00	0	26	59.5189999999999984	30.2280000000000015	59.7040000000000006	29.7330000000000005	19	107	GJ624	springsergio	timikanims
+371	2018-01-01 09:12:00	0	93	60.4549999999999983	29.5169999999999995	60.1760000000000019	29.6409999999999982	25	101	CZ751	eugenesacks	lettybruner
+372	2018-01-25 16:56:00	0	85	60.4510000000000005	29.7890000000000015	60.2530000000000001	30.0229999999999997	24	36	IM965	lillythorton	masonmardis
+373	2018-02-14 15:03:00	0	49	60.2740000000000009	29.6400000000000006	59.6769999999999996	30.1829999999999998	7	96	MA491	mitsuemcconico	julioned
+374	2018-01-25 14:36:00	0	54	59.9819999999999993	29.5809999999999995	59.5739999999999981	29.9860000000000007	21	102	IM002	kevinnuno	danillewhiteside
+375	2018-01-15 10:16:00	0	21	60.0510000000000019	30.3359999999999985	59.6319999999999979	30.1580000000000013	11	43	IM002	normangreb	julioned
+376	2018-01-20 04:08:00	0	71	59.6910000000000025	29.9200000000000017	59.7560000000000002	30.4310000000000009	7	104	UB128	pameliacavitt	debrahdeland
+377	2018-02-25 23:15:00	0	24	60.3659999999999997	30.3440000000000012	59.6159999999999997	30.4229999999999983	13	36	QL886	kevinnuno	debrahdeland
+378	2018-01-20 15:46:00	0	96	59.884999999999998	29.7390000000000008	60.4969999999999999	29.9959999999999987	14	79	CZ751	ozelladay	masonmardis
+379	2018-01-13 16:50:00	0	75	60.4549999999999983	29.5169999999999995	59.9260000000000019	29.9009999999999998	24	18	NB353	cedricguilford	shamekalachance
+380	2018-02-27 03:48:00	0	94	59.7419999999999973	30.2439999999999998	59.7359999999999971	29.6469999999999985	27	82	EI983	hershelsmullen	lerabreed
+381	2018-01-29 07:55:00	0	53	59.7359999999999971	29.6469999999999985	59.722999999999999	30.4160000000000004	13	103	RI764	kathlyndotts	essiehempel
+382	2018-02-01 15:52:00	0	98	59.9549999999999983	29.6080000000000005	59.6259999999999977	29.5889999999999986	9	16	PD533	normangreb	kenyarumore
+383	2018-02-15 15:17:00	0	82	59.9549999999999983	29.6080000000000005	60.0840000000000032	29.5899999999999999	30	96	GJ624	hershelsmullen	debrahdeland
+384	2018-02-05 04:10:00	0	81	59.8870000000000005	29.5850000000000009	60.4390000000000001	30.2250000000000014	13	37	IM002	taneshastruthers	masonmardis
+385	2018-02-15 05:53:00	0	90	60.4510000000000005	29.7890000000000015	60.4440000000000026	29.5249999999999986	28	20	FZ573	donniemaskell	kenyarumore
+386	2018-02-24 17:54:00	0	88	60.2409999999999997	29.5749999999999993	60.0840000000000032	29.5899999999999999	14	50	GJ528	springsergio	masonmardis
+387	2018-01-23 00:40:00	0	95	60.1670000000000016	29.5609999999999999	59.5549999999999997	30.1170000000000009	23	26	WT994	normangreb	julioned
+388	2018-02-04 17:57:00	0	73	60.1760000000000019	29.6409999999999982	59.884999999999998	29.7390000000000008	30	38	GJ624	lillythorton	sigridenger
+389	2018-01-22 05:31:00	0	33	59.7439999999999998	30.4009999999999998	60.2439999999999998	29.9899999999999984	17	92	SG947	sabrinacoss	sigridenger
+390	2018-02-01 11:05:00	0	66	59.6159999999999997	30.4229999999999983	60.2409999999999997	29.5749999999999993	21	114	NB353	taneshastruthers	fidelshimkus
+391	2018-01-04 08:55:00	0	68	60.2700000000000031	30.2590000000000003	60.2439999999999998	29.9899999999999984	22	28	GJ528	springsergio	marcellusmagana
+392	2018-02-21 11:39:00	0	85	59.6989999999999981	30.375	59.6989999999999981	30.375	21	97	HT034	sabrinacoss	essiehempel
+393	2018-01-23 03:57:00	0	71	60.2530000000000001	30.0229999999999997	60.222999999999999	30.3500000000000014	28	36	NB353	kevinnuno	sierragingras
+394	2018-01-02 18:19:00	0	55	59.7680000000000007	30.3200000000000003	60.1689999999999969	30.1859999999999999	21	40	UB128	alexacory	kenyarumore
+395	2018-02-09 07:04:00	0	16	59.8629999999999995	30.1000000000000014	60.1340000000000003	30.338000000000001	8	88	FZ573	ozelladay	fidelshimkus
+396	2018-02-04 20:32:00	0	29	60.1000000000000014	30.4289999999999985	60.4050000000000011	29.8590000000000018	30	117	PD533	cedricguilford	marcellusmagana
+397	2018-02-22 19:29:00	0	89	59.5549999999999997	30.1170000000000009	60.4549999999999983	29.5169999999999995	28	100	RI764	donniemaskell	wilburjustiniano
+398	2018-02-24 14:04:00	0	43	60.1670000000000016	29.5609999999999999	59.6289999999999978	29.6780000000000008	5	53	WT994	nathanielgibb	lettybruner
+399	2018-02-11 16:23:00	0	22	59.703000000000003	29.6750000000000007	59.6910000000000025	29.9200000000000017	6	82	WT994	kevinnuno	chiamurphey
+400	2018-02-04 07:02:00	0	81	59.9849999999999994	30.222999999999999	59.7040000000000006	29.7330000000000005	25	99	PL420	sabrinacoss	sierragingras
+401	2018-01-01 12:19:00	0	12	60.3840000000000003	29.9649999999999999	60.222999999999999	30.3500000000000014	13	23	WT994	hershelsmullen	vimilani
+402	2018-01-21 13:40:00	0	88	59.9560000000000031	30.2519999999999989	59.9549999999999983	29.6080000000000005	24	91	QL886	ozelladay	shaynacropp
+403	2018-02-28 01:51:00	0	23	60.3840000000000003	29.9649999999999999	59.6319999999999979	29.7600000000000016	21	83	XO182	nathanielgibb	joleenjefferis
+404	2018-01-28 04:25:00	0	13	59.9870000000000019	30.2970000000000006	60.2730000000000032	29.5990000000000002	9	30	MA491	nathanaelpaylor	julioned
+405	2018-01-10 08:20:00	0	26	59.9560000000000031	30.2519999999999989	60.3659999999999997	30.3440000000000012	22	19	SG947	madelainesing	julioned
+406	2018-02-08 11:35:00	0	87	59.865000000000002	30.1849999999999987	60.1289999999999978	30.4110000000000014	8	13	IM002	chungcottone	beewommack
+408	2018-01-09 03:24:00	0	55	59.865000000000002	30.1849999999999987	59.7520000000000024	29.8150000000000013	22	83	PB088	mitsuemcconico	ceolafazio
+409	2018-02-05 09:19:00	0	89	60.3930000000000007	29.6000000000000014	59.5549999999999997	30.1170000000000009	28	16	NB353	cedricguilford	fidelshimkus
+410	2018-01-17 18:09:00	0	46	59.7560000000000002	30.4310000000000009	59.7539999999999978	29.9490000000000016	13	13	FZ573	valrieburr	julioned
+411	2018-02-22 00:39:00	0	11	59.703000000000003	29.6750000000000007	60.2439999999999998	29.9899999999999984	17	16	NB353	hershelsmullen	vimilani
+412	2018-01-13 12:59:00	0	63	59.7359999999999971	29.6469999999999985	59.5549999999999997	30.1170000000000009	14	63	UB128	jerrodlupo	beewommack
+413	2018-01-11 10:55:00	0	68	59.7439999999999998	30.4009999999999998	59.5240000000000009	30.411999999999999	27	91	MA491	kathlyndotts	beewommack
+414	2018-01-17 06:46:00	0	86	59.8440000000000012	30.3120000000000012	59.9849999999999994	30.222999999999999	20	40	XO182	lillythorton	debrahdeland
+415	2018-02-28 02:57:00	0	70	59.8870000000000005	29.5850000000000009	60.1030000000000015	29.9540000000000006	15	58	IM965	kevinnuno	sigridenger
+416	2018-01-23 02:28:00	0	82	59.5309999999999988	29.7059999999999995	59.6259999999999977	29.5889999999999986	5	56	UB128	ozelladay	elfriededittmer
+417	2018-01-12 02:31:00	0	12	60.1000000000000014	30.4289999999999985	59.6159999999999997	30.4229999999999983	19	72	SG947	alexacory	louisalucio
+418	2018-01-01 10:10:00	0	60	59.7560000000000002	30.4310000000000009	59.8740000000000023	30.2360000000000007	22	59	RI764	ozelladay	shaynacropp
+419	2018-01-21 02:37:00	0	18	59.9680000000000035	29.8099999999999987	59.9680000000000035	29.8099999999999987	21	117	IM002	sabrinacoss	elfriededittmer
+420	2018-02-24 11:21:00	0	12	59.6989999999999981	30.375	59.7280000000000015	30.4710000000000001	16	113	IM965	pameliacavitt	shaynacropp
+421	2018-02-21 22:02:00	0	32	59.703000000000003	29.6750000000000007	59.6319999999999979	29.7600000000000016	6	28	QL886	latinaphenix	lerabreed
+422	2018-01-09 13:01:00	0	86	59.8170000000000002	29.8530000000000015	60.2349999999999994	30.3249999999999993	30	75	CZ751	ozelladay	wilburjustiniano
+423	2018-01-01 14:40:00	0	88	60.357999999999997	29.6729999999999983	60.2439999999999998	29.9899999999999984	24	77	EI983	jerrodlupo	judithvillareal
+424	2018-02-03 09:00:00	0	78	59.9870000000000019	30.2970000000000006	59.5309999999999988	29.7059999999999995	24	10	NB353	springsergio	lettybruner
+425	2018-02-18 17:45:00	0	37	59.9549999999999983	29.6080000000000005	59.884999999999998	29.7390000000000008	25	30	XO182	nathanaelpaylor	louisalucio
+426	2018-02-23 10:54:00	0	76	59.5189999999999984	30.2280000000000015	59.7560000000000002	30.4310000000000009	15	32	PB088	donniemaskell	beewommack
+427	2018-01-14 02:16:00	0	58	59.6319999999999979	30.1580000000000013	60.4390000000000001	30.2250000000000014	27	26	HT034	normangreb	kevenschuller
+428	2018-01-10 22:24:00	0	87	60.017000000000003	30.2850000000000001	60.357999999999997	29.6729999999999983	5	64	PL420	alexacory	debrahdeland
+429	2018-02-26 01:44:00	0	59	60.357999999999997	29.6729999999999983	60.357999999999997	29.6729999999999983	29	25	WT994	donniemaskell	marcellusmagana
+430	2018-02-27 23:35:00	0	67	59.5189999999999984	30.2280000000000015	60.1000000000000014	30.4289999999999985	6	26	NB353	latinaphenix	ceolafazio
+431	2018-02-12 08:56:00	0	15	59.6049999999999969	30.3270000000000017	60.4440000000000026	29.5249999999999986	7	14	GJ624	latinaphenix	essiehempel
+432	2018-01-29 11:58:00	0	48	59.7539999999999978	29.9490000000000016	60.3100000000000023	29.7560000000000002	29	22	IM002	alexacory	essiehempel
+433	2018-01-27 17:38:00	0	42	60.3840000000000003	29.9649999999999999	60.1689999999999969	30.1859999999999999	7	32	WT994	kevinnuno	danillewhiteside
+434	2018-01-15 15:23:00	0	34	59.6259999999999977	29.5889999999999986	59.7629999999999981	30.3230000000000004	30	74	PB088	sabrinacoss	louisalucio
+435	2018-01-09 19:05:00	0	33	59.6319999999999979	30.1580000000000013	60.0159999999999982	30.4849999999999994	14	90	FZ573	lillythorton	marcellusmagana
+436	2018-02-07 14:00:00	0	79	60.0510000000000019	30.3359999999999985	60.4080000000000013	29.625	9	23	GJ624	quentindelacruz	fidelshimkus
+437	2018-02-03 08:00:00	0	89	60.1000000000000014	29.9540000000000006	59.5670000000000002	29.7360000000000007	8	27	UB128	mitsuemcconico	sierragingras
+438	2018-01-11 19:46:00	0	35	60.4669999999999987	30.4989999999999988	60.4440000000000026	29.5249999999999986	7	19	QL886	taneshastruthers	kevenschuller
+439	2018-02-16 01:18:00	0	74	60.3140000000000001	29.9059999999999988	60.357999999999997	29.6729999999999983	30	14	HT034	jerrodlupo	kashacallen
+440	2018-02-23 21:46:00	0	97	60.3659999999999997	30.3440000000000012	59.5189999999999984	30.2280000000000015	21	17	FZ573	lillythorton	kashacallen
+441	2018-02-04 14:12:00	0	96	59.9560000000000031	30.2519999999999989	60.1000000000000014	29.9540000000000006	7	76	RI764	pameliacavitt	julioned
+442	2018-01-05 14:06:00	0	99	59.7340000000000018	30.463000000000001	59.722999999999999	30.4160000000000004	9	64	IM002	alexacory	danillewhiteside
+443	2018-02-25 03:26:00	0	21	59.5670000000000002	29.7360000000000007	59.9549999999999983	29.6080000000000005	14	59	NB353	eugenesacks	wilburjustiniano
+444	2018-02-19 08:01:00	0	74	60.222999999999999	30.3500000000000014	60.4549999999999983	29.5169999999999995	15	109	EI983	eugenesacks	chiamurphey
+445	2018-02-10 06:38:00	0	68	60.1689999999999969	30.1859999999999999	59.7419999999999973	30.2439999999999998	25	50	PD533	nathanaelpaylor	judithvillareal
+446	2018-01-06 23:13:00	0	28	59.7539999999999978	29.9490000000000016	59.8740000000000023	30.2360000000000007	25	84	FZ573	nathanaelpaylor	kashacallen
+447	2018-02-02 19:27:00	0	66	59.9680000000000035	29.8099999999999987	59.6049999999999969	30.3270000000000017	28	26	WT994	sabrinacoss	joleenjefferis
+448	2018-02-11 02:08:00	0	75	60.4669999999999987	30.4989999999999988	59.9819999999999993	29.5809999999999995	14	114	PL420	latinaphenix	beewommack
+449	2018-02-12 13:30:00	0	52	60.2439999999999998	29.9899999999999984	60.222999999999999	30.3500000000000014	11	87	HT034	cedricguilford	lerabreed
+450	2018-02-20 11:50:00	0	41	60.4189999999999969	29.5549999999999997	60.4949999999999974	29.6119999999999983	16	107	EI983	latinaphenix	debrahdeland
+451	2018-02-17 14:09:00	0	31	60.1670000000000016	29.5609999999999999	60.2730000000000032	29.5990000000000002	12	86	UB128	consuelotokarz	lettybruner
+452	2018-01-26 02:24:00	0	85	59.6159999999999997	30.4229999999999983	59.7629999999999981	30.3230000000000004	5	93	EI983	consuelotokarz	joleenjefferis
+453	2018-02-27 22:30:00	0	74	59.9450000000000003	30.1119999999999983	60.4969999999999999	29.9959999999999987	24	75	PD533	kathlyndotts	timikanims
+454	2018-02-22 13:22:00	0	37	60.0510000000000019	30.3359999999999985	59.8740000000000023	30.2360000000000007	16	85	SG947	ozelladay	essiehempel
+455	2018-01-04 00:11:00	0	80	59.5670000000000002	29.7360000000000007	59.8740000000000023	30.2360000000000007	5	54	PB088	kathlyndotts	lerabreed
+456	2018-02-19 03:47:00	0	46	59.7560000000000002	30.4310000000000009	59.9450000000000003	30.1119999999999983	23	16	QL886	consuelotokarz	elfriededittmer
+457	2018-02-28 11:20:00	0	48	59.6540000000000035	30.2199999999999989	59.7439999999999998	30.4009999999999998	28	42	PD533	lillythorton	sierragingras
+458	2018-01-07 12:02:00	0	36	59.8629999999999995	30.1000000000000014	59.8200000000000003	30.3520000000000003	27	101	IM002	quentindelacruz	julioned
+459	2018-01-29 16:08:00	0	72	60.222999999999999	30.3500000000000014	60.0159999999999982	30.4849999999999994	14	74	GJ528	latinaphenix	judithvillareal
+460	2018-02-21 17:53:00	0	81	59.5549999999999997	30.1170000000000009	59.8870000000000005	29.5850000000000009	26	75	XO182	nathanielgibb	kenyarumore
+461	2018-01-03 22:55:00	0	73	59.5940000000000012	29.8760000000000012	60.1670000000000016	29.5609999999999999	11	74	SG947	lillythorton	julioned
+462	2018-01-27 02:30:00	0	36	59.7419999999999973	30.2439999999999998	59.5670000000000002	29.7360000000000007	25	39	HT034	jerrodlupo	debrahdeland
+463	2018-01-29 23:40:00	0	58	59.7629999999999981	30.3230000000000004	59.9680000000000035	30.4170000000000016	18	78	NB353	latinaphenix	fidelshimkus
+464	2018-01-01 21:12:00	0	97	60.3569999999999993	30.338000000000001	60.0510000000000019	30.3359999999999985	5	78	RI764	jerrodlupo	elfriededittmer
+465	2018-01-11 07:02:00	0	64	59.7079999999999984	29.6479999999999997	59.546999999999997	30.2779999999999987	15	32	RI764	quentindelacruz	sigridenger
+466	2018-01-12 18:09:00	0	26	59.8089999999999975	29.9349999999999987	60.2700000000000031	30.2590000000000003	20	104	SG947	sabrinacoss	shamekalachance
+467	2018-02-05 02:27:00	0	76	60.2530000000000001	30.0229999999999997	60.4510000000000005	29.7890000000000015	9	103	QL886	springsergio	shaynacropp
+468	2018-01-09 15:29:00	0	21	59.8200000000000003	30.3520000000000003	59.9450000000000003	30.1119999999999983	5	14	XO182	lillythorton	fidelshimkus
+469	2018-02-21 00:06:00	0	13	60.1670000000000016	29.5609999999999999	59.8440000000000012	30.3120000000000012	26	60	MA491	cedricguilford	judithvillareal
+470	2018-01-15 07:25:00	0	25	59.6540000000000035	30.2199999999999989	59.8740000000000023	30.2360000000000007	23	21	RI764	latinaphenix	shaynacropp
+471	2018-02-16 02:50:00	0	65	60.1670000000000016	29.5609999999999999	59.5670000000000002	29.7360000000000007	12	111	QL886	jerrodlupo	essiehempel
+472	2018-01-09 21:43:00	0	97	59.5549999999999997	30.1170000000000009	59.8629999999999995	30.1000000000000014	13	97	MA491	cedricguilford	beewommack
+473	2018-01-26 16:20:00	0	83	59.7629999999999981	30.3230000000000004	59.6769999999999996	30.1829999999999998	29	65	HT034	nathanaelpaylor	judithvillareal
+474	2018-01-12 08:38:00	0	61	59.7340000000000018	30.463000000000001	59.7560000000000002	30.4310000000000009	23	98	QL886	cedricguilford	joleenjefferis
+475	2018-02-22 08:31:00	0	31	60.3840000000000003	29.9649999999999999	59.703000000000003	29.6750000000000007	14	20	IM002	chungcottone	debrahdeland
+476	2018-02-11 14:15:00	0	39	60.2349999999999994	30.3249999999999993	60.1760000000000019	29.6409999999999982	6	31	UB128	consuelotokarz	timikanims
+477	2018-01-29 03:24:00	0	30	59.9849999999999994	30.222999999999999	60.3140000000000001	29.9059999999999988	19	36	PD533	jerrodlupo	elfriededittmer
+479	2018-01-31 17:08:00	0	26	60.1310000000000002	30.3219999999999992	60.0840000000000032	29.5899999999999999	13	101	GJ528	latinaphenix	joleenjefferis
+480	2018-01-28 15:08:00	0	95	59.9549999999999983	29.6080000000000005	59.5060000000000002	29.7040000000000006	7	101	GJ528	madelainesing	lerabreed
+481	2018-02-20 06:40:00	0	95	60.1689999999999969	30.1859999999999999	60.1340000000000003	30.338000000000001	6	24	NB353	jerrodlupo	ceolafazio
+482	2018-01-26 20:50:00	0	40	60.357999999999997	29.6729999999999983	60.4080000000000013	29.625	28	21	RI764	kevinnuno	julioned
+484	2018-02-23 09:16:00	0	30	60.4189999999999969	29.5549999999999997	60.0840000000000032	29.5899999999999999	6	114	PD533	normangreb	shaynacropp
+485	2018-02-02 10:24:00	0	74	59.8629999999999995	30.1000000000000014	60.1779999999999973	29.8569999999999993	30	81	PD533	latinaphenix	kevenschuller
+486	2018-01-08 15:19:00	0	100	59.8629999999999995	30.1000000000000014	59.7439999999999998	30.4009999999999998	12	76	IM002	cedricguilford	kashacallen
+487	2018-02-07 22:25:00	0	14	60.4390000000000001	30.2250000000000014	59.9560000000000031	30.2519999999999989	9	75	XO182	donniemaskell	lettybruner
+488	2018-01-23 04:03:00	0	88	59.5240000000000009	30.411999999999999	60.4080000000000013	29.625	7	37	PL420	valrieburr	timikanims
+489	2018-01-07 19:00:00	0	88	60.357999999999997	29.6729999999999983	59.7560000000000002	30.4310000000000009	30	104	RI764	madelainesing	beewommack
+490	2018-01-16 06:04:00	0	39	59.8320000000000007	29.588000000000001	59.9819999999999993	29.5809999999999995	15	31	MA491	kevinnuno	julioned
+491	2018-01-15 03:26:00	0	78	59.722999999999999	30.4160000000000004	60.3639999999999972	29.9089999999999989	14	107	NB353	hershelsmullen	louisalucio
+492	2018-02-07 21:23:00	0	92	59.7340000000000018	30.463000000000001	59.5940000000000012	29.8760000000000012	27	69	SG947	chungcottone	lerabreed
+493	2018-02-12 02:36:00	0	84	60.017000000000003	30.2850000000000001	59.9059999999999988	30.2729999999999997	19	112	QL886	hershelsmullen	wilburjustiniano
+494	2018-01-05 17:09:00	0	38	60.2409999999999997	29.5749999999999993	60.1760000000000019	29.6409999999999982	22	76	HT034	normangreb	sigridenger
+495	2018-02-14 17:52:00	0	91	59.6289999999999978	29.6780000000000008	60.2010000000000005	29.6460000000000008	11	65	QL886	chungcottone	kevenschuller
+496	2018-02-26 15:33:00	0	26	60.1030000000000015	29.9540000000000006	60.1030000000000015	29.9540000000000006	26	100	CZ751	madelainesing	kashacallen
+497	2018-01-10 23:13:00	0	61	59.7520000000000024	29.8150000000000013	59.546999999999997	30.2779999999999987	15	65	UB128	alexacory	lerabreed
+498	2018-01-03 06:45:00	0	51	60.3140000000000001	29.9059999999999988	59.6049999999999969	30.3270000000000017	12	42	CZ751	hershelsmullen	essiehempel
+499	2018-02-14 07:07:00	0	53	59.7629999999999981	30.3230000000000004	59.6910000000000025	29.9200000000000017	8	120	HT034	lillythorton	judithvillareal
+500	2018-01-20 14:09:00	0	44	59.7659999999999982	29.7689999999999984	59.5739999999999981	29.9860000000000007	20	87	PD533	pameliacavitt	julioned
+502	2018-02-20 12:52:00	0	53	60.222999999999999	30.3500000000000014	59.8440000000000012	30.3120000000000012	17	78	PD533	nathanielgibb	wilburjustiniano
+503	2018-01-28 04:14:00	0	53	59.6159999999999997	30.4229999999999983	59.7359999999999971	29.6469999999999985	29	105	NB353	jerrodlupo	kashacallen
+504	2018-01-29 08:57:00	0	45	60.222999999999999	30.3500000000000014	59.7680000000000007	30.3200000000000003	8	94	GJ528	donniemaskell	wilburjustiniano
+505	2018-02-25 22:51:00	0	38	60.4080000000000013	29.625	59.6049999999999969	30.3270000000000017	15	58	PD533	jerrodlupo	danillewhiteside
+506	2018-02-27 19:10:00	0	18	60.0840000000000032	29.5899999999999999	59.8870000000000005	29.5850000000000009	30	113	UB128	normangreb	ceolafazio
+507	2018-01-30 19:32:00	0	52	59.6159999999999997	30.4229999999999983	60.4080000000000013	29.625	19	111	WT994	pameliacavitt	timikanims
+508	2018-02-16 04:07:00	0	30	59.8870000000000005	29.5850000000000009	60.2740000000000009	29.6400000000000006	9	37	GJ528	kathlyndotts	lettybruner
+509	2018-01-31 04:02:00	0	52	60.1670000000000016	29.5609999999999999	60.017000000000003	30.2850000000000001	14	19	GJ528	mitsuemcconico	danillewhiteside
+510	2018-02-19 17:18:00	0	95	59.703000000000003	29.6750000000000007	59.9549999999999983	29.6080000000000005	19	105	UB128	chungcottone	judithvillareal
+511	2018-02-08 04:51:00	0	88	60.0840000000000032	29.5899999999999999	59.7439999999999998	30.4009999999999998	19	47	QL886	kevinnuno	marcellusmagana
+512	2018-02-06 20:27:00	0	24	59.8629999999999995	30.1000000000000014	59.7659999999999982	29.7689999999999984	29	67	PL420	chungcottone	kashacallen
+513	2018-02-27 19:26:00	0	84	59.7439999999999998	30.4009999999999998	60.2439999999999998	29.9899999999999984	28	54	QL886	consuelotokarz	elfriededittmer
+514	2018-02-15 09:33:00	0	25	60.3930000000000007	29.6000000000000014	59.9819999999999993	29.5809999999999995	22	102	UB128	quentindelacruz	chiamurphey
+515	2018-02-01 00:54:00	0	27	59.7280000000000015	30.4710000000000001	59.7079999999999984	29.6479999999999997	12	44	IM002	cedricguilford	beewommack
+516	2018-01-28 01:58:00	0	26	59.7659999999999982	29.7689999999999984	59.884999999999998	29.7390000000000008	14	46	HT034	mitsuemcconico	kenyarumore
+517	2018-02-16 03:13:00	0	56	59.5549999999999997	30.1170000000000009	60.1760000000000019	29.6409999999999982	23	67	GJ528	pameliacavitt	masonmardis
+518	2018-01-12 21:52:00	0	35	59.6319999999999979	30.1580000000000013	59.7280000000000015	30.4710000000000001	30	106	IM965	valrieburr	danillewhiteside
+519	2018-01-29 01:34:00	0	78	59.5670000000000002	29.7360000000000007	59.6989999999999981	30.375	7	45	UB128	pameliacavitt	kevenschuller
+520	2018-02-07 23:13:00	0	39	60.3840000000000003	29.9649999999999999	59.9859999999999971	30.1559999999999988	22	58	CZ751	quentindelacruz	vimilani
+521	2018-02-22 02:15:00	0	11	60.2349999999999994	30.3249999999999993	60.2700000000000031	30.2590000000000003	27	107	MA491	springsergio	joleenjefferis
+522	2018-01-17 10:41:00	0	38	59.7680000000000007	30.3200000000000003	60.2349999999999994	30.3249999999999993	13	82	SG947	quentindelacruz	joleenjefferis
+523	2018-01-20 23:10:00	0	44	59.8059999999999974	29.8730000000000011	59.6540000000000035	30.2199999999999989	16	15	MA491	normangreb	danillewhiteside
+524	2018-01-19 09:55:00	0	10	59.9680000000000035	30.4170000000000016	59.9819999999999993	29.5809999999999995	24	90	EI983	jerrodlupo	louisalucio
+525	2018-01-02 09:07:00	0	94	60.3840000000000003	29.9649999999999999	59.865000000000002	30.1849999999999987	22	107	PD533	springsergio	fidelshimkus
+526	2018-01-08 21:47:00	0	79	60.4189999999999969	29.5549999999999997	59.5739999999999981	29.9860000000000007	16	101	SG947	sabrinacoss	debrahdeland
+527	2018-01-17 06:16:00	0	58	59.9260000000000019	29.9009999999999998	59.8870000000000005	29.5850000000000009	28	40	PB088	normangreb	sigridenger
+528	2018-01-02 04:28:00	0	16	60.4510000000000005	29.7890000000000015	60.2740000000000009	29.6400000000000006	27	79	GJ624	consuelotokarz	essiehempel
+529	2018-01-24 01:49:00	0	78	59.5739999999999981	29.9860000000000007	60.2730000000000032	29.5990000000000002	28	31	QL886	mitsuemcconico	masonmardis
+530	2018-02-25 10:22:00	0	50	59.8059999999999974	29.8730000000000011	60.3639999999999972	29.9089999999999989	5	38	SG947	mitsuemcconico	lettybruner
+531	2018-01-25 01:30:00	0	17	60.2700000000000031	30.2590000000000003	60.222999999999999	30.3500000000000014	9	120	NB353	kevinnuno	kevenschuller
+532	2018-01-15 07:48:00	0	85	60.1689999999999969	30.1859999999999999	59.7659999999999982	29.7689999999999984	28	35	RI764	nathanielgibb	wilburjustiniano
+533	2018-02-26 14:19:00	0	71	60.2730000000000032	29.5990000000000002	59.5309999999999988	29.7059999999999995	7	20	NB353	ozelladay	sierragingras
+534	2018-01-05 05:04:00	0	11	60.3100000000000023	29.7560000000000002	60.1670000000000016	29.5609999999999999	15	62	SG947	nathanielgibb	elfriededittmer
+535	2018-01-21 18:12:00	0	11	60.2730000000000032	29.5990000000000002	60.3930000000000007	29.6000000000000014	17	11	IM965	kevinnuno	joleenjefferis
+536	2018-01-18 08:37:00	0	87	60.4390000000000001	30.2250000000000014	60.1670000000000016	29.5609999999999999	30	48	NB353	quentindelacruz	elfriededittmer
+538	2018-02-11 15:16:00	0	63	59.9560000000000031	30.2519999999999989	59.9450000000000003	30.1119999999999983	20	24	FZ573	mitsuemcconico	chiamurphey
+539	2018-01-25 18:32:00	0	70	59.8059999999999974	29.8730000000000011	60.1779999999999973	29.8569999999999993	7	100	PD533	nathanielgibb	wilburjustiniano
+540	2018-01-14 18:03:00	0	28	60.2409999999999997	29.5749999999999993	60.4549999999999983	29.5169999999999995	26	78	CZ751	valrieburr	lettybruner
+542	2018-02-26 18:32:00	0	36	59.8629999999999995	30.1000000000000014	59.9549999999999983	29.6080000000000005	11	96	FZ573	kathlyndotts	vimilani
+543	2018-01-30 00:57:00	0	84	60.2409999999999997	29.5749999999999993	59.9870000000000019	30.2970000000000006	26	114	WT994	pameliacavitt	ceolafazio
+544	2018-01-27 17:27:00	0	69	59.7280000000000015	30.4710000000000001	59.7439999999999998	30.4009999999999998	26	86	XO182	consuelotokarz	debrahdeland
+545	2018-02-04 01:40:00	0	36	60.2530000000000001	30.0229999999999997	59.7419999999999973	30.2439999999999998	22	108	SG947	lillythorton	julioned
+546	2018-02-14 20:24:00	0	61	60.4440000000000026	29.5249999999999986	59.7079999999999984	29.6479999999999997	7	32	IM002	latinaphenix	ceolafazio
+548	2018-01-26 13:02:00	0	66	60.4390000000000001	30.2250000000000014	59.9680000000000035	30.4170000000000016	10	77	GJ624	kevinnuno	julioned
+549	2018-02-18 19:05:00	0	96	59.5940000000000012	29.8760000000000012	59.7659999999999982	29.7689999999999984	14	102	GJ624	sabrinacoss	vimilani
+550	2018-01-11 15:01:00	0	71	59.8170000000000002	29.8530000000000015	60.1000000000000014	30.4289999999999985	11	92	HT034	nathanaelpaylor	sierragingras
+551	2018-02-23 01:29:00	0	53	59.8250000000000028	30.1980000000000004	60.4510000000000005	29.7890000000000015	21	81	RI764	quentindelacruz	beewommack
+552	2018-01-27 08:09:00	0	77	59.9680000000000035	30.4170000000000016	59.9819999999999993	29.5809999999999995	19	49	RI764	cedricguilford	essiehempel
+553	2018-02-11 03:33:00	0	81	59.546999999999997	30.2779999999999987	59.6319999999999979	29.7600000000000016	26	37	NB353	lillythorton	elfriededittmer
+554	2018-01-06 02:42:00	0	82	60.2700000000000031	30.2590000000000003	60.4189999999999969	29.5549999999999997	7	102	GJ624	donniemaskell	kenyarumore
+555	2018-02-16 03:01:00	0	41	60.222999999999999	30.3500000000000014	60.1670000000000016	29.5609999999999999	6	107	RI764	eugenesacks	masonmardis
+556	2018-01-14 10:24:00	0	59	59.7419999999999973	30.2439999999999998	60.1670000000000016	29.5609999999999999	10	94	IM002	jerrodlupo	ceolafazio
+557	2018-02-15 05:09:00	0	72	59.9099999999999966	30	59.5940000000000012	29.8760000000000012	28	96	PB088	quentindelacruz	debrahdeland
+558	2018-02-12 19:13:00	0	16	60.1779999999999973	29.8569999999999993	59.9450000000000003	30.1119999999999983	11	68	GJ624	quentindelacruz	lerabreed
+559	2018-02-20 06:22:00	0	37	60.1289999999999978	30.4110000000000014	59.6049999999999969	30.3270000000000017	22	63	RI764	normangreb	ceolafazio
+560	2018-01-08 03:13:00	0	35	59.865000000000002	30.1849999999999987	59.7359999999999971	29.6469999999999985	22	73	EI983	eugenesacks	kashacallen
+561	2018-02-14 15:54:00	0	38	60.2700000000000031	30.2590000000000003	60.0510000000000019	30.3359999999999985	6	106	PB088	cedricguilford	elfriededittmer
+562	2018-01-24 10:21:00	0	33	59.8200000000000003	30.3520000000000003	60.0840000000000032	29.5899999999999999	11	19	IM002	taneshastruthers	ceolafazio
+563	2018-01-09 12:23:00	0	81	60.2740000000000009	29.6400000000000006	60.2439999999999998	29.9899999999999984	30	11	WT994	consuelotokarz	sigridenger
+564	2018-01-21 15:04:00	0	18	59.7419999999999973	30.2439999999999998	60.2409999999999997	29.5749999999999993	28	99	QL886	chungcottone	danillewhiteside
+565	2018-02-23 00:59:00	0	38	59.5309999999999988	29.7059999999999995	60.1199999999999974	30.254999999999999	15	14	PB088	alexacory	chiamurphey
+567	2018-01-06 04:49:00	0	47	59.7629999999999981	30.3230000000000004	60.4390000000000001	30.2250000000000014	8	105	FZ573	kevinnuno	beewommack
+568	2018-01-22 14:22:00	0	18	59.884999999999998	29.7390000000000008	59.5060000000000002	29.7040000000000006	19	49	NB353	latinaphenix	debrahdeland
+569	2018-01-20 22:54:00	0	15	59.7629999999999981	30.3230000000000004	59.865000000000002	30.1849999999999987	26	39	XO182	taneshastruthers	julioned
+570	2018-01-12 01:45:00	0	52	59.8089999999999975	29.9349999999999987	59.5739999999999981	29.9860000000000007	12	118	MA491	quentindelacruz	timikanims
+571	2018-01-07 06:33:00	0	46	59.5940000000000012	29.8760000000000012	59.7520000000000024	29.8150000000000013	7	113	PB088	chungcottone	shaynacropp
+572	2018-01-15 06:32:00	0	24	60.2010000000000005	29.6460000000000008	59.9859999999999971	30.1559999999999988	16	40	PB088	donniemaskell	louisalucio
+573	2018-02-26 21:26:00	0	67	59.5670000000000002	29.7360000000000007	60.3659999999999997	30.3440000000000012	19	43	XO182	ozelladay	lettybruner
+574	2018-02-23 09:25:00	0	95	60.1030000000000015	29.9540000000000006	59.6910000000000025	29.9200000000000017	22	21	EI983	donniemaskell	chiamurphey
+575	2018-01-27 11:17:00	0	39	59.9859999999999971	30.1559999999999988	60.017000000000003	30.2850000000000001	9	101	HT034	normangreb	debrahdeland
+576	2018-01-16 00:24:00	0	69	59.7040000000000006	29.7330000000000005	59.7419999999999973	30.2439999999999998	21	119	SG947	lillythorton	vimilani
+577	2018-02-20 13:24:00	0	11	60.3639999999999972	29.9089999999999989	59.8170000000000002	29.8530000000000015	29	43	HT034	donniemaskell	lettybruner
+578	2018-01-01 22:27:00	0	26	60.1030000000000015	29.9540000000000006	60.2730000000000032	29.5990000000000002	25	21	NB353	nathanaelpaylor	fidelshimkus
+579	2018-01-24 01:04:00	0	56	59.6540000000000035	30.2199999999999989	60.2530000000000001	30.0229999999999997	9	32	GJ528	chungcottone	wilburjustiniano
+580	2018-02-22 05:54:00	0	86	59.8059999999999974	29.8730000000000011	60.2740000000000009	29.6400000000000006	8	109	FZ573	hershelsmullen	chiamurphey
+581	2018-01-15 16:01:00	0	34	59.5060000000000002	29.7040000000000006	60.4189999999999969	29.5549999999999997	24	26	XO182	jerrodlupo	lettybruner
+582	2018-02-06 19:05:00	0	85	59.7680000000000007	30.3200000000000003	60.4549999999999983	29.5169999999999995	22	33	WT994	valrieburr	kevenschuller
+583	2018-01-16 23:24:00	0	79	59.8740000000000023	30.2360000000000007	60.2409999999999997	29.5749999999999993	8	51	CZ751	kathlyndotts	shamekalachance
+584	2018-02-24 18:52:00	0	38	59.9680000000000035	29.8099999999999987	60.1310000000000002	30.3219999999999992	11	38	SG947	cedricguilford	kenyarumore
+585	2018-01-12 17:01:00	0	23	59.6769999999999996	30.1829999999999998	60.2740000000000009	29.6400000000000006	8	54	MA491	kathlyndotts	marcellusmagana
+586	2018-01-28 18:26:00	0	76	59.5739999999999981	29.9860000000000007	59.5240000000000009	30.411999999999999	27	15	FZ573	cedricguilford	lettybruner
+587	2018-01-28 16:56:00	0	16	60.4969999999999999	29.9959999999999987	59.6259999999999977	29.5889999999999986	24	42	GJ624	lillythorton	ceolafazio
+588	2018-02-05 23:11:00	0	55	60.3569999999999993	30.338000000000001	60.1670000000000016	29.5609999999999999	17	93	PB088	consuelotokarz	louisalucio
+589	2018-02-25 12:34:00	0	86	59.6319999999999979	29.7600000000000016	60.2409999999999997	29.5749999999999993	21	54	GJ528	pameliacavitt	lettybruner
+590	2018-02-13 08:17:00	0	43	59.546999999999997	30.2779999999999987	59.865000000000002	30.1849999999999987	19	39	PB088	latinaphenix	chiamurphey
+591	2018-01-10 15:31:00	0	56	60.222999999999999	30.3500000000000014	59.7560000000000002	30.4310000000000009	12	84	CZ751	chungcottone	danillewhiteside
+592	2018-01-29 04:37:00	0	67	60.1779999999999973	29.8569999999999993	60.0159999999999982	30.4849999999999994	6	104	SG947	normangreb	debrahdeland
+593	2018-01-02 02:08:00	0	67	59.5739999999999981	29.9860000000000007	59.6049999999999969	30.3270000000000017	26	60	IM002	consuelotokarz	kevenschuller
+594	2018-02-25 02:09:00	0	33	59.9680000000000035	29.8099999999999987	59.9560000000000031	30.2519999999999989	19	81	PB088	nathanielgibb	masonmardis
+595	2018-02-09 04:42:00	0	46	60.1199999999999974	30.254999999999999	60.4080000000000013	29.625	19	100	HT034	chungcottone	vimilani
+596	2018-01-23 16:40:00	0	100	60.1289999999999978	30.4110000000000014	59.8320000000000007	29.588000000000001	24	42	EI983	kevinnuno	kevenschuller
+597	2018-02-13 01:47:00	0	38	60.3840000000000003	29.9649999999999999	59.8059999999999974	29.8730000000000011	19	42	RI764	springsergio	julioned
+598	2018-01-20 14:21:00	0	10	60.3569999999999993	30.338000000000001	60.4669999999999987	30.4989999999999988	26	62	UB128	normangreb	marcellusmagana
+599	2018-01-11 09:15:00	0	30	59.9260000000000019	29.9009999999999998	59.7280000000000015	30.4710000000000001	10	29	IM002	consuelotokarz	shaynacropp
+600	2018-01-02 23:31:00	0	81	59.7659999999999982	29.7689999999999984	59.7539999999999978	29.9490000000000016	24	58	GJ624	cedricguilford	essiehempel
+601	2018-01-09 03:13:00	0	36	59.8059999999999974	29.8730000000000011	59.9819999999999993	29.5809999999999995	24	44	WT994	hershelsmullen	marcellusmagana
+602	2018-02-14 11:24:00	0	77	60.2730000000000032	29.5990000000000002	60.0159999999999982	30.4849999999999994	5	114	PB088	cedricguilford	marcellusmagana
+603	2018-01-19 18:59:00	0	47	60.4080000000000013	29.625	60.017000000000003	30.2850000000000001	13	96	PD533	jerrodlupo	louisalucio
+604	2018-01-06 06:38:00	0	12	59.8170000000000002	29.8530000000000015	59.9819999999999993	29.5809999999999995	30	110	EI983	cedricguilford	masonmardis
+605	2018-02-10 23:47:00	0	11	59.8870000000000005	29.5850000000000009	60.3140000000000001	29.9059999999999988	23	92	PL420	nathanaelpaylor	sierragingras
+606	2018-02-28 22:25:00	0	60	59.722999999999999	30.4160000000000004	59.9870000000000019	30.2970000000000006	16	24	PD533	jerrodlupo	elfriededittmer
+607	2018-01-23 03:50:00	0	50	60.1289999999999978	30.4110000000000014	59.8200000000000003	30.3520000000000003	29	52	PD533	cedricguilford	wilburjustiniano
+608	2018-02-21 04:46:00	0	59	59.6319999999999979	30.1580000000000013	60.2530000000000001	30.0229999999999997	17	80	FZ573	madelainesing	debrahdeland
+609	2018-01-18 16:53:00	0	56	59.7560000000000002	30.4310000000000009	59.8870000000000005	29.5850000000000009	20	100	UB128	latinaphenix	beewommack
+610	2018-02-24 04:20:00	0	56	59.7520000000000024	29.8150000000000013	60.3840000000000003	29.9649999999999999	26	89	PL420	cedricguilford	joleenjefferis
+611	2018-02-26 00:03:00	0	13	60.1310000000000002	30.3219999999999992	60.1760000000000019	29.6409999999999982	30	119	SG947	eugenesacks	louisalucio
+612	2018-02-27 10:57:00	0	55	59.5189999999999984	30.2280000000000015	59.7359999999999971	29.6469999999999985	21	49	GJ624	hershelsmullen	essiehempel
+613	2018-01-30 17:53:00	0	82	60.3140000000000001	29.9059999999999988	59.9819999999999993	29.5809999999999995	9	118	GJ528	jerrodlupo	shaynacropp
+614	2018-01-13 11:30:00	0	73	60.0510000000000019	30.3359999999999985	59.7040000000000006	29.7330000000000005	25	41	CZ751	sabrinacoss	danillewhiteside
+615	2018-02-01 00:14:00	0	41	59.8059999999999974	29.8730000000000011	60.1340000000000003	30.338000000000001	26	103	MA491	pameliacavitt	shaynacropp
+616	2018-01-24 23:33:00	0	42	59.8200000000000003	30.3520000000000003	59.9680000000000035	29.8099999999999987	7	102	NB353	hershelsmullen	lettybruner
+617	2018-01-13 01:58:00	0	63	59.8200000000000003	30.3520000000000003	60.3840000000000003	29.9649999999999999	25	54	XO182	mitsuemcconico	marcellusmagana
+618	2018-02-26 02:31:00	0	32	59.5739999999999981	29.9860000000000007	60.3569999999999993	30.338000000000001	6	106	PB088	mitsuemcconico	fidelshimkus
+619	2018-01-27 21:46:00	0	44	59.8440000000000012	30.3120000000000012	60.2730000000000032	29.5990000000000002	22	86	QL886	donniemaskell	danillewhiteside
+620	2018-02-07 10:11:00	0	39	59.6989999999999981	30.375	59.9549999999999983	29.6080000000000005	10	40	XO182	nathanielgibb	julioned
+621	2018-01-17 01:54:00	0	85	59.6049999999999969	30.3270000000000017	59.9059999999999988	30.2729999999999997	30	94	PD533	alexacory	judithvillareal
+622	2018-01-22 05:10:00	0	90	59.5309999999999988	29.7059999999999995	59.8440000000000012	30.3120000000000012	11	59	WT994	pameliacavitt	shamekalachance
+623	2018-02-11 11:46:00	0	37	60.0840000000000032	29.5899999999999999	59.5240000000000009	30.411999999999999	10	25	PL420	madelainesing	timikanims
+624	2018-01-25 23:38:00	0	47	59.5940000000000012	29.8760000000000012	60.0840000000000032	29.5899999999999999	6	47	MA491	kevinnuno	vimilani
+625	2018-02-28 12:19:00	0	16	59.7040000000000006	29.7330000000000005	60.4390000000000001	30.2250000000000014	24	56	GJ528	springsergio	masonmardis
+626	2018-01-28 04:35:00	0	79	59.7359999999999971	29.6469999999999985	60.357999999999997	29.6729999999999983	21	66	RI764	quentindelacruz	joleenjefferis
+627	2018-01-07 19:57:00	0	39	60.0840000000000032	29.5899999999999999	59.7539999999999978	29.9490000000000016	27	76	MA491	kathlyndotts	fidelshimkus
+628	2018-01-21 13:14:00	0	51	60.3659999999999997	30.3440000000000012	60.0510000000000019	30.3359999999999985	16	104	GJ624	taneshastruthers	julioned
+629	2018-02-23 22:10:00	0	50	59.8740000000000023	30.2360000000000007	59.884999999999998	29.7390000000000008	27	37	PD533	consuelotokarz	sierragingras
+630	2018-02-14 02:19:00	0	84	59.9560000000000031	30.2519999999999989	59.8320000000000007	29.588000000000001	20	76	SG947	nathanielgibb	debrahdeland
+631	2018-02-04 19:27:00	0	99	59.6540000000000035	30.2199999999999989	59.6540000000000035	30.2199999999999989	21	52	PB088	chungcottone	kashacallen
+632	2018-01-02 21:47:00	0	31	59.6159999999999997	30.4229999999999983	59.5060000000000002	29.7040000000000006	10	91	NB353	donniemaskell	shamekalachance
+633	2018-02-19 12:22:00	0	68	59.6769999999999996	30.1829999999999998	60.2010000000000005	29.6460000000000008	7	106	QL886	ozelladay	chiamurphey
+634	2018-02-22 16:07:00	0	97	60.0159999999999982	30.4849999999999994	60.3930000000000007	29.6000000000000014	27	18	IM965	consuelotokarz	sierragingras
+636	2018-01-02 11:37:00	0	57	59.7629999999999981	30.3230000000000004	59.5940000000000012	29.8760000000000012	16	87	GJ528	donniemaskell	fidelshimkus
+637	2018-01-07 22:23:00	0	42	59.6319999999999979	30.1580000000000013	60.2700000000000031	30.2590000000000003	25	66	EI983	kathlyndotts	masonmardis
+638	2018-01-26 12:39:00	0	25	59.6319999999999979	30.1580000000000013	59.8170000000000002	29.8530000000000015	14	76	RI764	kevinnuno	shamekalachance
+639	2018-02-10 17:05:00	0	100	60.4510000000000005	29.7890000000000015	59.865000000000002	30.1849999999999987	23	15	SG947	springsergio	sigridenger
+640	2018-01-09 04:31:00	0	91	59.8870000000000005	29.5850000000000009	60.3100000000000023	29.7560000000000002	15	20	PL420	mitsuemcconico	marcellusmagana
+641	2018-01-17 09:46:00	0	28	60.4549999999999983	29.5169999999999995	60.1000000000000014	29.9540000000000006	17	65	IM965	cedricguilford	essiehempel
+642	2018-02-11 12:41:00	0	84	59.7040000000000006	29.7330000000000005	59.9560000000000031	30.2519999999999989	12	60	QL886	cedricguilford	kevenschuller
+643	2018-01-15 08:46:00	0	66	60.3569999999999993	30.338000000000001	59.7520000000000024	29.8150000000000013	7	31	IM002	valrieburr	kenyarumore
+644	2018-02-13 14:56:00	0	56	59.5309999999999988	29.7059999999999995	59.9260000000000019	29.9009999999999998	22	13	NB353	lillythorton	wilburjustiniano
+645	2018-02-11 20:52:00	0	46	59.5189999999999984	30.2280000000000015	60.1340000000000003	30.338000000000001	25	114	MA491	quentindelacruz	chiamurphey
+646	2018-01-21 03:19:00	0	69	60.1340000000000003	30.338000000000001	60.222999999999999	30.3500000000000014	10	43	EI983	kevinnuno	kevenschuller
+647	2018-01-31 19:41:00	0	45	60.2740000000000009	29.6400000000000006	60.3659999999999997	30.3440000000000012	17	10	PL420	taneshastruthers	essiehempel
+648	2018-02-03 08:05:00	0	83	59.7680000000000007	30.3200000000000003	60.2349999999999994	30.3249999999999993	5	52	EI983	springsergio	wilburjustiniano
+649	2018-02-12 21:52:00	0	39	59.7419999999999973	30.2439999999999998	60.017000000000003	30.2850000000000001	14	53	PB088	eugenesacks	masonmardis
+650	2018-02-18 02:15:00	0	62	59.9549999999999983	29.6080000000000005	59.8870000000000005	29.5850000000000009	29	55	MA491	normangreb	lerabreed
+651	2018-02-20 02:10:00	0	47	60.2439999999999998	29.9899999999999984	60.357999999999997	29.6729999999999983	20	95	UB128	nathanaelpaylor	lerabreed
+652	2018-02-05 08:21:00	0	15	59.6259999999999977	29.5889999999999986	60.2439999999999998	29.9899999999999984	6	41	WT994	eugenesacks	marcellusmagana
+654	2018-02-15 21:12:00	0	66	59.6049999999999969	30.3270000000000017	60.2700000000000031	30.2590000000000003	9	38	PL420	taneshastruthers	debrahdeland
+655	2018-01-11 23:10:00	0	66	60.4510000000000005	29.7890000000000015	59.7629999999999981	30.3230000000000004	30	89	SG947	latinaphenix	marcellusmagana
+656	2018-01-09 02:02:00	0	60	59.5940000000000012	29.8760000000000012	59.6319999999999979	29.7600000000000016	8	15	XO182	valrieburr	danillewhiteside
+657	2018-01-31 09:26:00	0	57	59.884999999999998	29.7390000000000008	59.6289999999999978	29.6780000000000008	19	75	UB128	lillythorton	beewommack
+658	2018-02-07 01:10:00	0	27	59.8629999999999995	30.1000000000000014	60.2439999999999998	29.9899999999999984	26	36	IM965	lillythorton	ceolafazio
+659	2018-02-01 10:22:00	0	62	59.6259999999999977	29.5889999999999986	59.6049999999999969	30.3270000000000017	13	30	UB128	kevinnuno	shamekalachance
+660	2018-02-26 22:16:00	0	61	59.7439999999999998	30.4009999999999998	60.3659999999999997	30.3440000000000012	8	55	GJ528	kevinnuno	kevenschuller
+661	2018-01-15 23:12:00	0	69	59.8089999999999975	29.9349999999999987	60.3930000000000007	29.6000000000000014	10	57	PB088	hershelsmullen	beewommack
+662	2018-02-06 14:46:00	0	53	60.1760000000000019	29.6409999999999982	60.2700000000000031	30.2590000000000003	14	118	CZ751	taneshastruthers	fidelshimkus
+663	2018-02-23 19:55:00	0	94	59.8320000000000007	29.588000000000001	59.9450000000000003	30.1119999999999983	10	92	WT994	nathanielgibb	wilburjustiniano
+664	2018-02-14 13:24:00	0	89	59.703000000000003	29.6750000000000007	60.0159999999999982	30.4849999999999994	5	41	PL420	valrieburr	masonmardis
+665	2018-02-17 20:22:00	0	29	60.0159999999999982	30.4849999999999994	60.1689999999999969	30.1859999999999999	23	100	GJ528	kevinnuno	ceolafazio
+666	2018-01-06 16:45:00	0	32	60.2439999999999998	29.9899999999999984	59.6259999999999977	29.5889999999999986	22	98	XO182	sabrinacoss	julioned
+667	2018-02-19 19:40:00	0	30	59.884999999999998	29.7390000000000008	59.9450000000000003	30.1119999999999983	6	118	EI983	madelainesing	timikanims
+668	2018-02-15 04:34:00	0	30	60.4050000000000011	29.8590000000000018	60.2730000000000032	29.5990000000000002	16	55	FZ573	latinaphenix	marcellusmagana
+669	2018-02-25 13:30:00	0	52	59.703000000000003	29.6750000000000007	60.2409999999999997	29.5749999999999993	30	57	XO182	kathlyndotts	chiamurphey
+670	2018-01-18 07:54:00	0	57	60.4390000000000001	30.2250000000000014	60.2349999999999994	30.3249999999999993	23	64	MA491	ozelladay	lerabreed
+671	2018-02-14 08:03:00	0	100	60.3659999999999997	30.3440000000000012	59.6289999999999978	29.6780000000000008	11	49	EI983	kathlyndotts	chiamurphey
+672	2018-01-31 20:48:00	0	29	59.7359999999999971	29.6469999999999985	59.8440000000000012	30.3120000000000012	25	104	RI764	chungcottone	ceolafazio
+673	2018-02-20 09:33:00	0	10	60.2730000000000032	29.5990000000000002	59.7560000000000002	30.4310000000000009	19	110	GJ624	taneshastruthers	debrahdeland
+674	2018-01-18 13:40:00	0	91	59.7340000000000018	30.463000000000001	60.4549999999999983	29.5169999999999995	11	111	RI764	normangreb	fidelshimkus
+675	2018-01-23 19:09:00	0	95	59.9560000000000031	30.2519999999999989	59.6259999999999977	29.5889999999999986	9	53	WT994	cedricguilford	beewommack
+676	2018-01-25 23:45:00	0	22	59.5670000000000002	29.7360000000000007	60.1760000000000019	29.6409999999999982	22	60	FZ573	cedricguilford	kevenschuller
+677	2018-01-18 13:39:00	0	71	60.4549999999999983	29.5169999999999995	59.7419999999999973	30.2439999999999998	18	71	WT994	hershelsmullen	sigridenger
+678	2018-02-13 17:04:00	0	27	59.7629999999999981	30.3230000000000004	59.5549999999999997	30.1170000000000009	13	20	QL886	latinaphenix	julioned
+679	2018-02-04 15:06:00	0	24	59.5189999999999984	30.2280000000000015	59.9099999999999966	30	23	109	HT034	hershelsmullen	kenyarumore
+680	2018-01-25 14:56:00	0	10	59.9819999999999993	29.5809999999999995	59.6319999999999979	30.1580000000000013	19	37	IM965	alexacory	danillewhiteside
+681	2018-02-08 04:28:00	0	47	59.8740000000000023	30.2360000000000007	59.7560000000000002	30.4310000000000009	12	96	CZ751	taneshastruthers	ceolafazio
+682	2018-02-25 16:50:00	0	99	59.9099999999999966	30	60.2010000000000005	29.6460000000000008	29	50	PL420	kathlyndotts	judithvillareal
+683	2018-01-23 13:03:00	0	25	59.9059999999999988	30.2729999999999997	60.1670000000000016	29.5609999999999999	21	118	IM002	donniemaskell	julioned
+684	2018-01-04 16:48:00	0	77	59.6989999999999981	30.375	59.8440000000000012	30.3120000000000012	30	16	PB088	springsergio	lettybruner
+685	2018-02-17 20:18:00	0	73	59.7439999999999998	30.4009999999999998	59.722999999999999	30.4160000000000004	8	116	IM965	sabrinacoss	joleenjefferis
+686	2018-02-04 04:11:00	0	72	59.8170000000000002	29.8530000000000015	59.5309999999999988	29.7059999999999995	28	29	WT994	jerrodlupo	judithvillareal
+687	2018-02-07 12:46:00	0	60	59.5060000000000002	29.7040000000000006	59.6159999999999997	30.4229999999999983	15	116	IM002	sabrinacoss	debrahdeland
+688	2018-01-02 19:47:00	0	51	59.5940000000000012	29.8760000000000012	59.7419999999999973	30.2439999999999998	18	23	GJ624	pameliacavitt	kevenschuller
+689	2018-01-07 23:14:00	0	52	60.4390000000000001	30.2250000000000014	59.7520000000000024	29.8150000000000013	26	60	HT034	madelainesing	beewommack
+690	2018-02-15 15:52:00	0	23	59.6289999999999978	29.6780000000000008	59.884999999999998	29.7390000000000008	6	27	QL886	kathlyndotts	essiehempel
+691	2018-02-27 23:53:00	0	85	59.722999999999999	30.4160000000000004	59.8629999999999995	30.1000000000000014	10	99	IM002	nathanaelpaylor	kevenschuller
+693	2018-01-25 23:59:00	0	84	59.6259999999999977	29.5889999999999986	60.4669999999999987	30.4989999999999988	8	42	IM002	donniemaskell	sierragingras
+694	2018-02-11 19:00:00	0	12	59.884999999999998	29.7390000000000008	59.7439999999999998	30.4009999999999998	30	93	SG947	nathanielgibb	wilburjustiniano
+695	2018-01-20 12:07:00	0	87	59.8440000000000012	30.3120000000000012	59.6319999999999979	30.1580000000000013	8	14	RI764	valrieburr	beewommack
+696	2018-01-07 20:37:00	0	10	59.5060000000000002	29.7040000000000006	60.2439999999999998	29.9899999999999984	14	118	IM002	sabrinacoss	kenyarumore
+697	2018-02-19 21:15:00	0	65	59.9059999999999988	30.2729999999999997	60.3100000000000023	29.7560000000000002	5	68	XO182	nathanaelpaylor	sigridenger
+699	2018-01-20 06:29:00	0	79	59.8250000000000028	30.1980000000000004	59.8629999999999995	30.1000000000000014	27	19	XO182	mitsuemcconico	marcellusmagana
+700	2018-01-08 21:47:00	0	13	60.222999999999999	30.3500000000000014	60.3659999999999997	30.3440000000000012	14	80	UB128	taneshastruthers	kenyarumore
+701	2018-02-13 07:53:00	0	88	59.8200000000000003	30.3520000000000003	59.5189999999999984	30.2280000000000015	18	88	PB088	kevinnuno	chiamurphey
+702	2018-02-02 13:45:00	0	29	59.6049999999999969	30.3270000000000017	60.4189999999999969	29.5549999999999997	23	81	SG947	sabrinacoss	debrahdeland
+703	2018-02-13 07:03:00	0	91	60.2730000000000032	29.5990000000000002	60.357999999999997	29.6729999999999983	26	62	PD533	chungcottone	danillewhiteside
+704	2018-02-07 14:06:00	0	27	59.5060000000000002	29.7040000000000006	59.6540000000000035	30.2199999999999989	20	15	HT034	donniemaskell	vimilani
+705	2018-01-11 14:39:00	0	35	60.1670000000000016	29.5609999999999999	59.9549999999999983	29.6080000000000005	21	52	FZ573	quentindelacruz	wilburjustiniano
+706	2018-02-21 18:48:00	0	94	59.7280000000000015	30.4710000000000001	60.3840000000000003	29.9649999999999999	25	91	EI983	hershelsmullen	joleenjefferis
+707	2018-01-25 07:42:00	0	75	59.9819999999999993	29.5809999999999995	60.1199999999999974	30.254999999999999	22	97	IM002	taneshastruthers	joleenjefferis
+708	2018-01-05 21:07:00	0	48	60.3930000000000007	29.6000000000000014	60.1030000000000015	29.9540000000000006	17	80	WT994	hershelsmullen	ceolafazio
+709	2018-02-20 03:49:00	0	63	60.2409999999999997	29.5749999999999993	59.8740000000000023	30.2360000000000007	10	42	UB128	taneshastruthers	wilburjustiniano
+710	2018-01-29 13:46:00	0	64	60.0510000000000019	30.3359999999999985	59.5060000000000002	29.7040000000000006	7	25	QL886	quentindelacruz	louisalucio
+711	2018-01-04 16:01:00	0	69	60.1670000000000016	29.5609999999999999	59.8320000000000007	29.588000000000001	26	14	HT034	sabrinacoss	kevenschuller
+712	2018-01-11 07:28:00	0	69	60.0840000000000032	29.5899999999999999	59.6910000000000025	29.9200000000000017	22	98	HT034	cedricguilford	debrahdeland
+713	2018-01-01 15:01:00	0	22	60.3639999999999972	29.9089999999999989	60.4969999999999999	29.9959999999999987	30	87	GJ528	springsergio	ceolafazio
+714	2018-02-22 19:14:00	0	19	60.4390000000000001	30.2250000000000014	59.6159999999999997	30.4229999999999983	29	45	MA491	taneshastruthers	louisalucio
+715	2018-02-14 16:50:00	0	46	59.9680000000000035	29.8099999999999987	59.9849999999999994	30.222999999999999	21	93	GJ624	cedricguilford	timikanims
+716	2018-01-29 10:21:00	0	24	60.1199999999999974	30.254999999999999	60.1000000000000014	30.4289999999999985	15	92	PB088	jerrodlupo	fidelshimkus
+717	2018-01-02 00:04:00	0	61	59.6289999999999978	29.6780000000000008	59.6319999999999979	29.7600000000000016	30	22	NB353	normangreb	beewommack
+718	2018-01-13 22:10:00	0	25	60.2730000000000032	29.5990000000000002	59.722999999999999	30.4160000000000004	24	91	PD533	latinaphenix	sigridenger
+719	2018-02-15 13:11:00	0	74	59.7079999999999984	29.6479999999999997	60.4050000000000011	29.8590000000000018	9	87	RI764	nathanielgibb	lettybruner
+720	2018-02-23 00:09:00	0	33	59.6989999999999981	30.375	60.1289999999999978	30.4110000000000014	5	28	PL420	hershelsmullen	joleenjefferis
+721	2018-01-13 10:37:00	0	60	60.1000000000000014	29.9540000000000006	60.1199999999999974	30.254999999999999	10	112	UB128	springsergio	kashacallen
+722	2018-02-23 11:10:00	0	78	59.5309999999999988	29.7059999999999995	59.9680000000000035	29.8099999999999987	28	81	IM002	kathlyndotts	lerabreed
+723	2018-01-05 20:45:00	0	12	60.2439999999999998	29.9899999999999984	59.8170000000000002	29.8530000000000015	17	45	PL420	pameliacavitt	sierragingras
+724	2018-02-02 03:56:00	0	29	59.5060000000000002	29.7040000000000006	59.5549999999999997	30.1170000000000009	23	43	PD533	alexacory	elfriededittmer
+725	2018-02-14 01:33:00	0	11	59.5240000000000009	30.411999999999999	59.884999999999998	29.7390000000000008	26	23	GJ528	donniemaskell	ceolafazio
+726	2018-01-03 07:13:00	0	53	60.3569999999999993	30.338000000000001	60.2730000000000032	29.5990000000000002	20	72	RI764	jerrodlupo	wilburjustiniano
+727	2018-01-11 23:12:00	0	66	59.5670000000000002	29.7360000000000007	60.2010000000000005	29.6460000000000008	23	48	PB088	sabrinacoss	timikanims
+728	2018-02-06 18:47:00	0	46	59.9560000000000031	30.2519999999999989	59.7560000000000002	30.4310000000000009	13	66	FZ573	taneshastruthers	lettybruner
+729	2018-01-25 01:33:00	0	62	60.1000000000000014	29.9540000000000006	59.5940000000000012	29.8760000000000012	9	54	HT034	latinaphenix	shamekalachance
+730	2018-01-02 10:47:00	0	95	60.1000000000000014	30.4289999999999985	59.5189999999999984	30.2280000000000015	9	67	CZ751	lillythorton	louisalucio
+731	2018-02-06 04:48:00	0	66	60.2530000000000001	30.0229999999999997	59.546999999999997	30.2779999999999987	30	118	PL420	consuelotokarz	lerabreed
+732	2018-01-09 03:52:00	0	28	60.4050000000000011	29.8590000000000018	59.5670000000000002	29.7360000000000007	22	34	SG947	springsergio	fidelshimkus
+733	2018-02-25 03:22:00	0	40	59.6319999999999979	29.7600000000000016	59.722999999999999	30.4160000000000004	16	99	HT034	madelainesing	chiamurphey
+734	2018-01-10 19:41:00	0	71	59.8870000000000005	29.5850000000000009	59.9549999999999983	29.6080000000000005	21	28	IM965	springsergio	fidelshimkus
+735	2018-02-08 03:05:00	0	11	60.2439999999999998	29.9899999999999984	60.1670000000000016	29.5609999999999999	12	15	PB088	mitsuemcconico	chiamurphey
+736	2018-02-08 05:27:00	0	47	60.2740000000000009	29.6400000000000006	59.884999999999998	29.7390000000000008	24	84	WT994	eugenesacks	timikanims
+737	2018-01-06 07:55:00	0	60	60.222999999999999	30.3500000000000014	59.6910000000000025	29.9200000000000017	25	94	QL886	springsergio	kevenschuller
+738	2018-01-01 18:04:00	0	57	60.2700000000000031	30.2590000000000003	60.2700000000000031	30.2590000000000003	6	70	NB353	ozelladay	masonmardis
+740	2018-02-07 12:09:00	0	98	59.6159999999999997	30.4229999999999983	60.4390000000000001	30.2250000000000014	19	90	HT034	hershelsmullen	fidelshimkus
+741	2018-01-11 12:36:00	0	68	59.7280000000000015	30.4710000000000001	60.222999999999999	30.3500000000000014	24	21	NB353	consuelotokarz	chiamurphey
+742	2018-02-02 20:43:00	0	53	60.4080000000000013	29.625	59.8170000000000002	29.8530000000000015	5	41	UB128	ozelladay	lerabreed
+743	2018-01-14 18:14:00	0	27	60.2700000000000031	30.2590000000000003	59.703000000000003	29.6750000000000007	18	10	QL886	valrieburr	timikanims
+744	2018-01-07 22:51:00	0	18	59.5940000000000012	29.8760000000000012	60.1000000000000014	29.9540000000000006	8	53	NB353	valrieburr	beewommack
+745	2018-01-25 11:01:00	0	65	60.1670000000000016	29.5609999999999999	59.5309999999999988	29.7059999999999995	14	29	UB128	taneshastruthers	ceolafazio
+746	2018-02-08 18:08:00	0	78	60.4189999999999969	29.5549999999999997	60.3840000000000003	29.9649999999999999	23	79	QL886	kevinnuno	joleenjefferis
+747	2018-01-13 13:30:00	0	50	59.7659999999999982	29.7689999999999984	59.7340000000000018	30.463000000000001	25	105	GJ528	donniemaskell	julioned
+748	2018-02-01 16:36:00	0	28	60.4510000000000005	29.7890000000000015	59.6769999999999996	30.1829999999999998	30	71	WT994	nathanaelpaylor	essiehempel
+749	2018-01-10 02:50:00	0	47	59.6259999999999977	29.5889999999999986	59.8250000000000028	30.1980000000000004	26	21	HT034	chungcottone	sigridenger
+750	2018-01-18 01:22:00	0	53	59.5240000000000009	30.411999999999999	59.5670000000000002	29.7360000000000007	17	80	CZ751	kathlyndotts	chiamurphey
+751	2018-02-16 19:07:00	0	53	59.9859999999999971	30.1559999999999988	59.6989999999999981	30.375	30	96	SG947	madelainesing	essiehempel
+752	2018-01-30 18:16:00	0	79	59.7629999999999981	30.3230000000000004	60.2010000000000005	29.6460000000000008	18	87	SG947	chungcottone	sigridenger
+753	2018-01-14 11:55:00	0	14	60.2730000000000032	29.5990000000000002	59.8440000000000012	30.3120000000000012	28	61	MA491	eugenesacks	shamekalachance
+754	2018-02-18 08:15:00	0	21	59.7539999999999978	29.9490000000000016	59.9549999999999983	29.6080000000000005	28	14	MA491	valrieburr	lettybruner
+755	2018-01-13 04:54:00	0	37	59.6049999999999969	30.3270000000000017	60.3930000000000007	29.6000000000000014	6	29	QL886	valrieburr	judithvillareal
+756	2018-02-04 01:48:00	0	46	59.5309999999999988	29.7059999999999995	60.4669999999999987	30.4989999999999988	9	120	UB128	cedricguilford	debrahdeland
+757	2018-02-06 03:51:00	0	23	59.865000000000002	30.1849999999999987	59.6769999999999996	30.1829999999999998	17	14	GJ528	madelainesing	elfriededittmer
+758	2018-01-06 23:25:00	0	70	59.7629999999999981	30.3230000000000004	59.5189999999999984	30.2280000000000015	23	27	GJ624	ozelladay	lerabreed
+759	2018-02-12 04:18:00	0	35	59.9680000000000035	30.4170000000000016	60.0510000000000019	30.3359999999999985	12	88	GJ528	springsergio	essiehempel
+760	2018-02-20 10:19:00	0	27	60.222999999999999	30.3500000000000014	59.5060000000000002	29.7040000000000006	22	81	WT994	alexacory	julioned
+761	2018-02-12 13:30:00	0	89	59.546999999999997	30.2779999999999987	59.7340000000000018	30.463000000000001	21	21	UB128	nathanielgibb	marcellusmagana
+762	2018-02-14 09:39:00	0	78	60.1340000000000003	30.338000000000001	60.4549999999999983	29.5169999999999995	27	65	SG947	normangreb	ceolafazio
+763	2018-01-15 19:20:00	0	73	60.1000000000000014	30.4289999999999985	60.2530000000000001	30.0229999999999997	17	100	HT034	donniemaskell	masonmardis
+764	2018-01-29 21:10:00	0	71	59.6049999999999969	30.3270000000000017	59.6319999999999979	30.1580000000000013	18	95	IM965	latinaphenix	fidelshimkus
+765	2018-02-16 19:34:00	0	100	59.9870000000000019	30.2970000000000006	60.4080000000000013	29.625	21	31	UB128	mitsuemcconico	kevenschuller
+766	2018-01-08 07:54:00	0	16	59.6910000000000025	29.9200000000000017	60.2349999999999994	30.3249999999999993	27	27	FZ573	hershelsmullen	chiamurphey
+767	2018-01-01 10:49:00	0	45	60.4080000000000013	29.625	59.6319999999999979	29.7600000000000016	26	13	PB088	sabrinacoss	ceolafazio
+768	2018-02-09 03:30:00	0	52	59.5189999999999984	30.2280000000000015	59.5309999999999988	29.7059999999999995	15	21	GJ624	sabrinacoss	kevenschuller
+769	2018-02-09 08:55:00	0	95	59.7439999999999998	30.4009999999999998	59.9680000000000035	30.4170000000000016	16	16	CZ751	hershelsmullen	kevenschuller
+770	2018-02-06 07:45:00	0	90	60.1310000000000002	30.3219999999999992	59.7439999999999998	30.4009999999999998	21	63	PL420	cedricguilford	danillewhiteside
+771	2018-02-26 16:54:00	0	73	60.2530000000000001	30.0229999999999997	59.7560000000000002	30.4310000000000009	27	10	NB353	alexacory	marcellusmagana
+772	2018-02-14 13:10:00	0	70	59.6989999999999981	30.375	59.703000000000003	29.6750000000000007	14	96	PD533	jerrodlupo	ceolafazio
+773	2018-02-07 12:56:00	0	79	59.5060000000000002	29.7040000000000006	60.2409999999999997	29.5749999999999993	14	37	XO182	madelainesing	vimilani
+774	2018-01-16 10:47:00	0	39	60.4510000000000005	29.7890000000000015	60.2349999999999994	30.3249999999999993	18	85	RI764	alexacory	ceolafazio
+775	2018-01-28 06:08:00	0	15	59.9680000000000035	30.4170000000000016	60.1779999999999973	29.8569999999999993	21	34	PL420	normangreb	fidelshimkus
+776	2018-01-25 07:08:00	0	14	59.8740000000000023	30.2360000000000007	60.1670000000000016	29.5609999999999999	21	78	EI983	eugenesacks	shamekalachance
+777	2018-01-03 02:15:00	0	89	59.7280000000000015	30.4710000000000001	59.9560000000000031	30.2519999999999989	29	116	MA491	taneshastruthers	lerabreed
+778	2018-01-18 11:39:00	0	34	60.222999999999999	30.3500000000000014	60.1670000000000016	29.5609999999999999	17	95	FZ573	valrieburr	judithvillareal
+779	2018-01-18 14:47:00	0	13	60.2700000000000031	30.2590000000000003	60.2700000000000031	30.2590000000000003	25	119	IM965	lillythorton	julioned
+780	2018-02-20 01:15:00	0	71	59.7359999999999971	29.6469999999999985	59.703000000000003	29.6750000000000007	21	57	UB128	quentindelacruz	kashacallen
+781	2018-01-31 22:31:00	0	94	59.6259999999999977	29.5889999999999986	60.1030000000000015	29.9540000000000006	26	12	IM002	hershelsmullen	essiehempel
+782	2018-02-16 01:39:00	0	16	59.6319999999999979	29.7600000000000016	59.9549999999999983	29.6080000000000005	5	17	IM002	quentindelacruz	lettybruner
+783	2018-02-19 12:43:00	0	55	60.1340000000000003	30.338000000000001	59.9260000000000019	29.9009999999999998	29	21	PD533	valrieburr	beewommack
+784	2018-01-07 02:57:00	0	82	59.7340000000000018	30.463000000000001	59.7439999999999998	30.4009999999999998	24	25	NB353	pameliacavitt	fidelshimkus
+785	2018-02-28 15:21:00	0	70	59.722999999999999	30.4160000000000004	59.6159999999999997	30.4229999999999983	27	12	IM002	valrieburr	essiehempel
+786	2018-02-22 01:24:00	0	36	59.7340000000000018	30.463000000000001	59.546999999999997	30.2779999999999987	18	117	XO182	consuelotokarz	shamekalachance
+787	2018-02-17 18:21:00	0	11	59.865000000000002	30.1849999999999987	60.2740000000000009	29.6400000000000006	22	78	XO182	pameliacavitt	fidelshimkus
+788	2018-02-04 15:41:00	0	95	59.7419999999999973	30.2439999999999998	60.1289999999999978	30.4110000000000014	13	58	FZ573	valrieburr	kevenschuller
+789	2018-02-04 03:46:00	0	25	60.357999999999997	29.6729999999999983	60.3639999999999972	29.9089999999999989	21	72	EI983	cedricguilford	timikanims
+790	2018-01-12 12:51:00	0	23	60.2730000000000032	29.5990000000000002	60.3659999999999997	30.3440000000000012	12	107	FZ573	latinaphenix	louisalucio
+791	2018-01-02 09:04:00	0	49	59.7040000000000006	29.7330000000000005	59.6319999999999979	30.1580000000000013	25	60	IM002	nathanielgibb	julioned
+792	2018-01-10 17:23:00	0	56	59.7629999999999981	30.3230000000000004	59.8170000000000002	29.8530000000000015	12	53	RI764	nathanaelpaylor	vimilani
+793	2018-01-16 16:18:00	0	74	60.2700000000000031	30.2590000000000003	59.5240000000000009	30.411999999999999	15	89	PL420	springsergio	joleenjefferis
+794	2018-01-19 05:26:00	0	34	59.9680000000000035	30.4170000000000016	60.017000000000003	30.2850000000000001	20	86	FZ573	hershelsmullen	shaynacropp
+795	2018-01-31 22:07:00	0	54	59.7539999999999978	29.9490000000000016	59.9099999999999966	30	7	54	PB088	eugenesacks	elfriededittmer
+796	2018-01-19 17:04:00	0	46	59.5189999999999984	30.2280000000000015	60.222999999999999	30.3500000000000014	26	32	MA491	nathanaelpaylor	kenyarumore
+797	2018-01-05 08:03:00	0	18	60.4189999999999969	29.5549999999999997	60.1289999999999978	30.4110000000000014	8	104	IM965	kevinnuno	timikanims
+798	2018-02-21 04:18:00	0	39	59.9859999999999971	30.1559999999999988	59.6540000000000035	30.2199999999999989	21	73	SG947	pameliacavitt	sigridenger
+799	2018-02-02 13:00:00	0	38	59.865000000000002	30.1849999999999987	60.222999999999999	30.3500000000000014	7	120	RI764	sabrinacoss	debrahdeland
+800	2018-02-21 16:58:00	0	71	59.7659999999999982	29.7689999999999984	59.7280000000000015	30.4710000000000001	12	25	MA491	consuelotokarz	masonmardis
+801	2018-01-16 17:08:00	0	11	59.5739999999999981	29.9860000000000007	59.7680000000000007	30.3200000000000003	16	70	HT034	madelainesing	debrahdeland
+802	2018-02-18 05:05:00	0	45	60.1030000000000015	29.9540000000000006	59.7040000000000006	29.7330000000000005	20	30	RI764	latinaphenix	essiehempel
+803	2018-01-11 14:54:00	0	91	59.6159999999999997	30.4229999999999983	59.8089999999999975	29.9349999999999987	8	86	PL420	quentindelacruz	judithvillareal
+804	2018-01-28 02:32:00	0	91	60.357999999999997	29.6729999999999983	59.7280000000000015	30.4710000000000001	24	71	HT034	nathanaelpaylor	joleenjefferis
+805	2018-01-06 18:04:00	0	23	60.3659999999999997	30.3440000000000012	59.7560000000000002	30.4310000000000009	13	105	IM965	normangreb	timikanims
+806	2018-01-07 02:02:00	0	89	59.9260000000000019	29.9009999999999998	59.7419999999999973	30.2439999999999998	26	111	PL420	valrieburr	vimilani
+807	2018-02-17 09:28:00	0	65	60.2740000000000009	29.6400000000000006	60.3569999999999993	30.338000000000001	10	44	CZ751	alexacory	masonmardis
+808	2018-02-13 13:12:00	0	14	60.4549999999999983	29.5169999999999995	60.1779999999999973	29.8569999999999993	15	94	FZ573	sabrinacoss	marcellusmagana
+809	2018-02-03 00:47:00	0	23	60.2349999999999994	30.3249999999999993	59.7340000000000018	30.463000000000001	25	85	UB128	alexacory	shaynacropp
+810	2018-02-17 07:05:00	0	31	60.1670000000000016	29.5609999999999999	59.703000000000003	29.6750000000000007	27	103	GJ528	eugenesacks	julioned
+811	2018-02-28 07:45:00	0	97	60.3659999999999997	30.3440000000000012	60.0510000000000019	30.3359999999999985	12	113	EI983	alexacory	debrahdeland
+812	2018-01-15 07:54:00	0	35	60.222999999999999	30.3500000000000014	59.7340000000000018	30.463000000000001	24	42	XO182	latinaphenix	sigridenger
+813	2018-02-22 03:17:00	0	74	60.4390000000000001	30.2250000000000014	59.9099999999999966	30	5	19	IM002	madelainesing	masonmardis
+814	2018-02-19 16:56:00	0	13	59.7079999999999984	29.6479999999999997	60.2700000000000031	30.2590000000000003	18	19	CZ751	nathanaelpaylor	chiamurphey
+815	2018-02-01 03:02:00	0	46	59.9099999999999966	30	59.9450000000000003	30.1119999999999983	19	27	RI764	quentindelacruz	julioned
+816	2018-01-16 13:53:00	0	71	60.3100000000000023	29.7560000000000002	59.9870000000000019	30.2970000000000006	11	41	SG947	kathlyndotts	debrahdeland
+817	2018-01-05 07:41:00	0	44	59.7359999999999971	29.6469999999999985	60.4949999999999974	29.6119999999999983	30	79	EI983	alexacory	fidelshimkus
+818	2018-01-29 14:28:00	0	38	60.3930000000000007	29.6000000000000014	60.3659999999999997	30.3440000000000012	12	28	FZ573	jerrodlupo	louisalucio
+819	2018-01-15 03:54:00	0	100	59.7079999999999984	29.6479999999999997	59.7079999999999984	29.6479999999999997	11	119	GJ624	mitsuemcconico	joleenjefferis
+820	2018-02-07 18:35:00	0	57	60.017000000000003	30.2850000000000001	59.8870000000000005	29.5850000000000009	24	77	EI983	mitsuemcconico	lettybruner
+821	2018-01-06 22:13:00	0	63	59.7439999999999998	30.4009999999999998	59.9870000000000019	30.2970000000000006	7	14	PL420	taneshastruthers	sigridenger
+822	2018-01-16 17:39:00	0	88	59.9099999999999966	30	59.7040000000000006	29.7330000000000005	28	66	PB088	nathanielgibb	danillewhiteside
+823	2018-02-12 20:52:00	0	12	59.7629999999999981	30.3230000000000004	60.1760000000000019	29.6409999999999982	17	92	PL420	valrieburr	marcellusmagana
+824	2018-01-08 14:08:00	0	71	59.8059999999999974	29.8730000000000011	59.9819999999999993	29.5809999999999995	8	87	NB353	springsergio	wilburjustiniano
+825	2018-02-03 01:47:00	0	36	59.865000000000002	30.1849999999999987	59.8200000000000003	30.3520000000000003	10	23	EI983	ozelladay	essiehempel
+827	2018-02-13 08:10:00	0	58	59.9870000000000019	30.2970000000000006	59.7539999999999978	29.9490000000000016	15	57	HT034	alexacory	kenyarumore
+828	2018-02-27 22:34:00	0	26	60.3569999999999993	30.338000000000001	60.4969999999999999	29.9959999999999987	24	71	EI983	nathanielgibb	marcellusmagana
+829	2018-02-10 02:20:00	0	98	59.7629999999999981	30.3230000000000004	59.6989999999999981	30.375	7	53	PB088	cedricguilford	sierragingras
+832	2018-01-11 01:10:00	0	66	59.7680000000000007	30.3200000000000003	60.2730000000000032	29.5990000000000002	21	47	CZ751	consuelotokarz	shamekalachance
+833	2018-01-25 17:43:00	0	77	59.7560000000000002	30.4310000000000009	59.9859999999999971	30.1559999999999988	11	108	EI983	quentindelacruz	marcellusmagana
+834	2018-02-23 19:27:00	0	11	60.2010000000000005	29.6460000000000008	60.2439999999999998	29.9899999999999984	25	104	PD533	mitsuemcconico	wilburjustiniano
+835	2018-01-09 03:36:00	0	32	59.9819999999999993	29.5809999999999995	60.4510000000000005	29.7890000000000015	12	61	FZ573	chungcottone	lerabreed
+836	2018-02-17 03:21:00	0	27	60.3840000000000003	29.9649999999999999	60.1340000000000003	30.338000000000001	29	117	HT034	springsergio	lettybruner
+838	2018-02-17 01:15:00	0	47	60.4549999999999983	29.5169999999999995	59.7539999999999978	29.9490000000000016	25	79	XO182	pameliacavitt	wilburjustiniano
+839	2018-02-25 16:33:00	0	82	60.0510000000000019	30.3359999999999985	59.9450000000000003	30.1119999999999983	26	20	NB353	cedricguilford	kevenschuller
+840	2018-01-17 18:05:00	0	16	60.4969999999999999	29.9959999999999987	59.9260000000000019	29.9009999999999998	6	52	MA491	lillythorton	lerabreed
+841	2018-01-26 02:07:00	0	86	60.2530000000000001	30.0229999999999997	60.1030000000000015	29.9540000000000006	18	98	EI983	hershelsmullen	ceolafazio
+842	2018-02-02 08:19:00	0	68	59.6910000000000025	29.9200000000000017	60.4549999999999983	29.5169999999999995	8	13	PB088	nathanielgibb	kashacallen
+843	2018-02-02 02:50:00	0	49	59.9560000000000031	30.2519999999999989	60.1030000000000015	29.9540000000000006	29	52	PB088	kathlyndotts	joleenjefferis
+844	2018-02-24 20:25:00	0	39	59.546999999999997	30.2779999999999987	59.5060000000000002	29.7040000000000006	21	82	IM002	nathanaelpaylor	vimilani
+845	2018-02-17 18:19:00	0	39	59.8170000000000002	29.8530000000000015	60.0840000000000032	29.5899999999999999	14	44	FZ573	valrieburr	essiehempel
+846	2018-01-02 17:49:00	0	98	59.8629999999999995	30.1000000000000014	59.9870000000000019	30.2970000000000006	6	37	CZ751	madelainesing	essiehempel
+847	2018-01-13 09:56:00	0	93	60.2439999999999998	29.9899999999999984	59.7439999999999998	30.4009999999999998	5	62	SG947	pameliacavitt	elfriededittmer
+848	2018-01-11 23:28:00	0	45	59.7539999999999978	29.9490000000000016	59.7520000000000024	29.8150000000000013	22	21	NB353	quentindelacruz	louisalucio
+849	2018-02-27 14:18:00	0	46	59.8320000000000007	29.588000000000001	60.2530000000000001	30.0229999999999997	24	20	UB128	cedricguilford	shaynacropp
+850	2018-01-03 11:47:00	0	53	59.7659999999999982	29.7689999999999984	60.1670000000000016	29.5609999999999999	13	33	NB353	valrieburr	julioned
+851	2018-01-05 14:58:00	0	69	59.7629999999999981	30.3230000000000004	59.6540000000000035	30.2199999999999989	21	50	PL420	eugenesacks	chiamurphey
+852	2018-02-02 04:11:00	0	82	60.1000000000000014	29.9540000000000006	60.2530000000000001	30.0229999999999997	9	70	GJ528	hershelsmullen	shaynacropp
+853	2018-02-26 15:53:00	0	49	59.6540000000000035	30.2199999999999989	59.6769999999999996	30.1829999999999998	16	69	PL420	eugenesacks	beewommack
+854	2018-02-11 09:26:00	0	42	60.4050000000000011	29.8590000000000018	60.3659999999999997	30.3440000000000012	28	16	GJ624	quentindelacruz	lettybruner
+855	2018-02-17 09:12:00	0	20	59.7520000000000024	29.8150000000000013	60.4440000000000026	29.5249999999999986	17	37	EI983	kathlyndotts	danillewhiteside
+856	2018-02-19 09:11:00	0	68	59.7560000000000002	30.4310000000000009	59.8320000000000007	29.588000000000001	13	51	FZ573	eugenesacks	kashacallen
+857	2018-01-24 23:21:00	0	26	59.7359999999999971	29.6469999999999985	59.8629999999999995	30.1000000000000014	17	98	WT994	madelainesing	danillewhiteside
+858	2018-01-08 20:23:00	0	87	60.0510000000000019	30.3359999999999985	60.4969999999999999	29.9959999999999987	26	52	GJ624	madelainesing	kevenschuller
+859	2018-02-21 10:19:00	0	30	59.6159999999999997	30.4229999999999983	59.9680000000000035	29.8099999999999987	18	77	PL420	latinaphenix	debrahdeland
+860	2018-01-08 14:51:00	0	50	59.7659999999999982	29.7689999999999984	59.7439999999999998	30.4009999999999998	11	26	NB353	jerrodlupo	sierragingras
+861	2018-02-17 03:49:00	0	53	60.4440000000000026	29.5249999999999986	60.3659999999999997	30.3440000000000012	6	16	SG947	lillythorton	essiehempel
+862	2018-02-13 04:02:00	0	64	60.1340000000000003	30.338000000000001	59.6769999999999996	30.1829999999999998	6	84	XO182	nathanaelpaylor	wilburjustiniano
+863	2018-01-18 12:01:00	0	29	59.9680000000000035	30.4170000000000016	59.5670000000000002	29.7360000000000007	19	80	SG947	chungcottone	shamekalachance
+864	2018-01-24 16:34:00	0	60	59.9059999999999988	30.2729999999999997	59.5189999999999984	30.2280000000000015	23	95	CZ751	sabrinacoss	sigridenger
+865	2018-02-27 17:18:00	0	62	59.6049999999999969	30.3270000000000017	60.3140000000000001	29.9059999999999988	11	47	GJ624	ozelladay	sierragingras
+866	2018-02-28 00:10:00	0	12	60.4969999999999999	29.9959999999999987	59.8629999999999995	30.1000000000000014	24	48	QL886	valrieburr	vimilani
+867	2018-02-25 07:34:00	0	29	60.4440000000000026	29.5249999999999986	59.6540000000000035	30.2199999999999989	16	10	FZ573	cedricguilford	fidelshimkus
+868	2018-02-12 05:20:00	0	30	60.3659999999999997	30.3440000000000012	59.7340000000000018	30.463000000000001	15	53	QL886	nathanielgibb	wilburjustiniano
+870	2018-02-05 01:34:00	0	83	59.5739999999999981	29.9860000000000007	59.8200000000000003	30.3520000000000003	6	109	GJ528	taneshastruthers	ceolafazio
+871	2018-01-31 22:07:00	0	44	59.8250000000000028	30.1980000000000004	59.7040000000000006	29.7330000000000005	16	82	IM002	taneshastruthers	vimilani
+872	2018-02-21 23:02:00	0	78	59.7680000000000007	30.3200000000000003	60.4390000000000001	30.2250000000000014	24	71	SG947	alexacory	ceolafazio
+873	2018-01-31 12:45:00	0	31	60.4050000000000011	29.8590000000000018	60.2010000000000005	29.6460000000000008	27	25	MA491	donniemaskell	fidelshimkus
+874	2018-02-17 13:32:00	0	22	60.222999999999999	30.3500000000000014	59.8440000000000012	30.3120000000000012	7	60	PD533	ozelladay	fidelshimkus
+875	2018-02-14 00:42:00	0	58	60.3140000000000001	29.9059999999999988	59.9870000000000019	30.2970000000000006	5	62	SG947	nathanielgibb	wilburjustiniano
+876	2018-01-27 04:10:00	0	97	60.2740000000000009	29.6400000000000006	59.8870000000000005	29.5850000000000009	17	61	FZ573	madelainesing	vimilani
+877	2018-01-28 10:23:00	0	89	60.3100000000000023	29.7560000000000002	59.6159999999999997	30.4229999999999983	27	24	CZ751	madelainesing	ceolafazio
+878	2018-01-26 23:06:00	0	30	60.3930000000000007	29.6000000000000014	59.9680000000000035	29.8099999999999987	20	58	SG947	taneshastruthers	sigridenger
+880	2018-02-09 12:48:00	0	42	59.9560000000000031	30.2519999999999989	59.6910000000000025	29.9200000000000017	17	38	CZ751	cedricguilford	danillewhiteside
+881	2018-02-24 15:48:00	0	98	59.7419999999999973	30.2439999999999998	59.7439999999999998	30.4009999999999998	15	27	WT994	chungcottone	sigridenger
+882	2018-01-09 04:02:00	0	14	59.7340000000000018	30.463000000000001	59.9859999999999971	30.1559999999999988	26	61	PD533	hershelsmullen	sierragingras
+883	2018-01-21 18:32:00	0	28	59.8740000000000023	30.2360000000000007	60.4510000000000005	29.7890000000000015	12	83	UB128	consuelotokarz	joleenjefferis
+884	2018-01-24 09:22:00	0	51	60.0840000000000032	29.5899999999999999	60.4440000000000026	29.5249999999999986	23	111	QL886	lillythorton	kashacallen
+885	2018-02-21 19:22:00	0	86	59.884999999999998	29.7390000000000008	60.1310000000000002	30.3219999999999992	26	119	XO182	madelainesing	danillewhiteside
+886	2018-02-01 00:06:00	0	66	59.5940000000000012	29.8760000000000012	59.6319999999999979	29.7600000000000016	11	113	SG947	taneshastruthers	fidelshimkus
+888	2018-02-09 08:28:00	0	70	59.5739999999999981	29.9860000000000007	59.9819999999999993	29.5809999999999995	7	43	QL886	donniemaskell	marcellusmagana
+889	2018-02-12 17:21:00	0	36	60.4669999999999987	30.4989999999999988	60.3930000000000007	29.6000000000000014	21	96	QL886	cedricguilford	chiamurphey
+890	2018-01-23 11:19:00	0	58	59.7079999999999984	29.6479999999999997	59.5739999999999981	29.9860000000000007	10	95	PB088	latinaphenix	shaynacropp
+891	2018-01-17 10:22:00	0	79	59.7439999999999998	30.4009999999999998	59.7539999999999978	29.9490000000000016	22	103	FZ573	pameliacavitt	sierragingras
+892	2018-02-09 01:11:00	0	51	59.9450000000000003	30.1119999999999983	59.7280000000000015	30.4710000000000001	27	44	PD533	consuelotokarz	judithvillareal
+893	2018-01-19 02:10:00	0	63	59.8170000000000002	29.8530000000000015	60.1289999999999978	30.4110000000000014	28	102	RI764	mitsuemcconico	julioned
+895	2018-02-05 03:02:00	0	30	59.5309999999999988	29.7059999999999995	59.9560000000000031	30.2519999999999989	17	42	SG947	lillythorton	judithvillareal
+896	2018-01-05 09:27:00	0	80	59.8440000000000012	30.3120000000000012	59.5549999999999997	30.1170000000000009	25	39	GJ624	latinaphenix	kashacallen
+897	2018-01-07 16:06:00	0	71	59.865000000000002	30.1849999999999987	59.6769999999999996	30.1829999999999998	25	95	MA491	sabrinacoss	debrahdeland
+898	2018-01-23 22:24:00	0	56	60.1310000000000002	30.3219999999999992	59.5670000000000002	29.7360000000000007	12	11	SG947	sabrinacoss	lerabreed
+899	2018-01-30 07:43:00	0	10	59.9859999999999971	30.1559999999999988	60.4390000000000001	30.2250000000000014	30	108	IM002	jerrodlupo	sierragingras
+900	2018-02-05 23:27:00	0	69	59.7659999999999982	29.7689999999999984	60.0840000000000032	29.5899999999999999	26	66	MA491	eugenesacks	shaynacropp
+901	2018-01-30 00:52:00	0	78	60.3840000000000003	29.9649999999999999	59.6159999999999997	30.4229999999999983	8	112	RI764	consuelotokarz	shaynacropp
+902	2018-01-14 23:55:00	0	90	60.4549999999999983	29.5169999999999995	59.8740000000000023	30.2360000000000007	29	30	GJ528	ozelladay	lettybruner
+903	2018-01-16 15:05:00	0	26	59.7340000000000018	30.463000000000001	59.9870000000000019	30.2970000000000006	21	114	UB128	kevinnuno	kenyarumore
+904	2018-02-27 06:07:00	0	57	59.9260000000000019	29.9009999999999998	60.1030000000000015	29.9540000000000006	7	16	WT994	mitsuemcconico	joleenjefferis
+905	2018-01-06 05:18:00	0	78	60.4949999999999974	29.6119999999999983	60.2700000000000031	30.2590000000000003	16	86	PL420	mitsuemcconico	kenyarumore
+906	2018-01-21 22:38:00	0	95	60.4080000000000013	29.625	60.222999999999999	30.3500000000000014	13	39	QL886	nathanielgibb	shaynacropp
+907	2018-02-02 05:51:00	0	48	59.8200000000000003	30.3520000000000003	60.4440000000000026	29.5249999999999986	17	71	WT994	jerrodlupo	lettybruner
+908	2018-02-15 17:42:00	0	99	59.9099999999999966	30	60.1199999999999974	30.254999999999999	10	86	MA491	mitsuemcconico	debrahdeland
+909	2018-02-11 23:47:00	0	86	60.0510000000000019	30.3359999999999985	60.1670000000000016	29.5609999999999999	14	40	MA491	madelainesing	marcellusmagana
+910	2018-02-11 06:22:00	0	70	60.1199999999999974	30.254999999999999	59.884999999999998	29.7390000000000008	15	100	WT994	kevinnuno	joleenjefferis
+911	2018-02-10 20:45:00	0	71	60.2349999999999994	30.3249999999999993	60.4510000000000005	29.7890000000000015	17	14	NB353	latinaphenix	debrahdeland
+912	2018-02-13 10:36:00	0	12	60.1779999999999973	29.8569999999999993	59.5060000000000002	29.7040000000000006	17	76	CZ751	latinaphenix	shamekalachance
+913	2018-02-28 11:57:00	0	62	59.8200000000000003	30.3520000000000003	59.8200000000000003	30.3520000000000003	22	110	GJ528	madelainesing	sierragingras
+914	2018-02-01 09:34:00	0	31	59.8320000000000007	29.588000000000001	60.2700000000000031	30.2590000000000003	14	110	CZ751	springsergio	elfriededittmer
+915	2018-01-31 17:16:00	0	80	60.1030000000000015	29.9540000000000006	60.4189999999999969	29.5549999999999997	18	11	SG947	madelainesing	lerabreed
+916	2018-02-11 05:38:00	0	94	59.8170000000000002	29.8530000000000015	60.2700000000000031	30.2590000000000003	30	87	EI983	alexacory	beewommack
+917	2018-01-29 00:53:00	0	83	59.7340000000000018	30.463000000000001	59.6769999999999996	30.1829999999999998	29	112	HT034	kathlyndotts	louisalucio
+918	2018-01-19 19:36:00	0	79	59.9450000000000003	30.1119999999999983	60.1670000000000016	29.5609999999999999	8	110	WT994	eugenesacks	judithvillareal
+919	2018-01-11 15:41:00	0	11	59.546999999999997	30.2779999999999987	60.0159999999999982	30.4849999999999994	10	119	QL886	nathanielgibb	danillewhiteside
+920	2018-02-28 15:48:00	0	29	59.6289999999999978	29.6780000000000008	60.1689999999999969	30.1859999999999999	25	75	FZ573	pameliacavitt	essiehempel
+921	2018-01-17 18:48:00	0	45	59.7340000000000018	30.463000000000001	60.222999999999999	30.3500000000000014	7	15	SG947	consuelotokarz	joleenjefferis
+922	2018-01-15 00:17:00	0	71	60.3930000000000007	29.6000000000000014	59.8440000000000012	30.3120000000000012	23	18	MA491	springsergio	essiehempel
+923	2018-01-14 12:09:00	0	10	59.9680000000000035	29.8099999999999987	59.6319999999999979	30.1580000000000013	29	42	SG947	alexacory	elfriededittmer
+924	2018-01-22 14:35:00	0	96	59.5189999999999984	30.2280000000000015	59.8740000000000023	30.2360000000000007	29	59	WT994	madelainesing	vimilani
+986	2018-02-16 15:17:00	0	97	59.6259999999999977	29.5889999999999986	59.5670000000000002	29.7360000000000007	10	42	FZ573	taneshastruthers	vimilani
+925	2018-02-04 02:03:00	0	57	59.5240000000000009	30.411999999999999	59.6259999999999977	29.5889999999999986	7	27	FZ573	cedricguilford	shamekalachance
+926	2018-01-17 08:15:00	0	96	59.9099999999999966	30	59.7079999999999984	29.6479999999999997	15	93	XO182	valrieburr	julioned
+928	2018-01-03 08:34:00	0	96	59.6910000000000025	29.9200000000000017	60.1289999999999978	30.4110000000000014	27	113	WT994	pameliacavitt	vimilani
+929	2018-02-14 09:25:00	0	56	59.9560000000000031	30.2519999999999989	59.7280000000000015	30.4710000000000001	26	118	UB128	nathanielgibb	wilburjustiniano
+930	2018-02-19 23:36:00	0	78	59.6259999999999977	29.5889999999999986	59.6319999999999979	29.7600000000000016	28	99	PB088	quentindelacruz	essiehempel
+931	2018-01-25 16:18:00	0	64	59.5549999999999997	30.1170000000000009	59.8740000000000023	30.2360000000000007	21	16	SG947	normangreb	shamekalachance
+932	2018-01-22 20:26:00	0	50	59.6989999999999981	30.375	60.3569999999999993	30.338000000000001	19	104	IM965	sabrinacoss	sierragingras
+933	2018-02-10 21:32:00	0	21	60.1779999999999973	29.8569999999999993	59.8629999999999995	30.1000000000000014	21	10	QL886	pameliacavitt	masonmardis
+934	2018-02-02 18:52:00	0	83	60.017000000000003	30.2850000000000001	60.1199999999999974	30.254999999999999	17	115	SG947	madelainesing	julioned
+935	2018-01-08 20:16:00	0	84	60.4549999999999983	29.5169999999999995	59.5670000000000002	29.7360000000000007	30	45	QL886	donniemaskell	kashacallen
+936	2018-02-22 10:54:00	0	45	60.3639999999999972	29.9089999999999989	59.7340000000000018	30.463000000000001	10	109	CZ751	nathanaelpaylor	joleenjefferis
+937	2018-02-24 21:33:00	0	54	60.3639999999999972	29.9089999999999989	60.4669999999999987	30.4989999999999988	13	62	IM002	chungcottone	elfriededittmer
+938	2018-01-22 10:22:00	0	92	60.4669999999999987	30.4989999999999988	59.6769999999999996	30.1829999999999998	28	118	IM965	mitsuemcconico	shamekalachance
+939	2018-02-11 15:04:00	0	47	59.5309999999999988	29.7059999999999995	60.3140000000000001	29.9059999999999988	5	114	PL420	normangreb	lerabreed
+940	2018-01-26 15:50:00	0	36	60.3930000000000007	29.6000000000000014	59.9680000000000035	30.4170000000000016	20	33	EI983	cedricguilford	lerabreed
+941	2018-02-06 18:11:00	0	91	59.6319999999999979	30.1580000000000013	59.5670000000000002	29.7360000000000007	28	93	IM002	madelainesing	lerabreed
+942	2018-02-13 03:25:00	0	73	59.7520000000000024	29.8150000000000013	60.4189999999999969	29.5549999999999997	17	20	NB353	normangreb	kenyarumore
+943	2018-01-26 13:32:00	0	37	59.7629999999999981	30.3230000000000004	59.865000000000002	30.1849999999999987	7	56	UB128	sabrinacoss	beewommack
+944	2018-02-25 07:16:00	0	40	60.4949999999999974	29.6119999999999983	59.9859999999999971	30.1559999999999988	17	29	IM002	eugenesacks	beewommack
+945	2018-02-04 01:24:00	0	52	59.6289999999999978	29.6780000000000008	60.3569999999999993	30.338000000000001	19	112	IM965	pameliacavitt	sierragingras
+946	2018-01-04 03:25:00	0	45	59.9059999999999988	30.2729999999999997	60.3840000000000003	29.9649999999999999	30	46	FZ573	chungcottone	julioned
+947	2018-02-07 01:16:00	0	21	59.6259999999999977	29.5889999999999986	59.7359999999999971	29.6469999999999985	15	49	SG947	taneshastruthers	beewommack
+948	2018-02-17 08:09:00	0	12	59.5940000000000012	29.8760000000000012	59.6910000000000025	29.9200000000000017	26	57	UB128	jerrodlupo	sierragingras
+949	2018-01-06 21:12:00	0	31	59.9059999999999988	30.2729999999999997	59.8440000000000012	30.3120000000000012	19	34	PB088	normangreb	joleenjefferis
+950	2018-01-06 15:11:00	0	20	59.6159999999999997	30.4229999999999983	59.703000000000003	29.6750000000000007	5	62	CZ751	kevinnuno	shamekalachance
+951	2018-02-09 09:44:00	0	28	59.8870000000000005	29.5850000000000009	59.8250000000000028	30.1980000000000004	9	79	HT034	cedricguilford	julioned
+952	2018-01-01 05:53:00	0	54	59.7079999999999984	29.6479999999999997	59.8629999999999995	30.1000000000000014	30	77	SG947	pameliacavitt	masonmardis
+953	2018-01-22 20:39:00	0	35	59.7680000000000007	30.3200000000000003	60.1670000000000016	29.5609999999999999	18	99	XO182	cedricguilford	kenyarumore
+954	2018-02-10 20:09:00	0	44	59.6910000000000025	29.9200000000000017	60.3659999999999997	30.3440000000000012	11	93	XO182	donniemaskell	lerabreed
+955	2018-01-01 03:44:00	0	24	59.9680000000000035	29.8099999999999987	60.1670000000000016	29.5609999999999999	22	108	HT034	pameliacavitt	shaynacropp
+956	2018-02-13 19:34:00	0	86	59.9450000000000003	30.1119999999999983	60.4390000000000001	30.2250000000000014	14	48	IM965	normangreb	lettybruner
+957	2018-02-04 16:04:00	0	86	59.8320000000000007	29.588000000000001	60.3100000000000023	29.7560000000000002	27	21	IM002	nathanielgibb	beewommack
+958	2018-01-31 17:31:00	0	13	60.1199999999999974	30.254999999999999	59.865000000000002	30.1849999999999987	9	110	IM002	eugenesacks	timikanims
+959	2018-02-20 18:59:00	0	85	59.6289999999999978	29.6780000000000008	59.8629999999999995	30.1000000000000014	6	20	QL886	pameliacavitt	essiehempel
+961	2018-02-24 10:02:00	0	60	60.3569999999999993	30.338000000000001	59.8250000000000028	30.1980000000000004	21	12	XO182	valrieburr	ceolafazio
+962	2018-01-24 02:07:00	0	10	59.6289999999999978	29.6780000000000008	60.0510000000000019	30.3359999999999985	13	118	FZ573	mitsuemcconico	fidelshimkus
+963	2018-02-11 05:15:00	0	48	59.9819999999999993	29.5809999999999995	60.3840000000000003	29.9649999999999999	26	31	FZ573	kathlyndotts	sierragingras
+964	2018-01-12 09:15:00	0	76	60.3840000000000003	29.9649999999999999	59.5240000000000009	30.411999999999999	28	10	IM965	jerrodlupo	marcellusmagana
+965	2018-01-29 05:40:00	0	37	59.9260000000000019	29.9009999999999998	59.7419999999999973	30.2439999999999998	14	15	GJ624	madelainesing	lerabreed
+966	2018-02-04 06:50:00	0	71	59.6540000000000035	30.2199999999999989	60.4549999999999983	29.5169999999999995	30	91	PL420	pameliacavitt	joleenjefferis
+967	2018-01-30 11:00:00	0	86	59.6159999999999997	30.4229999999999983	59.6319999999999979	30.1580000000000013	24	93	PD533	nathanielgibb	sierragingras
+968	2018-02-02 14:32:00	0	98	59.9849999999999994	30.222999999999999	60.4080000000000013	29.625	10	34	MA491	chungcottone	debrahdeland
+969	2018-02-26 23:30:00	0	76	59.6989999999999981	30.375	60.2740000000000009	29.6400000000000006	28	36	GJ528	jerrodlupo	essiehempel
+970	2018-01-10 00:44:00	0	49	59.722999999999999	30.4160000000000004	60.1289999999999978	30.4110000000000014	7	54	SG947	quentindelacruz	lerabreed
+971	2018-02-20 11:56:00	0	100	59.5739999999999981	29.9860000000000007	60.4080000000000013	29.625	12	87	IM002	normangreb	ceolafazio
+972	2018-01-21 19:22:00	0	76	59.9059999999999988	30.2729999999999997	59.6989999999999981	30.375	13	18	PL420	eugenesacks	sigridenger
+973	2018-02-18 16:05:00	0	95	60.4969999999999999	29.9959999999999987	60.4669999999999987	30.4989999999999988	26	78	PB088	mitsuemcconico	judithvillareal
+974	2018-02-21 08:16:00	0	81	59.9680000000000035	30.4170000000000016	59.6159999999999997	30.4229999999999983	8	118	XO182	springsergio	shaynacropp
+976	2018-01-22 11:51:00	0	24	59.5940000000000012	29.8760000000000012	60.1030000000000015	29.9540000000000006	24	72	PD533	taneshastruthers	elfriededittmer
+977	2018-02-26 00:27:00	0	34	60.3569999999999993	30.338000000000001	60.1000000000000014	29.9540000000000006	29	105	MA491	hershelsmullen	kenyarumore
+978	2018-01-17 23:14:00	0	40	60.0159999999999982	30.4849999999999994	60.4440000000000026	29.5249999999999986	23	58	GJ624	pameliacavitt	kevenschuller
+979	2018-02-28 12:47:00	0	39	59.8059999999999974	29.8730000000000011	59.5060000000000002	29.7040000000000006	21	48	HT034	springsergio	joleenjefferis
+980	2018-02-11 21:23:00	0	92	59.9549999999999983	29.6080000000000005	60.2349999999999994	30.3249999999999993	10	92	CZ751	madelainesing	sierragingras
+981	2018-01-05 12:19:00	0	34	59.7419999999999973	30.2439999999999998	59.9549999999999983	29.6080000000000005	23	57	RI764	pameliacavitt	chiamurphey
+982	2018-02-13 15:01:00	0	34	59.9849999999999994	30.222999999999999	60.2700000000000031	30.2590000000000003	22	65	HT034	latinaphenix	kenyarumore
+983	2018-01-03 22:28:00	0	48	59.7419999999999973	30.2439999999999998	59.6259999999999977	29.5889999999999986	9	41	HT034	quentindelacruz	vimilani
+984	2018-01-28 00:51:00	0	71	59.7539999999999978	29.9490000000000016	59.7040000000000006	29.7330000000000005	13	41	CZ751	latinaphenix	lerabreed
+960	2018-02-18 04:36:00	0	92	59.546999999999997	30.2779999999999987	59.8059999999999974	29.8730000000000011	11	36	AN916	kevinnuno	lerabreed
+987	2018-01-27 05:43:00	0	84	59.6910000000000025	29.9200000000000017	59.8629999999999995	30.1000000000000014	26	67	IM965	kathlyndotts	shamekalachance
+988	2018-01-17 06:08:00	0	46	59.9059999999999988	30.2729999999999997	60.357999999999997	29.6729999999999983	6	16	NB353	taneshastruthers	chiamurphey
+989	2018-01-09 04:54:00	0	35	60.4510000000000005	29.7890000000000015	59.9680000000000035	29.8099999999999987	13	20	PD533	nathanaelpaylor	danillewhiteside
+990	2018-01-10 19:35:00	0	48	59.7680000000000007	30.3200000000000003	59.7419999999999973	30.2439999999999998	24	84	CZ751	donniemaskell	chiamurphey
+991	2018-01-24 11:13:00	0	37	59.5549999999999997	30.1170000000000009	59.7419999999999973	30.2439999999999998	6	118	GJ528	chungcottone	timikanims
+992	2018-01-28 09:25:00	0	16	59.7539999999999978	29.9490000000000016	60.4949999999999974	29.6119999999999983	13	66	XO182	consuelotokarz	kenyarumore
+993	2018-02-16 14:19:00	0	55	59.6159999999999997	30.4229999999999983	59.7560000000000002	30.4310000000000009	5	28	GJ624	hershelsmullen	julioned
+994	2018-02-26 10:37:00	0	24	59.9560000000000031	30.2519999999999989	60.2740000000000009	29.6400000000000006	29	107	QL886	eugenesacks	timikanims
+995	2018-02-28 07:19:00	0	71	60.1340000000000003	30.338000000000001	60.1289999999999978	30.4110000000000014	26	88	FZ573	chungcottone	kenyarumore
+996	2018-01-09 06:54:00	0	73	60.4949999999999974	29.6119999999999983	59.7659999999999982	29.7689999999999984	24	29	RI764	nathanielgibb	kashacallen
+997	2018-02-14 18:39:00	0	80	60.1000000000000014	29.9540000000000006	59.9059999999999988	30.2729999999999997	13	90	FZ573	donniemaskell	danillewhiteside
+998	2018-01-14 02:57:00	0	28	59.7560000000000002	30.4310000000000009	59.884999999999998	29.7390000000000008	17	114	HT034	sabrinacoss	essiehempel
+999	2018-02-28 11:42:00	0	29	60.1340000000000003	30.338000000000001	60.1289999999999978	30.4110000000000014	26	71	PD533	jerrodlupo	marcellusmagana
+1000	2018-02-22 01:10:00	0	31	59.7439999999999998	30.4009999999999998	59.8870000000000005	29.5850000000000009	24	114	WT994	donniemaskell	kenyarumore
+4	2018-01-13 14:13:00	0	92	60.4669999999999987	30.4989999999999988	59.8059999999999974	29.8730000000000011	14	19	AN916	eugenesacks	ceolafazio
+5	2018-02-03 08:39:00	0	58	59.5240000000000009	30.411999999999999	59.6289999999999978	29.6780000000000008	5	117	AN916	springsergio	debrahdeland
+24	2018-01-12 00:12:00	0	79	59.9549999999999983	29.6080000000000005	59.6289999999999978	29.6780000000000008	5	71	AN916	quentindelacruz	beewommack
+45	2018-02-23 02:29:00	0	88	59.9680000000000035	29.8099999999999987	59.5940000000000012	29.8760000000000012	29	75	AN916	normangreb	ceolafazio
+96	2018-02-22 11:28:00	0	74	60.1289999999999978	30.4110000000000014	59.9680000000000035	30.4170000000000016	24	54	AN916	nathanaelpaylor	kevenschuller
+106	2018-02-15 19:22:00	0	13	59.7520000000000024	29.8150000000000013	59.865000000000002	30.1849999999999987	23	33	AN916	kevinnuno	danillewhiteside
+109	2018-01-14 14:35:00	0	47	59.7359999999999971	29.6469999999999985	60.3569999999999993	30.338000000000001	24	31	AN916	quentindelacruz	beewommack
+139	2018-01-11 14:30:00	0	85	59.6259999999999977	29.5889999999999986	60.2409999999999997	29.5749999999999993	8	105	AN916	hershelsmullen	beewommack
+142	2018-01-24 01:20:00	0	20	59.7439999999999998	30.4009999999999998	59.9819999999999993	29.5809999999999995	12	89	AN916	jerrodlupo	sierragingras
+147	2018-02-05 09:06:00	0	44	60.1030000000000015	29.9540000000000006	59.5309999999999988	29.7059999999999995	16	59	AN916	quentindelacruz	lettybruner
+158	2018-02-24 09:48:00	0	68	60.1760000000000019	29.6409999999999982	60.4440000000000026	29.5249999999999986	28	44	AN916	donniemaskell	lettybruner
+175	2018-01-16 03:11:00	0	15	60.2010000000000005	29.6460000000000008	59.8089999999999975	29.9349999999999987	22	45	AN916	latinaphenix	marcellusmagana
+319	2018-02-12 23:19:00	0	33	59.8250000000000028	30.1980000000000004	59.865000000000002	30.1849999999999987	22	12	AN916	jerrodlupo	kenyarumore
+322	2018-02-10 09:02:00	0	48	59.5060000000000002	29.7040000000000006	59.7539999999999978	29.9490000000000016	6	35	AN916	madelainesing	debrahdeland
+407	2018-01-31 11:50:00	0	98	59.6910000000000025	29.9200000000000017	60.1760000000000019	29.6409999999999982	23	100	AN916	alexacory	fidelshimkus
+478	2018-02-03 05:18:00	0	98	60.0510000000000019	30.3359999999999985	60.3840000000000003	29.9649999999999999	5	27	AN916	pameliacavitt	masonmardis
+483	2018-01-08 18:01:00	0	35	59.7659999999999982	29.7689999999999984	59.7419999999999973	30.2439999999999998	10	103	AN916	mitsuemcconico	vimilani
+501	2018-02-04 19:23:00	0	97	60.4080000000000013	29.625	59.9680000000000035	29.8099999999999987	16	22	AN916	mitsuemcconico	debrahdeland
+537	2018-02-18 08:55:00	0	83	60.1030000000000015	29.9540000000000006	59.865000000000002	30.1849999999999987	9	117	AN916	hershelsmullen	debrahdeland
+541	2018-01-07 23:23:00	0	98	59.5240000000000009	30.411999999999999	59.5060000000000002	29.7040000000000006	12	109	AN916	normangreb	kevenschuller
+547	2018-02-10 17:28:00	0	43	60.2700000000000031	30.2590000000000003	60.0159999999999982	30.4849999999999994	16	106	AN916	hershelsmullen	marcellusmagana
+566	2018-02-23 19:32:00	0	23	59.8059999999999974	29.8730000000000011	59.9549999999999983	29.6080000000000005	5	56	AN916	donniemaskell	fidelshimkus
+635	2018-02-03 14:13:00	0	41	59.9859999999999971	30.1559999999999988	59.5240000000000009	30.411999999999999	9	24	AN916	eugenesacks	kenyarumore
+653	2018-02-20 11:51:00	0	36	60.2700000000000031	30.2590000000000003	59.5240000000000009	30.411999999999999	12	91	AN916	cedricguilford	beewommack
+692	2018-02-23 10:56:00	0	11	60.3840000000000003	29.9649999999999999	59.9859999999999971	30.1559999999999988	29	42	AN916	eugenesacks	elfriededittmer
+698	2018-02-12 15:39:00	0	27	59.7280000000000015	30.4710000000000001	60.4080000000000013	29.625	15	109	AN916	kevinnuno	sigridenger
+739	2018-01-29 04:48:00	0	14	60.3140000000000001	29.9059999999999988	59.6910000000000025	29.9200000000000017	24	15	AN916	kathlyndotts	kashacallen
+826	2018-01-31 16:04:00	0	92	60.3100000000000023	29.7560000000000002	60.0840000000000032	29.5899999999999999	23	84	AN916	pameliacavitt	chiamurphey
+830	2018-02-07 12:32:00	0	95	60.3930000000000007	29.6000000000000014	59.7659999999999982	29.7689999999999984	14	60	AN916	kathlyndotts	debrahdeland
+831	2018-01-24 21:56:00	0	96	59.7040000000000006	29.7330000000000005	59.9450000000000003	30.1119999999999983	10	76	AN916	donniemaskell	lerabreed
+837	2018-01-30 11:20:00	0	38	60.3140000000000001	29.9059999999999988	60.3569999999999993	30.338000000000001	17	60	AN916	ozelladay	wilburjustiniano
+869	2018-02-05 01:06:00	0	84	60.2730000000000032	29.5990000000000002	59.5739999999999981	29.9860000000000007	8	50	AN916	mitsuemcconico	louisalucio
+879	2018-01-15 01:09:00	0	69	60.3840000000000003	29.9649999999999999	60.4440000000000026	29.5249999999999986	14	63	AN916	kevinnuno	vimilani
+887	2018-01-08 18:08:00	0	26	60.2530000000000001	30.0229999999999997	60.4080000000000013	29.625	24	23	AN916	valrieburr	ceolafazio
+894	2018-01-16 21:34:00	0	100	59.9849999999999994	30.222999999999999	60.1760000000000019	29.6409999999999982	22	96	AN916	quentindelacruz	debrahdeland
+927	2018-02-21 08:42:00	0	43	60.2700000000000031	30.2590000000000003	59.9260000000000019	29.9009999999999998	19	102	AN916	donniemaskell	shamekalachance
+975	2018-01-10 00:49:00	0	49	59.9680000000000035	30.4170000000000016	59.6289999999999978	29.6780000000000008	13	40	AN916	alexacory	timikanims
+985	2018-02-26 09:39:00	0	42	59.5940000000000012	29.8760000000000012	60.4949999999999974	29.6119999999999983	17	56	AN916	consuelotokarz	sierragingras
+\.
+
+
+--
+-- Data for Name: car_part; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.car_part (car_part_id, part_name, car_type_id) FROM stdin;
+1	Muffler﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+2	Shock Absorbers﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	4
+3	Muffler﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+4	Power Steering Fluid﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿	8
+5	Axle﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+6	Catalytic Converter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	6
+7	Clutch﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	5
+8	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	4
+9	Shock Absorbers﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	4
+10	Alternator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	4
+11	Spark Plug﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+12	Pressure Gauge﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+13	Pressure Gauge﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	4
+14	Spare Tire﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	5
+15	Power Steering Fluid﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿	3
+16	Pressure Gauge﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+17	Car Jack﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+18	Power Steering Fluid﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿	5
+19	Power Steering Fluid﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿	3
+20	Spare Tire﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	3
+21	Muffler﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+22	Brakes﻿﻿﻿﻿﻿﻿\n	6
+23	Engine Fan﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	4
+24	Alternator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	4
+25	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	4
+26	Spare Tire﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	5
+27	Battery﻿﻿﻿﻿\n	6
+28	Pressure Gauge﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	4
+29	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	5
+30	Shock Absorbers﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+31	Muffler﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+32	Clutch﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	3
+33	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+34	Radiator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+35	Spark Plug﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+36	Clutch﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+37	Spark Plug﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+38	Brakes﻿﻿﻿﻿﻿﻿\n	9
+39	Radiator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	5
+40	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+41	Pressure Gauge﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+42	Shock Absorbers﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+43	Radiator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+44	Fuel Injector﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	3
+45	Car Jack﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	6
+46	Alternator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+47	Shock Absorbers﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	10
+48	Piston﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	3
+49	Alternator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+50	Spark Plug﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	6
+51	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	4
+52	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+53	Clutch﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	5
+54	Piston﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+55	Brakes﻿﻿﻿﻿﻿﻿\n	6
+56	Fuel Injector﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	4
+57	Radiator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	10
+58	Axle﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+59	Spark Plug﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+60	Pressure Gauge﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+61	Piston﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+62	Axle﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	5
+63	Car Jack﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+64	Car Jack﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	3
+65	Battery﻿﻿﻿﻿\n	7
+66	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	3
+67	Engine Fan﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+68	Catalytic Converter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+69	Fuel Injector﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	6
+70	Radiator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	5
+71	Battery﻿﻿﻿﻿\n	10
+72	Power Steering Fluid﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿	7
+73	Spare Tire﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	10
+74	Battery﻿﻿﻿﻿\n	5
+75	Catalytic Converter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	2
+76	Fuel Injector﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	6
+77	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+78	Alternator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	3
+79	Muffler﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+80	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+81	Transmission﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+82	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	10
+83	Pressure Gauge﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+84	Axle﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+85	Shock Absorbers﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+86	Radiator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+87	Transmission﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	10
+88	Alternator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+89	Transmission﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	1
+90	Spare Tire﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	6
+91	Alternator﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	10
+92	Fuel Injector﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+93	Battery﻿﻿﻿﻿\n	5
+94	Transmission﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	9
+95	Muffler﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	3
+96	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	8
+97	Axle﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+98	Air Filter﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	5
+99	Clutch﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	4
+100	Fuel Injector﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿\n	7
+\.
+
+
+--
+-- Data for Name: car_parts_order; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.car_parts_order (car_parts_order_id, description, status, creating_time, amount, car_part_id, workshop_id, car_parts_provider_id) FROM stdin;
+1	No description	0	2018-02-17	21	51	11	20
+2	No description	0	2018-01-08	38	88	14	21
+3	No description	0	2018-02-12	42	50	20	19
+4	No description	0	2018-02-28	34	20	22	11
+5	No description	0	2018-02-15	11	79	9	25
+6	No description	0	2018-01-13	43	75	18	22
+7	No description	0	2018-01-23	47	72	16	5
+8	No description	0	2018-02-14	28	5	19	18
+9	No description	0	2018-01-12	41	38	27	13
+10	No description	0	2018-02-28	28	15	4	10
+11	No description	0	2018-02-06	14	54	18	21
+12	No description	0	2018-02-06	35	75	28	22
+13	No description	0	2018-02-24	26	55	13	11
+14	No description	0	2018-01-06	29	31	9	10
+15	No description	0	2018-02-13	17	18	7	3
+16	No description	0	2018-01-07	11	30	9	17
+17	No description	0	2018-02-26	12	36	19	21
+18	No description	0	2018-01-24	18	87	1	5
+19	No description	0	2018-02-27	33	30	8	13
+20	No description	0	2018-02-19	11	45	29	4
+21	No description	0	2018-01-16	44	22	28	7
+22	No description	0	2018-01-20	11	13	24	22
+23	No description	0	2018-01-05	20	5	20	4
+24	No description	0	2018-01-27	17	53	29	17
+25	No description	0	2018-02-12	50	11	2	14
+26	No description	0	2018-01-23	42	88	7	5
+27	No description	0	2018-01-02	18	99	8	16
+28	No description	0	2018-01-09	31	2	28	9
+29	No description	0	2018-02-15	20	43	6	10
+30	No description	0	2018-02-10	12	33	25	25
+31	No description	0	2018-01-22	10	84	10	18
+32	No description	0	2018-02-01	24	66	23	14
+33	No description	0	2018-02-26	8	45	20	3
+34	No description	0	2018-01-22	39	40	1	5
+35	No description	0	2018-01-27	38	36	22	9
+36	No description	0	2018-02-27	34	78	12	2
+37	No description	0	2018-01-01	50	11	8	19
+38	No description	0	2018-02-01	34	100	16	17
+39	No description	0	2018-02-10	44	91	24	13
+40	No description	0	2018-01-24	20	79	8	20
+41	No description	0	2018-01-29	44	33	2	20
+42	No description	0	2018-01-11	7	87	26	2
+43	No description	0	2018-02-21	22	68	29	2
+44	No description	0	2018-01-01	29	33	17	19
+45	No description	0	2018-02-24	40	56	6	1
+46	No description	0	2018-02-06	47	23	2	19
+47	No description	0	2018-01-22	41	20	2	3
+48	No description	0	2018-02-16	36	73	23	24
+49	No description	0	2018-01-04	49	82	14	9
+50	No description	0	2018-02-15	41	55	18	14
+51	No description	0	2018-02-20	20	43	28	13
+52	No description	0	2018-02-14	18	22	30	15
+53	No description	0	2018-01-17	29	73	6	22
+54	No description	0	2018-02-03	46	100	28	21
+55	No description	0	2018-01-25	14	36	12	23
+56	No description	0	2018-01-19	49	37	12	14
+57	No description	0	2018-01-06	26	1	30	11
+58	No description	0	2018-01-21	36	7	20	7
+59	No description	0	2018-02-17	15	35	24	22
+60	No description	0	2018-01-09	20	31	14	9
+61	No description	0	2018-01-15	43	52	10	21
+62	No description	0	2018-02-13	11	16	12	24
+63	No description	0	2018-02-27	6	1	1	25
+64	No description	0	2018-02-07	42	59	12	23
+65	No description	0	2018-01-02	30	99	3	19
+66	No description	0	2018-02-18	18	71	30	15
+67	No description	0	2018-01-11	15	15	6	17
+68	No description	0	2018-01-05	8	81	16	8
+69	No description	0	2018-01-26	44	57	23	24
+70	No description	0	2018-02-05	23	25	13	19
+71	No description	0	2018-01-20	49	52	7	7
+72	No description	0	2018-02-17	48	33	27	20
+73	No description	0	2018-02-14	11	64	28	18
+74	No description	0	2018-01-29	32	56	1	12
+75	No description	0	2018-02-06	8	75	18	19
+76	No description	0	2018-02-16	46	20	27	22
+77	No description	0	2018-01-01	50	74	25	20
+78	No description	0	2018-01-04	32	30	11	3
+79	No description	0	2018-01-27	10	41	11	3
+80	No description	0	2018-02-19	18	88	17	10
+81	No description	0	2018-01-02	15	19	19	5
+82	No description	0	2018-01-08	48	8	3	22
+83	No description	0	2018-02-09	13	42	27	25
+84	No description	0	2018-01-18	39	2	4	8
+85	No description	0	2018-01-16	33	66	3	3
+86	No description	0	2018-02-01	28	100	16	9
+87	No description	0	2018-01-11	24	32	3	7
+88	No description	0	2018-01-17	9	29	17	21
+89	No description	0	2018-01-07	9	8	17	18
+90	No description	0	2018-01-09	6	92	9	5
+91	No description	0	2018-02-15	32	28	25	9
+92	No description	0	2018-01-18	5	36	1	1
+93	No description	0	2018-02-15	45	43	22	7
+94	No description	0	2018-02-06	18	57	25	2
+95	No description	0	2018-02-09	45	40	12	20
+96	No description	0	2018-01-29	43	38	24	24
+97	No description	0	2018-02-12	43	95	30	12
+98	No description	0	2018-01-26	41	11	12	24
+99	No description	0	2018-02-16	8	63	17	16
+100	No description	0	2018-02-16	12	64	7	12
+101	No description	0	2018-02-11	50	7	18	5
+102	No description	0	2018-02-25	35	34	13	22
+103	No description	0	2018-02-26	21	20	24	8
+104	No description	0	2018-02-28	36	57	5	9
+105	No description	0	2018-01-09	6	90	23	16
+106	No description	0	2018-02-26	27	22	15	2
+107	No description	0	2018-02-20	19	87	16	21
+108	No description	0	2018-01-05	45	66	17	23
+109	No description	0	2018-01-27	34	70	19	18
+110	No description	0	2018-02-20	49	38	10	20
+111	No description	0	2018-01-01	10	42	4	19
+112	No description	0	2018-02-23	43	19	6	19
+113	No description	0	2018-01-11	12	73	3	17
+114	No description	0	2018-02-06	18	15	7	19
+115	No description	0	2018-02-18	29	97	21	16
+116	No description	0	2018-01-27	40	61	21	13
+117	No description	0	2018-01-15	33	75	13	11
+118	No description	0	2018-01-13	9	31	7	10
+119	No description	0	2018-01-22	13	86	30	14
+120	No description	0	2018-02-16	48	80	9	14
+121	No description	0	2018-01-30	25	88	2	20
+122	No description	0	2018-01-29	11	98	30	21
+123	No description	0	2018-02-21	23	36	22	7
+124	No description	0	2018-02-17	31	55	1	18
+125	No description	0	2018-01-04	46	76	11	15
+126	No description	0	2018-02-17	26	49	2	21
+127	No description	0	2018-01-24	5	27	21	25
+128	No description	0	2018-02-18	21	83	28	4
+129	No description	0	2018-02-20	6	9	24	17
+130	No description	0	2018-01-13	50	96	27	20
+131	No description	0	2018-01-19	12	22	18	4
+132	No description	0	2018-01-21	6	79	28	24
+133	No description	0	2018-01-02	18	32	21	20
+134	No description	0	2018-02-13	18	50	22	18
+135	No description	0	2018-01-05	36	67	15	18
+136	No description	0	2018-01-21	30	37	27	5
+137	No description	0	2018-03-01	27	72	17	17
+138	No description	0	2018-02-03	11	5	29	25
+139	No description	0	2018-01-05	19	85	24	11
+140	No description	0	2018-02-18	21	64	22	14
+141	No description	0	2018-02-20	17	18	29	7
+142	No description	0	2018-01-27	39	65	5	10
+143	No description	0	2018-01-05	35	100	14	21
+144	No description	0	2018-02-17	46	100	29	13
+145	No description	0	2018-02-24	36	38	16	12
+146	No description	0	2018-01-05	39	41	2	14
+147	No description	0	2018-01-13	26	78	30	23
+148	No description	0	2018-01-15	6	43	8	2
+149	No description	0	2018-01-19	41	44	26	25
+150	No description	0	2018-01-18	28	95	8	16
+151	No description	0	2018-02-02	7	80	4	6
+152	No description	0	2018-02-05	47	44	17	18
+153	No description	0	2018-02-04	19	6	22	13
+154	No description	0	2018-01-20	6	1	18	4
+155	No description	0	2018-02-20	8	81	21	12
+156	No description	0	2018-01-10	20	39	21	17
+157	No description	0	2018-01-31	42	84	21	5
+158	No description	0	2018-02-15	44	58	7	6
+159	No description	0	2018-02-08	45	69	26	12
+160	No description	0	2018-02-22	7	6	12	8
+161	No description	0	2018-02-03	50	73	23	15
+162	No description	0	2018-02-23	9	85	7	24
+163	No description	0	2018-02-17	26	39	23	25
+164	No description	0	2018-02-02	24	90	1	19
+165	No description	0	2018-02-24	44	40	18	5
+166	No description	0	2018-01-28	44	32	16	21
+167	No description	0	2018-01-11	39	50	22	3
+168	No description	0	2018-01-07	24	39	21	5
+169	No description	0	2018-02-20	11	21	2	20
+170	No description	0	2018-02-13	10	99	4	20
+171	No description	0	2018-01-09	31	57	21	24
+172	No description	0	2018-02-24	6	28	16	21
+173	No description	0	2018-01-04	27	24	8	19
+174	No description	0	2018-02-17	41	81	19	2
+175	No description	0	2018-02-11	34	75	18	21
+176	No description	0	2018-02-03	50	16	11	18
+177	No description	0	2018-02-10	16	88	26	20
+178	No description	0	2018-02-20	10	43	1	14
+179	No description	0	2018-02-17	17	30	2	18
+180	No description	0	2018-02-14	48	10	8	8
+181	No description	0	2018-01-04	38	70	15	18
+182	No description	0	2018-02-12	43	71	22	8
+183	No description	0	2018-02-25	28	27	8	17
+184	No description	0	2018-01-20	43	41	30	12
+185	No description	0	2018-01-16	36	68	13	8
+186	No description	0	2018-01-30	22	87	24	3
+187	No description	0	2018-02-12	18	47	24	7
+188	No description	0	2018-02-19	49	73	17	11
+189	No description	0	2018-01-17	44	47	21	7
+190	No description	0	2018-02-11	36	24	29	6
+191	No description	0	2018-02-04	12	87	28	9
+192	No description	0	2018-02-15	14	3	23	16
+193	No description	0	2018-01-30	45	53	9	21
+194	No description	0	2018-01-20	25	33	17	23
+195	No description	0	2018-02-23	32	91	24	12
+196	No description	0	2018-01-10	32	36	11	5
+197	No description	0	2018-02-09	49	68	24	2
+198	No description	0	2018-02-14	14	20	28	20
+199	No description	0	2018-02-18	32	94	17	10
+200	No description	0	2018-01-22	14	43	12	19
+201	No description	0	2018-01-15	16	14	23	6
+202	No description	0	2018-02-16	9	17	4	11
+203	No description	0	2018-01-04	10	80	30	7
+204	No description	0	2018-02-09	47	14	11	21
+205	No description	0	2018-02-11	41	66	19	1
+206	No description	0	2018-02-08	45	93	3	17
+207	No description	0	2018-02-20	7	5	4	18
+208	No description	0	2018-01-06	20	19	8	11
+209	No description	0	2018-01-31	24	62	11	25
+210	No description	0	2018-01-05	19	35	14	13
+211	No description	0	2018-02-10	31	98	3	6
+212	No description	0	2018-01-27	22	30	22	17
+213	No description	0	2018-01-17	21	70	27	6
+214	No description	0	2018-02-25	14	7	15	8
+215	No description	0	2018-01-27	36	65	7	3
+216	No description	0	2018-02-17	8	61	4	23
+217	No description	0	2018-02-10	18	40	13	8
+218	No description	0	2018-01-28	46	47	20	1
+219	No description	0	2018-01-09	17	59	11	20
+220	No description	0	2018-01-08	16	56	6	15
+221	No description	0	2018-01-20	8	64	27	2
+222	No description	0	2018-01-31	15	90	25	4
+223	No description	0	2018-02-26	26	40	3	11
+224	No description	0	2018-02-19	14	57	19	13
+225	No description	0	2018-02-27	25	25	5	24
+226	No description	0	2018-02-27	49	40	23	14
+227	No description	0	2018-01-09	14	59	3	11
+228	No description	0	2018-01-09	12	47	26	10
+229	No description	0	2018-02-25	26	83	4	1
+230	No description	0	2018-01-23	30	71	13	23
+231	No description	0	2018-01-12	15	53	6	13
+232	No description	0	2018-01-24	5	10	1	24
+233	No description	0	2018-02-02	9	28	29	20
+234	No description	0	2018-01-26	41	7	19	13
+235	No description	0	2018-01-29	41	73	4	10
+236	No description	0	2018-01-16	15	10	23	13
+237	No description	0	2018-01-13	11	85	23	8
+238	No description	0	2018-01-26	50	29	18	22
+239	No description	0	2018-02-27	38	46	9	17
+240	No description	0	2018-02-04	20	68	30	8
+241	No description	0	2018-02-07	24	56	22	10
+242	No description	0	2018-01-28	39	72	12	15
+243	No description	0	2018-02-08	18	91	18	20
+244	No description	0	2018-01-08	22	90	24	5
+245	No description	0	2018-01-22	11	44	13	2
+246	No description	0	2018-01-04	24	23	7	15
+247	No description	0	2018-02-23	26	13	10	16
+248	No description	0	2018-01-29	21	25	26	25
+249	No description	0	2018-01-02	15	43	3	13
+250	No description	0	2018-02-15	14	98	17	10
+251	No description	0	2018-02-01	30	21	6	21
+252	No description	0	2018-01-15	5	17	19	21
+253	No description	0	2018-01-08	27	87	30	3
+254	No description	0	2018-01-07	21	86	17	23
+255	No description	0	2018-01-22	50	31	19	2
+256	No description	0	2018-02-25	22	93	26	17
+257	No description	0	2018-02-16	45	95	18	9
+258	No description	0	2018-01-05	32	14	6	24
+259	No description	0	2018-02-07	9	44	20	20
+260	No description	0	2018-01-20	22	31	17	17
+261	No description	0	2018-01-01	46	77	7	24
+262	No description	0	2018-01-23	43	48	23	22
+263	No description	0	2018-02-04	50	35	24	4
+264	No description	0	2018-01-14	14	89	1	24
+265	No description	0	2018-02-07	19	98	20	17
+266	No description	0	2018-01-06	47	51	4	20
+267	No description	0	2018-01-17	42	86	20	4
+268	No description	0	2018-02-16	11	18	26	12
+269	No description	0	2018-02-05	39	37	18	24
+270	No description	0	2018-01-14	40	48	18	22
+271	No description	0	2018-02-26	9	63	18	17
+272	No description	0	2018-02-12	48	15	28	13
+273	No description	0	2018-01-04	7	22	28	24
+274	No description	0	2018-02-27	28	27	28	16
+275	No description	0	2018-01-29	13	19	8	3
+276	No description	0	2018-02-10	17	83	1	7
+277	No description	0	2018-01-23	21	90	11	11
+278	No description	0	2018-01-21	6	95	12	15
+279	No description	0	2018-02-28	22	78	26	17
+280	No description	0	2018-02-15	34	58	27	5
+281	No description	0	2018-01-03	29	53	26	10
+282	No description	0	2018-02-26	16	74	10	15
+283	No description	0	2018-02-21	23	15	24	10
+284	No description	0	2018-01-25	41	98	26	11
+285	No description	0	2018-01-07	13	82	24	10
+286	No description	0	2018-01-22	16	80	28	7
+287	No description	0	2018-02-26	22	68	21	8
+288	No description	0	2018-02-16	42	43	22	16
+289	No description	0	2018-01-20	17	99	29	18
+290	No description	0	2018-01-30	29	24	26	15
+291	No description	0	2018-01-10	7	69	16	7
+292	No description	0	2018-02-07	28	28	21	13
+293	No description	0	2018-02-21	18	64	18	7
+294	No description	0	2018-01-26	38	6	16	15
+295	No description	0	2018-02-20	29	91	21	5
+296	No description	0	2018-02-16	14	79	24	2
+297	No description	0	2018-01-14	35	70	8	3
+298	No description	0	2018-02-26	8	4	21	19
+299	No description	0	2018-01-02	43	70	27	1
+300	No description	0	2018-02-01	34	57	23	17
+301	No description	0	2018-01-11	29	81	2	2
+302	No description	0	2018-02-10	33	73	24	23
+303	No description	0	2018-01-11	45	81	11	15
+304	No description	0	2018-01-24	22	37	19	25
+305	No description	0	2018-02-19	16	15	11	5
+306	No description	0	2018-01-29	35	92	11	19
+307	No description	0	2018-01-13	50	20	30	6
+308	No description	0	2018-02-15	36	36	24	24
+309	No description	0	2018-02-21	48	17	20	25
+310	No description	0	2018-02-20	44	3	29	21
+311	No description	0	2018-02-04	26	45	23	7
+312	No description	0	2018-02-16	34	36	5	18
+313	No description	0	2018-02-06	34	80	26	6
+314	No description	0	2018-02-16	38	55	3	2
+315	No description	0	2018-02-27	35	91	2	24
+316	No description	0	2018-01-26	24	29	9	6
+317	No description	0	2018-01-03	39	27	26	10
+318	No description	0	2018-01-13	47	28	3	4
+319	No description	0	2018-02-07	44	97	25	6
+320	No description	0	2018-02-07	11	46	18	15
+321	No description	0	2018-01-25	23	100	21	14
+322	No description	0	2018-02-15	5	32	10	9
+323	No description	0	2018-02-24	16	65	6	19
+324	No description	0	2018-02-04	23	7	19	20
+325	No description	0	2018-02-12	43	46	19	15
+326	No description	0	2018-01-08	11	13	28	10
+327	No description	0	2018-02-10	45	44	19	5
+328	No description	0	2018-02-18	35	45	26	9
+329	No description	0	2018-02-06	43	23	13	1
+330	No description	0	2018-01-24	49	69	30	11
+331	No description	0	2018-02-27	22	75	16	15
+332	No description	0	2018-01-10	43	95	7	16
+333	No description	0	2018-01-14	50	28	13	7
+334	No description	0	2018-01-12	25	55	24	15
+335	No description	0	2018-02-18	24	53	9	22
+336	No description	0	2018-01-25	17	56	24	1
+337	No description	0	2018-01-18	42	92	24	5
+338	No description	0	2018-02-03	9	80	30	19
+339	No description	0	2018-01-16	23	37	25	6
+340	No description	0	2018-01-06	47	52	17	15
+341	No description	0	2018-02-18	16	100	21	13
+342	No description	0	2018-01-03	34	5	26	15
+343	No description	0	2018-01-10	6	17	5	6
+344	No description	0	2018-01-24	14	86	18	14
+345	No description	0	2018-02-25	26	15	29	17
+346	No description	0	2018-02-12	13	37	3	1
+347	No description	0	2018-01-31	16	21	18	10
+348	No description	0	2018-02-21	48	19	29	16
+349	No description	0	2018-02-09	24	15	6	10
+350	No description	0	2018-01-19	17	3	25	5
+351	No description	0	2018-01-12	23	75	8	14
+352	No description	0	2018-02-05	7	16	2	6
+353	No description	0	2018-01-09	35	69	26	22
+354	No description	0	2018-01-14	46	91	17	22
+355	No description	0	2018-01-23	9	94	18	19
+356	No description	0	2018-01-12	10	70	7	13
+357	No description	0	2018-01-09	14	4	26	6
+358	No description	0	2018-02-21	40	73	18	2
+359	No description	0	2018-01-23	13	86	14	16
+360	No description	0	2018-02-27	32	53	2	18
+361	No description	0	2018-02-12	36	83	7	15
+362	No description	0	2018-01-22	21	59	29	6
+363	No description	0	2018-02-08	13	54	28	7
+364	No description	0	2018-02-13	17	33	20	13
+365	No description	0	2018-02-11	14	95	12	5
+366	No description	0	2018-02-26	23	66	26	7
+367	No description	0	2018-02-10	16	36	27	19
+368	No description	0	2018-02-21	31	5	21	18
+369	No description	0	2018-01-07	46	19	12	9
+370	No description	0	2018-02-12	18	98	22	24
+371	No description	0	2018-02-28	30	3	4	11
+372	No description	0	2018-01-03	12	91	19	22
+373	No description	0	2018-01-09	10	43	29	12
+374	No description	0	2018-02-08	23	63	21	8
+375	No description	0	2018-02-06	10	67	18	5
+376	No description	0	2018-02-18	7	4	13	4
+377	No description	0	2018-02-15	47	31	30	4
+378	No description	0	2018-01-21	16	46	23	5
+379	No description	0	2018-01-14	10	95	18	22
+380	No description	0	2018-02-09	31	67	3	21
+381	No description	0	2018-02-18	30	64	5	5
+382	No description	0	2018-01-02	11	91	7	18
+383	No description	0	2018-01-03	35	42	1	5
+384	No description	0	2018-02-27	46	95	2	10
+385	No description	0	2018-02-14	18	60	24	12
+386	No description	0	2018-02-14	26	88	28	23
+387	No description	0	2018-01-06	28	64	23	7
+388	No description	0	2018-01-31	46	33	21	20
+389	No description	0	2018-01-13	35	22	20	16
+390	No description	0	2018-01-30	23	97	6	21
+391	No description	0	2018-01-06	31	88	27	25
+392	No description	0	2018-01-03	17	55	16	13
+393	No description	0	2018-01-06	26	18	24	17
+394	No description	0	2018-02-06	15	24	17	13
+395	No description	0	2018-02-06	42	19	2	9
+396	No description	0	2018-01-22	42	6	12	9
+397	No description	0	2018-01-26	19	52	22	3
+398	No description	0	2018-02-13	44	86	4	7
+399	No description	0	2018-01-05	40	46	24	11
+400	No description	0	2018-01-02	10	1	27	8
+401	No description	0	2018-02-13	6	21	29	11
+402	No description	0	2018-02-01	38	19	23	5
+403	No description	0	2018-01-28	33	13	21	25
+404	No description	0	2018-02-04	25	28	12	18
+405	No description	0	2018-01-09	6	46	30	3
+406	No description	0	2018-01-22	49	31	11	20
+407	No description	0	2018-01-30	28	89	25	18
+408	No description	0	2018-02-16	43	1	6	5
+409	No description	0	2018-01-14	25	100	8	7
+410	No description	0	2018-01-09	35	91	24	7
+411	No description	0	2018-02-12	16	31	6	17
+412	No description	0	2018-01-03	43	20	28	18
+413	No description	0	2018-01-30	20	60	28	13
+414	No description	0	2018-01-24	38	37	14	9
+415	No description	0	2018-02-28	32	2	29	10
+416	No description	0	2018-02-13	28	36	13	1
+417	No description	0	2018-02-19	26	3	12	7
+418	No description	0	2018-01-31	12	42	12	5
+419	No description	0	2018-01-11	30	65	3	21
+420	No description	0	2018-02-25	26	66	25	24
+421	No description	0	2018-02-09	41	55	5	19
+422	No description	0	2018-01-09	44	49	15	1
+423	No description	0	2018-01-29	49	8	6	6
+424	No description	0	2018-01-15	19	14	11	1
+425	No description	0	2018-02-24	15	72	3	9
+426	No description	0	2018-01-16	8	68	26	23
+427	No description	0	2018-01-11	24	90	9	7
+428	No description	0	2018-01-06	14	28	30	23
+429	No description	0	2018-02-04	18	98	13	23
+430	No description	0	2018-02-07	12	14	18	1
+431	No description	0	2018-02-13	16	6	7	14
+432	No description	0	2018-02-22	40	21	19	3
+433	No description	0	2018-02-09	26	99	12	22
+434	No description	0	2018-02-12	43	8	26	3
+435	No description	0	2018-01-25	26	45	5	5
+436	No description	0	2018-02-10	26	67	7	12
+437	No description	0	2018-02-21	13	76	15	7
+438	No description	0	2018-02-28	48	71	15	23
+439	No description	0	2018-01-20	22	5	6	18
+440	No description	0	2018-01-25	15	25	22	14
+441	No description	0	2018-01-05	44	49	29	12
+442	No description	0	2018-02-06	7	43	9	3
+443	No description	0	2018-01-04	50	73	28	24
+444	No description	0	2018-01-18	15	64	21	19
+445	No description	0	2018-01-21	45	66	28	10
+446	No description	0	2018-02-20	17	55	10	1
+447	No description	0	2018-02-19	32	65	18	9
+448	No description	0	2018-02-22	31	15	9	22
+449	No description	0	2018-01-01	20	61	20	4
+450	No description	0	2018-01-30	12	21	28	12
+451	No description	0	2018-02-03	14	52	4	21
+452	No description	0	2018-01-30	31	75	24	25
+453	No description	0	2018-02-03	46	95	21	16
+454	No description	0	2018-01-26	5	52	24	3
+455	No description	0	2018-02-09	45	15	9	9
+456	No description	0	2018-01-22	12	97	21	16
+457	No description	0	2018-01-25	41	81	28	11
+458	No description	0	2018-02-14	45	7	3	23
+459	No description	0	2018-02-28	33	50	19	24
+460	No description	0	2018-02-04	30	53	14	24
+461	No description	0	2018-02-02	14	95	7	22
+462	No description	0	2018-02-16	8	48	25	16
+463	No description	0	2018-02-01	14	82	27	16
+464	No description	0	2018-01-13	21	3	18	20
+465	No description	0	2018-01-22	28	28	28	8
+466	No description	0	2018-02-22	43	65	7	7
+467	No description	0	2018-02-12	29	36	17	19
+468	No description	0	2018-01-07	30	80	9	14
+469	No description	0	2018-02-08	21	15	3	21
+470	No description	0	2018-01-31	14	70	24	15
+471	No description	0	2018-02-23	10	9	14	16
+472	No description	0	2018-01-25	15	19	27	15
+473	No description	0	2018-01-18	20	38	12	9
+474	No description	0	2018-02-27	16	69	22	12
+475	No description	0	2018-02-12	48	23	6	9
+476	No description	0	2018-02-20	42	46	13	8
+477	No description	0	2018-01-01	5	88	29	5
+478	No description	0	2018-01-05	38	64	28	21
+479	No description	0	2018-01-06	43	57	1	7
+480	No description	0	2018-01-16	46	91	30	1
+481	No description	0	2018-02-14	48	14	11	17
+482	No description	0	2018-02-03	25	65	7	7
+483	No description	0	2018-02-27	25	46	19	21
+484	No description	0	2018-02-10	21	15	15	13
+485	No description	0	2018-01-09	48	9	14	20
+486	No description	0	2018-01-27	37	88	27	16
+487	No description	0	2018-02-22	19	47	20	5
+488	No description	0	2018-01-28	44	11	2	13
+489	No description	0	2018-02-15	15	39	6	13
+490	No description	0	2018-02-15	19	23	8	14
+491	No description	0	2018-01-21	46	15	28	3
+492	No description	0	2018-02-16	14	58	5	14
+493	No description	0	2018-01-12	42	54	2	12
+494	No description	0	2018-02-13	6	67	1	4
+495	No description	0	2018-02-20	48	49	19	19
+496	No description	0	2018-01-16	40	71	10	9
+497	No description	0	2018-02-18	19	7	3	25
+498	No description	0	2018-01-14	29	25	22	22
+499	No description	0	2018-02-02	42	98	8	9
+500	No description	0	2018-01-27	44	34	19	3
+501	No description	0	2018-02-05	42	62	27	1
+502	No description	0	2018-01-07	29	83	8	15
+503	No description	0	2018-01-10	48	66	23	2
+504	No description	0	2018-01-13	21	86	29	1
+505	No description	0	2018-01-22	8	23	6	24
+506	No description	0	2018-02-05	35	54	11	14
+507	No description	0	2018-02-18	39	7	4	24
+508	No description	0	2018-01-08	11	56	16	10
+509	No description	0	2018-02-28	6	58	11	17
+510	No description	0	2018-02-20	43	61	28	6
+511	No description	0	2018-01-11	30	50	17	17
+512	No description	0	2018-01-11	19	19	14	4
+513	No description	0	2018-01-24	33	18	15	5
+514	No description	0	2018-01-04	37	18	27	22
+515	No description	0	2018-01-23	32	34	13	2
+516	No description	0	2018-02-08	13	72	17	7
+517	No description	0	2018-01-15	22	47	27	22
+518	No description	0	2018-01-29	25	67	20	19
+519	No description	0	2018-02-18	42	87	9	13
+520	No description	0	2018-02-04	44	29	24	22
+521	No description	0	2018-02-07	29	60	25	9
+522	No description	0	2018-01-05	27	88	6	24
+523	No description	0	2018-01-05	16	10	29	24
+524	No description	0	2018-01-24	26	98	15	6
+525	No description	0	2018-01-18	23	83	27	21
+526	No description	0	2018-01-21	30	44	8	23
+527	No description	0	2018-02-18	22	40	29	5
+528	No description	0	2018-01-09	37	85	19	6
+529	No description	0	2018-01-25	33	13	24	15
+530	No description	0	2018-01-23	21	31	30	13
+531	No description	0	2018-01-08	15	22	29	15
+532	No description	0	2018-02-16	29	2	15	17
+533	No description	0	2018-01-22	39	30	28	16
+534	No description	0	2018-02-15	32	91	20	11
+535	No description	0	2018-01-08	22	53	22	3
+536	No description	0	2018-01-05	29	45	15	2
+537	No description	0	2018-02-23	11	48	18	12
+538	No description	0	2018-01-13	33	44	19	16
+539	No description	0	2018-02-21	15	83	6	7
+540	No description	0	2018-02-17	19	62	15	15
+541	No description	0	2018-02-07	26	2	13	1
+542	No description	0	2018-01-09	38	72	29	4
+543	No description	0	2018-01-26	16	98	7	4
+544	No description	0	2018-02-16	13	64	25	9
+545	No description	0	2018-01-16	18	96	29	5
+546	No description	0	2018-02-20	40	100	21	16
+547	No description	0	2018-02-25	45	67	13	21
+548	No description	0	2018-02-08	24	37	12	16
+549	No description	0	2018-02-17	19	41	21	6
+550	No description	0	2018-02-28	29	42	21	3
+551	No description	0	2018-01-14	42	84	10	10
+552	No description	0	2018-01-08	29	32	14	20
+553	No description	0	2018-01-10	17	39	25	24
+554	No description	0	2018-02-19	26	1	9	10
+555	No description	0	2018-01-11	5	100	5	8
+556	No description	0	2018-01-05	41	33	16	1
+557	No description	0	2018-01-27	19	7	13	15
+558	No description	0	2018-02-14	25	87	22	3
+559	No description	0	2018-02-23	32	72	23	11
+560	No description	0	2018-02-16	15	96	18	8
+561	No description	0	2018-01-26	39	53	25	10
+562	No description	0	2018-02-05	41	22	19	15
+563	No description	0	2018-02-11	11	78	13	7
+564	No description	0	2018-01-26	20	41	15	5
+565	No description	0	2018-02-12	15	16	22	25
+566	No description	0	2018-01-27	12	56	30	19
+567	No description	0	2018-02-28	16	65	15	25
+568	No description	0	2018-01-05	21	10	24	14
+569	No description	0	2018-02-04	47	48	1	3
+570	No description	0	2018-01-04	19	63	11	1
+571	No description	0	2018-01-15	47	100	23	14
+572	No description	0	2018-01-17	26	11	18	11
+573	No description	0	2018-02-22	5	36	8	17
+574	No description	0	2018-01-01	38	58	30	24
+575	No description	0	2018-02-11	8	39	30	5
+576	No description	0	2018-01-04	41	84	7	5
+577	No description	0	2018-01-12	18	93	25	22
+578	No description	0	2018-01-18	9	36	9	15
+579	No description	0	2018-01-13	37	48	26	21
+580	No description	0	2018-01-11	12	45	17	24
+581	No description	0	2018-02-02	32	85	7	6
+582	No description	0	2018-02-28	21	22	7	10
+583	No description	0	2018-01-13	15	33	11	11
+584	No description	0	2018-02-14	44	51	24	23
+585	No description	0	2018-01-13	7	76	21	1
+586	No description	0	2018-02-22	18	100	28	13
+587	No description	0	2018-02-25	37	75	19	4
+588	No description	0	2018-02-28	28	19	8	6
+589	No description	0	2018-02-12	22	75	29	21
+590	No description	0	2018-01-25	7	7	9	15
+591	No description	0	2018-01-02	42	14	30	3
+592	No description	0	2018-02-27	32	57	14	13
+593	No description	0	2018-02-04	21	84	22	22
+594	No description	0	2018-02-11	12	88	19	18
+595	No description	0	2018-02-10	35	89	1	6
+596	No description	0	2018-01-04	42	10	8	19
+597	No description	0	2018-02-02	14	10	20	15
+598	No description	0	2018-02-02	25	90	3	8
+599	No description	0	2018-01-10	44	88	7	23
+600	No description	0	2018-01-30	26	48	22	1
+601	No description	0	2018-01-30	23	36	10	13
+602	No description	0	2018-01-02	48	91	30	1
+603	No description	0	2018-02-09	18	19	25	15
+604	No description	0	2018-02-18	13	70	24	5
+605	No description	0	2018-02-23	42	62	5	23
+606	No description	0	2018-01-10	27	38	7	23
+607	No description	0	2018-01-17	36	7	11	20
+608	No description	0	2018-01-09	23	98	1	6
+609	No description	0	2018-01-15	41	48	9	15
+610	No description	0	2018-01-05	31	28	10	10
+611	No description	0	2018-01-02	43	72	10	23
+612	No description	0	2018-02-17	46	13	9	1
+613	No description	0	2018-02-03	23	30	9	3
+614	No description	0	2018-01-04	42	68	4	18
+615	No description	0	2018-02-27	32	11	3	11
+616	No description	0	2018-01-04	40	8	7	23
+617	No description	0	2018-02-20	24	72	3	6
+618	No description	0	2018-02-04	23	45	24	21
+619	No description	0	2018-01-27	26	9	4	19
+620	No description	0	2018-01-31	9	46	14	22
+621	No description	0	2018-01-24	15	85	18	6
+622	No description	0	2018-02-22	38	75	30	24
+623	No description	0	2018-02-21	28	20	30	22
+624	No description	0	2018-01-29	12	94	13	13
+625	No description	0	2018-02-11	25	43	1	4
+626	No description	0	2018-01-16	24	21	3	21
+627	No description	0	2018-01-13	20	27	10	24
+628	No description	0	2018-01-11	25	15	19	2
+629	No description	0	2018-02-22	20	38	28	1
+630	No description	0	2018-01-02	25	1	11	22
+631	No description	0	2018-02-17	17	11	12	19
+632	No description	0	2018-01-21	50	7	25	8
+633	No description	0	2018-01-02	31	38	4	3
+634	No description	0	2018-01-08	12	85	4	21
+635	No description	0	2018-02-18	35	77	24	17
+636	No description	0	2018-01-04	7	97	1	5
+637	No description	0	2018-01-04	37	9	26	4
+638	No description	0	2018-02-08	43	25	30	19
+639	No description	0	2018-02-20	43	74	5	23
+640	No description	0	2018-01-13	7	74	26	7
+641	No description	0	2018-02-02	10	60	29	16
+642	No description	0	2018-01-23	16	87	22	14
+643	No description	0	2018-02-19	40	37	8	20
+644	No description	0	2018-02-22	48	88	17	21
+645	No description	0	2018-02-04	10	85	21	2
+646	No description	0	2018-02-04	43	19	30	22
+647	No description	0	2018-01-22	30	92	20	16
+648	No description	0	2018-01-11	21	76	20	22
+649	No description	0	2018-01-11	24	59	11	5
+650	No description	0	2018-02-28	39	63	20	15
+651	No description	0	2018-01-20	13	32	22	16
+652	No description	0	2018-02-07	18	49	11	25
+653	No description	0	2018-01-26	44	20	15	13
+654	No description	0	2018-01-10	38	68	14	9
+655	No description	0	2018-02-13	41	82	5	24
+656	No description	0	2018-01-10	30	84	23	2
+657	No description	0	2018-02-04	49	88	9	20
+658	No description	0	2018-01-20	41	55	1	10
+659	No description	0	2018-01-07	12	99	14	7
+660	No description	0	2018-01-20	44	49	2	2
+661	No description	0	2018-01-20	14	59	10	18
+662	No description	0	2018-01-04	13	31	1	22
+663	No description	0	2018-02-15	28	16	24	7
+664	No description	0	2018-02-12	6	17	17	21
+665	No description	0	2018-01-22	50	1	30	1
+666	No description	0	2018-02-10	48	3	29	23
+667	No description	0	2018-01-17	22	32	28	12
+668	No description	0	2018-02-03	23	50	3	8
+669	No description	0	2018-02-26	22	57	15	13
+670	No description	0	2018-01-12	36	41	23	2
+671	No description	0	2018-01-19	47	99	29	23
+672	No description	0	2018-01-29	45	90	25	14
+673	No description	0	2018-02-16	20	6	9	1
+674	No description	0	2018-02-18	42	94	29	4
+675	No description	0	2018-02-06	17	72	8	16
+676	No description	0	2018-01-01	33	68	15	20
+677	No description	0	2018-02-20	33	78	12	10
+678	No description	0	2018-01-12	7	47	18	19
+679	No description	0	2018-02-18	35	3	19	21
+680	No description	0	2018-01-04	35	34	12	16
+681	No description	0	2018-01-24	13	93	30	20
+682	No description	0	2018-01-05	21	79	25	7
+683	No description	0	2018-02-22	19	32	22	14
+684	No description	0	2018-02-24	25	38	7	8
+685	No description	0	2018-02-17	13	72	8	2
+686	No description	0	2018-02-14	39	67	13	9
+687	No description	0	2018-01-09	23	69	24	2
+688	No description	0	2018-01-11	42	49	5	15
+689	No description	0	2018-02-20	36	89	4	3
+690	No description	0	2018-02-02	40	91	13	21
+691	No description	0	2018-01-05	40	15	14	17
+692	No description	0	2018-01-09	13	35	20	15
+693	No description	0	2018-02-24	18	34	9	5
+694	No description	0	2018-01-12	14	78	4	4
+695	No description	0	2018-02-10	19	93	15	18
+696	No description	0	2018-02-10	23	9	15	13
+697	No description	0	2018-02-14	19	1	30	5
+698	No description	0	2018-02-10	42	70	6	11
+699	No description	0	2018-01-06	24	69	10	7
+700	No description	0	2018-01-21	29	2	16	9
+701	No description	0	2018-01-09	46	51	4	22
+702	No description	0	2018-01-19	34	9	5	1
+703	No description	0	2018-02-06	11	55	24	8
+704	No description	0	2018-01-26	39	80	23	10
+705	No description	0	2018-01-27	45	87	26	13
+706	No description	0	2018-01-05	40	86	21	21
+707	No description	0	2018-01-29	38	33	12	19
+708	No description	0	2018-02-15	43	84	5	16
+709	No description	0	2018-02-25	50	85	9	14
+710	No description	0	2018-01-29	15	28	4	8
+711	No description	0	2018-01-23	42	21	11	23
+712	No description	0	2018-02-12	37	22	30	13
+713	No description	0	2018-02-07	45	92	8	8
+714	No description	0	2018-02-02	48	21	27	7
+715	No description	0	2018-01-26	40	43	6	15
+716	No description	0	2018-01-10	10	50	27	21
+717	No description	0	2018-02-25	26	43	10	3
+718	No description	0	2018-01-20	27	54	3	7
+719	No description	0	2018-01-21	49	56	3	16
+720	No description	0	2018-02-28	25	26	12	20
+721	No description	0	2018-01-08	25	91	8	14
+722	No description	0	2018-02-10	41	50	4	14
+723	No description	0	2018-02-02	31	88	6	10
+724	No description	0	2018-03-01	8	23	21	19
+725	No description	0	2018-01-07	16	37	20	4
+726	No description	0	2018-01-24	10	10	30	17
+727	No description	0	2018-01-11	41	79	11	9
+728	No description	0	2018-01-23	22	26	17	10
+729	No description	0	2018-02-14	7	35	13	3
+730	No description	0	2018-01-23	15	85	3	20
+731	No description	0	2018-02-26	25	37	24	17
+732	No description	0	2018-02-04	41	55	5	7
+733	No description	0	2018-01-10	26	39	13	21
+734	No description	0	2018-01-24	36	89	8	23
+735	No description	0	2018-01-20	30	7	21	10
+736	No description	0	2018-01-17	6	85	17	11
+737	No description	0	2018-01-19	25	32	15	11
+738	No description	0	2018-01-30	22	57	30	15
+739	No description	0	2018-01-11	45	19	30	9
+740	No description	0	2018-01-27	43	53	20	2
+741	No description	0	2018-02-28	32	42	22	23
+742	No description	0	2018-02-19	27	61	28	17
+743	No description	0	2018-01-13	47	30	18	13
+744	No description	0	2018-01-01	19	81	20	10
+745	No description	0	2018-01-18	49	90	6	11
+746	No description	0	2018-02-28	13	16	5	11
+747	No description	0	2018-02-09	15	58	2	10
+748	No description	0	2018-02-04	29	18	17	14
+749	No description	0	2018-02-20	15	43	17	24
+750	No description	0	2018-02-10	34	26	4	1
+751	No description	0	2018-01-08	30	85	19	11
+752	No description	0	2018-01-18	7	99	14	1
+753	No description	0	2018-01-20	18	92	25	10
+754	No description	0	2018-02-19	44	12	20	1
+755	No description	0	2018-01-26	15	65	23	11
+756	No description	0	2018-02-26	12	47	18	25
+757	No description	0	2018-01-26	21	11	5	16
+758	No description	0	2018-02-23	13	12	4	2
+759	No description	0	2018-02-18	50	9	20	1
+760	No description	0	2018-01-01	39	88	5	20
+761	No description	0	2018-02-27	47	37	19	25
+762	No description	0	2018-02-28	42	45	1	21
+763	No description	0	2018-02-24	33	55	9	22
+764	No description	0	2018-01-09	34	92	15	19
+765	No description	0	2018-02-01	47	85	13	25
+766	No description	0	2018-01-28	41	97	25	10
+767	No description	0	2018-01-16	40	98	29	18
+768	No description	0	2018-01-26	44	93	22	5
+769	No description	0	2018-01-19	28	76	16	3
+770	No description	0	2018-01-10	39	33	2	14
+771	No description	0	2018-01-17	17	14	23	19
+772	No description	0	2018-02-14	35	23	26	11
+773	No description	0	2018-02-03	5	16	19	24
+774	No description	0	2018-01-15	22	2	11	21
+775	No description	0	2018-01-23	10	55	3	1
+776	No description	0	2018-01-09	26	50	7	13
+777	No description	0	2018-01-15	32	69	28	12
+778	No description	0	2018-02-12	44	50	24	1
+779	No description	0	2018-01-04	26	70	29	12
+780	No description	0	2018-01-13	30	62	14	17
+781	No description	0	2018-02-12	50	96	17	17
+782	No description	0	2018-01-27	19	49	19	22
+783	No description	0	2018-02-10	18	8	24	24
+784	No description	0	2018-01-16	11	41	26	10
+785	No description	0	2018-02-11	23	1	1	8
+786	No description	0	2018-02-08	6	89	24	10
+787	No description	0	2018-01-25	47	92	18	10
+788	No description	0	2018-02-23	40	29	8	2
+789	No description	0	2018-01-04	49	59	6	7
+790	No description	0	2018-02-06	13	44	26	10
+791	No description	0	2018-01-17	19	15	8	19
+792	No description	0	2018-01-16	24	59	25	7
+793	No description	0	2018-02-12	37	53	11	10
+794	No description	0	2018-02-02	21	48	6	18
+795	No description	0	2018-02-01	34	94	26	15
+796	No description	0	2018-02-15	41	18	21	6
+797	No description	0	2018-01-05	7	4	2	19
+798	No description	0	2018-01-13	18	38	2	2
+799	No description	0	2018-01-20	45	83	19	2
+800	No description	0	2018-01-02	15	9	9	11
+801	No description	0	2018-01-28	9	77	22	13
+802	No description	0	2018-02-19	46	93	19	18
+803	No description	0	2018-02-07	43	93	18	6
+804	No description	0	2018-01-22	21	2	22	22
+805	No description	0	2018-01-11	41	68	19	13
+806	No description	0	2018-01-31	29	8	23	13
+807	No description	0	2018-01-23	40	19	13	3
+808	No description	0	2018-02-20	37	71	22	20
+809	No description	0	2018-01-12	34	84	11	21
+810	No description	0	2018-01-18	18	78	29	6
+811	No description	0	2018-02-14	15	17	17	10
+812	No description	0	2018-02-17	50	86	9	21
+813	No description	0	2018-02-11	26	1	30	20
+814	No description	0	2018-01-20	20	88	29	13
+815	No description	0	2018-02-22	25	97	13	17
+816	No description	0	2018-02-11	36	63	5	20
+817	No description	0	2018-02-19	50	6	17	14
+818	No description	0	2018-02-24	41	3	10	10
+819	No description	0	2018-02-22	41	2	28	20
+820	No description	0	2018-02-12	24	99	18	10
+821	No description	0	2018-02-19	50	96	29	14
+822	No description	0	2018-02-04	49	14	9	21
+823	No description	0	2018-01-20	23	69	11	8
+824	No description	0	2018-01-05	37	50	5	10
+825	No description	0	2018-01-11	23	78	27	3
+826	No description	0	2018-01-02	49	31	9	22
+827	No description	0	2018-01-23	22	91	9	24
+828	No description	0	2018-02-16	6	12	14	8
+829	No description	0	2018-02-18	32	81	25	7
+830	No description	0	2018-02-06	20	70	23	1
+831	No description	0	2018-01-11	48	38	4	12
+832	No description	0	2018-01-12	35	79	7	22
+833	No description	0	2018-02-13	36	24	9	6
+834	No description	0	2018-01-11	30	64	14	10
+835	No description	0	2018-01-08	19	64	24	23
+836	No description	0	2018-02-27	18	14	6	14
+837	No description	0	2018-01-09	41	43	19	15
+838	No description	0	2018-02-17	19	23	19	14
+839	No description	0	2018-02-16	35	64	3	18
+840	No description	0	2018-01-11	27	41	28	24
+841	No description	0	2018-02-13	7	44	16	4
+842	No description	0	2018-02-02	50	1	30	5
+843	No description	0	2018-01-02	6	86	17	12
+844	No description	0	2018-02-25	46	62	29	17
+845	No description	0	2018-01-12	10	32	29	20
+846	No description	0	2018-01-28	38	90	2	4
+847	No description	0	2018-01-26	31	78	21	8
+848	No description	0	2018-01-05	46	88	25	9
+849	No description	0	2018-01-03	18	59	3	15
+850	No description	0	2018-02-08	29	81	29	23
+851	No description	0	2018-01-02	21	96	6	24
+852	No description	0	2018-02-25	45	19	1	12
+853	No description	0	2018-01-03	42	6	29	25
+854	No description	0	2018-01-10	13	37	15	2
+855	No description	0	2018-02-10	38	32	19	17
+856	No description	0	2018-02-18	25	72	9	6
+857	No description	0	2018-01-28	22	7	30	16
+858	No description	0	2018-01-05	17	54	2	8
+859	No description	0	2018-01-20	28	2	12	8
+860	No description	0	2018-02-08	17	96	18	25
+861	No description	0	2018-01-14	32	91	5	13
+862	No description	0	2018-02-18	23	9	19	9
+863	No description	0	2018-01-26	39	17	16	24
+864	No description	0	2018-01-06	26	42	17	5
+865	No description	0	2018-01-12	7	46	4	21
+866	No description	0	2018-02-19	14	20	28	7
+867	No description	0	2018-01-12	27	7	16	18
+868	No description	0	2018-02-14	32	64	30	11
+869	No description	0	2018-01-12	49	35	25	13
+870	No description	0	2018-01-26	5	72	27	14
+871	No description	0	2018-02-02	30	64	24	8
+872	No description	0	2018-01-03	15	3	22	13
+873	No description	0	2018-01-04	16	16	3	18
+874	No description	0	2018-01-30	9	2	4	13
+875	No description	0	2018-01-15	33	49	23	23
+876	No description	0	2018-01-16	19	17	12	1
+877	No description	0	2018-01-20	45	68	11	5
+878	No description	0	2018-02-18	17	2	6	11
+879	No description	0	2018-01-19	38	1	2	13
+880	No description	0	2018-01-23	36	85	10	8
+881	No description	0	2018-01-28	13	41	21	12
+882	No description	0	2018-01-03	41	13	29	5
+883	No description	0	2018-02-08	41	93	2	12
+884	No description	0	2018-01-18	18	82	16	23
+885	No description	0	2018-02-26	49	36	8	19
+886	No description	0	2018-01-09	22	30	28	25
+887	No description	0	2018-02-20	5	4	12	10
+888	No description	0	2018-02-17	20	86	13	11
+889	No description	0	2018-02-28	14	35	27	10
+890	No description	0	2018-01-04	33	15	7	9
+891	No description	0	2018-02-10	11	73	23	8
+892	No description	0	2018-02-06	44	69	5	18
+893	No description	0	2018-02-05	44	39	24	18
+894	No description	0	2018-02-10	9	39	2	1
+895	No description	0	2018-01-05	19	61	6	1
+896	No description	0	2018-02-28	26	60	6	18
+897	No description	0	2018-01-21	9	72	4	13
+898	No description	0	2018-02-09	20	9	15	17
+899	No description	0	2018-02-26	15	96	27	22
+900	No description	0	2018-01-01	25	91	24	20
+901	No description	0	2018-01-22	39	33	29	15
+902	No description	0	2018-01-02	34	33	12	25
+903	No description	0	2018-01-18	12	24	22	19
+904	No description	0	2018-02-12	7	42	20	9
+905	No description	0	2018-02-02	5	36	26	12
+906	No description	0	2018-01-25	22	43	17	13
+907	No description	0	2018-02-16	35	10	11	22
+908	No description	0	2018-02-24	10	87	16	7
+909	No description	0	2018-01-22	20	60	29	7
+910	No description	0	2018-01-02	48	41	17	22
+911	No description	0	2018-02-22	23	68	16	8
+912	No description	0	2018-02-18	19	90	17	9
+913	No description	0	2018-02-08	45	40	13	12
+914	No description	0	2018-01-12	50	7	24	20
+915	No description	0	2018-02-03	17	58	18	16
+916	No description	0	2018-02-15	40	7	23	6
+917	No description	0	2018-01-29	16	63	11	8
+918	No description	0	2018-01-02	32	30	13	15
+919	No description	0	2018-01-28	45	76	20	7
+920	No description	0	2018-01-10	10	51	21	16
+921	No description	0	2018-01-06	5	35	6	6
+922	No description	0	2018-02-21	36	36	15	16
+923	No description	0	2018-02-08	18	49	14	17
+924	No description	0	2018-01-19	45	88	8	16
+925	No description	0	2018-01-26	43	34	9	21
+926	No description	0	2018-02-08	46	48	24	3
+927	No description	0	2018-01-14	37	87	12	16
+928	No description	0	2018-01-09	32	55	20	17
+929	No description	0	2018-01-26	11	60	25	19
+930	No description	0	2018-02-09	26	69	1	9
+931	No description	0	2018-01-12	9	1	14	6
+932	No description	0	2018-02-18	28	62	19	2
+933	No description	0	2018-02-27	21	2	27	20
+934	No description	0	2018-01-06	20	86	23	20
+935	No description	0	2018-02-15	39	47	19	16
+936	No description	0	2018-01-27	44	73	7	7
+937	No description	0	2018-02-25	19	72	18	21
+938	No description	0	2018-01-19	42	23	16	20
+939	No description	0	2018-02-14	26	73	4	21
+940	No description	0	2018-01-12	49	33	7	25
+941	No description	0	2018-01-23	50	22	17	15
+942	No description	0	2018-01-19	49	28	9	20
+943	No description	0	2018-01-31	29	8	12	12
+944	No description	0	2018-01-31	35	76	14	4
+945	No description	0	2018-01-24	11	68	7	10
+946	No description	0	2018-02-20	10	34	8	18
+947	No description	0	2018-02-18	48	70	6	16
+948	No description	0	2018-01-25	17	12	27	13
+949	No description	0	2018-02-09	15	75	20	17
+950	No description	0	2018-02-20	25	24	18	5
+951	No description	0	2018-01-19	22	95	3	2
+952	No description	0	2018-01-30	29	68	10	3
+953	No description	0	2018-02-26	32	24	24	21
+954	No description	0	2018-01-17	41	34	12	7
+955	No description	0	2018-01-12	41	12	9	10
+956	No description	0	2018-02-03	47	83	14	2
+957	No description	0	2018-01-18	21	13	23	13
+958	No description	0	2018-01-27	45	39	17	13
+959	No description	0	2018-02-27	25	52	7	10
+960	No description	0	2018-02-06	42	61	2	8
+961	No description	0	2018-02-26	34	88	7	8
+962	No description	0	2018-01-24	49	19	8	1
+963	No description	0	2018-02-23	30	14	6	20
+964	No description	0	2018-02-26	39	27	20	20
+965	No description	0	2018-02-12	15	98	29	1
+966	No description	0	2018-01-18	13	37	14	22
+967	No description	0	2018-01-03	42	40	23	6
+968	No description	0	2018-01-27	33	65	14	3
+969	No description	0	2018-02-21	44	46	11	21
+970	No description	0	2018-02-24	38	98	25	12
+971	No description	0	2018-01-18	45	33	12	9
+972	No description	0	2018-01-05	26	55	3	1
+973	No description	0	2018-02-09	34	82	25	6
+974	No description	0	2018-01-22	49	50	14	25
+975	No description	0	2018-01-27	11	1	27	2
+976	No description	0	2018-01-27	14	24	16	2
+977	No description	0	2018-01-06	32	58	9	19
+978	No description	0	2018-01-19	25	72	9	17
+979	No description	0	2018-01-21	28	54	13	12
+980	No description	0	2018-02-10	34	60	18	8
+981	No description	0	2018-01-24	41	39	21	25
+982	No description	0	2018-01-05	35	72	14	6
+983	No description	0	2018-02-13	20	4	3	12
+984	No description	0	2018-01-30	38	12	19	13
+985	No description	0	2018-01-11	42	33	14	4
+986	No description	0	2018-01-27	45	34	21	24
+987	No description	0	2018-02-12	20	67	29	8
+988	No description	0	2018-01-28	36	81	17	23
+989	No description	0	2018-01-01	47	41	3	19
+990	No description	0	2018-02-15	40	22	5	17
+991	No description	0	2018-01-06	45	27	19	9
+992	No description	0	2018-01-04	23	57	30	12
+993	No description	0	2018-02-27	5	28	6	18
+994	No description	0	2018-01-14	29	55	14	20
+995	No description	0	2018-01-06	8	9	13	22
+996	No description	0	2018-01-10	5	75	18	24
+997	No description	0	2018-02-04	33	81	15	9
+998	No description	0	2018-02-24	6	70	25	15
+999	No description	0	2018-01-08	18	14	30	15
+1000	No description	0	2018-01-23	40	49	19	11
+1001	No description	0	2018-01-10	19	37	30	3
+1002	No description	0	2018-01-18	35	42	1	14
+1003	No description	0	2018-02-28	15	49	29	24
+1004	No description	0	2018-01-18	20	95	11	8
+1005	No description	0	2018-02-20	42	89	6	4
+1006	No description	0	2018-02-25	22	100	15	25
+1007	No description	0	2018-02-01	29	7	7	11
+1008	No description	0	2018-01-17	13	45	2	24
+1009	No description	0	2018-01-07	23	25	12	1
+1010	No description	0	2018-02-11	17	52	11	2
+1011	No description	0	2018-02-04	43	8	25	3
+1012	No description	0	2018-01-29	32	53	22	6
+1013	No description	0	2018-01-06	42	44	25	23
+1014	No description	0	2018-01-25	31	81	24	16
+1015	No description	0	2018-02-16	37	83	28	23
+1016	No description	0	2018-02-02	9	1	3	2
+1017	No description	0	2018-02-18	32	90	28	5
+1018	No description	0	2018-02-10	19	99	11	8
+1019	No description	0	2018-02-18	42	94	11	1
+1020	No description	0	2018-02-24	14	24	19	4
+1021	No description	0	2018-02-02	12	84	9	3
+1022	No description	0	2018-01-10	8	86	8	15
+1023	No description	0	2018-01-09	26	9	29	6
+1024	No description	0	2018-02-23	5	31	19	12
+1025	No description	0	2018-01-23	21	48	10	22
+1026	No description	0	2018-02-01	41	84	19	18
+1027	No description	0	2018-01-14	28	38	16	14
+1028	No description	0	2018-02-26	48	44	21	4
+1029	No description	0	2018-02-10	6	27	12	15
+1030	No description	0	2018-01-19	40	37	9	17
+1031	No description	0	2018-02-03	15	80	1	7
+1032	No description	0	2018-02-18	48	53	27	11
+1033	No description	0	2018-01-26	40	62	2	25
+1034	No description	0	2018-02-08	41	74	15	8
+1035	No description	0	2018-01-08	10	66	2	25
+1036	No description	0	2018-01-26	44	83	29	8
+1037	No description	0	2018-01-15	18	74	24	14
+1038	No description	0	2018-02-22	48	5	19	23
+1039	No description	0	2018-02-28	34	86	30	21
+1040	No description	0	2018-02-24	48	17	8	17
+1041	No description	0	2018-01-20	48	1	27	13
+1042	No description	0	2018-01-12	17	26	22	16
+1043	No description	0	2018-01-28	13	47	10	16
+1044	No description	0	2018-02-15	18	22	27	4
+1045	No description	0	2018-02-13	18	28	30	10
+1046	No description	0	2018-02-01	25	22	24	7
+1047	No description	0	2018-02-16	37	48	30	20
+1048	No description	0	2018-01-31	50	3	19	12
+1049	No description	0	2018-01-15	26	57	3	9
+1050	No description	0	2018-01-08	15	75	6	5
+1051	No description	0	2018-01-13	43	45	17	21
+1052	No description	0	2018-02-11	12	100	9	9
+1053	No description	0	2018-01-12	30	22	15	5
+1054	No description	0	2018-02-04	21	43	9	16
+1055	No description	0	2018-02-22	20	11	16	21
+1056	No description	0	2018-02-03	46	26	30	15
+1057	No description	0	2018-01-08	17	23	24	18
+1058	No description	0	2018-02-16	40	31	3	3
+1059	No description	0	2018-02-06	50	3	22	5
+1060	No description	0	2018-01-07	40	76	21	6
+1061	No description	0	2018-01-12	42	29	16	3
+1062	No description	0	2018-01-24	23	32	11	8
+1063	No description	0	2018-01-25	35	15	30	23
+1064	No description	0	2018-01-05	14	68	19	16
+1065	No description	0	2018-01-14	26	65	8	1
+1066	No description	0	2018-02-20	43	58	24	21
+1067	No description	0	2018-02-22	7	60	18	10
+1068	No description	0	2018-01-21	10	3	19	6
+1069	No description	0	2018-01-21	41	33	13	16
+1070	No description	0	2018-02-28	23	23	23	14
+1071	No description	0	2018-01-11	32	12	16	12
+1072	No description	0	2018-02-18	40	91	13	6
+1073	No description	0	2018-01-13	43	76	8	21
+1074	No description	0	2018-02-27	48	49	1	13
+1075	No description	0	2018-02-28	8	20	10	16
+1076	No description	0	2018-02-16	22	31	1	15
+1077	No description	0	2018-02-08	37	98	30	21
+1078	No description	0	2018-02-09	21	5	3	12
+1079	No description	0	2018-01-29	30	95	18	3
+1080	No description	0	2018-01-14	44	64	14	17
+1081	No description	0	2018-01-11	14	78	16	9
+1082	No description	0	2018-02-06	9	31	17	14
+1083	No description	0	2018-01-17	34	7	13	21
+1084	No description	0	2018-02-26	49	38	7	2
+1085	No description	0	2018-02-11	25	17	7	15
+1086	No description	0	2018-01-25	22	68	5	23
+1087	No description	0	2018-01-17	10	86	18	19
+1088	No description	0	2018-02-05	48	90	17	9
+1089	No description	0	2018-01-23	31	69	16	11
+1090	No description	0	2018-01-17	45	99	28	21
+1091	No description	0	2018-02-13	41	54	24	13
+1092	No description	0	2018-01-26	6	44	4	7
+1093	No description	0	2018-01-08	33	61	15	15
+1094	No description	0	2018-02-17	9	65	21	12
+1095	No description	0	2018-01-02	41	81	28	19
+1096	No description	0	2018-01-18	16	98	5	14
+1097	No description	0	2018-01-08	35	53	9	10
+1098	No description	0	2018-02-05	21	48	9	21
+1099	No description	0	2018-02-01	37	88	27	1
+1100	No description	0	2018-02-25	31	25	21	19
+1101	No description	0	2018-01-29	10	68	30	23
+1102	No description	0	2018-02-19	19	40	12	2
+1103	No description	0	2018-01-31	47	100	18	19
+1104	No description	0	2018-02-02	9	22	12	19
+1105	No description	0	2018-01-08	47	73	20	6
+1106	No description	0	2018-02-15	35	68	7	19
+1107	No description	0	2018-02-03	21	55	13	14
+1108	No description	0	2018-02-16	14	96	17	2
+1109	No description	0	2018-01-10	11	24	23	25
+1110	No description	0	2018-01-07	36	33	19	19
+1111	No description	0	2018-01-04	14	40	30	9
+1112	No description	0	2018-01-07	48	79	9	12
+1113	No description	0	2018-02-05	18	92	28	14
+1114	No description	0	2018-02-28	31	1	1	23
+1115	No description	0	2018-02-16	39	26	20	11
+1116	No description	0	2018-01-03	50	19	6	10
+1117	No description	0	2018-02-01	43	82	8	2
+1118	No description	0	2018-01-07	40	3	13	11
+1119	No description	0	2018-01-17	15	84	23	25
+1120	No description	0	2018-01-27	18	90	20	10
+1121	No description	0	2018-02-07	50	1	12	14
+1122	No description	0	2018-02-24	12	56	3	20
+1123	No description	0	2018-01-31	28	4	28	5
+1124	No description	0	2018-01-30	36	34	10	10
+1125	No description	0	2018-02-07	43	48	26	2
+1126	No description	0	2018-01-25	8	37	13	5
+1127	No description	0	2018-01-19	22	43	29	11
+1128	No description	0	2018-02-03	43	62	19	5
+1129	No description	0	2018-02-23	16	70	9	25
+1130	No description	0	2018-01-19	22	2	13	4
+1131	No description	0	2018-02-19	33	94	6	1
+1132	No description	0	2018-01-03	32	60	27	18
+1133	No description	0	2018-01-26	35	90	20	2
+1134	No description	0	2018-01-02	45	76	22	5
+1135	No description	0	2018-02-01	21	9	30	8
+1136	No description	0	2018-02-12	25	44	13	23
+1137	No description	0	2018-02-09	16	29	23	25
+1138	No description	0	2018-02-14	38	95	23	21
+1139	No description	0	2018-01-16	44	69	27	4
+1140	No description	0	2018-02-14	26	6	11	15
+1141	No description	0	2018-02-11	17	97	13	9
+1142	No description	0	2018-02-27	10	15	18	20
+1143	No description	0	2018-01-23	41	19	11	16
+1144	No description	0	2018-02-02	8	22	5	21
+1145	No description	0	2018-02-18	9	76	23	15
+1146	No description	0	2018-01-25	17	22	7	22
+1147	No description	0	2018-01-29	5	13	19	19
+1148	No description	0	2018-02-23	45	1	5	17
+1149	No description	0	2018-01-10	18	45	29	10
+1150	No description	0	2018-02-16	13	11	8	25
+1151	No description	0	2018-01-05	35	4	29	12
+1152	No description	0	2018-01-11	34	51	6	13
+1153	No description	0	2018-02-25	17	59	4	17
+1154	No description	0	2018-01-02	9	11	12	10
+1155	No description	0	2018-02-15	9	13	22	12
+1156	No description	0	2018-02-15	42	12	20	13
+1157	No description	0	2018-01-19	30	73	21	15
+1158	No description	0	2018-01-04	37	20	16	1
+1159	No description	0	2018-02-19	46	81	18	19
+1160	No description	0	2018-01-14	35	38	17	10
+1161	No description	0	2018-02-07	27	55	21	16
+1162	No description	0	2018-02-16	16	18	19	16
+1163	No description	0	2018-02-15	15	4	23	2
+1164	No description	0	2018-02-27	41	54	1	20
+1165	No description	0	2018-01-15	15	100	26	23
+1166	No description	0	2018-01-15	11	84	6	19
+1167	No description	0	2018-01-29	26	53	24	21
+1168	No description	0	2018-01-11	21	3	24	11
+1169	No description	0	2018-02-28	34	77	28	5
+1170	No description	0	2018-01-10	11	93	24	8
+1171	No description	0	2018-02-04	29	57	22	8
+1172	No description	0	2018-01-14	13	78	6	11
+1173	No description	0	2018-02-20	42	52	18	5
+1174	No description	0	2018-02-15	47	30	15	24
+1175	No description	0	2018-01-30	41	38	28	22
+1176	No description	0	2018-02-15	9	26	30	12
+1177	No description	0	2018-02-01	26	58	13	10
+1178	No description	0	2018-01-27	18	12	29	24
+1179	No description	0	2018-01-29	46	59	12	25
+1180	No description	0	2018-02-20	20	8	14	1
+1181	No description	0	2018-02-11	30	39	18	15
+1182	No description	0	2018-01-30	19	32	2	23
+1183	No description	0	2018-02-26	7	96	3	8
+1184	No description	0	2018-01-13	42	68	8	6
+1185	No description	0	2018-01-24	38	50	26	8
+1186	No description	0	2018-02-21	32	12	23	15
+1187	No description	0	2018-01-29	25	68	7	22
+1188	No description	0	2018-02-04	45	27	12	13
+1189	No description	0	2018-02-17	43	51	12	3
+1190	No description	0	2018-01-12	39	44	30	5
+1191	No description	0	2018-01-09	27	1	9	22
+1192	No description	0	2018-01-25	25	36	20	20
+1193	No description	0	2018-02-10	16	45	26	7
+1194	No description	0	2018-01-14	19	67	4	16
+1195	No description	0	2018-02-05	21	33	26	4
+1196	No description	0	2018-01-21	46	54	23	6
+1197	No description	0	2018-02-04	41	66	12	3
+1198	No description	0	2018-02-15	21	100	22	13
+1199	No description	0	2018-02-01	24	70	3	21
+1200	No description	0	2018-02-13	24	37	16	16
+1201	No description	0	2018-02-04	25	21	7	5
+1202	No description	0	2018-01-17	40	3	3	12
+1203	No description	0	2018-01-05	21	76	19	25
+1204	No description	0	2018-02-26	6	35	8	14
+1205	No description	0	2018-02-22	9	81	20	1
+1206	No description	0	2018-02-25	26	43	2	8
+1207	No description	0	2018-01-02	30	72	19	21
+1208	No description	0	2018-01-18	14	64	16	20
+1209	No description	0	2018-01-09	26	16	29	25
+1210	No description	0	2018-02-27	21	70	18	7
+1211	No description	0	2018-02-25	20	62	23	19
+1212	No description	0	2018-02-16	37	87	2	19
+1213	No description	0	2018-01-04	9	85	24	18
+1214	No description	0	2018-02-17	33	93	6	19
+1215	No description	0	2018-01-17	37	79	6	25
+1216	No description	0	2018-02-28	5	91	29	10
+1217	No description	0	2018-01-23	46	57	14	21
+1218	No description	0	2018-01-09	16	3	14	21
+1219	No description	0	2018-01-18	7	33	22	11
+1220	No description	0	2018-02-15	13	56	30	5
+1221	No description	0	2018-02-26	12	76	2	11
+1222	No description	0	2018-02-11	42	79	8	25
+1223	No description	0	2018-02-18	36	89	5	2
+1224	No description	0	2018-02-25	39	85	11	13
+1225	No description	0	2018-02-10	7	44	10	19
+1226	No description	0	2018-01-13	11	81	8	24
+1227	No description	0	2018-02-22	15	92	27	2
+1228	No description	0	2018-02-22	30	8	29	14
+1229	No description	0	2018-01-16	49	74	16	8
+1230	No description	0	2018-02-12	45	95	27	2
+1231	No description	0	2018-02-28	5	49	2	24
+1232	No description	0	2018-01-15	46	99	28	12
+1233	No description	0	2018-01-26	13	79	8	22
+1234	No description	0	2018-02-21	10	15	21	21
+1235	No description	0	2018-02-03	47	99	22	17
+1236	No description	0	2018-01-22	18	76	8	20
+1237	No description	0	2018-02-09	31	94	23	16
+1238	No description	0	2018-01-13	44	71	12	21
+1239	No description	0	2018-02-25	33	63	29	12
+1240	No description	0	2018-02-27	29	14	29	8
+1241	No description	0	2018-01-22	15	35	22	22
+1242	No description	0	2018-01-06	39	37	22	19
+1243	No description	0	2018-02-23	13	36	23	12
+1244	No description	0	2018-02-26	16	56	23	12
+1245	No description	0	2018-02-24	49	60	16	25
+1246	No description	0	2018-01-01	23	15	6	5
+1247	No description	0	2018-02-26	14	69	28	14
+1248	No description	0	2018-01-27	49	26	22	11
+1249	No description	0	2018-01-27	38	48	23	21
+1250	No description	0	2018-02-18	43	2	1	14
+1251	No description	0	2018-01-20	22	54	10	21
+1252	No description	0	2018-02-06	30	63	12	21
+1253	No description	0	2018-02-22	47	79	28	20
+1254	No description	0	2018-02-21	13	97	9	20
+1255	No description	0	2018-02-14	41	5	6	16
+1256	No description	0	2018-02-19	48	19	6	10
+1257	No description	0	2018-02-20	40	36	4	18
+1258	No description	0	2018-01-17	46	73	26	7
+1259	No description	0	2018-02-21	22	90	13	12
+1260	No description	0	2018-01-25	47	10	27	11
+1261	No description	0	2018-01-02	48	89	27	20
+1262	No description	0	2018-02-24	50	23	20	10
+1263	No description	0	2018-02-14	14	11	9	12
+1264	No description	0	2018-02-17	17	41	6	18
+1265	No description	0	2018-02-27	17	35	13	3
+1266	No description	0	2018-01-18	5	89	7	3
+1267	No description	0	2018-02-06	32	62	24	25
+1268	No description	0	2018-01-04	6	70	10	4
+1269	No description	0	2018-01-29	16	73	8	25
+1270	No description	0	2018-02-24	48	71	20	4
+1271	No description	0	2018-01-25	15	3	12	15
+1272	No description	0	2018-02-15	25	49	7	23
+1273	No description	0	2018-01-23	33	21	9	12
+1274	No description	0	2018-02-22	32	97	16	13
+1275	No description	0	2018-01-14	45	77	3	22
+1276	No description	0	2018-02-10	41	8	19	16
+1277	No description	0	2018-02-03	43	50	2	8
+1278	No description	0	2018-01-29	46	46	12	20
+1279	No description	0	2018-02-19	31	70	28	10
+1280	No description	0	2018-02-23	29	90	26	11
+1281	No description	0	2018-01-30	21	94	9	9
+1282	No description	0	2018-01-25	43	8	6	8
+1283	No description	0	2018-02-15	32	61	11	24
+1284	No description	0	2018-01-27	7	69	6	1
+1285	No description	0	2018-01-20	13	20	10	1
+1286	No description	0	2018-02-05	12	17	29	11
+1287	No description	0	2018-01-05	18	59	6	14
+1288	No description	0	2018-02-05	30	96	24	7
+1289	No description	0	2018-01-21	15	94	16	2
+1290	No description	0	2018-01-27	12	64	6	3
+1291	No description	0	2018-01-28	11	24	15	10
+1292	No description	0	2018-02-16	29	54	2	25
+1293	No description	0	2018-02-23	10	10	23	22
+1294	No description	0	2018-01-01	39	60	17	1
+1295	No description	0	2018-01-16	16	59	9	15
+1296	No description	0	2018-01-18	34	31	11	25
+1297	No description	0	2018-02-13	50	60	25	2
+1298	No description	0	2018-01-15	49	87	14	13
+1299	No description	0	2018-02-04	22	32	5	2
+1300	No description	0	2018-01-06	42	95	5	10
+1301	No description	0	2018-01-16	26	1	27	12
+1302	No description	0	2018-02-19	34	66	11	1
+1303	No description	0	2018-01-19	28	83	9	5
+1304	No description	0	2018-02-10	36	84	20	7
+1305	No description	0	2018-02-22	15	76	21	16
+1306	No description	0	2018-01-16	10	15	2	16
+1307	No description	0	2018-01-08	26	38	22	7
+1308	No description	0	2018-01-29	6	43	26	23
+1309	No description	0	2018-02-12	39	86	6	11
+1310	No description	0	2018-01-08	6	91	12	17
+1311	No description	0	2018-01-04	23	14	19	21
+1312	No description	0	2018-01-05	45	82	9	12
+1313	No description	0	2018-01-04	24	64	14	13
+1314	No description	0	2018-02-25	47	22	12	4
+1315	No description	0	2018-02-14	44	11	8	1
+1316	No description	0	2018-01-08	24	4	21	9
+1317	No description	0	2018-02-24	17	7	29	12
+1318	No description	0	2018-01-10	38	93	17	16
+1319	No description	0	2018-01-30	43	45	2	22
+1320	No description	0	2018-01-29	39	72	30	4
+1321	No description	0	2018-02-16	43	80	28	16
+1322	No description	0	2018-01-30	15	28	20	11
+1323	No description	0	2018-02-06	44	28	25	9
+1324	No description	0	2018-02-27	36	19	15	2
+1325	No description	0	2018-02-26	39	75	5	13
+1326	No description	0	2018-02-22	49	68	5	10
+1327	No description	0	2018-02-25	33	94	2	3
+1328	No description	0	2018-01-19	25	49	16	7
+1329	No description	0	2018-01-07	44	26	3	11
+1330	No description	0	2018-01-02	39	13	15	2
+1331	No description	0	2018-01-29	28	24	26	11
+1332	No description	0	2018-02-28	22	44	19	15
+1333	No description	0	2018-02-27	24	39	24	25
+1334	No description	0	2018-02-02	44	88	12	6
+1335	No description	0	2018-02-08	19	28	8	2
+1336	No description	0	2018-02-17	11	72	8	17
+1337	No description	0	2018-01-29	15	94	23	2
+1338	No description	0	2018-01-23	23	24	12	19
+1339	No description	0	2018-02-16	16	45	15	11
+1340	No description	0	2018-01-31	49	50	16	24
+1341	No description	0	2018-02-25	28	38	29	21
+1342	No description	0	2018-02-08	33	9	2	14
+1343	No description	0	2018-02-20	7	78	6	15
+1344	No description	0	2018-02-07	22	83	13	24
+1345	No description	0	2018-01-20	29	36	29	1
+1346	No description	0	2018-02-26	39	9	7	24
+1347	No description	0	2018-01-02	15	16	16	23
+1348	No description	0	2018-02-27	16	58	14	8
+1349	No description	0	2018-02-09	12	17	6	17
+1350	No description	0	2018-02-19	12	80	11	16
+1351	No description	0	2018-01-08	34	15	25	4
+1352	No description	0	2018-02-22	10	20	21	24
+1353	No description	0	2018-02-14	13	23	25	23
+1354	No description	0	2018-01-27	45	24	27	8
+1355	No description	0	2018-02-25	33	60	10	9
+1356	No description	0	2018-02-19	8	64	4	9
+1357	No description	0	2018-01-03	31	34	19	17
+1358	No description	0	2018-01-19	36	38	2	14
+1359	No description	0	2018-01-30	42	35	27	11
+1360	No description	0	2018-01-05	11	43	30	14
+1361	No description	0	2018-02-25	31	15	25	17
+1362	No description	0	2018-02-03	23	66	24	6
+1363	No description	0	2018-01-11	7	11	17	10
+1364	No description	0	2018-02-08	46	84	26	18
+1365	No description	0	2018-01-28	46	49	26	2
+1366	No description	0	2018-01-22	40	97	3	2
+1367	No description	0	2018-01-26	30	18	1	21
+1368	No description	0	2018-02-23	18	53	15	20
+1369	No description	0	2018-01-28	27	40	4	1
+1370	No description	0	2018-02-03	32	100	25	24
+1371	No description	0	2018-02-23	16	93	6	2
+1372	No description	0	2018-01-16	22	65	27	22
+1373	No description	0	2018-02-19	12	1	25	16
+1374	No description	0	2018-01-30	48	15	12	13
+1375	No description	0	2018-01-10	10	92	18	17
+1376	No description	0	2018-02-14	19	87	3	7
+1377	No description	0	2018-01-30	44	43	19	4
+1378	No description	0	2018-02-04	29	51	29	12
+1379	No description	0	2018-02-28	43	40	6	24
+1380	No description	0	2018-02-09	50	97	19	15
+1381	No description	0	2018-02-04	30	47	9	22
+1382	No description	0	2018-01-31	10	33	10	4
+1383	No description	0	2018-01-13	20	7	28	1
+1384	No description	0	2018-01-05	33	53	22	1
+1385	No description	0	2018-01-08	50	87	13	18
+1386	No description	0	2018-01-24	13	48	1	11
+1387	No description	0	2018-01-30	7	30	21	22
+1388	No description	0	2018-01-16	32	71	21	6
+1389	No description	0	2018-01-13	13	54	3	18
+1390	No description	0	2018-02-03	49	35	10	24
+1391	No description	0	2018-01-03	12	74	20	19
+1392	No description	0	2018-02-11	32	55	25	22
+1393	No description	0	2018-01-27	37	66	14	7
+1394	No description	0	2018-01-23	34	56	14	19
+1395	No description	0	2018-01-25	42	89	20	13
+1396	No description	0	2018-02-03	11	9	20	14
+1397	No description	0	2018-02-13	6	31	26	5
+1398	No description	0	2018-02-26	41	92	28	18
+1399	No description	0	2018-01-04	44	94	28	9
+1400	No description	0	2018-02-28	8	40	11	17
+1401	No description	0	2018-01-21	40	9	25	4
+1402	No description	0	2018-01-03	24	2	19	4
+1403	No description	0	2018-02-18	15	32	19	12
+1404	No description	0	2018-02-23	18	24	21	19
+1405	No description	0	2018-01-11	18	75	27	23
+1406	No description	0	2018-01-20	41	7	26	17
+1407	No description	0	2018-01-09	38	13	1	6
+1408	No description	0	2018-01-06	45	56	22	9
+1409	No description	0	2018-01-05	29	33	13	4
+1410	No description	0	2018-01-23	44	3	26	9
+1411	No description	0	2018-01-14	50	23	18	4
+1412	No description	0	2018-02-04	50	67	15	2
+1413	No description	0	2018-02-08	19	22	4	2
+1414	No description	0	2018-01-09	6	23	24	18
+1415	No description	0	2018-02-12	23	55	28	3
+1416	No description	0	2018-02-27	26	21	20	12
+1417	No description	0	2018-01-11	15	67	21	8
+1418	No description	0	2018-01-08	36	90	25	4
+1419	No description	0	2018-01-31	14	22	8	25
+1420	No description	0	2018-02-03	27	38	8	23
+1421	No description	0	2018-02-05	15	32	29	19
+1422	No description	0	2018-02-17	32	47	23	16
+1423	No description	0	2018-02-08	9	32	16	4
+1424	No description	0	2018-01-14	43	66	26	4
+1425	No description	0	2018-01-27	9	99	23	13
+1426	No description	0	2018-01-20	40	6	25	16
+1427	No description	0	2018-01-03	31	27	6	2
+1428	No description	0	2018-02-02	14	28	23	15
+1429	No description	0	2018-01-11	20	87	8	7
+1430	No description	0	2018-01-05	48	80	13	18
+1431	No description	0	2018-01-16	14	3	8	2
+1432	No description	0	2018-01-26	19	9	23	8
+1433	No description	0	2018-02-04	25	36	17	22
+1434	No description	0	2018-02-26	49	48	22	5
+1435	No description	0	2018-01-12	10	91	10	3
+1436	No description	0	2018-01-06	32	6	13	25
+1437	No description	0	2018-01-26	31	72	11	6
+1438	No description	0	2018-02-17	33	63	9	22
+1439	No description	0	2018-02-03	15	78	23	5
+1440	No description	0	2018-01-26	32	83	25	12
+1441	No description	0	2018-02-13	28	30	7	5
+1442	No description	0	2018-02-04	23	16	23	22
+1443	No description	0	2018-01-12	31	33	27	16
+1444	No description	0	2018-01-23	5	40	15	4
+1445	No description	0	2018-02-12	50	33	13	17
+1446	No description	0	2018-02-22	44	52	18	18
+1447	No description	0	2018-02-13	21	32	20	11
+1448	No description	0	2018-02-12	36	86	29	3
+1449	No description	0	2018-02-02	20	14	12	25
+1450	No description	0	2018-01-19	8	42	17	2
+1451	No description	0	2018-02-22	34	20	28	16
+1452	No description	0	2018-01-09	19	28	25	23
+1453	No description	0	2018-01-10	15	90	18	9
+1454	No description	0	2018-02-24	36	79	27	18
+1455	No description	0	2018-02-03	37	93	16	6
+1456	No description	0	2018-01-14	7	72	5	3
+1457	No description	0	2018-02-06	48	60	30	18
+1458	No description	0	2018-01-31	27	17	16	24
+1459	No description	0	2018-02-07	17	91	18	8
+1460	No description	0	2018-02-13	27	31	14	8
+1461	No description	0	2018-02-22	49	100	3	16
+1462	No description	0	2018-02-20	24	94	13	1
+1463	No description	0	2018-02-06	18	88	17	15
+1464	No description	0	2018-01-16	33	84	17	13
+1465	No description	0	2018-01-19	6	5	10	2
+1466	No description	0	2018-02-14	39	33	25	24
+1467	No description	0	2018-01-20	30	20	18	21
+1468	No description	0	2018-01-14	45	62	19	15
+1469	No description	0	2018-01-17	48	98	19	6
+1470	No description	0	2018-01-01	23	89	9	22
+1471	No description	0	2018-01-10	8	75	17	3
+1472	No description	0	2018-02-09	41	1	18	3
+1473	No description	0	2018-01-06	44	18	24	8
+1474	No description	0	2018-01-19	26	1	27	24
+1475	No description	0	2018-02-23	26	59	6	12
+1476	No description	0	2018-02-07	49	84	19	2
+1477	No description	0	2018-02-28	8	35	30	7
+1478	No description	0	2018-02-17	36	37	1	2
+1479	No description	0	2018-02-04	38	79	29	18
+1480	No description	0	2018-02-21	43	62	24	7
+1481	No description	0	2018-01-10	37	76	14	8
+1482	No description	0	2018-01-12	17	48	5	1
+1483	No description	0	2018-01-05	14	85	2	21
+1484	No description	0	2018-01-30	25	54	30	13
+1485	No description	0	2018-01-16	16	66	3	13
+1486	No description	0	2018-02-28	41	7	15	15
+1487	No description	0	2018-01-21	18	5	5	2
+1488	No description	0	2018-02-10	12	56	2	12
+1489	No description	0	2018-01-05	26	74	17	20
+1490	No description	0	2018-02-04	38	81	13	12
+1491	No description	0	2018-02-17	7	8	29	5
+1492	No description	0	2018-01-10	10	41	23	19
+1493	No description	0	2018-01-01	12	52	15	1
+1494	No description	0	2018-02-06	37	27	10	3
+1495	No description	0	2018-02-14	13	33	7	8
+1496	No description	0	2018-01-04	12	36	9	21
+1497	No description	0	2018-02-14	34	8	4	7
+1498	No description	0	2018-02-11	7	53	6	10
+1499	No description	0	2018-02-01	48	70	12	1
+1500	No description	0	2018-01-24	37	95	11	25
+1501	No description	0	2018-01-17	29	58	30	22
+1502	No description	0	2018-02-20	28	71	6	14
+1503	No description	0	2018-01-11	11	64	20	7
+1504	No description	0	2018-01-09	41	83	1	25
+1505	No description	0	2018-01-31	19	36	28	7
+1506	No description	0	2018-02-24	29	79	27	1
+1507	No description	0	2018-01-04	20	58	2	11
+1508	No description	0	2018-02-08	28	13	6	17
+1509	No description	0	2018-01-04	17	24	29	5
+1510	No description	0	2018-01-31	34	55	27	13
+1511	No description	0	2018-02-11	6	98	11	22
+1512	No description	0	2018-01-02	28	10	22	25
+1513	No description	0	2018-01-11	25	93	17	7
+1514	No description	0	2018-02-15	33	30	7	9
+1515	No description	0	2018-01-16	13	50	17	10
+1516	No description	0	2018-02-18	28	83	22	1
+1517	No description	0	2018-01-18	15	83	26	13
+1518	No description	0	2018-01-01	13	96	26	9
+1519	No description	0	2018-02-27	38	98	21	6
+1520	No description	0	2018-01-07	22	14	21	23
+1521	No description	0	2018-01-24	5	53	19	12
+1522	No description	0	2018-01-24	15	15	17	2
+1523	No description	0	2018-01-30	36	54	10	23
+1524	No description	0	2018-01-05	9	39	21	20
+1525	No description	0	2018-01-25	18	4	4	18
+1526	No description	0	2018-02-02	24	3	28	3
+1527	No description	0	2018-02-28	11	69	9	6
+1528	No description	0	2018-01-12	5	53	15	10
+1529	No description	0	2018-02-07	9	51	6	9
+1530	No description	0	2018-01-22	31	99	2	16
+1531	No description	0	2018-01-16	24	39	22	11
+1532	No description	0	2018-01-05	45	62	3	8
+1533	No description	0	2018-02-12	41	25	30	20
+1534	No description	0	2018-01-19	42	52	14	10
+1535	No description	0	2018-01-25	43	27	15	21
+1536	No description	0	2018-02-17	47	58	29	3
+1537	No description	0	2018-01-11	24	39	6	23
+1538	No description	0	2018-01-05	50	4	7	20
+1539	No description	0	2018-01-11	11	30	4	22
+1540	No description	0	2018-02-02	39	63	12	10
+1541	No description	0	2018-01-12	22	70	24	25
+1542	No description	0	2018-02-05	7	23	11	18
+1543	No description	0	2018-02-11	23	77	7	11
+1544	No description	0	2018-01-14	20	59	1	19
+1545	No description	0	2018-02-28	29	14	5	25
+1546	No description	0	2018-02-02	45	77	24	7
+1547	No description	0	2018-01-20	9	99	30	15
+1548	No description	0	2018-02-23	44	37	26	25
+1549	No description	0	2018-02-16	23	14	24	25
+1550	No description	0	2018-01-28	9	98	11	5
+1551	No description	0	2018-01-04	11	3	13	1
+1552	No description	0	2018-01-21	14	100	6	3
+1553	No description	0	2018-01-10	11	79	30	3
+1554	No description	0	2018-01-27	32	30	22	4
+1555	No description	0	2018-01-04	41	68	23	2
+1556	No description	0	2018-01-21	35	30	30	6
+1557	No description	0	2018-01-14	13	19	8	10
+1558	No description	0	2018-02-12	32	42	22	4
+1559	No description	0	2018-01-10	48	66	24	6
+1560	No description	0	2018-02-15	41	99	24	16
+1561	No description	0	2018-01-18	28	95	5	19
+1562	No description	0	2018-01-23	30	48	27	3
+1563	No description	0	2018-02-02	48	70	10	14
+1564	No description	0	2018-01-19	45	38	28	2
+1565	No description	0	2018-01-02	12	61	5	18
+1566	No description	0	2018-02-15	38	60	24	15
+1567	No description	0	2018-02-15	46	78	27	18
+1568	No description	0	2018-02-09	22	30	23	21
+1569	No description	0	2018-01-30	19	1	11	24
+1570	No description	0	2018-02-14	10	35	27	15
+1571	No description	0	2018-02-21	46	91	29	8
+1572	No description	0	2018-01-03	42	41	19	15
+1573	No description	0	2018-01-19	11	49	8	24
+1574	No description	0	2018-01-04	50	63	21	25
+1575	No description	0	2018-02-03	31	57	1	25
+1576	No description	0	2018-02-10	47	68	1	8
+1577	No description	0	2018-02-28	21	26	14	21
+1578	No description	0	2018-02-04	22	48	11	14
+1579	No description	0	2018-01-05	19	58	15	17
+1580	No description	0	2018-01-08	10	95	13	25
+1581	No description	0	2018-02-22	24	81	12	3
+1582	No description	0	2018-01-31	40	92	28	15
+1583	No description	0	2018-02-17	32	82	21	7
+1584	No description	0	2018-01-16	46	82	17	1
+1585	No description	0	2018-01-26	22	73	25	13
+1586	No description	0	2018-01-22	10	18	8	14
+1587	No description	0	2018-01-19	16	85	22	25
+1588	No description	0	2018-01-27	7	61	16	9
+1589	No description	0	2018-02-16	28	37	23	13
+1590	No description	0	2018-01-04	17	60	13	19
+1591	No description	0	2018-02-15	42	97	15	14
+1592	No description	0	2018-01-11	28	36	3	11
+1593	No description	0	2018-02-28	11	83	24	25
+1594	No description	0	2018-01-03	28	37	26	2
+1595	No description	0	2018-02-23	36	62	6	8
+1596	No description	0	2018-01-24	5	11	6	23
+1597	No description	0	2018-01-20	20	31	25	18
+1598	No description	0	2018-01-30	37	46	12	1
+1599	No description	0	2018-02-23	9	96	26	22
+1600	No description	0	2018-01-18	43	73	14	24
+1601	No description	0	2018-01-18	18	64	15	14
+1602	No description	0	2018-02-16	11	79	28	3
+1603	No description	0	2018-02-05	23	63	3	19
+1604	No description	0	2018-01-16	7	46	16	20
+1605	No description	0	2018-02-22	9	13	29	12
+1606	No description	0	2018-01-08	16	38	23	14
+1607	No description	0	2018-02-07	26	76	19	10
+1608	No description	0	2018-01-28	16	62	20	25
+1609	No description	0	2018-02-19	27	28	24	16
+1610	No description	0	2018-02-21	13	43	2	15
+1611	No description	0	2018-02-01	48	42	7	23
+1612	No description	0	2018-01-31	38	36	10	21
+1613	No description	0	2018-01-26	11	47	25	22
+1614	No description	0	2018-01-27	19	95	26	10
+1615	No description	0	2018-02-22	50	4	22	7
+1616	No description	0	2018-01-03	12	25	11	23
+1617	No description	0	2018-01-25	27	15	12	2
+1618	No description	0	2018-01-25	37	53	11	8
+1619	No description	0	2018-01-24	49	28	26	16
+1620	No description	0	2018-02-19	25	30	25	1
+1621	No description	0	2018-01-01	49	41	20	5
+1622	No description	0	2018-01-16	8	62	15	12
+1623	No description	0	2018-01-01	10	44	20	5
+1624	No description	0	2018-01-28	50	51	12	18
+1625	No description	0	2018-01-08	30	88	15	15
+1626	No description	0	2018-01-29	16	18	1	21
+1627	No description	0	2018-02-11	27	93	17	23
+1628	No description	0	2018-02-19	38	27	30	9
+1629	No description	0	2018-01-09	36	32	21	16
+1630	No description	0	2018-01-17	37	19	7	23
+1631	No description	0	2018-02-27	40	85	5	8
+1632	No description	0	2018-01-20	11	78	18	12
+1633	No description	0	2018-02-02	28	45	25	17
+1634	No description	0	2018-01-06	27	36	26	2
+1635	No description	0	2018-01-28	14	80	6	11
+1636	No description	0	2018-02-08	31	80	6	22
+1637	No description	0	2018-01-31	7	67	3	11
+1638	No description	0	2018-02-22	14	44	21	9
+1639	No description	0	2018-02-18	24	92	29	24
+1640	No description	0	2018-02-16	11	24	1	2
+1641	No description	0	2018-02-27	39	72	3	17
+1642	No description	0	2018-01-25	5	61	28	2
+1643	No description	0	2018-01-10	20	59	11	22
+1644	No description	0	2018-02-26	14	71	16	19
+1645	No description	0	2018-02-25	15	35	7	3
+1646	No description	0	2018-02-05	40	58	27	1
+1647	No description	0	2018-02-28	19	22	8	12
+1648	No description	0	2018-02-28	11	53	26	21
+1649	No description	0	2018-02-03	40	46	18	16
+1650	No description	0	2018-02-26	42	100	5	18
+1651	No description	0	2018-01-16	32	19	25	25
+1652	No description	0	2018-02-26	25	22	3	4
+1653	No description	0	2018-01-31	47	22	12	24
+1654	No description	0	2018-01-20	39	77	13	2
+1655	No description	0	2018-01-02	27	93	6	5
+1656	No description	0	2018-02-21	15	88	14	3
+1657	No description	0	2018-02-26	9	53	6	20
+1658	No description	0	2018-01-24	24	52	5	11
+1659	No description	0	2018-02-25	22	26	18	11
+1660	No description	0	2018-02-17	46	5	29	16
+1661	No description	0	2018-01-09	10	74	16	21
+1662	No description	0	2018-01-18	39	66	1	24
+1663	No description	0	2018-01-19	43	83	2	7
+1664	No description	0	2018-01-26	37	66	1	7
+1665	No description	0	2018-02-12	9	50	8	4
+1666	No description	0	2018-02-01	31	31	20	16
+1667	No description	0	2018-01-04	45	40	23	7
+1668	No description	0	2018-02-22	20	67	19	1
+1669	No description	0	2018-02-21	39	64	20	25
+1670	No description	0	2018-01-08	41	92	3	5
+1671	No description	0	2018-01-01	11	12	21	21
+1672	No description	0	2018-02-28	19	67	5	1
+1673	No description	0	2018-01-31	20	64	14	13
+1674	No description	0	2018-01-21	18	59	2	8
+1675	No description	0	2018-02-14	50	17	14	18
+1676	No description	0	2018-01-17	49	51	20	25
+1677	No description	0	2018-01-08	35	31	27	3
+1678	No description	0	2018-02-27	49	31	4	20
+1679	No description	0	2018-01-30	18	6	23	21
+1680	No description	0	2018-01-19	20	87	9	7
+1681	No description	0	2018-02-21	38	16	29	4
+1682	No description	0	2018-01-14	16	80	18	19
+1683	No description	0	2018-02-24	46	37	13	18
+1684	No description	0	2018-01-30	30	7	1	21
+1685	No description	0	2018-01-05	26	92	21	2
+1686	No description	0	2018-01-19	11	71	25	20
+1687	No description	0	2018-01-27	45	14	3	13
+1688	No description	0	2018-02-05	33	30	26	1
+1689	No description	0	2018-01-14	7	33	10	19
+1690	No description	0	2018-01-23	32	19	17	24
+1691	No description	0	2018-01-28	7	72	15	10
+1692	No description	0	2018-02-09	45	90	27	20
+1693	No description	0	2018-01-25	33	38	5	5
+1694	No description	0	2018-01-19	35	58	11	21
+1695	No description	0	2018-01-31	9	89	7	7
+1696	No description	0	2018-02-27	14	3	15	20
+1697	No description	0	2018-02-26	47	83	25	8
+1698	No description	0	2018-01-10	13	31	5	17
+1699	No description	0	2018-01-13	44	46	16	12
+1700	No description	0	2018-02-24	19	12	3	17
+1701	No description	0	2018-02-18	44	20	6	18
+1702	No description	0	2018-01-17	13	12	9	11
+1703	No description	0	2018-01-20	26	40	10	22
+1704	No description	0	2018-02-19	24	51	24	19
+1705	No description	0	2018-02-03	20	86	18	3
+1706	No description	0	2018-01-16	20	52	5	19
+1707	No description	0	2018-01-08	32	93	17	4
+1708	No description	0	2018-02-07	34	72	5	22
+1709	No description	0	2018-02-25	18	66	18	3
+1710	No description	0	2018-01-01	18	18	10	4
+1711	No description	0	2018-01-31	31	48	7	6
+1712	No description	0	2018-02-13	19	61	15	7
+1713	No description	0	2018-01-01	37	64	16	4
+1714	No description	0	2018-02-20	43	80	5	20
+1715	No description	0	2018-02-12	30	1	8	18
+1716	No description	0	2018-02-18	25	65	9	24
+1717	No description	0	2018-01-29	30	20	9	23
+1718	No description	0	2018-01-13	36	64	10	9
+1719	No description	0	2018-01-02	24	25	13	1
+1720	No description	0	2018-01-25	49	31	3	1
+1721	No description	0	2018-01-28	50	96	7	17
+1722	No description	0	2018-02-13	50	87	16	7
+1723	No description	0	2018-02-07	23	77	6	17
+1724	No description	0	2018-02-04	34	4	2	17
+1725	No description	0	2018-01-20	37	45	20	24
+1726	No description	0	2018-02-15	43	73	29	19
+1727	No description	0	2018-01-11	24	47	10	1
+1728	No description	0	2018-01-22	27	34	30	16
+1729	No description	0	2018-02-19	30	86	9	5
+1730	No description	0	2018-02-27	10	49	22	9
+1731	No description	0	2018-02-24	40	60	8	19
+1732	No description	0	2018-01-13	48	51	25	17
+1733	No description	0	2018-02-27	22	31	29	25
+1734	No description	0	2018-02-10	14	24	21	14
+1735	No description	0	2018-01-21	36	80	17	5
+1736	No description	0	2018-01-23	39	45	21	1
+1737	No description	0	2018-02-03	34	84	26	9
+1738	No description	0	2018-02-21	30	86	11	12
+1739	No description	0	2018-02-14	35	87	20	20
+1740	No description	0	2018-02-23	14	77	29	20
+1741	No description	0	2018-02-12	25	23	14	21
+1742	No description	0	2018-01-09	33	56	26	18
+1743	No description	0	2018-02-14	15	92	5	15
+1744	No description	0	2018-01-15	32	3	21	7
+1745	No description	0	2018-01-30	10	22	15	11
+1746	No description	0	2018-01-24	35	65	4	24
+1747	No description	0	2018-01-29	50	12	30	9
+1748	No description	0	2018-02-07	31	96	28	18
+1749	No description	0	2018-01-18	21	19	26	24
+1750	No description	0	2018-02-24	5	6	29	19
+1751	No description	0	2018-02-16	34	58	26	1
+1752	No description	0	2018-02-16	5	27	13	10
+1753	No description	0	2018-01-14	19	55	28	18
+1754	No description	0	2018-01-30	31	35	23	10
+1755	No description	0	2018-01-05	24	17	18	17
+1756	No description	0	2018-01-25	26	85	20	18
+1757	No description	0	2018-02-17	20	72	3	19
+1758	No description	0	2018-02-18	45	30	1	18
+1759	No description	0	2018-02-21	29	22	4	3
+1760	No description	0	2018-01-11	46	100	4	16
+1761	No description	0	2018-01-16	38	10	27	6
+1762	No description	0	2018-02-13	34	33	26	14
+1763	No description	0	2018-02-09	15	75	12	10
+1764	No description	0	2018-02-27	11	28	21	9
+1765	No description	0	2018-02-05	33	56	18	16
+1766	No description	0	2018-01-17	7	31	1	23
+1767	No description	0	2018-02-19	32	7	25	13
+1768	No description	0	2018-02-01	12	38	30	1
+1769	No description	0	2018-02-01	15	50	27	8
+1770	No description	0	2018-02-14	7	35	26	5
+1771	No description	0	2018-01-14	16	97	12	21
+1772	No description	0	2018-01-24	37	32	8	15
+1773	No description	0	2018-01-28	12	46	22	1
+1774	No description	0	2018-02-09	38	52	25	24
+1775	No description	0	2018-01-23	14	17	18	1
+1776	No description	0	2018-02-09	27	17	26	20
+1777	No description	0	2018-02-22	13	36	1	18
+1778	No description	0	2018-02-21	48	2	5	21
+1779	No description	0	2018-02-02	43	66	23	16
+1780	No description	0	2018-01-31	24	58	30	7
+1781	No description	0	2018-01-02	35	97	8	3
+1782	No description	0	2018-01-08	48	73	15	8
+1783	No description	0	2018-01-09	36	7	27	7
+1784	No description	0	2018-02-03	20	83	12	20
+1785	No description	0	2018-02-09	41	77	3	2
+1786	No description	0	2018-01-31	22	11	19	5
+1787	No description	0	2018-02-09	7	78	20	23
+1788	No description	0	2018-02-07	8	35	21	5
+1789	No description	0	2018-02-23	17	48	2	13
+1790	No description	0	2018-02-05	27	63	7	11
+1791	No description	0	2018-01-24	38	36	5	10
+1792	No description	0	2018-02-28	37	82	2	24
+1793	No description	0	2018-02-23	31	49	24	8
+1794	No description	0	2018-01-06	9	86	4	18
+1795	No description	0	2018-02-24	40	6	7	9
+1796	No description	0	2018-01-16	47	89	2	14
+1797	No description	0	2018-01-27	27	97	28	25
+1798	No description	0	2018-02-21	19	80	15	18
+1799	No description	0	2018-02-04	36	81	27	23
+1800	No description	0	2018-02-13	19	62	5	18
+1801	No description	0	2018-02-02	31	44	21	15
+1802	No description	0	2018-02-23	50	92	18	25
+1803	No description	0	2018-02-02	37	68	9	21
+1804	No description	0	2018-01-16	50	57	22	17
+1805	No description	0	2018-01-08	22	88	17	3
+1806	No description	0	2018-01-20	13	80	7	24
+1807	No description	0	2018-01-15	38	78	19	1
+1808	No description	0	2018-02-22	7	99	18	20
+1809	No description	0	2018-02-08	27	7	1	11
+1810	No description	0	2018-01-30	11	14	11	5
+1811	No description	0	2018-02-10	10	85	2	5
+1812	No description	0	2018-01-06	46	90	23	7
+1813	No description	0	2018-01-15	16	13	19	13
+1814	No description	0	2018-02-11	44	63	12	8
+1815	No description	0	2018-01-01	28	20	27	20
+1816	No description	0	2018-01-21	14	85	25	24
+1817	No description	0	2018-01-02	50	4	2	6
+1818	No description	0	2018-01-18	14	80	14	20
+1819	No description	0	2018-01-22	16	23	1	4
+1820	No description	0	2018-01-23	47	31	28	4
+1821	No description	0	2018-02-20	26	59	9	12
+1822	No description	0	2018-01-26	15	2	25	16
+1823	No description	0	2018-01-07	39	88	24	23
+1824	No description	0	2018-02-25	10	26	28	20
+1825	No description	0	2018-01-24	24	23	30	17
+1826	No description	0	2018-02-28	31	6	29	20
+1827	No description	0	2018-02-07	46	56	18	4
+1828	No description	0	2018-02-25	16	10	25	2
+1829	No description	0	2018-02-04	33	5	13	7
+1830	No description	0	2018-02-20	7	22	6	7
+1831	No description	0	2018-01-01	50	79	3	1
+1832	No description	0	2018-01-10	44	94	9	11
+1833	No description	0	2018-02-24	27	53	30	14
+1834	No description	0	2018-02-03	31	8	27	11
+1835	No description	0	2018-01-28	45	93	6	23
+1836	No description	0	2018-02-13	45	6	8	14
+1837	No description	0	2018-01-20	43	62	24	10
+1838	No description	0	2018-02-17	42	51	21	14
+1839	No description	0	2018-01-14	22	99	24	21
+1840	No description	0	2018-02-08	32	57	5	11
+1841	No description	0	2018-02-10	34	62	3	20
+1842	No description	0	2018-01-02	30	11	6	3
+1843	No description	0	2018-01-02	41	18	2	21
+1844	No description	0	2018-02-24	43	100	28	13
+1845	No description	0	2018-02-02	28	26	4	5
+1846	No description	0	2018-02-18	23	84	11	12
+1847	No description	0	2018-01-20	26	70	25	2
+1848	No description	0	2018-01-23	22	97	6	9
+1849	No description	0	2018-02-10	50	54	14	12
+1850	No description	0	2018-02-07	30	91	22	23
+1851	No description	0	2018-01-05	17	31	25	8
+1852	No description	0	2018-01-12	45	57	20	16
+1853	No description	0	2018-02-20	26	34	2	9
+1854	No description	0	2018-02-21	38	34	4	25
+1855	No description	0	2018-02-13	42	91	28	2
+1856	No description	0	2018-01-10	10	66	11	12
+1857	No description	0	2018-01-11	27	19	12	7
+1858	No description	0	2018-02-08	29	20	18	11
+1859	No description	0	2018-02-22	46	78	23	11
+1860	No description	0	2018-01-31	41	34	13	6
+1861	No description	0	2018-01-09	17	15	4	18
+1862	No description	0	2018-01-20	46	80	10	15
+1863	No description	0	2018-01-11	16	68	15	3
+1864	No description	0	2018-01-19	32	72	30	25
+1865	No description	0	2018-01-28	30	91	22	18
+1866	No description	0	2018-01-13	19	32	23	25
+1867	No description	0	2018-01-10	42	4	5	16
+1868	No description	0	2018-02-27	35	48	17	1
+1869	No description	0	2018-01-03	8	4	26	16
+1870	No description	0	2018-02-24	10	73	27	22
+1871	No description	0	2018-02-19	36	92	29	1
+1872	No description	0	2018-02-08	27	14	29	9
+1873	No description	0	2018-01-20	47	50	28	20
+1874	No description	0	2018-02-15	25	32	4	7
+1875	No description	0	2018-02-09	25	37	25	9
+1876	No description	0	2018-02-01	37	49	10	6
+1877	No description	0	2018-01-06	5	54	28	18
+1878	No description	0	2018-02-14	44	6	18	19
+1879	No description	0	2018-01-22	31	99	1	11
+1880	No description	0	2018-01-27	23	77	22	10
+1881	No description	0	2018-02-26	25	8	22	17
+1882	No description	0	2018-02-26	5	1	3	22
+1883	No description	0	2018-02-09	34	51	23	7
+1884	No description	0	2018-02-24	41	41	18	6
+1885	No description	0	2018-01-29	49	65	18	13
+1886	No description	0	2018-02-20	16	15	12	6
+1887	No description	0	2018-02-24	50	10	27	10
+1888	No description	0	2018-01-11	43	77	17	7
+1889	No description	0	2018-01-12	7	45	6	22
+1890	No description	0	2018-01-02	27	90	19	5
+1891	No description	0	2018-01-21	29	5	19	20
+1892	No description	0	2018-02-23	6	32	22	22
+1893	No description	0	2018-01-26	5	29	25	18
+1894	No description	0	2018-01-09	44	20	28	6
+1895	No description	0	2018-02-13	27	93	4	22
+1896	No description	0	2018-02-20	21	19	30	12
+1897	No description	0	2018-01-04	42	5	21	17
+1898	No description	0	2018-01-27	30	58	18	20
+1899	No description	0	2018-02-03	22	69	10	22
+1900	No description	0	2018-01-01	41	63	29	7
+1901	No description	0	2018-02-02	35	56	18	12
+1902	No description	0	2018-02-10	50	17	19	2
+1903	No description	0	2018-02-07	40	85	29	10
+1904	No description	0	2018-02-01	23	56	3	3
+1905	No description	0	2018-02-10	14	45	14	22
+1906	No description	0	2018-01-19	31	63	7	9
+1907	No description	0	2018-01-24	19	79	25	2
+1908	No description	0	2018-01-25	27	28	25	14
+1909	No description	0	2018-01-03	44	97	1	14
+1910	No description	0	2018-02-14	39	55	21	9
+1911	No description	0	2018-02-23	27	7	27	9
+1912	No description	0	2018-02-19	50	43	30	20
+1913	No description	0	2018-01-31	9	32	2	18
+1914	No description	0	2018-02-05	30	96	17	15
+1915	No description	0	2018-01-13	48	48	24	16
+1916	No description	0	2018-01-18	38	27	17	11
+1917	No description	0	2018-01-16	23	93	6	1
+1918	No description	0	2018-01-18	33	99	21	12
+1919	No description	0	2018-01-28	31	10	22	8
+1920	No description	0	2018-02-15	6	57	24	23
+1921	No description	0	2018-01-28	43	59	28	20
+1922	No description	0	2018-01-15	37	67	2	15
+1923	No description	0	2018-01-22	27	15	22	1
+1924	No description	0	2018-01-03	50	11	29	3
+1925	No description	0	2018-01-09	12	91	25	17
+1926	No description	0	2018-01-11	32	78	29	11
+1927	No description	0	2018-02-07	32	21	22	14
+1928	No description	0	2018-01-23	30	21	24	24
+1929	No description	0	2018-01-07	28	71	3	15
+1930	No description	0	2018-01-25	29	29	26	13
+1931	No description	0	2018-02-11	44	5	14	23
+1932	No description	0	2018-01-22	8	1	11	20
+1933	No description	0	2018-01-07	49	19	4	22
+1934	No description	0	2018-02-14	24	89	17	7
+1935	No description	0	2018-01-27	14	47	29	15
+1936	No description	0	2018-02-14	5	78	3	18
+1937	No description	0	2018-02-10	12	78	6	4
+1938	No description	0	2018-01-12	29	58	22	17
+1939	No description	0	2018-02-01	42	98	17	11
+1940	No description	0	2018-01-15	16	71	26	16
+1941	No description	0	2018-02-17	50	56	25	1
+1942	No description	0	2018-02-14	16	89	24	13
+1943	No description	0	2018-01-27	43	83	25	16
+1944	No description	0	2018-02-26	12	39	7	15
+1945	No description	0	2018-01-26	32	42	13	14
+1946	No description	0	2018-01-01	33	67	18	18
+1947	No description	0	2018-01-06	20	74	16	9
+1948	No description	0	2018-02-15	39	33	20	15
+1949	No description	0	2018-01-09	47	51	29	1
+1950	No description	0	2018-01-27	46	15	16	23
+1951	No description	0	2018-02-17	5	22	6	8
+1952	No description	0	2018-01-09	10	23	5	21
+1953	No description	0	2018-02-10	17	75	5	24
+1954	No description	0	2018-02-12	38	11	15	22
+1955	No description	0	2018-02-02	30	90	1	1
+1956	No description	0	2018-02-12	24	9	10	19
+1957	No description	0	2018-02-02	11	47	29	12
+1958	No description	0	2018-01-15	46	41	21	10
+1959	No description	0	2018-01-28	25	59	14	15
+1960	No description	0	2018-02-25	31	3	15	15
+1961	No description	0	2018-02-20	19	91	19	1
+1962	No description	0	2018-01-27	44	19	3	25
+1963	No description	0	2018-02-09	10	49	29	1
+1964	No description	0	2018-02-04	32	38	28	16
+1965	No description	0	2018-01-18	15	39	30	18
+1966	No description	0	2018-01-22	9	91	5	12
+1967	No description	0	2018-01-15	17	22	2	9
+1968	No description	0	2018-02-02	5	22	9	24
+1969	No description	0	2018-01-25	27	32	13	22
+1970	No description	0	2018-01-12	22	71	20	2
+1971	No description	0	2018-01-28	7	47	3	7
+1972	No description	0	2018-01-12	21	74	20	15
+1973	No description	0	2018-02-26	29	66	20	25
+1974	No description	0	2018-02-21	16	55	27	9
+1975	No description	0	2018-02-13	29	48	23	6
+1976	No description	0	2018-01-03	45	72	27	18
+1977	No description	0	2018-02-28	8	97	30	20
+1978	No description	0	2018-02-02	37	100	25	11
+1979	No description	0	2018-01-11	26	38	25	9
+1980	No description	0	2018-02-02	49	14	5	1
+1981	No description	0	2018-02-08	9	48	11	14
+1982	No description	0	2018-01-03	46	12	22	2
+1983	No description	0	2018-02-25	40	74	4	2
+1984	No description	0	2018-02-22	42	7	16	9
+1985	No description	0	2018-02-13	47	68	7	15
+1986	No description	0	2018-02-22	20	5	27	1
+1987	No description	0	2018-02-08	17	59	25	17
+1988	No description	0	2018-01-18	30	65	16	2
+1989	No description	0	2018-01-29	49	79	7	7
+1990	No description	0	2018-01-08	32	71	29	6
+1991	No description	0	2018-02-18	43	72	11	1
+1992	No description	0	2018-01-31	17	73	20	5
+1993	No description	0	2018-02-17	46	71	1	11
+1994	No description	0	2018-02-04	34	7	15	9
+1995	No description	0	2018-02-07	27	36	5	1
+1996	No description	0	2018-01-07	10	44	19	19
+1997	No description	0	2018-01-31	50	68	25	15
+1998	No description	0	2018-01-17	7	70	23	3
+1999	No description	0	2018-01-16	21	62	21	10
+2000	No description	0	2018-02-20	38	16	19	22
+2001	No description	0	2018-02-22	6	36	22	4
+2002	No description	0	2018-02-10	5	97	7	3
+2003	No description	0	2018-02-05	10	23	10	5
+2004	No description	0	2018-01-03	20	85	9	11
+2005	No description	0	2018-02-04	38	27	24	18
+2006	No description	0	2018-02-20	48	31	24	9
+2007	No description	0	2018-01-16	42	85	20	7
+2008	No description	0	2018-01-16	42	60	16	23
+2009	No description	0	2018-02-10	36	28	27	9
+2010	No description	0	2018-02-11	49	26	14	11
+2011	No description	0	2018-01-12	17	32	11	9
+2012	No description	0	2018-01-26	20	100	9	9
+2013	No description	0	2018-02-25	39	6	14	16
+2014	No description	0	2018-01-11	35	65	21	21
+2015	No description	0	2018-02-04	10	54	28	1
+2016	No description	0	2018-02-21	20	91	10	25
+2017	No description	0	2018-02-18	12	73	20	20
+2018	No description	0	2018-01-01	9	57	19	7
+2019	No description	0	2018-02-02	35	40	6	23
+2020	No description	0	2018-01-08	9	65	9	16
+2021	No description	0	2018-01-25	26	23	30	8
+2022	No description	0	2018-01-26	19	78	26	21
+2023	No description	0	2018-01-16	46	97	14	15
+2024	No description	0	2018-01-11	31	78	1	1
+2025	No description	0	2018-01-17	31	49	19	17
+2026	No description	0	2018-02-15	12	23	23	10
+2027	No description	0	2018-02-28	31	93	30	6
+2028	No description	0	2018-01-04	34	42	1	17
+2029	No description	0	2018-02-26	9	49	10	2
+2030	No description	0	2018-01-12	36	37	14	23
+2031	No description	0	2018-02-11	47	64	18	7
+2032	No description	0	2018-02-28	42	5	10	8
+2033	No description	0	2018-02-08	34	55	29	18
+2034	No description	0	2018-01-18	29	57	10	7
+2035	No description	0	2018-01-23	25	30	10	23
+2036	No description	0	2018-02-13	35	99	8	11
+2037	No description	0	2018-01-21	7	80	10	10
+2038	No description	0	2018-01-19	46	76	7	4
+2039	No description	0	2018-01-20	48	79	27	14
+2040	No description	0	2018-01-27	15	61	13	10
+2041	No description	0	2018-02-23	29	30	14	2
+2042	No description	0	2018-01-16	11	42	7	8
+2043	No description	0	2018-02-03	10	26	4	13
+2044	No description	0	2018-01-21	5	12	9	16
+2045	No description	0	2018-02-27	47	41	9	7
+2046	No description	0	2018-02-23	21	37	10	1
+2047	No description	0	2018-02-09	37	68	30	17
+2048	No description	0	2018-01-22	35	82	29	23
+2049	No description	0	2018-01-26	34	3	8	15
+2050	No description	0	2018-01-25	9	76	21	25
+2051	No description	0	2018-02-04	44	88	24	13
+2052	No description	0	2018-01-01	23	70	28	21
+2053	No description	0	2018-02-06	48	69	10	16
+2054	No description	0	2018-01-23	39	65	27	13
+2055	No description	0	2018-02-27	33	6	18	23
+2056	No description	0	2018-02-20	11	33	25	15
+2057	No description	0	2018-01-05	6	50	14	25
+2058	No description	0	2018-01-10	13	4	26	13
+2059	No description	0	2018-02-18	16	20	6	4
+2060	No description	0	2018-01-31	50	77	30	19
+2061	No description	0	2018-01-03	9	62	22	24
+2062	No description	0	2018-02-13	39	34	27	1
+2063	No description	0	2018-01-30	27	11	14	4
+2064	No description	0	2018-02-11	50	88	16	17
+2065	No description	0	2018-01-21	47	83	14	18
+2066	No description	0	2018-01-02	27	41	30	20
+2067	No description	0	2018-01-03	10	82	6	4
+2068	No description	0	2018-01-28	39	79	4	3
+2069	No description	0	2018-02-02	47	12	8	6
+2070	No description	0	2018-02-23	7	34	6	10
+2071	No description	0	2018-02-27	23	83	16	11
+2072	No description	0	2018-01-07	13	99	30	21
+2073	No description	0	2018-01-12	14	10	24	18
+2074	No description	0	2018-02-11	32	62	16	25
+2075	No description	0	2018-01-19	36	22	11	5
+2076	No description	0	2018-01-09	44	18	13	24
+2077	No description	0	2018-01-26	45	19	3	11
+2078	No description	0	2018-01-16	22	69	17	20
+2079	No description	0	2018-01-11	25	74	8	23
+2080	No description	0	2018-01-09	43	32	15	3
+2081	No description	0	2018-02-22	45	46	24	13
+2082	No description	0	2018-01-04	36	86	21	24
+2083	No description	0	2018-02-24	26	83	1	24
+2084	No description	0	2018-01-01	22	3	4	1
+2085	No description	0	2018-01-23	6	6	1	20
+2086	No description	0	2018-01-20	36	10	9	13
+2087	No description	0	2018-01-28	45	60	18	23
+2088	No description	0	2018-01-08	45	40	7	14
+2089	No description	0	2018-02-01	38	36	3	25
+2090	No description	0	2018-02-12	8	48	9	9
+2091	No description	0	2018-02-21	43	17	18	10
+2092	No description	0	2018-01-07	15	21	27	5
+2093	No description	0	2018-01-23	21	4	18	7
+2094	No description	0	2018-01-10	25	19	8	2
+2095	No description	0	2018-02-03	35	22	29	15
+2096	No description	0	2018-01-23	34	25	12	21
+2097	No description	0	2018-01-14	12	68	1	9
+2098	No description	0	2018-01-12	42	20	20	22
+2099	No description	0	2018-01-09	41	97	29	16
+2100	No description	0	2018-01-28	34	18	24	23
+2101	No description	0	2018-02-16	16	80	6	10
+2102	No description	0	2018-01-07	47	57	12	21
+2103	No description	0	2018-02-24	43	77	27	8
+2104	No description	0	2018-02-21	42	1	27	9
+2105	No description	0	2018-02-07	11	28	25	9
+2106	No description	0	2018-01-02	12	38	16	15
+2107	No description	0	2018-02-18	19	17	3	3
+2108	No description	0	2018-02-18	34	32	22	2
+2109	No description	0	2018-01-19	38	2	2	5
+2110	No description	0	2018-02-21	6	71	23	6
+2111	No description	0	2018-02-20	35	92	15	16
+2112	No description	0	2018-01-22	38	11	25	17
+2113	No description	0	2018-02-06	14	54	26	16
+2114	No description	0	2018-02-06	7	25	21	4
+2115	No description	0	2018-01-17	21	44	30	3
+2116	No description	0	2018-01-08	42	75	16	11
+2117	No description	0	2018-02-09	25	47	7	7
+2118	No description	0	2018-02-06	34	4	5	7
+2119	No description	0	2018-01-12	17	82	10	25
+2120	No description	0	2018-01-16	44	55	8	21
+2121	No description	0	2018-01-22	30	12	11	11
+2122	No description	0	2018-01-22	39	95	29	14
+2123	No description	0	2018-01-14	10	72	6	19
+2124	No description	0	2018-02-22	25	65	3	17
+2125	No description	0	2018-01-18	22	53	25	6
+2126	No description	0	2018-01-26	17	20	4	7
+2127	No description	0	2018-01-25	13	57	2	24
+2128	No description	0	2018-02-19	25	91	23	18
+2129	No description	0	2018-01-16	39	14	7	8
+2130	No description	0	2018-01-17	24	72	1	24
+2131	No description	0	2018-01-08	6	11	30	12
+2132	No description	0	2018-01-04	21	51	21	14
+2133	No description	0	2018-02-26	18	81	26	4
+2134	No description	0	2018-02-06	26	18	11	13
+2135	No description	0	2018-01-22	36	74	15	6
+2136	No description	0	2018-02-08	44	55	20	3
+2137	No description	0	2018-01-01	37	81	12	8
+2138	No description	0	2018-02-09	22	57	13	23
+2139	No description	0	2018-02-27	34	17	17	2
+2140	No description	0	2018-01-12	36	87	3	12
+2141	No description	0	2018-02-24	43	82	1	20
+2142	No description	0	2018-01-21	30	74	23	22
+2143	No description	0	2018-02-22	38	74	25	23
+2144	No description	0	2018-01-13	45	26	9	17
+2145	No description	0	2018-02-18	15	29	6	17
+2146	No description	0	2018-02-24	44	71	5	6
+2147	No description	0	2018-02-02	50	97	11	21
+2148	No description	0	2018-02-16	26	100	4	3
+2149	No description	0	2018-02-28	12	2	29	2
+2150	No description	0	2018-02-05	39	32	7	11
+2151	No description	0	2018-02-08	19	10	24	8
+2152	No description	0	2018-01-27	31	100	29	11
+2153	No description	0	2018-01-19	40	58	25	9
+2154	No description	0	2018-01-17	21	97	24	3
+2155	No description	0	2018-02-27	48	71	15	3
+2156	No description	0	2018-02-07	22	80	16	14
+2157	No description	0	2018-01-25	48	92	28	22
+2158	No description	0	2018-01-26	48	39	29	20
+2159	No description	0	2018-01-05	33	99	27	19
+2160	No description	0	2018-01-18	46	84	27	17
+2161	No description	0	2018-02-03	5	48	19	16
+2162	No description	0	2018-02-20	36	29	18	20
+2163	No description	0	2018-02-06	21	39	1	21
+2164	No description	0	2018-01-24	5	72	7	22
+2165	No description	0	2018-01-15	17	13	30	20
+2166	No description	0	2018-01-11	33	56	26	23
+2167	No description	0	2018-02-13	42	71	5	14
+2168	No description	0	2018-01-25	10	7	21	24
+2169	No description	0	2018-01-07	44	40	9	24
+2170	No description	0	2018-01-17	39	59	22	23
+2171	No description	0	2018-01-16	9	63	10	14
+2172	No description	0	2018-01-15	7	26	12	6
+2173	No description	0	2018-01-11	16	10	13	12
+2174	No description	0	2018-01-31	7	67	4	2
+2175	No description	0	2018-02-27	12	30	3	16
+2176	No description	0	2018-01-01	24	68	25	6
+2177	No description	0	2018-02-23	28	18	14	21
+2178	No description	0	2018-02-04	45	85	1	21
+2179	No description	0	2018-01-18	13	26	9	9
+2180	No description	0	2018-02-01	42	45	23	13
+2181	No description	0	2018-01-24	7	45	14	6
+2182	No description	0	2018-02-09	41	35	14	2
+2183	No description	0	2018-01-11	20	56	2	15
+2184	No description	0	2018-01-12	46	8	13	14
+2185	No description	0	2018-01-06	17	100	16	16
+2186	No description	0	2018-02-04	5	75	18	19
+2187	No description	0	2018-02-11	34	98	10	15
+2188	No description	0	2018-01-10	16	20	17	8
+2189	No description	0	2018-02-04	44	7	22	21
+2190	No description	0	2018-02-20	37	54	1	21
+2191	No description	0	2018-02-04	30	74	12	10
+2192	No description	0	2018-01-17	20	87	23	10
+2193	No description	0	2018-01-09	10	92	5	9
+2194	No description	0	2018-01-22	13	66	18	16
+2195	No description	0	2018-01-15	37	89	2	5
+2196	No description	0	2018-02-03	26	70	3	5
+2197	No description	0	2018-02-25	30	32	18	8
+2198	No description	0	2018-01-23	29	17	7	10
+2199	No description	0	2018-01-15	25	61	19	11
+2200	No description	0	2018-01-11	26	50	18	9
+2201	No description	0	2018-01-14	24	83	26	10
+2202	No description	0	2018-01-24	23	86	4	2
+2203	No description	0	2018-02-09	36	82	22	7
+2204	No description	0	2018-01-05	13	54	28	2
+2205	No description	0	2018-02-16	18	44	10	19
+2206	No description	0	2018-01-07	39	18	11	23
+2207	No description	0	2018-02-20	14	49	13	22
+2208	No description	0	2018-01-08	35	59	14	23
+2209	No description	0	2018-01-18	49	100	21	9
+2210	No description	0	2018-01-09	10	15	15	2
+2211	No description	0	2018-01-24	35	2	20	7
+2212	No description	0	2018-01-31	23	89	20	5
+2213	No description	0	2018-02-08	48	47	18	10
+2214	No description	0	2018-01-21	24	63	6	17
+2215	No description	0	2018-01-17	15	27	24	2
+2216	No description	0	2018-02-16	34	27	29	22
+2217	No description	0	2018-02-25	38	25	24	6
+2218	No description	0	2018-02-06	18	6	4	14
+2219	No description	0	2018-02-19	48	55	29	21
+2220	No description	0	2018-02-27	49	79	28	5
+2221	No description	0	2018-02-18	30	44	4	12
+2222	No description	0	2018-01-27	36	12	20	12
+2223	No description	0	2018-01-07	36	23	7	16
+2224	No description	0	2018-01-06	33	14	11	3
+2225	No description	0	2018-01-09	25	88	1	22
+2226	No description	0	2018-02-04	10	5	13	16
+2227	No description	0	2018-01-30	30	31	6	24
+2228	No description	0	2018-02-17	9	6	12	17
+2229	No description	0	2018-02-17	7	89	12	23
+2230	No description	0	2018-01-18	20	98	2	19
+2231	No description	0	2018-02-14	44	57	27	6
+2232	No description	0	2018-02-22	44	94	10	11
+2233	No description	0	2018-02-23	25	62	24	18
+2234	No description	0	2018-01-02	7	56	24	12
+2235	No description	0	2018-01-24	5	66	17	22
+2236	No description	0	2018-02-19	46	15	14	19
+2237	No description	0	2018-02-02	17	33	9	8
+2238	No description	0	2018-02-20	11	68	24	10
+2239	No description	0	2018-02-19	13	35	26	7
+2240	No description	0	2018-01-24	27	29	7	13
+2241	No description	0	2018-01-08	7	12	23	18
+2242	No description	0	2018-01-22	18	27	1	14
+2243	No description	0	2018-01-13	47	9	2	5
+2244	No description	0	2018-02-08	8	25	8	5
+2245	No description	0	2018-02-19	16	23	10	1
+2246	No description	0	2018-02-21	17	29	18	2
+2247	No description	0	2018-02-20	25	65	28	5
+2248	No description	0	2018-02-15	43	22	10	16
+2249	No description	0	2018-02-15	31	20	30	13
+2250	No description	0	2018-01-11	48	11	22	13
+2251	No description	0	2018-01-26	15	27	26	19
+2252	No description	0	2018-02-11	32	59	17	4
+2253	No description	0	2018-01-19	10	24	21	20
+2254	No description	0	2018-01-09	27	86	12	9
+2255	No description	0	2018-02-10	11	62	6	7
+2256	No description	0	2018-02-14	44	85	2	2
+2257	No description	0	2018-01-26	13	49	9	22
+2258	No description	0	2018-01-30	16	11	24	22
+2259	No description	0	2018-02-25	38	76	19	14
+2260	No description	0	2018-01-27	29	7	6	10
+2261	No description	0	2018-02-16	16	96	18	6
+2262	No description	0	2018-01-15	24	26	24	4
+2263	No description	0	2018-01-11	36	7	25	14
+2264	No description	0	2018-01-08	9	98	29	20
+2265	No description	0	2018-01-13	9	50	28	23
+2266	No description	0	2018-01-13	43	15	12	11
+2267	No description	0	2018-02-12	46	64	9	22
+2268	No description	0	2018-01-08	50	97	1	18
+2269	No description	0	2018-01-24	28	68	26	8
+2270	No description	0	2018-01-25	26	79	29	19
+2271	No description	0	2018-01-16	38	16	19	17
+2272	No description	0	2018-01-16	27	25	11	20
+2273	No description	0	2018-02-09	6	14	13	18
+2274	No description	0	2018-02-19	10	88	28	10
+2275	No description	0	2018-01-07	8	17	6	5
+2276	No description	0	2018-02-03	27	45	10	15
+2277	No description	0	2018-01-11	48	3	15	4
+2278	No description	0	2018-02-22	11	37	12	10
+2279	No description	0	2018-02-25	32	52	13	4
+2280	No description	0	2018-01-16	23	39	5	19
+2281	No description	0	2018-01-18	28	55	2	8
+2282	No description	0	2018-02-24	6	26	1	22
+2283	No description	0	2018-02-23	18	24	1	3
+2284	No description	0	2018-01-11	46	95	2	18
+2285	No description	0	2018-01-09	40	100	11	19
+2286	No description	0	2018-01-24	36	15	28	21
+2287	No description	0	2018-01-23	43	33	7	1
+2288	No description	0	2018-01-25	18	50	27	20
+2289	No description	0	2018-02-02	41	8	3	7
+2290	No description	0	2018-02-18	26	53	18	20
+2291	No description	0	2018-02-18	48	61	16	16
+2292	No description	0	2018-01-10	36	97	30	19
+2293	No description	0	2018-02-01	7	99	21	19
+2294	No description	0	2018-01-09	33	93	28	4
+2295	No description	0	2018-01-04	31	40	1	20
+2296	No description	0	2018-01-08	36	92	7	3
+2297	No description	0	2018-01-19	40	56	6	6
+2298	No description	0	2018-02-16	46	26	7	15
+2299	No description	0	2018-01-21	30	22	25	2
+2300	No description	0	2018-01-02	24	88	20	16
+2301	No description	0	2018-02-09	7	5	4	13
+2302	No description	0	2018-01-30	40	45	6	19
+2303	No description	0	2018-01-16	44	88	12	2
+2304	No description	0	2018-01-04	47	28	7	19
+2305	No description	0	2018-01-13	25	42	25	15
+2306	No description	0	2018-01-11	13	58	28	11
+2307	No description	0	2018-02-28	11	95	4	7
+2308	No description	0	2018-02-14	32	1	13	8
+2309	No description	0	2018-02-07	29	41	15	23
+2310	No description	0	2018-01-19	34	45	17	16
+2311	No description	0	2018-01-08	11	35	22	10
+2312	No description	0	2018-02-04	20	4	10	4
+2313	No description	0	2018-02-08	45	68	26	18
+2314	No description	0	2018-01-15	29	59	17	24
+2315	No description	0	2018-01-22	27	38	11	19
+2316	No description	0	2018-02-04	9	93	1	8
+2317	No description	0	2018-01-16	18	38	4	16
+2318	No description	0	2018-01-18	49	23	22	4
+2319	No description	0	2018-01-28	37	7	17	25
+2320	No description	0	2018-02-28	32	15	14	10
+2321	No description	0	2018-01-25	14	41	6	3
+2322	No description	0	2018-02-06	47	35	1	24
+2323	No description	0	2018-01-14	25	82	3	16
+2324	No description	0	2018-02-05	38	28	20	14
+2325	No description	0	2018-01-14	9	99	23	4
+2326	No description	0	2018-01-19	47	50	24	2
+2327	No description	0	2018-02-06	9	12	13	11
+2328	No description	0	2018-01-19	22	21	12	7
+2329	No description	0	2018-02-14	22	89	15	1
+2330	No description	0	2018-01-13	47	71	17	11
+2331	No description	0	2018-01-15	47	71	29	7
+2332	No description	0	2018-01-31	25	4	8	1
+2333	No description	0	2018-02-18	17	36	2	5
+2334	No description	0	2018-01-22	30	82	27	22
+2335	No description	0	2018-02-17	6	30	14	13
+2336	No description	0	2018-01-23	15	18	12	7
+2337	No description	0	2018-02-27	31	69	19	25
+2338	No description	0	2018-02-16	15	92	26	13
+2339	No description	0	2018-02-23	32	17	4	21
+2340	No description	0	2018-01-06	36	60	17	16
+2341	No description	0	2018-02-03	45	96	20	7
+2342	No description	0	2018-02-23	12	14	26	8
+2343	No description	0	2018-01-04	7	31	27	9
+2344	No description	0	2018-01-01	30	97	11	2
+2345	No description	0	2018-01-22	49	55	22	19
+2346	No description	0	2018-02-20	26	50	4	17
+2347	No description	0	2018-01-14	23	80	30	15
+2348	No description	0	2018-01-18	19	73	28	17
+2349	No description	0	2018-02-25	22	81	2	16
+2350	No description	0	2018-02-10	21	10	6	24
+2351	No description	0	2018-02-28	6	81	5	19
+2352	No description	0	2018-01-09	12	52	7	13
+2353	No description	0	2018-02-23	5	23	30	22
+2354	No description	0	2018-01-09	12	31	5	19
+2355	No description	0	2018-02-12	19	93	27	22
+2356	No description	0	2018-02-11	14	47	30	4
+2357	No description	0	2018-01-25	17	64	8	12
+2358	No description	0	2018-02-23	13	50	14	13
+2359	No description	0	2018-01-08	6	28	15	16
+2360	No description	0	2018-02-27	5	11	1	16
+2361	No description	0	2018-01-25	32	56	12	13
+2362	No description	0	2018-02-04	32	58	5	9
+2363	No description	0	2018-02-02	39	39	11	14
+2364	No description	0	2018-02-25	12	40	5	4
+2365	No description	0	2018-02-26	7	71	3	20
+2366	No description	0	2018-01-09	43	64	25	10
+2367	No description	0	2018-02-21	39	66	27	22
+2368	No description	0	2018-02-20	23	44	3	19
+2369	No description	0	2018-01-05	5	40	16	3
+2370	No description	0	2018-02-15	34	51	2	5
+2371	No description	0	2018-02-13	29	47	12	2
+2372	No description	0	2018-01-01	30	1	3	18
+2373	No description	0	2018-01-14	6	49	10	10
+2374	No description	0	2018-02-04	37	80	25	8
+2375	No description	0	2018-01-22	7	95	16	18
+2376	No description	0	2018-01-24	17	55	25	12
+2377	No description	0	2018-01-19	43	18	19	8
+2378	No description	0	2018-01-29	33	100	10	16
+2379	No description	0	2018-02-03	38	70	15	10
+2380	No description	0	2018-01-11	6	68	1	10
+2381	No description	0	2018-01-20	33	4	4	8
+2382	No description	0	2018-02-03	47	17	25	10
+2383	No description	0	2018-01-12	26	26	21	14
+2384	No description	0	2018-02-13	49	18	30	16
+2385	No description	0	2018-01-07	8	41	25	8
+2386	No description	0	2018-02-14	5	67	7	25
+2387	No description	0	2018-01-22	11	96	15	25
+2388	No description	0	2018-02-06	26	32	24	20
+2389	No description	0	2018-01-05	24	16	14	24
+2390	No description	0	2018-01-16	28	77	28	4
+2391	No description	0	2018-02-16	23	9	3	16
+2392	No description	0	2018-01-30	24	18	19	25
+2393	No description	0	2018-02-10	36	100	15	16
+2394	No description	0	2018-02-23	13	86	5	21
+2395	No description	0	2018-02-24	27	37	12	3
+2396	No description	0	2018-02-02	46	59	15	14
+2397	No description	0	2018-02-04	11	40	28	6
+2398	No description	0	2018-01-24	22	12	11	21
+2399	No description	0	2018-01-20	42	38	2	2
+2400	No description	0	2018-01-31	15	91	30	17
+2401	No description	0	2018-01-05	48	96	28	10
+2402	No description	0	2018-01-18	5	82	13	11
+2403	No description	0	2018-01-07	35	1	5	6
+2404	No description	0	2018-01-06	48	60	1	8
+2405	No description	0	2018-02-10	40	34	8	8
+2406	No description	0	2018-02-24	32	85	15	5
+2407	No description	0	2018-01-20	37	99	21	8
+2408	No description	0	2018-01-20	21	100	6	23
+2409	No description	0	2018-02-16	41	14	21	5
+2410	No description	0	2018-02-04	23	47	11	13
+2411	No description	0	2018-01-17	45	100	12	22
+2412	No description	0	2018-01-16	42	5	30	10
+2413	No description	0	2018-02-26	31	9	4	23
+2414	No description	0	2018-01-13	47	65	1	9
+2415	No description	0	2018-01-09	17	82	20	23
+2416	No description	0	2018-01-27	32	23	2	2
+2417	No description	0	2018-01-10	39	54	6	18
+2418	No description	0	2018-02-27	40	62	21	25
+2419	No description	0	2018-01-24	6	46	11	25
+2420	No description	0	2018-02-28	46	91	24	6
+2421	No description	0	2018-02-25	46	38	8	8
+2422	No description	0	2018-02-21	9	85	15	23
+2423	No description	0	2018-01-11	43	57	3	3
+2424	No description	0	2018-02-16	27	55	21	22
+2425	No description	0	2018-01-29	48	1	30	22
+2426	No description	0	2018-02-11	10	98	30	21
+2427	No description	0	2018-01-12	38	16	23	17
+2428	No description	0	2018-01-15	24	50	22	6
+2429	No description	0	2018-01-20	48	59	29	20
+2430	No description	0	2018-02-08	29	42	22	12
+2431	No description	0	2018-02-07	24	11	25	4
+2432	No description	0	2018-02-03	41	66	7	4
+2433	No description	0	2018-01-03	39	96	27	1
+2434	No description	0	2018-01-27	20	94	13	21
+2435	No description	0	2018-02-18	13	65	1	21
+2436	No description	0	2018-01-25	27	31	30	23
+2437	No description	0	2018-01-02	9	5	10	20
+2438	No description	0	2018-02-06	37	56	15	8
+2439	No description	0	2018-01-16	23	23	21	3
+2440	No description	0	2018-01-03	42	35	29	3
+2441	No description	0	2018-02-01	30	23	7	1
+2442	No description	0	2018-02-17	26	5	23	7
+2443	No description	0	2018-02-26	48	60	26	13
+2444	No description	0	2018-02-27	27	89	19	23
+2445	No description	0	2018-02-09	11	89	18	3
+2446	No description	0	2018-01-20	19	42	4	7
+2447	No description	0	2018-02-19	38	61	15	20
+2448	No description	0	2018-02-06	41	53	22	17
+2449	No description	0	2018-02-11	24	21	19	19
+2450	No description	0	2018-02-12	8	71	13	14
+2451	No description	0	2018-02-26	22	64	2	1
+2452	No description	0	2018-01-26	39	15	10	7
+2453	No description	0	2018-02-10	33	83	17	14
+2454	No description	0	2018-01-24	28	11	7	23
+2455	No description	0	2018-02-26	38	95	13	21
+2456	No description	0	2018-02-07	39	70	8	3
+2457	No description	0	2018-01-17	19	20	28	4
+2458	No description	0	2018-01-23	31	7	23	20
+2459	No description	0	2018-02-06	28	46	17	4
+2460	No description	0	2018-01-22	37	66	4	21
+2461	No description	0	2018-02-08	50	35	28	19
+2462	No description	0	2018-02-05	10	99	27	13
+2463	No description	0	2018-01-18	23	84	9	23
+2464	No description	0	2018-02-14	21	54	11	6
+2465	No description	0	2018-01-14	47	2	16	18
+2466	No description	0	2018-02-21	17	45	13	14
+2467	No description	0	2018-01-10	29	72	24	25
+2468	No description	0	2018-02-20	14	100	16	8
+2469	No description	0	2018-02-14	41	79	17	4
+2470	No description	0	2018-01-27	18	75	10	10
+2471	No description	0	2018-01-07	33	91	7	10
+2472	No description	0	2018-01-09	47	22	6	4
+2473	No description	0	2018-02-12	47	70	26	3
+2474	No description	0	2018-01-09	50	12	1	6
+2475	No description	0	2018-01-04	11	94	11	21
+2476	No description	0	2018-02-21	35	58	18	11
+2477	No description	0	2018-01-17	22	93	6	10
+2478	No description	0	2018-02-01	21	65	9	23
+2479	No description	0	2018-01-07	19	79	28	7
+2480	No description	0	2018-01-17	25	29	16	4
+2481	No description	0	2018-02-22	45	61	14	12
+2482	No description	0	2018-01-26	9	85	12	13
+2483	No description	0	2018-01-09	16	62	12	22
+2484	No description	0	2018-01-11	21	73	7	4
+2485	No description	0	2018-01-31	23	44	29	6
+2486	No description	0	2018-01-24	15	13	10	10
+2487	No description	0	2018-02-05	48	81	25	3
+2488	No description	0	2018-01-25	5	61	16	10
+2489	No description	0	2018-01-15	19	19	16	2
+2490	No description	0	2018-01-20	32	60	20	5
+2491	No description	0	2018-02-18	23	22	7	2
+2492	No description	0	2018-01-12	5	4	30	6
+2493	No description	0	2018-01-29	39	42	29	23
+2494	No description	0	2018-01-29	39	80	18	23
+2495	No description	0	2018-02-09	33	72	3	4
+2496	No description	0	2018-01-21	31	53	14	12
+2497	No description	0	2018-02-07	37	87	14	24
+2498	No description	0	2018-01-21	40	53	23	18
+2499	No description	0	2018-02-06	19	58	11	5
+2500	No description	0	2018-01-14	18	55	21	4
+2501	No description	0	2018-02-06	39	80	7	16
+2502	No description	0	2018-02-25	38	86	8	14
+2503	No description	0	2018-01-23	33	25	11	8
+2504	No description	0	2018-02-17	40	14	7	16
+2505	No description	0	2018-01-30	19	14	24	10
+2506	No description	0	2018-01-15	23	7	29	12
+2507	No description	0	2018-01-20	13	21	18	9
+2508	No description	0	2018-01-15	45	13	27	11
+2509	No description	0	2018-02-26	38	81	6	13
+2510	No description	0	2018-02-18	10	68	11	4
+2511	No description	0	2018-02-27	11	71	29	8
+2512	No description	0	2018-02-10	7	16	1	20
+2513	No description	0	2018-01-23	44	10	22	10
+2514	No description	0	2018-01-06	31	90	9	15
+2515	No description	0	2018-02-05	28	43	12	6
+2516	No description	0	2018-01-09	7	86	15	12
+2517	No description	0	2018-02-23	49	40	2	21
+2518	No description	0	2018-01-20	21	6	21	5
+2519	No description	0	2018-02-19	21	61	2	15
+2520	No description	0	2018-02-22	14	30	27	20
+2521	No description	0	2018-01-21	16	39	27	14
+2522	No description	0	2018-01-12	40	47	7	3
+2523	No description	0	2018-01-25	37	56	12	9
+2524	No description	0	2018-02-08	33	7	6	9
+2525	No description	0	2018-01-10	7	23	7	1
+2526	No description	0	2018-01-31	49	26	9	9
+2527	No description	0	2018-02-08	28	98	16	4
+2528	No description	0	2018-02-23	8	70	26	25
+2529	No description	0	2018-02-27	45	77	25	21
+2530	No description	0	2018-01-24	22	65	5	23
+2531	No description	0	2018-02-03	25	79	26	8
+2532	No description	0	2018-01-22	27	51	23	20
+2533	No description	0	2018-01-28	20	96	22	3
+2534	No description	0	2018-01-12	27	10	27	1
+2535	No description	0	2018-02-10	9	47	19	11
+2536	No description	0	2018-01-10	44	21	5	18
+2537	No description	0	2018-01-19	8	65	10	9
+2538	No description	0	2018-02-05	15	93	30	16
+2539	No description	0	2018-02-22	20	89	10	4
+2540	No description	0	2018-02-15	48	5	24	21
+2541	No description	0	2018-01-27	34	54	30	25
+2542	No description	0	2018-02-25	15	24	23	17
+2543	No description	0	2018-02-19	6	37	13	24
+2544	No description	0	2018-01-09	32	60	22	2
+2545	No description	0	2018-02-19	8	68	25	25
+2546	No description	0	2018-02-04	46	78	21	5
+2547	No description	0	2018-02-02	9	25	10	13
+2548	No description	0	2018-02-14	23	40	25	7
+2549	No description	0	2018-02-04	45	91	26	18
+2550	No description	0	2018-01-18	15	61	6	21
+2551	No description	0	2018-02-19	50	89	23	20
+2552	No description	0	2018-02-13	7	43	22	14
+2553	No description	0	2018-02-07	22	84	30	16
+2554	No description	0	2018-01-24	48	69	6	5
+2555	No description	0	2018-02-25	28	16	29	20
+2556	No description	0	2018-01-06	21	30	17	1
+2557	No description	0	2018-02-04	37	66	8	7
+2558	No description	0	2018-02-02	10	89	7	4
+2559	No description	0	2018-01-16	36	82	22	13
+2560	No description	0	2018-02-06	19	71	2	23
+2561	No description	0	2018-01-08	35	5	21	8
+2562	No description	0	2018-02-10	39	99	14	1
+2563	No description	0	2018-01-27	33	4	10	23
+2564	No description	0	2018-01-24	33	13	5	2
+2565	No description	0	2018-01-16	6	81	27	21
+2566	No description	0	2018-02-18	20	91	10	14
+2567	No description	0	2018-02-06	36	73	19	15
+2568	No description	0	2018-02-18	37	1	27	17
+2569	No description	0	2018-01-29	32	26	7	25
+2570	No description	0	2018-02-13	48	29	5	1
+2571	No description	0	2018-01-31	20	39	24	4
+2572	No description	0	2018-01-19	37	98	5	17
+2573	No description	0	2018-02-10	26	28	2	19
+2574	No description	0	2018-01-23	32	81	11	13
+2575	No description	0	2018-01-27	25	21	14	12
+2576	No description	0	2018-01-13	13	76	30	6
+2577	No description	0	2018-02-22	12	94	18	3
+2578	No description	0	2018-01-21	14	71	25	11
+2579	No description	0	2018-01-25	46	76	18	12
+2580	No description	0	2018-02-23	18	70	16	14
+2581	No description	0	2018-01-22	45	58	2	3
+2582	No description	0	2018-02-02	35	8	19	8
+2583	No description	0	2018-01-06	40	65	13	5
+2584	No description	0	2018-02-04	46	36	30	10
+2585	No description	0	2018-01-02	46	48	4	25
+2586	No description	0	2018-01-19	42	83	23	21
+2587	No description	0	2018-02-04	19	59	29	21
+2588	No description	0	2018-02-09	41	95	20	12
+2589	No description	0	2018-01-30	41	22	1	15
+2590	No description	0	2018-01-27	5	63	20	14
+2591	No description	0	2018-02-22	11	37	4	25
+2592	No description	0	2018-02-02	47	19	9	16
+2593	No description	0	2018-01-20	39	10	5	2
+2594	No description	0	2018-02-18	27	54	30	8
+2595	No description	0	2018-02-02	11	34	1	1
+2596	No description	0	2018-01-12	34	53	9	12
+2597	No description	0	2018-01-06	46	54	18	25
+2598	No description	0	2018-02-13	34	80	22	4
+2599	No description	0	2018-02-22	18	90	7	25
+2600	No description	0	2018-02-27	31	69	18	2
+2601	No description	0	2018-01-12	49	30	16	25
+2602	No description	0	2018-02-12	16	47	29	23
+2603	No description	0	2018-01-20	41	7	7	9
+2604	No description	0	2018-02-18	24	51	20	12
+2605	No description	0	2018-01-08	10	99	8	2
+2606	No description	0	2018-01-08	30	76	6	23
+2607	No description	0	2018-02-22	27	32	10	11
+2608	No description	0	2018-02-26	45	61	14	17
+2609	No description	0	2018-01-29	20	48	20	12
+2610	No description	0	2018-01-04	26	36	28	9
+2611	No description	0	2018-01-16	40	11	8	25
+2612	No description	0	2018-01-25	46	54	25	9
+2613	No description	0	2018-01-18	16	24	3	4
+2614	No description	0	2018-02-16	45	86	22	24
+2615	No description	0	2018-02-20	27	85	6	11
+2616	No description	0	2018-01-18	27	13	2	2
+2617	No description	0	2018-02-09	40	78	9	10
+2618	No description	0	2018-02-28	11	99	16	8
+2619	No description	0	2018-01-05	47	26	30	21
+2620	No description	0	2018-02-15	25	42	27	24
+2621	No description	0	2018-02-23	34	53	22	19
+2622	No description	0	2018-02-26	33	27	1	11
+2623	No description	0	2018-02-13	36	61	19	21
+2624	No description	0	2018-02-10	5	3	17	19
+2625	No description	0	2018-01-13	7	84	2	21
+2626	No description	0	2018-02-14	10	94	30	3
+2627	No description	0	2018-02-18	26	60	11	12
+2628	No description	0	2018-02-24	12	66	17	22
+2629	No description	0	2018-01-19	47	25	29	5
+2630	No description	0	2018-02-10	8	27	27	17
+2631	No description	0	2018-02-18	14	69	23	25
+2632	No description	0	2018-01-05	30	77	30	24
+2633	No description	0	2018-01-03	29	72	10	2
+2634	No description	0	2018-01-21	31	16	9	15
+2635	No description	0	2018-01-03	26	87	11	5
+2636	No description	0	2018-01-16	8	58	11	14
+2637	No description	0	2018-01-16	7	81	18	22
+2638	No description	0	2018-02-08	11	36	9	18
+2639	No description	0	2018-02-03	36	22	21	9
+2640	No description	0	2018-01-15	21	58	15	23
+2641	No description	0	2018-01-22	6	49	24	16
+2642	No description	0	2018-02-16	46	22	17	18
+2643	No description	0	2018-02-16	10	3	11	23
+2644	No description	0	2018-02-18	39	41	15	3
+2645	No description	0	2018-01-28	48	11	1	10
+2646	No description	0	2018-02-16	20	39	3	21
+2647	No description	0	2018-02-03	45	24	22	17
+2648	No description	0	2018-01-02	43	83	6	19
+2649	No description	0	2018-01-29	11	41	29	8
+2650	No description	0	2018-01-28	25	97	30	25
+2651	No description	0	2018-02-19	7	20	23	11
+2652	No description	0	2018-01-27	26	48	11	1
+2653	No description	0	2018-02-04	20	85	3	4
+2654	No description	0	2018-01-04	38	35	20	12
+2655	No description	0	2018-02-26	37	93	22	10
+2656	No description	0	2018-01-22	46	52	4	24
+2657	No description	0	2018-02-18	6	8	7	14
+2658	No description	0	2018-01-22	27	89	6	19
+2659	No description	0	2018-02-03	37	14	26	15
+2660	No description	0	2018-02-22	7	5	10	2
+2661	No description	0	2018-02-26	31	79	15	11
+2662	No description	0	2018-02-25	30	77	1	8
+2663	No description	0	2018-01-18	7	4	24	20
+2664	No description	0	2018-01-26	33	73	20	7
+2665	No description	0	2018-01-25	48	81	1	9
+2666	No description	0	2018-02-08	13	98	10	6
+2667	No description	0	2018-01-09	25	66	9	5
+2668	No description	0	2018-01-19	46	76	27	12
+2669	No description	0	2018-01-03	44	74	30	11
+2670	No description	0	2018-01-25	36	20	30	21
+2671	No description	0	2018-01-08	17	25	16	23
+2672	No description	0	2018-01-31	11	14	18	13
+2673	No description	0	2018-02-01	18	16	18	11
+2674	No description	0	2018-02-09	50	47	23	4
+2675	No description	0	2018-02-13	11	82	18	24
+2676	No description	0	2018-02-27	36	11	7	2
+2677	No description	0	2018-01-08	42	35	26	2
+2678	No description	0	2018-01-02	27	40	8	15
+2679	No description	0	2018-02-08	12	28	27	18
+2680	No description	0	2018-01-31	35	1	3	15
+2681	No description	0	2018-02-04	20	73	13	14
+2682	No description	0	2018-02-20	11	15	10	2
+2683	No description	0	2018-02-10	13	6	27	9
+2684	No description	0	2018-02-14	27	49	8	10
+2685	No description	0	2018-02-02	45	86	26	3
+2686	No description	0	2018-02-25	13	50	4	22
+2687	No description	0	2018-01-19	44	37	15	14
+2688	No description	0	2018-01-31	40	38	29	15
+2689	No description	0	2018-01-01	43	5	3	13
+2690	No description	0	2018-01-10	25	40	11	25
+2691	No description	0	2018-02-21	41	65	16	12
+2692	No description	0	2018-01-20	47	54	8	19
+2693	No description	0	2018-01-28	42	82	10	14
+2694	No description	0	2018-02-01	42	44	24	23
+2695	No description	0	2018-01-07	12	36	27	3
+2696	No description	0	2018-01-22	15	67	29	17
+2697	No description	0	2018-01-19	17	74	21	25
+2698	No description	0	2018-02-18	25	83	20	5
+2699	No description	0	2018-01-24	6	30	10	2
+2700	No description	0	2018-01-28	42	53	17	6
+2701	No description	0	2018-01-29	8	47	13	4
+2702	No description	0	2018-01-31	44	91	29	10
+2703	No description	0	2018-02-20	20	85	11	10
+2704	No description	0	2018-01-01	50	93	29	11
+2705	No description	0	2018-01-23	27	95	5	7
+2706	No description	0	2018-01-07	8	28	11	11
+2707	No description	0	2018-01-16	38	7	6	4
+2708	No description	0	2018-01-23	14	31	7	9
+2709	No description	0	2018-01-12	30	83	4	10
+2710	No description	0	2018-02-09	37	76	29	10
+2711	No description	0	2018-02-06	41	100	27	8
+2712	No description	0	2018-01-19	33	94	5	15
+2713	No description	0	2018-02-06	13	94	21	10
+2714	No description	0	2018-01-24	29	30	14	20
+2715	No description	0	2018-02-12	40	72	27	19
+2716	No description	0	2018-02-22	50	30	11	16
+2717	No description	0	2018-02-01	29	73	28	22
+2718	No description	0	2018-02-07	13	98	11	2
+2719	No description	0	2018-01-18	10	87	4	8
+2720	No description	0	2018-01-09	28	68	30	9
+2721	No description	0	2018-02-16	50	62	30	17
+2722	No description	0	2018-01-27	41	33	7	15
+2723	No description	0	2018-01-07	9	62	22	24
+2724	No description	0	2018-02-26	47	72	25	11
+2725	No description	0	2018-02-19	23	32	16	19
+2726	No description	0	2018-02-22	37	46	30	18
+2727	No description	0	2018-01-12	5	10	18	7
+2728	No description	0	2018-02-13	45	80	30	2
+2729	No description	0	2018-02-14	47	54	27	4
+2730	No description	0	2018-01-10	47	88	4	13
+2731	No description	0	2018-01-19	41	33	29	11
+2732	No description	0	2018-02-11	44	93	14	11
+2733	No description	0	2018-02-12	25	4	16	15
+2734	No description	0	2018-02-07	31	6	20	9
+2735	No description	0	2018-01-07	17	69	1	7
+2736	No description	0	2018-02-23	42	76	14	24
+2737	No description	0	2018-02-15	44	40	25	1
+2738	No description	0	2018-02-10	28	41	11	7
+2739	No description	0	2018-02-11	27	43	22	1
+2740	No description	0	2018-02-18	26	9	5	13
+2741	No description	0	2018-02-03	19	76	1	16
+2742	No description	0	2018-01-14	45	75	21	3
+2743	No description	0	2018-01-03	48	4	11	24
+2744	No description	0	2018-01-09	5	40	8	16
+2745	No description	0	2018-02-11	37	1	15	11
+2746	No description	0	2018-01-19	46	44	7	11
+2747	No description	0	2018-02-23	22	32	24	21
+2748	No description	0	2018-02-07	16	64	6	10
+2749	No description	0	2018-02-12	44	1	4	17
+2750	No description	0	2018-02-23	11	60	7	17
+2751	No description	0	2018-02-12	46	36	21	15
+2752	No description	0	2018-02-05	35	23	2	3
+2753	No description	0	2018-01-03	19	68	10	21
+2754	No description	0	2018-01-05	25	40	7	23
+2755	No description	0	2018-01-29	6	70	14	25
+2756	No description	0	2018-01-18	37	61	25	15
+2757	No description	0	2018-01-18	37	28	10	2
+2758	No description	0	2018-02-11	49	15	22	12
+2759	No description	0	2018-01-17	44	69	12	21
+2760	No description	0	2018-02-06	35	23	20	17
+2761	No description	0	2018-02-01	27	97	1	10
+2762	No description	0	2018-01-19	9	58	5	4
+2763	No description	0	2018-01-08	42	13	27	14
+2764	No description	0	2018-01-25	50	33	16	24
+2765	No description	0	2018-01-12	30	7	5	15
+2766	No description	0	2018-02-06	24	69	17	1
+2767	No description	0	2018-02-11	19	71	19	15
+2768	No description	0	2018-02-20	40	95	5	13
+2769	No description	0	2018-01-27	39	84	19	18
+2770	No description	0	2018-02-13	37	3	4	1
+2771	No description	0	2018-02-22	12	25	15	20
+2772	No description	0	2018-01-01	19	55	4	25
+2773	No description	0	2018-01-18	5	88	23	10
+2774	No description	0	2018-02-08	8	51	10	20
+2775	No description	0	2018-02-22	44	64	2	20
+2776	No description	0	2018-01-12	50	13	27	18
+2777	No description	0	2018-01-10	23	23	25	25
+2778	No description	0	2018-01-20	44	69	23	2
+2779	No description	0	2018-02-05	36	49	4	10
+2780	No description	0	2018-02-01	40	21	10	23
+2781	No description	0	2018-02-03	15	22	16	14
+2782	No description	0	2018-02-27	33	11	12	15
+2783	No description	0	2018-01-05	34	63	11	2
+2784	No description	0	2018-02-03	29	26	20	10
+2785	No description	0	2018-02-15	30	33	11	21
+2786	No description	0	2018-02-24	13	91	18	24
+2787	No description	0	2018-02-04	14	50	26	2
+2788	No description	0	2018-02-01	43	97	11	5
+2789	No description	0	2018-01-25	6	40	10	24
+2790	No description	0	2018-02-24	26	62	11	19
+2791	No description	0	2018-02-22	9	35	9	14
+2792	No description	0	2018-01-17	15	48	15	18
+2793	No description	0	2018-01-11	7	77	2	8
+2794	No description	0	2018-01-08	41	93	9	21
+2795	No description	0	2018-02-06	29	68	3	14
+2796	No description	0	2018-02-04	46	52	2	25
+2797	No description	0	2018-01-31	29	5	9	25
+2798	No description	0	2018-01-16	32	65	8	9
+2799	No description	0	2018-01-07	25	23	6	13
+2800	No description	0	2018-02-24	41	44	11	18
+2801	No description	0	2018-02-03	36	97	7	2
+2802	No description	0	2018-01-26	39	18	28	24
+2803	No description	0	2018-01-13	6	12	17	21
+2804	No description	0	2018-02-28	40	3	18	20
+2805	No description	0	2018-01-07	35	36	18	25
+2806	No description	0	2018-01-02	40	95	19	2
+2807	No description	0	2018-01-31	40	5	11	15
+2808	No description	0	2018-01-31	32	3	30	2
+2809	No description	0	2018-01-14	41	57	26	4
+2810	No description	0	2018-01-13	20	51	3	16
+2811	No description	0	2018-01-02	13	83	15	15
+2812	No description	0	2018-02-26	11	22	1	17
+2813	No description	0	2018-02-11	48	31	16	25
+2814	No description	0	2018-01-26	50	81	7	19
+2815	No description	0	2018-02-07	49	75	18	14
+2816	No description	0	2018-01-02	39	10	25	25
+2817	No description	0	2018-01-09	20	80	23	22
+2818	No description	0	2018-02-15	45	67	20	25
+2819	No description	0	2018-02-03	9	1	12	6
+2820	No description	0	2018-01-09	49	78	14	10
+2821	No description	0	2018-01-02	37	21	30	1
+2822	No description	0	2018-01-13	8	26	22	6
+2823	No description	0	2018-02-08	41	1	1	22
+2824	No description	0	2018-02-26	21	83	30	3
+2825	No description	0	2018-01-27	37	66	20	14
+2826	No description	0	2018-01-24	46	62	20	1
+2827	No description	0	2018-01-14	36	45	22	21
+2828	No description	0	2018-02-18	16	63	16	11
+2829	No description	0	2018-02-25	30	34	19	14
+2830	No description	0	2018-02-01	44	71	24	3
+2831	No description	0	2018-01-19	44	48	14	11
+2832	No description	0	2018-02-06	38	49	3	19
+2833	No description	0	2018-01-10	31	2	7	14
+2834	No description	0	2018-02-07	39	85	6	2
+2835	No description	0	2018-02-23	9	54	17	15
+2836	No description	0	2018-01-07	41	9	27	8
+2837	No description	0	2018-02-25	18	98	4	25
+2838	No description	0	2018-01-15	29	22	11	7
+2839	No description	0	2018-01-09	23	81	16	15
+2840	No description	0	2018-02-20	21	48	9	8
+2841	No description	0	2018-01-22	37	20	25	21
+2842	No description	0	2018-02-09	50	34	21	4
+2843	No description	0	2018-02-10	7	60	9	21
+2844	No description	0	2018-02-08	32	79	21	3
+2845	No description	0	2018-01-28	29	89	6	1
+2846	No description	0	2018-01-30	16	7	5	9
+2847	No description	0	2018-01-01	11	93	3	25
+2848	No description	0	2018-02-24	14	59	7	17
+2849	No description	0	2018-01-19	37	86	23	10
+2850	No description	0	2018-02-08	49	67	11	24
+2851	No description	0	2018-01-17	30	38	27	21
+2852	No description	0	2018-02-20	48	49	5	11
+2853	No description	0	2018-02-03	27	42	6	8
+2854	No description	0	2018-01-18	43	97	3	11
+2855	No description	0	2018-02-21	41	81	17	13
+2856	No description	0	2018-02-21	28	25	26	11
+2857	No description	0	2018-02-17	39	75	23	17
+2858	No description	0	2018-02-23	14	9	1	1
+2859	No description	0	2018-01-15	16	82	29	2
+2860	No description	0	2018-02-13	19	63	4	6
+2861	No description	0	2018-02-08	9	55	5	10
+2862	No description	0	2018-02-25	32	21	6	11
+2863	No description	0	2018-02-27	29	35	2	25
+2864	No description	0	2018-01-01	49	67	19	2
+2865	No description	0	2018-02-03	10	72	30	6
+2866	No description	0	2018-01-16	15	26	18	23
+2867	No description	0	2018-01-29	44	6	21	25
+2868	No description	0	2018-01-11	50	51	2	15
+2869	No description	0	2018-02-15	22	34	18	13
+2870	No description	0	2018-01-31	16	70	9	1
+2871	No description	0	2018-01-11	46	83	1	7
+2872	No description	0	2018-01-29	47	3	5	21
+2873	No description	0	2018-01-12	11	84	27	1
+2874	No description	0	2018-01-06	39	36	30	15
+2875	No description	0	2018-01-22	16	82	7	20
+2876	No description	0	2018-02-16	50	73	22	12
+2877	No description	0	2018-01-28	37	60	20	8
+2878	No description	0	2018-02-26	12	74	20	5
+2879	No description	0	2018-02-15	28	24	10	14
+2880	No description	0	2018-01-02	47	4	11	4
+2881	No description	0	2018-02-01	19	48	6	8
+2882	No description	0	2018-02-14	21	72	1	17
+2883	No description	0	2018-02-17	46	50	15	13
+2884	No description	0	2018-02-28	8	33	10	19
+2885	No description	0	2018-01-05	11	36	8	19
+2886	No description	0	2018-02-15	30	31	10	24
+2887	No description	0	2018-02-26	37	70	10	11
+2888	No description	0	2018-02-21	39	31	3	22
+2889	No description	0	2018-02-11	22	20	15	10
+2890	No description	0	2018-01-03	11	61	18	11
+2891	No description	0	2018-01-30	46	88	22	24
+2892	No description	0	2018-01-09	39	45	13	8
+2893	No description	0	2018-02-18	10	66	20	23
+2894	No description	0	2018-01-17	35	47	23	19
+2895	No description	0	2018-02-08	43	17	4	13
+2896	No description	0	2018-02-25	41	58	10	23
+2897	No description	0	2018-02-14	41	89	28	3
+2898	No description	0	2018-02-08	10	46	22	18
+2899	No description	0	2018-02-02	5	58	1	6
+2900	No description	0	2018-02-05	24	86	13	3
+2901	No description	0	2018-01-04	39	59	7	2
+2902	No description	0	2018-01-30	18	59	1	8
+2903	No description	0	2018-02-26	45	28	14	19
+2904	No description	0	2018-01-18	46	71	17	8
+2905	No description	0	2018-01-29	25	60	18	1
+2906	No description	0	2018-02-05	43	21	10	4
+2907	No description	0	2018-01-07	16	89	18	25
+2908	No description	0	2018-01-03	6	50	11	23
+2909	No description	0	2018-02-19	30	36	1	3
+2910	No description	0	2018-01-05	19	5	11	7
+2911	No description	0	2018-01-16	12	19	12	22
+2912	No description	0	2018-02-17	25	77	10	10
+2913	No description	0	2018-01-16	45	12	21	18
+2914	No description	0	2018-01-04	5	16	25	19
+2915	No description	0	2018-02-24	37	25	22	12
+2916	No description	0	2018-02-07	20	14	28	10
+2917	No description	0	2018-01-25	15	41	24	2
+2918	No description	0	2018-02-22	32	31	2	1
+2919	No description	0	2018-02-09	23	21	27	9
+2920	No description	0	2018-01-29	14	23	2	7
+2921	No description	0	2018-01-25	33	90	13	21
+2922	No description	0	2018-02-19	45	73	25	1
+2923	No description	0	2018-02-01	41	70	10	3
+2924	No description	0	2018-01-09	23	8	1	17
+2925	No description	0	2018-01-21	31	20	14	5
+2926	No description	0	2018-01-31	12	64	2	25
+2927	No description	0	2018-02-01	29	81	3	14
+2928	No description	0	2018-02-12	12	95	2	6
+2929	No description	0	2018-02-23	43	45	9	23
+2930	No description	0	2018-01-17	46	48	28	23
+2931	No description	0	2018-01-03	18	31	23	10
+2932	No description	0	2018-01-02	44	38	27	24
+2933	No description	0	2018-01-22	12	4	2	9
+2934	No description	0	2018-01-25	7	3	1	12
+2935	No description	0	2018-02-13	8	1	9	13
+2936	No description	0	2018-01-20	37	25	23	8
+2937	No description	0	2018-01-25	38	43	26	13
+2938	No description	0	2018-01-03	44	1	21	17
+2939	No description	0	2018-02-28	35	34	22	7
+2940	No description	0	2018-01-17	34	22	2	15
+2941	No description	0	2018-02-07	43	100	9	6
+2942	No description	0	2018-01-26	36	1	12	13
+2943	No description	0	2018-02-07	47	40	11	4
+2944	No description	0	2018-01-19	7	25	20	6
+2945	No description	0	2018-01-29	21	3	7	9
+2946	No description	0	2018-02-07	50	97	19	10
+2947	No description	0	2018-02-15	46	100	9	1
+2948	No description	0	2018-02-19	47	64	19	7
+2949	No description	0	2018-01-29	43	65	19	10
+2950	No description	0	2018-01-23	10	68	13	1
+2951	No description	0	2018-02-16	37	79	17	23
+2952	No description	0	2018-02-12	36	56	3	4
+2953	No description	0	2018-02-07	22	17	11	18
+2954	No description	0	2018-01-06	23	94	18	9
+2955	No description	0	2018-01-05	11	13	25	16
+2956	No description	0	2018-01-10	23	68	27	11
+2957	No description	0	2018-02-28	29	65	19	10
+2958	No description	0	2018-02-16	19	78	17	20
+2959	No description	0	2018-02-09	7	63	13	1
+2960	No description	0	2018-02-24	33	31	9	18
+2961	No description	0	2018-02-10	17	80	12	15
+2962	No description	0	2018-01-13	39	72	15	20
+2963	No description	0	2018-01-12	24	96	13	2
+2964	No description	0	2018-02-16	22	84	25	17
+2965	No description	0	2018-02-02	49	14	20	16
+2966	No description	0	2018-01-18	43	28	5	15
+2967	No description	0	2018-02-25	26	69	21	18
+2968	No description	0	2018-02-27	22	39	9	6
+2969	No description	0	2018-02-07	20	24	7	13
+2970	No description	0	2018-02-04	15	4	7	13
+2971	No description	0	2018-02-26	16	92	25	9
+2972	No description	0	2018-02-11	29	80	14	3
+2973	No description	0	2018-01-20	7	37	27	19
+2974	No description	0	2018-02-26	33	60	20	18
+2975	No description	0	2018-02-02	42	68	15	7
+2976	No description	0	2018-01-27	8	79	20	10
+2977	No description	0	2018-02-04	17	28	11	20
+2978	No description	0	2018-02-11	50	70	19	6
+2979	No description	0	2018-01-15	24	89	25	9
+2980	No description	0	2018-01-21	45	25	8	10
+2981	No description	0	2018-01-15	19	22	11	17
+2982	No description	0	2018-01-21	41	70	19	3
+2983	No description	0	2018-01-15	49	90	18	16
+2984	No description	0	2018-01-16	9	79	12	4
+2985	No description	0	2018-01-28	29	56	29	22
+2986	No description	0	2018-02-18	39	30	16	19
+2987	No description	0	2018-01-31	16	95	8	8
+2988	No description	0	2018-01-10	8	27	18	23
+2989	No description	0	2018-01-13	44	7	30	2
+2990	No description	0	2018-01-26	45	57	17	8
+2991	No description	0	2018-01-04	37	84	17	24
+2992	No description	0	2018-02-26	9	47	1	23
+2993	No description	0	2018-01-17	38	75	9	13
+2994	No description	0	2018-02-11	37	95	9	6
+2995	No description	0	2018-01-10	29	3	5	19
+2996	No description	0	2018-01-29	8	11	26	8
+2997	No description	0	2018-02-11	24	78	11	16
+2998	No description	0	2018-02-19	32	33	22	13
+2999	No description	0	2018-02-26	15	75	8	8
+3000	No description	0	2018-01-07	27	87	30	11
+3001	No description	0	2018-02-19	21	46	26	2
+3002	No description	0	2018-01-31	49	75	7	4
+3003	No description	0	2018-01-03	32	57	23	4
+3004	No description	0	2018-01-20	28	69	20	17
+3005	No description	0	2018-02-14	18	55	24	24
+3006	No description	0	2018-02-08	47	31	8	5
+3007	No description	0	2018-01-27	43	38	27	18
+3008	No description	0	2018-02-28	12	22	14	19
+3009	No description	0	2018-01-16	35	1	11	19
+3010	No description	0	2018-01-19	26	97	27	7
+3011	No description	0	2018-02-19	48	49	25	11
+3012	No description	0	2018-01-05	11	7	27	20
+3013	No description	0	2018-01-19	15	61	17	24
+3014	No description	0	2018-02-26	30	38	1	13
+3015	No description	0	2018-01-01	30	63	4	1
+3016	No description	0	2018-01-03	43	93	2	5
+3017	No description	0	2018-01-11	27	45	11	3
+3018	No description	0	2018-02-15	33	67	20	21
+3019	No description	0	2018-01-08	18	88	1	10
+3020	No description	0	2018-02-07	12	85	13	16
+3021	No description	0	2018-02-17	47	45	16	10
+3022	No description	0	2018-02-02	19	74	27	4
+3023	No description	0	2018-02-12	49	9	4	7
+3024	No description	0	2018-02-18	25	86	14	14
+3025	No description	0	2018-01-16	38	95	10	20
+3026	No description	0	2018-02-18	13	33	21	16
+3027	No description	0	2018-02-02	39	83	9	3
+3028	No description	0	2018-01-27	20	34	27	3
+3029	No description	0	2018-02-23	31	21	13	19
+3030	No description	0	2018-02-09	15	89	28	10
+3031	No description	0	2018-02-06	16	92	12	21
+3032	No description	0	2018-01-24	20	86	8	19
+3033	No description	0	2018-02-10	26	45	16	8
+3034	No description	0	2018-02-04	44	65	2	22
+3035	No description	0	2018-01-02	28	50	14	4
+3036	No description	0	2018-01-18	35	4	28	3
+3037	No description	0	2018-02-09	14	79	4	25
+3038	No description	0	2018-02-22	29	84	1	15
+3039	No description	0	2018-01-03	39	36	13	6
+3040	No description	0	2018-01-21	34	47	13	5
+3041	No description	0	2018-02-11	50	23	23	18
+3042	No description	0	2018-01-15	19	66	27	2
+3043	No description	0	2018-02-23	48	7	20	8
+3044	No description	0	2018-02-19	23	23	5	12
+3045	No description	0	2018-02-21	45	39	8	7
+3046	No description	0	2018-01-04	16	12	6	22
+3047	No description	0	2018-02-22	40	73	7	13
+3048	No description	0	2018-01-25	39	84	19	16
+3049	No description	0	2018-02-22	28	16	15	24
+3050	No description	0	2018-01-21	42	8	4	17
+3051	No description	0	2018-02-07	29	82	9	14
+3052	No description	0	2018-02-24	28	84	2	24
+3053	No description	0	2018-01-26	33	59	12	17
+3054	No description	0	2018-01-31	22	11	9	25
+3055	No description	0	2018-02-01	20	12	16	5
+3056	No description	0	2018-01-15	39	94	8	21
+3057	No description	0	2018-02-17	9	42	13	7
+3058	No description	0	2018-01-09	19	24	26	12
+3059	No description	0	2018-02-15	42	4	23	22
+3060	No description	0	2018-02-28	22	49	23	6
+3061	No description	0	2018-02-24	47	27	14	21
+3062	No description	0	2018-02-17	36	88	5	20
+3063	No description	0	2018-02-24	20	100	21	25
+3064	No description	0	2018-01-12	15	46	17	1
+3065	No description	0	2018-01-28	37	19	18	23
+3066	No description	0	2018-02-01	33	95	20	9
+3067	No description	0	2018-01-10	23	97	8	8
+3068	No description	0	2018-02-22	25	3	29	4
+3069	No description	0	2018-01-09	12	60	26	16
+3070	No description	0	2018-01-10	8	57	24	14
+3071	No description	0	2018-01-12	10	70	2	11
+3072	No description	0	2018-02-24	45	85	22	20
+3073	No description	0	2018-01-26	18	91	27	6
+3074	No description	0	2018-01-08	49	67	7	8
+3075	No description	0	2018-02-09	23	4	20	9
+3076	No description	0	2018-01-15	45	12	4	24
+3077	No description	0	2018-02-02	16	39	21	7
+3078	No description	0	2018-01-01	36	49	18	2
+3079	No description	0	2018-01-03	29	66	9	21
+3080	No description	0	2018-02-15	32	34	4	18
+3081	No description	0	2018-01-09	5	7	3	7
+3082	No description	0	2018-01-14	12	41	21	1
+3083	No description	0	2018-01-16	26	67	4	15
+3084	No description	0	2018-01-11	16	78	15	15
+3085	No description	0	2018-02-17	9	69	4	17
+3086	No description	0	2018-02-09	33	6	8	12
+3087	No description	0	2018-02-17	23	43	21	25
+3088	No description	0	2018-02-06	27	84	12	12
+3089	No description	0	2018-01-02	20	86	17	18
+3090	No description	0	2018-02-25	45	99	20	17
+3091	No description	0	2018-02-23	35	24	24	18
+3092	No description	0	2018-01-31	8	4	27	22
+3093	No description	0	2018-02-20	47	13	13	16
+3094	No description	0	2018-01-14	43	1	17	6
+3095	No description	0	2018-02-09	22	100	9	21
+3096	No description	0	2018-01-24	18	92	23	2
+3097	No description	0	2018-02-26	9	39	26	7
+3098	No description	0	2018-02-04	16	50	25	17
+3099	No description	0	2018-01-31	39	31	17	2
+3100	No description	0	2018-01-16	21	33	6	25
+3101	No description	0	2018-01-26	34	65	19	2
+3102	No description	0	2018-02-01	33	56	5	7
+3103	No description	0	2018-01-07	15	44	8	6
+3104	No description	0	2018-01-16	11	71	26	24
+3105	No description	0	2018-02-11	8	46	7	5
+3106	No description	0	2018-01-01	35	71	29	20
+3107	No description	0	2018-01-30	12	18	4	14
+3108	No description	0	2018-01-24	50	88	4	5
+3109	No description	0	2018-02-20	7	85	29	9
+3110	No description	0	2018-01-15	9	13	30	25
+3111	No description	0	2018-01-14	25	54	26	6
+3112	No description	0	2018-02-16	25	38	28	18
+3113	No description	0	2018-02-02	21	40	30	6
+3114	No description	0	2018-01-10	39	96	30	23
+3115	No description	0	2018-02-11	24	71	10	9
+3116	No description	0	2018-02-08	48	35	18	8
+3117	No description	0	2018-01-28	31	29	7	23
+3118	No description	0	2018-01-03	36	81	27	11
+3119	No description	0	2018-01-21	16	18	16	17
+3120	No description	0	2018-01-21	27	82	8	8
+3121	No description	0	2018-01-03	47	29	10	8
+3122	No description	0	2018-01-05	41	23	21	2
+3123	No description	0	2018-01-03	28	15	14	13
+3124	No description	0	2018-02-20	15	60	7	11
+3125	No description	0	2018-01-14	45	17	14	19
+3126	No description	0	2018-02-15	27	28	9	23
+3127	No description	0	2018-02-17	13	76	4	18
+3128	No description	0	2018-02-15	28	37	8	6
+3129	No description	0	2018-02-15	5	79	10	2
+3130	No description	0	2018-01-01	10	14	24	2
+3131	No description	0	2018-01-22	29	14	24	3
+3132	No description	0	2018-02-10	13	21	14	20
+3133	No description	0	2018-02-27	10	100	13	23
+3134	No description	0	2018-02-21	17	14	17	24
+3135	No description	0	2018-02-03	14	80	25	25
+3136	No description	0	2018-02-07	6	79	1	23
+3137	No description	0	2018-01-08	33	11	22	19
+3138	No description	0	2018-01-23	47	24	8	20
+3139	No description	0	2018-02-04	22	3	13	22
+3140	No description	0	2018-02-13	25	44	5	15
+3141	No description	0	2018-02-25	15	51	7	7
+3142	No description	0	2018-02-25	49	98	11	12
+3143	No description	0	2018-01-23	6	33	10	3
+3144	No description	0	2018-02-20	24	52	14	21
+3145	No description	0	2018-01-27	13	77	16	8
+3146	No description	0	2018-01-05	32	51	23	20
+3147	No description	0	2018-01-16	20	96	23	3
+3148	No description	0	2018-01-21	25	80	3	17
+3149	No description	0	2018-01-31	37	97	28	17
+3150	No description	0	2018-02-19	29	59	18	10
+3151	No description	0	2018-01-14	20	34	30	18
+3152	No description	0	2018-02-09	13	19	5	14
+3153	No description	0	2018-01-27	26	79	25	15
+3154	No description	0	2018-02-15	20	29	14	8
+3155	No description	0	2018-02-10	42	32	25	21
+3156	No description	0	2018-01-25	49	23	27	5
+3157	No description	0	2018-01-30	8	92	18	22
+3158	No description	0	2018-02-10	43	15	21	5
+3159	No description	0	2018-01-02	5	6	25	4
+3160	No description	0	2018-02-16	30	66	30	25
+3161	No description	0	2018-02-19	12	8	23	16
+3162	No description	0	2018-01-15	30	23	1	11
+3163	No description	0	2018-02-01	32	67	13	7
+3164	No description	0	2018-01-22	14	88	28	7
+3165	No description	0	2018-01-24	42	98	28	19
+3166	No description	0	2018-01-04	34	82	9	2
+3167	No description	0	2018-02-20	7	5	9	11
+3168	No description	0	2018-01-01	25	5	28	10
+3169	No description	0	2018-01-10	30	51	22	8
+3170	No description	0	2018-01-22	50	93	5	8
+3171	No description	0	2018-01-21	26	18	28	21
+3172	No description	0	2018-01-09	16	25	27	19
+3173	No description	0	2018-01-01	39	11	8	9
+3174	No description	0	2018-02-13	6	17	4	9
+3175	No description	0	2018-01-03	45	50	13	20
+3176	No description	0	2018-01-27	17	12	15	6
+3177	No description	0	2018-02-26	36	38	10	17
+3178	No description	0	2018-02-09	7	57	15	1
+3179	No description	0	2018-02-14	28	61	12	18
+3180	No description	0	2018-01-10	45	59	27	24
+3181	No description	0	2018-01-27	12	18	1	1
+3182	No description	0	2018-02-09	21	38	19	11
+3183	No description	0	2018-01-22	30	27	3	17
+3184	No description	0	2018-01-05	20	33	30	10
+3185	No description	0	2018-01-10	27	23	11	20
+3186	No description	0	2018-01-05	48	82	18	18
+3187	No description	0	2018-01-18	44	72	10	23
+3188	No description	0	2018-02-15	32	74	29	22
+3189	No description	0	2018-01-09	18	34	6	7
+3190	No description	0	2018-01-12	17	82	10	4
+3191	No description	0	2018-02-18	28	70	3	8
+3192	No description	0	2018-02-12	6	85	1	18
+3193	No description	0	2018-01-11	20	95	6	2
+3194	No description	0	2018-02-02	14	69	12	20
+3195	No description	0	2018-02-09	44	6	20	16
+3196	No description	0	2018-02-03	7	89	25	20
+3197	No description	0	2018-01-13	43	91	10	20
+3198	No description	0	2018-01-13	47	27	13	19
+3199	No description	0	2018-02-18	16	9	20	17
+3200	No description	0	2018-02-02	8	18	10	5
+3201	No description	0	2018-02-18	7	89	15	16
+3202	No description	0	2018-02-20	13	94	3	24
+3203	No description	0	2018-02-20	9	50	22	3
+3204	No description	0	2018-01-03	42	85	20	13
+3205	No description	0	2018-01-22	8	88	16	16
+3206	No description	0	2018-01-01	32	26	24	7
+3207	No description	0	2018-02-06	48	74	29	20
+3208	No description	0	2018-02-15	39	76	25	20
+3209	No description	0	2018-02-11	46	55	25	17
+3210	No description	0	2018-02-28	37	64	19	13
+3211	No description	0	2018-01-06	37	45	17	5
+3212	No description	0	2018-02-24	15	52	10	25
+3213	No description	0	2018-01-21	28	9	8	5
+3214	No description	0	2018-01-09	34	75	28	16
+3215	No description	0	2018-01-12	42	33	6	20
+3216	No description	0	2018-01-08	48	12	10	1
+3217	No description	0	2018-01-14	37	29	8	12
+3218	No description	0	2018-01-27	10	37	24	15
+3219	No description	0	2018-01-27	38	78	22	9
+3220	No description	0	2018-02-21	21	16	8	2
+3221	No description	0	2018-02-27	28	98	23	12
+3222	No description	0	2018-01-02	18	52	24	12
+3223	No description	0	2018-02-21	50	1	2	14
+3224	No description	0	2018-02-12	25	24	29	11
+3225	No description	0	2018-01-17	45	49	16	20
+3226	No description	0	2018-01-11	11	24	7	25
+3227	No description	0	2018-02-21	44	40	27	18
+3228	No description	0	2018-02-12	25	96	24	17
+3229	No description	0	2018-02-28	43	68	16	3
+3230	No description	0	2018-02-28	24	75	27	2
+3231	No description	0	2018-01-10	27	47	2	24
+3232	No description	0	2018-01-26	37	36	9	11
+3233	No description	0	2018-02-06	25	22	10	20
+3234	No description	0	2018-02-09	37	48	17	23
+3235	No description	0	2018-01-19	15	86	8	17
+3236	No description	0	2018-02-05	13	35	3	10
+3237	No description	0	2018-02-13	32	76	7	18
+3238	No description	0	2018-02-22	43	97	24	21
+3239	No description	0	2018-02-15	22	55	1	9
+3240	No description	0	2018-02-24	14	27	20	23
+3241	No description	0	2018-01-02	49	6	25	11
+3242	No description	0	2018-01-25	37	53	11	11
+3243	No description	0	2018-02-12	45	59	16	5
+3244	No description	0	2018-01-17	10	1	17	7
+3245	No description	0	2018-02-28	31	38	18	6
+3246	No description	0	2018-01-08	50	98	13	8
+3247	No description	0	2018-02-14	45	33	18	13
+3248	No description	0	2018-01-15	33	53	25	23
+3249	No description	0	2018-01-21	24	91	27	5
+3250	No description	0	2018-02-28	41	38	29	8
+3251	No description	0	2018-01-04	5	11	1	15
+3252	No description	0	2018-01-10	46	7	11	22
+3253	No description	0	2018-02-28	26	4	20	25
+3254	No description	0	2018-02-21	15	8	13	21
+3255	No description	0	2018-02-19	49	7	8	19
+3256	No description	0	2018-01-06	45	80	17	19
+3257	No description	0	2018-01-16	25	78	15	23
+3258	No description	0	2018-01-05	12	50	2	13
+3259	No description	0	2018-01-27	29	40	22	4
+3260	No description	0	2018-01-21	16	92	30	16
+3261	No description	0	2018-02-25	6	8	21	16
+3262	No description	0	2018-01-19	29	7	15	13
+3263	No description	0	2018-02-13	38	96	5	16
+3264	No description	0	2018-01-09	16	17	22	12
+3265	No description	0	2018-02-11	14	34	28	6
+3266	No description	0	2018-02-23	48	5	7	4
+3267	No description	0	2018-01-08	35	90	25	23
+3268	No description	0	2018-01-23	5	16	27	9
+3269	No description	0	2018-02-21	8	65	22	13
+3270	No description	0	2018-02-27	28	25	17	20
+3271	No description	0	2018-02-09	44	32	6	14
+3272	No description	0	2018-02-27	37	70	15	12
+3273	No description	0	2018-02-21	34	84	14	14
+3274	No description	0	2018-02-18	49	85	30	17
+3275	No description	0	2018-01-07	23	31	16	6
+3276	No description	0	2018-01-03	44	70	12	8
+3277	No description	0	2018-01-05	39	25	30	18
+3278	No description	0	2018-02-21	24	51	13	7
+3279	No description	0	2018-01-29	11	20	25	14
+3280	No description	0	2018-01-17	35	52	21	4
+3281	No description	0	2018-01-15	25	75	6	1
+3282	No description	0	2018-02-15	42	88	25	5
+3283	No description	0	2018-02-18	30	81	16	18
+3284	No description	0	2018-01-07	13	59	11	18
+3285	No description	0	2018-01-24	5	12	10	12
+3286	No description	0	2018-01-19	42	55	18	21
+3287	No description	0	2018-02-07	13	95	7	23
+3288	No description	0	2018-02-19	11	38	19	16
+3289	No description	0	2018-02-19	16	73	13	4
+3290	No description	0	2018-01-09	18	86	27	8
+3291	No description	0	2018-02-06	31	7	7	13
+3292	No description	0	2018-01-14	12	60	23	17
+3293	No description	0	2018-01-02	43	69	17	11
+3294	No description	0	2018-02-11	17	78	8	19
+3295	No description	0	2018-01-06	41	43	18	24
+3296	No description	0	2018-01-24	41	76	1	24
+3297	No description	0	2018-01-04	22	80	29	23
+3298	No description	0	2018-02-28	29	35	9	6
+3299	No description	0	2018-02-21	15	36	18	22
+3300	No description	0	2018-01-14	15	17	29	7
+3301	No description	0	2018-02-08	35	16	25	10
+3302	No description	0	2018-01-30	20	44	8	13
+3303	No description	0	2018-02-28	19	65	26	19
+3304	No description	0	2018-01-13	49	97	11	11
+3305	No description	0	2018-01-18	33	50	12	21
+3306	No description	0	2018-02-12	26	91	30	12
+3307	No description	0	2018-01-12	50	84	22	17
+3308	No description	0	2018-02-10	8	24	19	21
+3309	No description	0	2018-02-18	35	96	1	18
+3310	No description	0	2018-01-18	49	45	3	17
+3311	No description	0	2018-02-26	5	23	16	24
+3312	No description	0	2018-01-29	5	54	14	5
+3313	No description	0	2018-01-22	35	56	11	3
+3314	No description	0	2018-01-20	9	13	18	23
+3315	No description	0	2018-02-15	36	20	2	9
+3316	No description	0	2018-01-14	17	29	12	16
+3317	No description	0	2018-02-19	19	35	4	12
+3318	No description	0	2018-01-05	25	82	18	17
+3319	No description	0	2018-02-12	34	100	21	16
+3320	No description	0	2018-01-05	37	64	27	11
+3321	No description	0	2018-01-10	11	76	5	10
+3322	No description	0	2018-02-18	29	1	17	6
+3323	No description	0	2018-02-17	24	68	2	1
+3324	No description	0	2018-02-06	49	28	29	5
+3325	No description	0	2018-02-11	40	96	28	6
+3326	No description	0	2018-01-26	15	30	19	13
+3327	No description	0	2018-01-06	34	10	1	3
+3328	No description	0	2018-01-30	26	64	23	15
+3329	No description	0	2018-01-30	18	15	1	20
+3330	No description	0	2018-01-22	13	40	18	3
+3331	No description	0	2018-02-04	7	37	19	6
+3332	No description	0	2018-01-16	17	37	18	10
+3333	No description	0	2018-01-15	11	22	24	9
+3334	No description	0	2018-01-28	20	74	19	19
+3335	No description	0	2018-02-17	47	51	11	22
+3336	No description	0	2018-02-22	8	8	17	13
+3337	No description	0	2018-01-25	17	33	23	12
+3338	No description	0	2018-01-02	23	4	17	8
+3339	No description	0	2018-02-26	23	19	26	1
+3340	No description	0	2018-02-15	50	67	10	21
+3341	No description	0	2018-02-26	19	44	5	18
+3342	No description	0	2018-02-17	37	65	16	22
+3343	No description	0	2018-01-13	34	98	1	5
+3344	No description	0	2018-02-28	38	71	19	5
+3345	No description	0	2018-01-05	26	39	11	17
+3346	No description	0	2018-02-10	37	37	8	22
+3347	No description	0	2018-01-02	20	48	15	11
+3348	No description	0	2018-01-22	48	39	29	23
+3349	No description	0	2018-02-27	47	81	30	7
+3350	No description	0	2018-01-08	6	80	4	17
+3351	No description	0	2018-01-01	12	68	28	25
+3352	No description	0	2018-01-27	43	23	13	10
+3353	No description	0	2018-01-15	5	9	6	2
+3354	No description	0	2018-01-01	14	47	2	14
+3355	No description	0	2018-02-12	26	36	13	9
+3356	No description	0	2018-01-29	22	59	24	19
+3357	No description	0	2018-02-26	22	85	14	12
+3358	No description	0	2018-01-02	10	94	21	11
+3359	No description	0	2018-02-19	24	78	21	5
+3360	No description	0	2018-02-20	33	27	6	12
+3361	No description	0	2018-01-19	40	6	15	21
+3362	No description	0	2018-01-05	40	59	18	21
+3363	No description	0	2018-01-05	43	24	30	1
+3364	No description	0	2018-01-04	11	22	27	15
+3365	No description	0	2018-02-24	26	81	23	8
+3366	No description	0	2018-02-03	19	77	22	15
+3367	No description	0	2018-01-17	14	27	28	24
+3368	No description	0	2018-01-04	28	70	27	8
+3369	No description	0	2018-02-01	38	56	13	20
+3370	No description	0	2018-01-25	7	16	8	11
+3371	No description	0	2018-02-03	8	44	28	1
+3372	No description	0	2018-01-26	10	90	9	25
+3373	No description	0	2018-02-08	49	88	26	11
+3374	No description	0	2018-01-09	39	48	20	1
+3375	No description	0	2018-01-26	15	51	29	3
+3376	No description	0	2018-02-13	17	72	11	20
+3377	No description	0	2018-02-10	34	44	5	11
+3378	No description	0	2018-02-05	26	66	16	23
+3379	No description	0	2018-01-14	40	61	24	3
+3380	No description	0	2018-02-28	23	47	5	19
+3381	No description	0	2018-01-04	49	69	13	11
+3382	No description	0	2018-01-05	32	2	11	25
+3383	No description	0	2018-01-16	21	84	12	19
+3384	No description	0	2018-01-12	14	89	16	8
+3385	No description	0	2018-02-10	10	40	21	1
+3386	No description	0	2018-01-04	17	100	20	15
+3387	No description	0	2018-01-20	21	2	11	3
+3388	No description	0	2018-01-06	47	12	18	19
+3389	No description	0	2018-02-06	46	48	22	18
+3390	No description	0	2018-02-14	15	47	4	25
+3391	No description	0	2018-02-05	25	98	28	14
+3392	No description	0	2018-01-21	50	10	10	22
+3393	No description	0	2018-02-14	19	44	2	10
+3394	No description	0	2018-02-03	20	18	20	11
+3395	No description	0	2018-02-09	9	100	19	22
+3396	No description	0	2018-02-13	6	24	24	18
+3397	No description	0	2018-02-07	25	89	23	17
+3398	No description	0	2018-01-09	39	18	11	10
+3399	No description	0	2018-01-29	18	35	1	3
+3400	No description	0	2018-02-24	45	97	26	14
+3401	No description	0	2018-02-17	24	20	8	17
+3402	No description	0	2018-02-17	8	1	25	25
+3403	No description	0	2018-01-07	12	93	6	5
+3404	No description	0	2018-01-14	39	43	10	8
+3405	No description	0	2018-01-06	33	97	24	22
+3406	No description	0	2018-02-12	15	68	16	20
+3407	No description	0	2018-02-28	40	56	24	24
+3408	No description	0	2018-01-29	29	94	27	14
+3409	No description	0	2018-02-08	44	93	17	24
+3410	No description	0	2018-02-11	32	24	16	9
+3411	No description	0	2018-02-24	6	64	22	16
+3412	No description	0	2018-01-30	30	24	11	14
+3413	No description	0	2018-01-19	6	50	9	12
+3414	No description	0	2018-02-08	11	99	14	15
+3415	No description	0	2018-02-19	8	44	8	13
+3416	No description	0	2018-01-29	43	14	15	17
+3417	No description	0	2018-02-28	5	30	17	6
+3418	No description	0	2018-02-08	9	5	19	12
+3419	No description	0	2018-01-14	45	28	28	3
+3420	No description	0	2018-01-24	29	87	3	16
+3421	No description	0	2018-02-03	21	60	14	8
+3422	No description	0	2018-02-03	39	36	26	1
+3423	No description	0	2018-01-27	17	84	6	5
+3424	No description	0	2018-01-08	28	30	14	20
+3425	No description	0	2018-01-08	25	44	24	22
+3426	No description	0	2018-01-07	46	20	17	11
+3427	No description	0	2018-02-11	22	76	24	24
+3428	No description	0	2018-02-26	32	88	3	21
+3429	No description	0	2018-02-11	10	98	13	17
+3430	No description	0	2018-02-11	34	27	27	21
+3431	No description	0	2018-01-15	41	26	11	7
+3432	No description	0	2018-02-19	49	8	7	22
+3433	No description	0	2018-01-18	43	81	7	20
+3434	No description	0	2018-02-28	31	41	6	11
+3435	No description	0	2018-02-04	22	65	29	20
+3436	No description	0	2018-02-05	32	47	25	16
+3437	No description	0	2018-02-08	34	95	29	16
+3438	No description	0	2018-02-09	23	69	19	5
+3439	No description	0	2018-01-29	42	22	4	19
+3440	No description	0	2018-02-06	16	43	15	4
+3441	No description	0	2018-01-22	47	37	5	7
+3442	No description	0	2018-01-04	39	40	16	23
+3443	No description	0	2018-01-14	9	26	7	15
+3444	No description	0	2018-01-29	47	33	11	9
+3445	No description	0	2018-01-13	16	36	13	4
+3446	No description	0	2018-01-13	44	90	8	23
+3447	No description	0	2018-02-10	23	65	12	10
+3448	No description	0	2018-01-16	17	21	23	8
+3449	No description	0	2018-02-02	27	89	23	6
+3450	No description	0	2018-02-15	40	17	7	20
+3451	No description	0	2018-02-24	32	73	8	8
+3452	No description	0	2018-02-01	33	5	28	1
+3453	No description	0	2018-01-06	37	97	13	5
+3454	No description	0	2018-01-04	8	88	25	1
+3455	No description	0	2018-01-24	48	94	21	1
+3456	No description	0	2018-01-03	40	91	5	4
+3457	No description	0	2018-01-26	14	65	18	7
+3458	No description	0	2018-01-16	49	99	25	10
+3459	No description	0	2018-02-13	9	44	17	11
+3460	No description	0	2018-02-08	19	80	10	23
+3461	No description	0	2018-01-27	19	36	29	12
+3462	No description	0	2018-01-03	32	68	21	16
+3463	No description	0	2018-02-18	6	3	5	15
+3464	No description	0	2018-02-01	9	6	7	9
+3465	No description	0	2018-01-21	31	36	21	12
+3466	No description	0	2018-01-12	30	83	24	11
+3467	No description	0	2018-02-20	44	28	12	17
+3468	No description	0	2018-01-05	7	18	25	21
+3469	No description	0	2018-01-02	39	18	18	1
+3470	No description	0	2018-02-11	10	10	16	13
+3471	No description	0	2018-02-15	29	22	24	18
+3472	No description	0	2018-01-19	5	84	11	7
+3473	No description	0	2018-01-05	23	34	13	17
+3474	No description	0	2018-01-10	34	75	28	9
+3475	No description	0	2018-02-12	14	100	12	8
+3476	No description	0	2018-01-18	5	74	18	21
+3477	No description	0	2018-01-17	38	2	20	21
+3478	No description	0	2018-01-09	12	12	4	21
+3479	No description	0	2018-01-20	46	91	17	4
+3480	No description	0	2018-01-13	19	88	8	14
+3481	No description	0	2018-01-17	49	16	27	19
+3482	No description	0	2018-02-04	47	9	4	22
+3483	No description	0	2018-02-26	16	49	18	18
+3484	No description	0	2018-01-01	32	60	11	19
+3485	No description	0	2018-02-11	10	4	19	21
+3486	No description	0	2018-02-08	16	42	1	4
+3487	No description	0	2018-01-15	49	81	5	11
+3488	No description	0	2018-01-12	25	26	5	4
+3489	No description	0	2018-02-20	13	14	20	2
+3490	No description	0	2018-02-15	39	46	21	3
+3491	No description	0	2018-02-12	49	12	21	9
+3492	No description	0	2018-02-21	23	43	28	2
+3493	No description	0	2018-02-26	23	40	11	10
+3494	No description	0	2018-01-25	17	45	3	25
+3495	No description	0	2018-01-16	48	15	13	3
+3496	No description	0	2018-01-07	6	92	15	1
+3497	No description	0	2018-02-06	39	78	23	3
+3498	No description	0	2018-01-11	18	34	24	15
+3499	No description	0	2018-02-07	42	43	12	18
+3500	No description	0	2018-01-12	48	80	19	11
+3501	No description	0	2018-02-21	34	12	23	16
+3502	No description	0	2018-01-29	29	30	25	14
+3503	No description	0	2018-02-08	16	35	15	14
+3504	No description	0	2018-02-28	42	40	7	21
+3505	No description	0	2018-02-05	49	54	27	21
+3506	No description	0	2018-02-05	50	79	4	2
+3507	No description	0	2018-01-11	49	83	21	9
+3508	No description	0	2018-01-21	9	34	17	18
+3509	No description	0	2018-01-20	32	1	5	15
+3510	No description	0	2018-02-23	5	59	1	3
+3511	No description	0	2018-02-27	43	65	17	18
+3512	No description	0	2018-02-15	8	68	2	19
+3513	No description	0	2018-01-18	13	68	7	18
+3514	No description	0	2018-01-13	18	76	28	22
+3515	No description	0	2018-02-23	35	68	7	5
+3516	No description	0	2018-01-01	30	61	22	20
+3517	No description	0	2018-02-18	17	84	17	1
+3518	No description	0	2018-01-30	41	17	7	23
+3519	No description	0	2018-01-08	49	16	14	7
+3520	No description	0	2018-01-19	43	98	8	24
+3521	No description	0	2018-01-22	25	49	4	8
+3522	No description	0	2018-02-23	25	82	23	18
+3523	No description	0	2018-02-19	29	15	3	9
+3524	No description	0	2018-02-23	50	28	2	9
+3525	No description	0	2018-02-27	47	54	12	20
+3526	No description	0	2018-01-28	49	97	13	10
+3527	No description	0	2018-02-27	17	97	26	22
+3528	No description	0	2018-01-29	23	25	29	19
+3529	No description	0	2018-02-24	49	22	24	4
+3530	No description	0	2018-01-27	44	67	25	24
+3531	No description	0	2018-01-07	31	53	14	2
+3532	No description	0	2018-01-09	35	23	20	4
+3533	No description	0	2018-01-04	30	82	28	22
+3534	No description	0	2018-01-13	25	51	19	17
+3535	No description	0	2018-01-31	29	83	28	14
+3536	No description	0	2018-01-14	11	84	20	15
+3537	No description	0	2018-02-14	8	1	7	24
+3538	No description	0	2018-02-16	25	81	12	10
+3539	No description	0	2018-01-17	20	32	26	25
+3540	No description	0	2018-01-24	16	20	3	16
+3541	No description	0	2018-01-28	40	83	27	20
+3542	No description	0	2018-01-14	12	74	28	20
+3543	No description	0	2018-01-04	47	23	11	3
+3544	No description	0	2018-02-23	15	97	16	6
+3545	No description	0	2018-01-15	36	90	19	14
+3546	No description	0	2018-02-11	39	90	17	10
+3547	No description	0	2018-01-15	24	40	2	10
+3548	No description	0	2018-02-16	9	75	10	15
+3549	No description	0	2018-01-26	32	84	12	2
+3550	No description	0	2018-01-11	23	82	23	24
+3551	No description	0	2018-02-04	43	42	21	10
+3552	No description	0	2018-01-11	6	18	10	15
+3553	No description	0	2018-02-16	24	15	10	15
+3554	No description	0	2018-02-01	12	33	22	5
+3555	No description	0	2018-02-12	47	54	30	17
+3556	No description	0	2018-01-01	38	30	9	24
+3557	No description	0	2018-01-01	33	93	3	9
+3558	No description	0	2018-02-01	12	26	15	17
+3559	No description	0	2018-01-02	17	15	11	17
+3560	No description	0	2018-01-17	46	35	25	11
+3561	No description	0	2018-01-16	38	87	3	9
+3562	No description	0	2018-01-15	38	9	26	13
+3563	No description	0	2018-01-23	36	52	19	1
+3564	No description	0	2018-02-07	26	93	15	22
+3565	No description	0	2018-02-03	30	67	29	12
+3566	No description	0	2018-02-09	43	48	27	1
+3567	No description	0	2018-01-22	24	60	19	4
+3568	No description	0	2018-01-06	5	63	19	8
+3569	No description	0	2018-01-01	45	81	14	13
+3570	No description	0	2018-01-06	5	50	2	3
+3571	No description	0	2018-01-02	13	21	25	10
+3572	No description	0	2018-02-08	16	17	12	10
+3573	No description	0	2018-01-22	10	91	22	4
+3574	No description	0	2018-01-12	42	35	20	13
+3575	No description	0	2018-02-08	26	24	25	18
+3576	No description	0	2018-02-16	46	8	18	19
+3577	No description	0	2018-02-15	41	31	9	11
+3578	No description	0	2018-02-08	25	11	28	17
+3579	No description	0	2018-01-16	41	44	13	16
+3580	No description	0	2018-01-05	15	7	4	14
+3581	No description	0	2018-01-07	15	28	14	5
+3582	No description	0	2018-01-10	23	48	29	7
+3583	No description	0	2018-02-21	28	35	9	23
+3584	No description	0	2018-02-09	48	61	8	9
+3585	No description	0	2018-01-22	22	91	17	20
+3586	No description	0	2018-01-05	18	77	2	12
+3587	No description	0	2018-02-22	9	23	1	25
+3588	No description	0	2018-01-24	45	72	2	25
+3589	No description	0	2018-01-17	35	41	11	21
+3590	No description	0	2018-01-03	8	31	15	15
+3591	No description	0	2018-02-19	17	80	2	15
+3592	No description	0	2018-02-10	36	27	17	25
+3593	No description	0	2018-01-17	12	50	20	12
+3594	No description	0	2018-01-30	6	89	17	12
+3595	No description	0	2018-02-09	5	41	11	13
+3596	No description	0	2018-01-28	35	14	13	20
+3597	No description	0	2018-01-24	32	50	2	11
+3598	No description	0	2018-01-01	41	2	11	23
+3599	No description	0	2018-01-11	16	34	2	6
+3600	No description	0	2018-01-11	23	2	1	6
+3601	No description	0	2018-02-04	50	60	11	20
+3602	No description	0	2018-01-22	33	68	12	13
+3603	No description	0	2018-01-25	23	22	19	21
+3604	No description	0	2018-01-04	13	47	19	6
+3605	No description	0	2018-02-22	10	94	6	24
+3606	No description	0	2018-01-07	20	29	5	9
+3607	No description	0	2018-02-05	8	13	25	16
+3608	No description	0	2018-02-01	38	92	25	9
+3609	No description	0	2018-01-15	40	94	25	10
+3610	No description	0	2018-01-06	39	66	2	3
+3611	No description	0	2018-01-23	40	15	13	6
+3612	No description	0	2018-01-18	18	69	6	1
+3613	No description	0	2018-01-07	37	80	3	11
+3614	No description	0	2018-02-01	37	93	27	19
+3615	No description	0	2018-02-13	41	57	25	24
+3616	No description	0	2018-02-05	35	60	20	4
+3617	No description	0	2018-02-28	25	68	12	2
+3618	No description	0	2018-01-29	29	40	2	7
+3619	No description	0	2018-01-23	21	84	28	20
+3620	No description	0	2018-02-13	33	63	5	25
+3621	No description	0	2018-01-26	25	94	13	17
+3622	No description	0	2018-01-08	38	24	23	2
+3623	No description	0	2018-02-15	10	59	14	12
+3624	No description	0	2018-01-06	43	8	25	16
+3625	No description	0	2018-01-20	6	44	16	14
+3626	No description	0	2018-01-13	47	93	3	2
+3627	No description	0	2018-02-09	37	69	17	25
+3628	No description	0	2018-02-06	5	50	16	6
+3629	No description	0	2018-02-23	20	66	25	22
+3630	No description	0	2018-02-12	46	8	24	25
+3631	No description	0	2018-01-19	23	68	6	22
+3632	No description	0	2018-01-21	36	11	22	5
+3633	No description	0	2018-01-04	14	32	3	8
+3634	No description	0	2018-01-17	5	53	1	3
+3635	No description	0	2018-02-10	35	62	16	1
+3636	No description	0	2018-01-01	24	19	19	14
+3637	No description	0	2018-01-29	44	69	4	10
+3638	No description	0	2018-02-07	25	51	1	22
+3639	No description	0	2018-01-23	20	57	13	12
+3640	No description	0	2018-01-11	30	35	22	1
+3641	No description	0	2018-01-23	5	63	28	13
+3642	No description	0	2018-02-19	35	17	30	6
+3643	No description	0	2018-02-05	19	20	29	20
+3644	No description	0	2018-02-02	7	35	14	21
+3645	No description	0	2018-02-21	37	68	21	24
+3646	No description	0	2018-02-15	16	64	30	4
+3647	No description	0	2018-01-03	33	77	27	21
+3648	No description	0	2018-02-25	31	83	3	1
+3649	No description	0	2018-02-07	34	34	22	8
+3650	No description	0	2018-01-12	12	83	15	15
+3651	No description	0	2018-02-14	30	91	24	12
+3652	No description	0	2018-01-30	36	16	12	14
+3653	No description	0	2018-02-01	20	34	14	2
+3654	No description	0	2018-02-19	8	93	23	19
+3655	No description	0	2018-02-20	27	28	22	16
+3656	No description	0	2018-01-10	30	30	24	1
+3657	No description	0	2018-01-03	41	4	6	4
+3658	No description	0	2018-02-28	48	65	28	4
+3659	No description	0	2018-01-26	5	47	28	7
+3660	No description	0	2018-02-22	6	75	23	9
+3661	No description	0	2018-02-20	17	54	7	20
+3662	No description	0	2018-01-29	24	37	25	9
+3663	No description	0	2018-02-18	10	61	17	15
+3664	No description	0	2018-02-28	48	26	23	10
+3665	No description	0	2018-01-08	25	29	12	2
+3666	No description	0	2018-01-24	7	91	30	24
+3667	No description	0	2018-01-12	29	88	29	18
+3668	No description	0	2018-01-23	45	36	29	18
+3669	No description	0	2018-01-12	28	39	17	2
+3670	No description	0	2018-02-03	36	98	17	6
+3671	No description	0	2018-01-12	33	14	15	12
+3672	No description	0	2018-01-16	34	72	26	22
+3673	No description	0	2018-01-04	37	19	3	3
+3674	No description	0	2018-01-30	23	88	11	19
+3675	No description	0	2018-02-14	8	17	2	9
+3676	No description	0	2018-01-05	6	38	21	20
+3677	No description	0	2018-02-10	13	83	21	7
+3678	No description	0	2018-01-22	41	57	30	5
+3679	No description	0	2018-02-17	12	53	12	19
+3680	No description	0	2018-02-17	18	51	15	10
+3681	No description	0	2018-01-07	22	100	28	4
+3682	No description	0	2018-02-01	26	56	30	13
+3683	No description	0	2018-02-11	24	31	2	19
+3684	No description	0	2018-01-18	8	94	7	24
+3685	No description	0	2018-02-22	44	71	14	8
+3686	No description	0	2018-01-20	34	69	22	6
+3687	No description	0	2018-02-03	15	8	5	11
+3688	No description	0	2018-02-20	36	41	30	10
+3689	No description	0	2018-02-06	44	71	15	22
+3690	No description	0	2018-01-24	5	57	1	3
+3691	No description	0	2018-01-19	28	51	28	8
+3692	No description	0	2018-01-08	13	41	1	24
+3693	No description	0	2018-01-24	49	9	20	10
+3694	No description	0	2018-01-06	47	79	4	23
+3695	No description	0	2018-01-13	20	81	15	14
+3696	No description	0	2018-01-12	50	45	4	18
+3697	No description	0	2018-02-09	48	65	29	3
+3698	No description	0	2018-01-18	33	9	11	12
+3699	No description	0	2018-01-16	26	80	13	1
+3700	No description	0	2018-02-21	31	26	16	24
+3701	No description	0	2018-01-14	22	91	29	3
+3702	No description	0	2018-01-21	50	5	3	7
+3703	No description	0	2018-01-18	49	85	14	15
+3704	No description	0	2018-01-11	20	78	17	2
+3705	No description	0	2018-02-25	13	30	13	7
+3706	No description	0	2018-01-11	26	83	4	5
+3707	No description	0	2018-01-05	38	3	11	2
+3708	No description	0	2018-01-29	35	72	10	7
+3709	No description	0	2018-01-29	37	48	22	15
+3710	No description	0	2018-01-12	17	22	18	6
+3711	No description	0	2018-01-15	46	19	10	1
+3712	No description	0	2018-01-13	45	92	8	15
+3713	No description	0	2018-02-28	23	8	17	2
+3714	No description	0	2018-01-31	23	24	30	23
+3715	No description	0	2018-01-04	19	91	7	20
+3716	No description	0	2018-02-21	26	71	2	8
+3717	No description	0	2018-02-07	34	38	23	5
+3718	No description	0	2018-01-12	50	68	13	24
+3719	No description	0	2018-01-13	25	66	3	21
+3720	No description	0	2018-02-11	5	35	5	15
+3721	No description	0	2018-02-18	42	36	20	12
+3722	No description	0	2018-01-29	19	73	8	17
+3723	No description	0	2018-02-07	35	17	4	16
+3724	No description	0	2018-01-03	39	2	11	25
+3725	No description	0	2018-02-25	36	25	8	8
+3726	No description	0	2018-01-11	8	37	12	6
+3727	No description	0	2018-02-17	16	46	23	25
+3728	No description	0	2018-01-22	11	14	17	13
+3729	No description	0	2018-02-14	27	79	27	19
+3730	No description	0	2018-02-13	48	76	28	4
+3731	No description	0	2018-02-07	9	2	1	13
+3732	No description	0	2018-01-14	14	43	10	21
+3733	No description	0	2018-02-11	12	69	23	5
+3734	No description	0	2018-02-14	44	49	2	22
+3735	No description	0	2018-02-26	10	73	11	18
+3736	No description	0	2018-01-29	18	9	15	22
+3737	No description	0	2018-02-03	8	12	14	9
+3738	No description	0	2018-02-25	39	24	27	18
+3739	No description	0	2018-01-09	19	87	25	25
+3740	No description	0	2018-01-09	10	12	8	20
+3741	No description	0	2018-01-28	8	61	9	4
+3742	No description	0	2018-01-05	24	18	12	4
+3743	No description	0	2018-01-31	20	63	6	25
+3744	No description	0	2018-02-05	14	62	21	13
+3745	No description	0	2018-02-11	48	32	20	17
+3746	No description	0	2018-01-22	41	66	21	13
+3747	No description	0	2018-02-04	23	68	30	15
+3748	No description	0	2018-02-03	15	64	16	11
+3749	No description	0	2018-01-25	32	26	14	19
+3750	No description	0	2018-02-21	29	5	4	12
+3751	No description	0	2018-01-17	37	51	23	7
+3752	No description	0	2018-02-08	38	50	30	20
+3753	No description	0	2018-02-26	10	40	27	12
+3754	No description	0	2018-01-24	26	85	9	4
+3755	No description	0	2018-02-08	25	5	17	1
+3756	No description	0	2018-01-25	12	5	10	11
+3757	No description	0	2018-02-17	5	2	29	24
+3758	No description	0	2018-01-17	48	24	2	23
+3759	No description	0	2018-01-05	45	84	2	9
+3760	No description	0	2018-02-05	40	34	4	5
+3761	No description	0	2018-02-10	14	95	12	9
+3762	No description	0	2018-02-26	31	86	4	7
+3763	No description	0	2018-01-06	37	90	6	16
+3764	No description	0	2018-02-13	32	80	10	3
+3765	No description	0	2018-01-31	41	49	26	18
+3766	No description	0	2018-01-19	46	50	27	10
+3767	No description	0	2018-02-24	39	89	17	5
+3768	No description	0	2018-02-23	29	99	27	12
+3769	No description	0	2018-01-16	32	46	20	21
+3770	No description	0	2018-01-24	43	26	13	14
+3771	No description	0	2018-01-21	31	51	22	21
+3772	No description	0	2018-02-15	29	66	22	14
+3773	No description	0	2018-02-03	40	43	19	10
+3774	No description	0	2018-01-12	21	63	29	13
+3775	No description	0	2018-02-17	40	90	4	9
+3776	No description	0	2018-02-26	28	54	9	18
+3777	No description	0	2018-01-10	48	72	3	19
+3778	No description	0	2018-02-09	21	77	24	4
+3779	No description	0	2018-01-07	22	83	14	13
+3780	No description	0	2018-01-24	43	73	10	8
+3781	No description	0	2018-02-22	15	60	6	12
+3782	No description	0	2018-01-26	29	91	16	14
+3783	No description	0	2018-01-09	23	58	12	19
+3784	No description	0	2018-01-30	12	93	13	15
+3785	No description	0	2018-02-02	24	58	14	9
+3786	No description	0	2018-02-06	18	27	8	10
+3787	No description	0	2018-02-21	8	80	8	9
+3788	No description	0	2018-01-15	44	73	14	22
+3789	No description	0	2018-02-08	18	55	24	12
+3790	No description	0	2018-02-22	45	31	16	13
+3791	No description	0	2018-02-13	36	46	23	14
+3792	No description	0	2018-01-25	21	73	30	12
+3793	No description	0	2018-02-26	21	20	13	5
+3794	No description	0	2018-01-08	13	56	9	2
+3795	No description	0	2018-01-28	43	26	13	15
+3796	No description	0	2018-01-11	24	76	8	22
+3797	No description	0	2018-01-28	11	44	30	16
+3798	No description	0	2018-01-05	11	13	6	2
+3799	No description	0	2018-02-24	44	85	23	22
+3800	No description	0	2018-01-08	37	49	28	10
+3801	No description	0	2018-01-05	9	92	22	1
+3802	No description	0	2018-01-09	43	75	5	21
+3803	No description	0	2018-01-29	15	76	8	25
+3804	No description	0	2018-01-07	6	95	21	25
+3805	No description	0	2018-02-06	23	21	7	6
+3806	No description	0	2018-01-24	46	73	26	8
+3807	No description	0	2018-02-12	27	46	3	8
+3808	No description	0	2018-02-23	9	40	6	21
+3809	No description	0	2018-02-03	17	83	16	13
+3810	No description	0	2018-02-03	14	30	19	7
+3811	No description	0	2018-02-28	40	31	26	7
+3812	No description	0	2018-01-13	32	91	21	13
+3813	No description	0	2018-02-08	10	11	6	17
+3814	No description	0	2018-01-09	11	94	16	3
+3815	No description	0	2018-01-22	38	42	20	3
+3816	No description	0	2018-01-10	50	33	30	25
+3817	No description	0	2018-02-16	31	17	11	20
+3818	No description	0	2018-01-28	49	37	3	17
+3819	No description	0	2018-02-19	37	23	7	16
+3820	No description	0	2018-02-02	10	92	13	24
+3821	No description	0	2018-02-19	49	89	3	13
+3822	No description	0	2018-01-10	27	72	23	9
+3823	No description	0	2018-01-10	45	57	16	13
+3824	No description	0	2018-01-12	41	92	6	5
+3825	No description	0	2018-02-11	17	31	20	8
+3826	No description	0	2018-02-27	18	47	12	11
+3827	No description	0	2018-02-07	36	87	11	25
+3828	No description	0	2018-01-09	50	9	26	18
+3829	No description	0	2018-01-24	36	60	2	13
+3830	No description	0	2018-02-23	24	45	6	13
+3831	No description	0	2018-01-04	40	43	29	15
+3832	No description	0	2018-01-03	31	79	1	14
+3833	No description	0	2018-01-01	46	98	22	17
+3834	No description	0	2018-02-15	36	67	28	5
+3835	No description	0	2018-01-17	30	12	23	5
+3836	No description	0	2018-01-05	46	45	30	21
+3837	No description	0	2018-02-08	21	5	4	6
+3838	No description	0	2018-02-03	17	30	1	19
+3839	No description	0	2018-01-08	6	42	18	18
+3840	No description	0	2018-02-11	9	66	12	23
+3841	No description	0	2018-01-09	46	71	9	16
+3842	No description	0	2018-01-27	6	75	19	6
+3843	No description	0	2018-02-03	39	91	3	15
+3844	No description	0	2018-01-20	46	61	25	6
+3845	No description	0	2018-02-05	42	95	10	16
+3846	No description	0	2018-02-12	12	27	15	4
+3847	No description	0	2018-02-16	46	23	13	23
+3848	No description	0	2018-01-21	42	28	17	25
+3849	No description	0	2018-02-15	35	8	11	12
+3850	No description	0	2018-02-26	19	24	5	14
+3851	No description	0	2018-01-22	12	71	9	5
+3852	No description	0	2018-01-16	14	63	28	21
+3853	No description	0	2018-02-23	47	58	28	9
+3854	No description	0	2018-02-07	27	74	30	14
+3855	No description	0	2018-02-16	12	99	2	19
+3856	No description	0	2018-02-08	39	31	5	17
+3857	No description	0	2018-01-10	42	41	7	20
+3858	No description	0	2018-02-06	27	75	17	13
+3859	No description	0	2018-02-04	14	38	1	12
+3860	No description	0	2018-01-08	36	74	8	12
+3861	No description	0	2018-02-16	8	98	8	21
+3862	No description	0	2018-02-12	32	62	7	20
+3863	No description	0	2018-01-22	31	84	17	25
+3864	No description	0	2018-02-10	36	59	5	5
+3865	No description	0	2018-02-13	32	67	1	25
+3866	No description	0	2018-01-12	17	45	18	19
+3867	No description	0	2018-02-05	27	82	22	22
+3868	No description	0	2018-02-18	5	57	26	20
+3869	No description	0	2018-01-01	14	3	19	8
+3870	No description	0	2018-02-19	37	88	14	5
+3871	No description	0	2018-02-08	28	91	13	10
+3872	No description	0	2018-01-08	31	62	3	8
+3873	No description	0	2018-02-12	25	21	29	1
+3874	No description	0	2018-02-01	7	6	25	23
+3875	No description	0	2018-02-08	40	29	20	16
+3876	No description	0	2018-02-09	10	1	6	15
+3877	No description	0	2018-01-23	25	94	15	16
+3878	No description	0	2018-01-04	39	19	16	11
+3879	No description	0	2018-01-21	29	64	12	15
+3880	No description	0	2018-01-05	13	14	10	10
+3881	No description	0	2018-02-27	21	69	25	16
+3882	No description	0	2018-02-12	20	57	20	9
+3883	No description	0	2018-01-31	33	7	10	13
+3884	No description	0	2018-01-26	25	27	20	18
+3885	No description	0	2018-02-06	47	47	29	23
+3886	No description	0	2018-01-21	8	80	12	17
+3887	No description	0	2018-01-13	38	23	5	11
+3888	No description	0	2018-01-25	44	49	4	23
+3889	No description	0	2018-01-18	32	97	9	2
+3890	No description	0	2018-02-23	35	67	13	25
+3891	No description	0	2018-02-27	31	66	14	1
+3892	No description	0	2018-02-27	14	67	5	15
+3893	No description	0	2018-02-09	36	67	27	15
+3894	No description	0	2018-02-01	13	19	30	11
+3895	No description	0	2018-01-28	16	18	10	9
+3896	No description	0	2018-01-05	44	19	10	19
+3897	No description	0	2018-02-07	44	57	7	4
+3898	No description	0	2018-01-11	11	26	23	10
+3899	No description	0	2018-01-29	26	98	25	22
+3900	No description	0	2018-01-03	46	83	28	5
+3901	No description	0	2018-01-17	21	14	10	12
+3902	No description	0	2018-01-29	5	54	29	18
+3903	No description	0	2018-01-03	40	64	1	16
+3904	No description	0	2018-01-27	11	100	28	23
+3905	No description	0	2018-02-15	30	42	10	17
+3906	No description	0	2018-02-10	42	54	6	13
+3907	No description	0	2018-01-23	40	78	5	21
+3908	No description	0	2018-02-08	49	9	24	3
+3909	No description	0	2018-01-15	25	31	17	4
+3910	No description	0	2018-01-05	26	81	16	4
+3911	No description	0	2018-01-07	6	16	1	10
+3912	No description	0	2018-02-17	36	17	9	10
+3913	No description	0	2018-02-24	8	61	17	6
+3914	No description	0	2018-02-18	50	35	4	21
+3915	No description	0	2018-01-28	49	3	30	23
+3916	No description	0	2018-01-04	11	28	9	24
+3917	No description	0	2018-02-07	23	9	23	5
+3918	No description	0	2018-01-06	10	75	1	24
+3919	No description	0	2018-02-08	20	86	1	6
+3920	No description	0	2018-01-28	22	96	10	3
+3921	No description	0	2018-01-15	24	55	12	4
+3922	No description	0	2018-02-19	28	79	18	6
+3923	No description	0	2018-01-20	39	37	28	8
+3924	No description	0	2018-01-08	29	78	23	17
+3925	No description	0	2018-02-25	36	82	15	7
+3926	No description	0	2018-02-14	11	60	16	2
+3927	No description	0	2018-01-16	44	89	18	3
+3928	No description	0	2018-02-10	24	38	24	17
+3929	No description	0	2018-02-08	8	25	10	22
+3930	No description	0	2018-01-18	34	34	24	20
+3931	No description	0	2018-01-19	13	43	14	16
+3932	No description	0	2018-02-01	23	25	16	3
+3933	No description	0	2018-02-03	30	49	23	23
+3934	No description	0	2018-02-27	18	69	29	9
+3935	No description	0	2018-02-16	25	7	24	9
+3936	No description	0	2018-01-27	30	41	22	11
+3937	No description	0	2018-01-30	27	76	27	25
+3938	No description	0	2018-02-01	7	56	22	1
+3939	No description	0	2018-02-25	43	47	16	25
+3940	No description	0	2018-02-13	27	93	18	15
+3941	No description	0	2018-02-04	7	23	9	6
+3942	No description	0	2018-02-10	38	62	12	21
+3943	No description	0	2018-01-22	21	62	13	2
+3944	No description	0	2018-02-08	49	87	29	7
+3945	No description	0	2018-01-26	47	68	25	23
+3946	No description	0	2018-01-24	14	65	22	9
+3947	No description	0	2018-01-09	49	94	17	13
+3948	No description	0	2018-01-24	18	45	8	16
+3949	No description	0	2018-01-23	27	55	11	15
+3950	No description	0	2018-01-19	39	86	21	17
+3951	No description	0	2018-02-27	48	45	22	7
+3952	No description	0	2018-02-06	21	77	11	8
+3953	No description	0	2018-01-22	43	80	5	9
+3954	No description	0	2018-01-14	49	42	17	1
+3955	No description	0	2018-01-21	47	25	27	18
+3956	No description	0	2018-01-05	27	8	6	14
+3957	No description	0	2018-02-03	15	27	4	17
+3958	No description	0	2018-01-24	40	93	28	5
+3959	No description	0	2018-01-22	26	25	2	2
+3960	No description	0	2018-02-09	19	40	15	17
+3961	No description	0	2018-01-03	47	28	19	11
+3962	No description	0	2018-01-02	15	4	1	7
+3963	No description	0	2018-01-07	22	83	2	22
+3964	No description	0	2018-01-11	41	77	22	12
+3965	No description	0	2018-01-07	15	26	11	13
+3966	No description	0	2018-01-19	20	99	19	6
+3967	No description	0	2018-02-11	31	65	5	5
+3968	No description	0	2018-02-17	24	89	10	10
+3969	No description	0	2018-02-05	32	40	26	21
+3970	No description	0	2018-01-16	18	54	7	13
+3971	No description	0	2018-02-08	28	2	6	12
+3972	No description	0	2018-02-17	50	89	17	5
+3973	No description	0	2018-01-14	13	26	30	18
+3974	No description	0	2018-01-10	17	83	2	25
+3975	No description	0	2018-01-11	41	17	17	21
+3976	No description	0	2018-01-01	6	24	23	24
+3977	No description	0	2018-02-27	16	51	11	19
+3978	No description	0	2018-01-20	49	81	21	20
+3979	No description	0	2018-01-09	32	100	4	17
+3980	No description	0	2018-01-11	24	67	14	10
+3981	No description	0	2018-02-04	14	86	1	3
+3982	No description	0	2018-01-23	9	30	18	16
+3983	No description	0	2018-02-07	42	89	15	4
+3984	No description	0	2018-01-25	50	24	30	22
+3985	No description	0	2018-01-01	16	80	18	1
+3986	No description	0	2018-02-19	7	98	4	21
+3987	No description	0	2018-02-20	33	55	25	15
+3988	No description	0	2018-01-16	46	83	4	16
+3989	No description	0	2018-01-08	10	33	28	15
+3990	No description	0	2018-01-26	18	63	28	15
+3991	No description	0	2018-01-20	40	8	27	16
+3992	No description	0	2018-02-14	42	51	28	8
+3993	No description	0	2018-02-20	9	28	26	8
+3994	No description	0	2018-01-13	39	38	28	6
+3995	No description	0	2018-02-28	33	94	4	22
+3996	No description	0	2018-02-20	7	59	15	12
+3997	No description	0	2018-01-03	7	57	24	22
+3998	No description	0	2018-01-07	48	34	27	18
+3999	No description	0	2018-01-09	41	96	22	17
+4000	No description	0	2018-02-18	16	69	14	21
+4001	No description	0	2018-01-17	31	87	24	24
+4002	No description	0	2018-02-01	18	70	14	7
+4003	No description	0	2018-02-10	6	46	21	21
+4004	No description	0	2018-01-11	16	60	3	14
+4005	No description	0	2018-01-11	44	9	21	4
+4006	No description	0	2018-01-15	46	18	9	6
+4007	No description	0	2018-01-08	46	83	22	8
+4008	No description	0	2018-01-09	49	68	27	9
+4009	No description	0	2018-01-08	27	28	24	24
+4010	No description	0	2018-01-24	44	75	23	24
+4011	No description	0	2018-01-21	12	92	10	19
+4012	No description	0	2018-02-18	37	30	23	22
+4013	No description	0	2018-01-24	10	68	30	7
+4014	No description	0	2018-02-18	16	52	4	21
+4015	No description	0	2018-01-02	34	96	10	25
+4016	No description	0	2018-01-13	40	14	3	10
+4017	No description	0	2018-01-04	12	14	17	15
+4018	No description	0	2018-01-24	45	79	1	19
+4019	No description	0	2018-02-02	17	85	2	22
+4020	No description	0	2018-01-04	27	41	12	9
+4021	No description	0	2018-01-16	26	52	21	11
+4022	No description	0	2018-02-04	42	60	29	4
+4023	No description	0	2018-01-28	33	75	15	16
+4024	No description	0	2018-01-11	47	75	4	20
+4025	No description	0	2018-01-13	42	47	24	16
+4026	No description	0	2018-02-17	37	9	9	23
+4027	No description	0	2018-02-05	19	67	5	13
+4028	No description	0	2018-02-15	35	62	19	24
+4029	No description	0	2018-01-02	40	64	3	22
+4030	No description	0	2018-01-04	48	80	13	25
+4031	No description	0	2018-01-07	12	27	3	23
+4032	No description	0	2018-01-06	14	78	5	18
+4033	No description	0	2018-02-16	39	57	24	2
+4034	No description	0	2018-01-26	23	94	26	23
+4035	No description	0	2018-02-06	18	82	28	25
+4036	No description	0	2018-01-28	27	66	27	22
+4037	No description	0	2018-02-01	36	55	7	25
+4038	No description	0	2018-02-10	18	90	11	11
+4039	No description	0	2018-02-28	25	65	20	10
+4040	No description	0	2018-02-06	45	54	21	20
+4041	No description	0	2018-02-22	18	31	18	22
+4042	No description	0	2018-01-27	35	63	1	25
+4043	No description	0	2018-01-22	40	83	3	21
+4044	No description	0	2018-02-27	34	84	14	12
+4045	No description	0	2018-01-12	17	37	30	14
+4046	No description	0	2018-01-01	23	19	2	23
+4047	No description	0	2018-02-28	12	49	29	18
+4048	No description	0	2018-02-18	18	60	3	3
+4049	No description	0	2018-02-08	31	31	20	18
+4050	No description	0	2018-01-11	16	53	8	22
+4051	No description	0	2018-01-29	17	67	25	20
+4052	No description	0	2018-01-08	10	44	30	18
+4053	No description	0	2018-02-14	30	63	2	11
+4054	No description	0	2018-01-25	32	28	15	1
+4055	No description	0	2018-02-12	33	71	25	10
+4056	No description	0	2018-02-20	47	97	11	14
+4057	No description	0	2018-02-14	27	100	18	5
+4058	No description	0	2018-02-09	26	7	23	17
+4059	No description	0	2018-02-15	27	6	21	11
+4060	No description	0	2018-01-06	13	35	13	8
+4061	No description	0	2018-01-03	27	89	5	5
+4062	No description	0	2018-01-19	43	83	25	24
+4063	No description	0	2018-02-09	37	80	14	22
+4064	No description	0	2018-02-24	19	12	13	18
+4065	No description	0	2018-01-15	22	68	12	1
+4066	No description	0	2018-01-11	35	99	2	8
+4067	No description	0	2018-01-01	6	32	20	9
+4068	No description	0	2018-01-03	10	58	29	4
+4069	No description	0	2018-01-03	18	35	1	1
+4070	No description	0	2018-01-25	20	68	17	25
+4071	No description	0	2018-02-25	50	2	25	17
+4072	No description	0	2018-02-22	48	23	14	17
+4073	No description	0	2018-01-30	41	65	21	8
+4074	No description	0	2018-02-25	12	81	28	2
+4075	No description	0	2018-02-28	43	26	20	15
+4076	No description	0	2018-01-20	12	1	1	23
+4077	No description	0	2018-02-11	7	93	16	19
+4078	No description	0	2018-01-04	30	26	22	17
+4079	No description	0	2018-02-27	29	14	24	3
+4080	No description	0	2018-02-07	31	42	6	3
+4081	No description	0	2018-01-10	42	66	2	22
+4082	No description	0	2018-02-10	23	46	24	12
+4083	No description	0	2018-01-13	47	99	7	23
+4084	No description	0	2018-01-22	38	76	19	13
+4085	No description	0	2018-01-06	17	43	14	8
+4086	No description	0	2018-02-23	49	53	9	1
+4087	No description	0	2018-02-07	23	25	5	13
+4088	No description	0	2018-02-15	49	57	5	16
+4089	No description	0	2018-02-04	50	26	9	4
+4090	No description	0	2018-02-20	20	30	4	18
+4091	No description	0	2018-02-21	44	1	20	4
+4092	No description	0	2018-02-11	45	84	23	23
+4093	No description	0	2018-01-29	43	51	27	7
+4094	No description	0	2018-01-04	42	30	27	19
+4095	No description	0	2018-02-12	20	73	28	15
+4096	No description	0	2018-02-05	48	52	17	8
+4097	No description	0	2018-02-02	45	66	27	10
+4098	No description	0	2018-02-28	37	83	5	14
+4099	No description	0	2018-02-23	44	76	2	20
+4100	No description	0	2018-02-10	19	100	8	14
+4101	No description	0	2018-02-02	17	93	14	8
+4102	No description	0	2018-01-16	19	46	7	15
+4103	No description	0	2018-01-31	31	3	20	15
+4104	No description	0	2018-02-24	41	73	18	11
+4105	No description	0	2018-02-19	20	82	30	2
+4106	No description	0	2018-02-27	5	51	23	22
+4107	No description	0	2018-02-06	46	30	22	16
+4108	No description	0	2018-02-05	37	80	25	6
+4109	No description	0	2018-01-28	40	48	14	18
+4110	No description	0	2018-02-12	11	39	3	15
+4111	No description	0	2018-01-20	5	38	26	23
+4112	No description	0	2018-02-04	30	32	4	25
+4113	No description	0	2018-02-11	12	21	3	21
+4114	No description	0	2018-02-05	27	85	23	18
+4115	No description	0	2018-01-03	42	80	3	8
+4116	No description	0	2018-01-23	33	53	2	22
+4117	No description	0	2018-02-09	29	43	25	21
+4118	No description	0	2018-02-27	9	100	21	16
+4119	No description	0	2018-01-18	46	7	13	18
+4120	No description	0	2018-02-25	49	86	3	3
+4121	No description	0	2018-02-03	19	5	18	2
+4122	No description	0	2018-02-18	18	81	30	15
+4123	No description	0	2018-01-23	17	80	13	4
+4124	No description	0	2018-01-06	47	66	2	8
+4125	No description	0	2018-01-18	26	62	1	5
+4126	No description	0	2018-02-13	17	30	26	10
+4127	No description	0	2018-01-18	18	92	28	22
+4128	No description	0	2018-01-24	7	39	17	5
+4129	No description	0	2018-02-08	41	87	21	8
+4130	No description	0	2018-01-23	48	5	27	22
+4131	No description	0	2018-01-23	33	58	24	20
+4132	No description	0	2018-02-09	14	16	24	7
+4133	No description	0	2018-01-28	26	13	6	3
+4134	No description	0	2018-01-23	5	37	23	6
+4135	No description	0	2018-02-06	49	38	12	6
+4136	No description	0	2018-01-13	14	27	16	5
+4137	No description	0	2018-02-20	30	95	23	15
+4138	No description	0	2018-02-20	39	45	1	24
+4139	No description	0	2018-02-26	12	44	26	19
+4140	No description	0	2018-01-15	32	80	13	14
+4141	No description	0	2018-02-09	27	9	2	23
+4142	No description	0	2018-01-20	36	5	28	25
+4143	No description	0	2018-01-31	15	67	9	1
+4144	No description	0	2018-01-29	17	45	18	2
+4145	No description	0	2018-02-07	48	77	4	1
+4146	No description	0	2018-02-04	20	59	23	7
+4147	No description	0	2018-01-27	12	13	23	10
+4148	No description	0	2018-02-23	43	36	3	10
+4149	No description	0	2018-01-28	48	62	17	24
+4150	No description	0	2018-01-11	43	59	2	20
+4151	No description	0	2018-02-23	5	42	15	19
+4152	No description	0	2018-01-29	17	14	12	12
+4153	No description	0	2018-01-18	8	46	18	11
+4154	No description	0	2018-02-26	29	85	2	12
+4155	No description	0	2018-01-11	20	68	2	21
+4156	No description	0	2018-01-09	31	52	15	15
+4157	No description	0	2018-01-23	19	91	22	1
+4158	No description	0	2018-02-26	48	34	11	14
+4159	No description	0	2018-02-19	37	58	22	7
+4160	No description	0	2018-02-14	35	46	17	3
+4161	No description	0	2018-01-01	45	30	29	17
+4162	No description	0	2018-02-03	30	45	11	19
+4163	No description	0	2018-01-20	28	14	21	8
+4164	No description	0	2018-02-18	36	100	13	10
+4165	No description	0	2018-02-14	29	96	12	15
+4166	No description	0	2018-01-08	16	18	29	13
+4167	No description	0	2018-01-29	26	65	10	4
+4168	No description	0	2018-01-22	23	7	4	19
+4169	No description	0	2018-02-23	31	32	30	24
+4170	No description	0	2018-02-17	19	46	6	15
+4171	No description	0	2018-01-31	45	20	29	10
+4172	No description	0	2018-02-11	6	92	28	18
+4173	No description	0	2018-02-28	22	21	20	15
+4174	No description	0	2018-01-04	31	98	23	19
+4175	No description	0	2018-01-02	17	74	21	12
+4176	No description	0	2018-01-30	35	34	21	4
+4177	No description	0	2018-02-24	41	97	30	1
+4178	No description	0	2018-02-07	20	40	8	23
+4179	No description	0	2018-01-24	13	59	23	23
+4180	No description	0	2018-01-22	19	39	30	1
+4181	No description	0	2018-01-31	11	57	7	16
+4182	No description	0	2018-01-24	35	29	26	16
+4183	No description	0	2018-01-21	42	37	26	23
+4184	No description	0	2018-02-15	17	77	5	5
+4185	No description	0	2018-01-23	49	86	14	20
+4186	No description	0	2018-01-17	26	31	10	3
+4187	No description	0	2018-02-12	10	96	25	18
+4188	No description	0	2018-02-14	15	25	30	8
+4189	No description	0	2018-02-14	24	12	20	10
+4190	No description	0	2018-02-15	33	87	30	14
+4191	No description	0	2018-02-20	36	3	10	24
+4192	No description	0	2018-01-21	8	35	30	3
+4193	No description	0	2018-02-09	49	89	17	24
+4194	No description	0	2018-02-16	26	18	12	16
+4195	No description	0	2018-01-14	11	88	24	21
+4196	No description	0	2018-02-17	24	47	16	23
+4197	No description	0	2018-02-15	15	60	19	7
+4198	No description	0	2018-02-16	31	30	2	7
+4199	No description	0	2018-02-07	27	51	15	12
+4200	No description	0	2018-01-03	13	89	10	18
+4201	No description	0	2018-02-05	40	96	10	8
+4202	No description	0	2018-01-07	7	35	23	8
+4203	No description	0	2018-01-30	45	1	17	18
+4204	No description	0	2018-01-01	34	28	4	6
+4205	No description	0	2018-01-20	27	26	23	3
+4206	No description	0	2018-01-01	33	32	10	24
+4207	No description	0	2018-01-27	15	22	1	14
+4208	No description	0	2018-02-07	39	42	19	6
+4209	No description	0	2018-01-16	21	64	29	22
+4210	No description	0	2018-02-22	19	62	16	19
+4211	No description	0	2018-01-29	28	88	11	18
+4212	No description	0	2018-02-14	28	94	21	12
+4213	No description	0	2018-01-13	18	44	1	3
+4214	No description	0	2018-01-30	36	26	10	8
+4215	No description	0	2018-01-26	42	72	14	10
+4216	No description	0	2018-01-03	31	28	16	19
+4217	No description	0	2018-02-01	17	49	25	10
+4218	No description	0	2018-01-25	46	65	30	15
+4219	No description	0	2018-01-13	17	10	5	16
+4220	No description	0	2018-02-14	43	61	12	6
+4221	No description	0	2018-01-23	42	87	5	23
+4222	No description	0	2018-01-25	29	86	9	9
+4223	No description	0	2018-02-21	18	20	30	18
+4224	No description	0	2018-02-21	17	72	14	1
+4225	No description	0	2018-02-05	20	59	27	20
+4226	No description	0	2018-01-27	42	51	2	10
+4227	No description	0	2018-02-20	28	6	24	8
+4228	No description	0	2018-01-20	25	46	14	6
+4229	No description	0	2018-02-08	47	22	5	18
+4230	No description	0	2018-01-21	44	60	19	24
+4231	No description	0	2018-02-12	20	77	3	23
+4232	No description	0	2018-02-19	35	90	23	1
+4233	No description	0	2018-02-19	12	48	23	6
+4234	No description	0	2018-01-17	11	39	27	24
+4235	No description	0	2018-01-04	17	62	12	19
+4236	No description	0	2018-01-21	26	36	12	9
+4237	No description	0	2018-02-10	5	63	18	8
+4238	No description	0	2018-02-16	28	95	13	6
+4239	No description	0	2018-01-08	29	22	4	20
+4240	No description	0	2018-01-17	44	29	15	11
+4241	No description	0	2018-02-06	40	70	21	17
+4242	No description	0	2018-02-04	43	87	6	15
+4243	No description	0	2018-01-11	27	26	25	8
+4244	No description	0	2018-02-25	26	43	4	15
+4245	No description	0	2018-01-13	25	66	13	19
+4246	No description	0	2018-02-14	30	22	25	22
+4247	No description	0	2018-02-07	18	29	23	17
+4248	No description	0	2018-01-15	39	12	30	18
+4249	No description	0	2018-01-04	35	10	25	14
+4250	No description	0	2018-01-10	32	97	25	11
+4251	No description	0	2018-02-13	13	42	9	24
+4252	No description	0	2018-01-24	11	72	14	16
+4253	No description	0	2018-02-25	6	31	10	19
+4254	No description	0	2018-01-01	47	70	1	24
+4255	No description	0	2018-02-22	42	60	24	21
+4256	No description	0	2018-01-03	43	87	23	4
+4257	No description	0	2018-01-14	41	41	21	21
+4258	No description	0	2018-02-08	20	45	9	7
+4259	No description	0	2018-01-28	41	31	22	18
+4260	No description	0	2018-02-14	7	70	17	6
+4261	No description	0	2018-01-22	30	60	2	23
+4262	No description	0	2018-01-09	15	58	8	4
+4263	No description	0	2018-01-30	49	80	8	20
+4264	No description	0	2018-02-08	29	52	12	19
+4265	No description	0	2018-02-27	44	4	4	6
+4266	No description	0	2018-01-27	46	81	5	11
+4267	No description	0	2018-02-04	31	70	10	18
+4268	No description	0	2018-01-02	11	66	24	15
+4269	No description	0	2018-01-28	46	76	8	17
+4270	No description	0	2018-02-12	44	18	5	7
+4271	No description	0	2018-02-17	15	60	14	23
+4272	No description	0	2018-02-18	44	86	17	15
+4273	No description	0	2018-02-26	10	42	9	22
+4274	No description	0	2018-02-05	29	54	16	21
+4275	No description	0	2018-02-01	42	93	6	24
+4276	No description	0	2018-02-28	47	47	18	11
+4277	No description	0	2018-01-31	25	17	25	8
+4278	No description	0	2018-02-15	26	59	27	3
+4279	No description	0	2018-01-27	38	90	30	18
+4280	No description	0	2018-02-14	38	96	25	1
+4281	No description	0	2018-01-07	43	7	15	8
+4282	No description	0	2018-01-17	45	75	10	15
+4283	No description	0	2018-02-12	24	86	10	5
+4284	No description	0	2018-01-09	45	79	14	23
+4285	No description	0	2018-01-11	10	15	26	24
+4286	No description	0	2018-02-07	49	69	27	9
+4287	No description	0	2018-01-10	27	63	20	22
+4288	No description	0	2018-01-08	9	87	12	22
+4289	No description	0	2018-02-08	6	66	29	13
+4290	No description	0	2018-01-03	19	18	19	7
+4291	No description	0	2018-02-15	23	99	17	6
+4292	No description	0	2018-01-24	28	94	23	16
+4293	No description	0	2018-02-11	45	15	13	19
+4294	No description	0	2018-01-14	5	76	24	10
+4295	No description	0	2018-02-19	34	72	24	20
+4296	No description	0	2018-01-15	34	31	25	6
+4297	No description	0	2018-01-20	27	80	22	17
+4298	No description	0	2018-01-24	20	55	9	22
+4299	No description	0	2018-02-16	33	14	2	24
+4300	No description	0	2018-01-08	15	43	6	9
+4301	No description	0	2018-01-17	19	7	6	2
+4302	No description	0	2018-01-11	46	50	25	12
+4303	No description	0	2018-01-14	37	49	25	10
+4304	No description	0	2018-01-17	37	98	2	9
+4305	No description	0	2018-02-01	50	97	23	8
+4306	No description	0	2018-02-09	25	72	21	16
+4307	No description	0	2018-02-27	34	60	24	25
+4308	No description	0	2018-02-09	41	14	6	12
+4309	No description	0	2018-02-11	37	13	19	21
+4310	No description	0	2018-02-02	29	99	15	19
+4311	No description	0	2018-02-05	45	18	17	15
+4312	No description	0	2018-01-12	31	96	1	1
+4313	No description	0	2018-01-04	7	87	5	22
+4314	No description	0	2018-02-08	32	5	2	15
+4315	No description	0	2018-01-01	26	56	2	25
+4316	No description	0	2018-02-23	15	47	23	8
+4317	No description	0	2018-01-17	44	96	4	12
+4318	No description	0	2018-01-27	16	46	27	18
+4319	No description	0	2018-02-24	28	7	28	23
+4320	No description	0	2018-01-08	33	25	1	25
+4321	No description	0	2018-02-06	26	13	30	16
+4322	No description	0	2018-02-25	6	62	3	9
+4323	No description	0	2018-01-06	5	87	13	16
+4324	No description	0	2018-01-20	36	65	18	22
+4325	No description	0	2018-02-26	32	7	19	19
+4326	No description	0	2018-02-12	27	45	17	8
+4327	No description	0	2018-02-06	42	39	9	13
+4328	No description	0	2018-02-19	11	28	25	15
+4329	No description	0	2018-01-18	35	90	21	13
+4330	No description	0	2018-02-06	13	96	23	11
+4331	No description	0	2018-02-08	25	62	25	9
+4332	No description	0	2018-01-20	14	37	9	3
+4333	No description	0	2018-01-16	49	13	26	17
+4334	No description	0	2018-02-11	48	52	29	3
+4335	No description	0	2018-01-23	8	61	8	23
+4336	No description	0	2018-01-30	44	47	25	25
+4337	No description	0	2018-01-19	33	87	27	22
+4338	No description	0	2018-01-10	23	58	5	17
+4339	No description	0	2018-02-09	42	99	13	16
+4340	No description	0	2018-02-06	41	2	30	10
+4341	No description	0	2018-02-26	14	66	11	1
+4342	No description	0	2018-02-06	39	87	21	6
+4343	No description	0	2018-02-20	48	2	10	5
+4344	No description	0	2018-02-16	43	93	30	9
+4345	No description	0	2018-01-26	28	55	7	25
+4346	No description	0	2018-01-17	15	96	4	22
+4347	No description	0	2018-01-01	17	80	18	15
+4348	No description	0	2018-01-12	14	18	11	6
+4349	No description	0	2018-01-11	49	57	15	2
+4350	No description	0	2018-02-02	46	93	30	21
+4351	No description	0	2018-02-18	28	77	14	7
+4352	No description	0	2018-01-31	44	60	28	5
+4353	No description	0	2018-02-01	24	59	28	2
+4354	No description	0	2018-02-10	20	42	3	22
+4355	No description	0	2018-01-28	15	79	20	7
+4356	No description	0	2018-02-20	23	19	26	15
+4357	No description	0	2018-01-13	13	16	25	18
+4358	No description	0	2018-01-30	8	20	23	13
+4359	No description	0	2018-01-09	49	25	12	5
+4360	No description	0	2018-01-16	49	11	1	9
+4361	No description	0	2018-02-09	14	31	20	23
+4362	No description	0	2018-02-16	7	93	2	15
+4363	No description	0	2018-02-20	43	92	26	17
+4364	No description	0	2018-01-08	16	13	17	4
+4365	No description	0	2018-02-13	44	32	14	5
+4366	No description	0	2018-02-09	25	3	29	15
+4367	No description	0	2018-01-20	24	97	14	25
+4368	No description	0	2018-01-27	22	37	7	23
+4369	No description	0	2018-02-28	27	59	6	9
+4370	No description	0	2018-02-10	30	21	20	14
+4371	No description	0	2018-01-13	13	37	30	16
+4372	No description	0	2018-02-02	11	97	23	12
+4373	No description	0	2018-01-06	47	24	3	20
+4374	No description	0	2018-01-07	11	38	23	18
+4375	No description	0	2018-02-06	46	37	11	7
+4376	No description	0	2018-01-03	18	14	25	19
+4377	No description	0	2018-02-20	14	15	14	11
+4378	No description	0	2018-02-18	22	67	29	13
+4379	No description	0	2018-01-13	35	97	27	6
+4380	No description	0	2018-01-20	37	22	3	20
+4381	No description	0	2018-02-03	13	43	1	6
+4382	No description	0	2018-01-16	9	74	19	10
+4383	No description	0	2018-01-20	50	47	21	21
+4384	No description	0	2018-01-07	22	4	7	16
+4385	No description	0	2018-02-23	38	97	4	5
+4386	No description	0	2018-02-14	45	78	8	22
+4387	No description	0	2018-01-09	23	23	11	2
+4388	No description	0	2018-01-24	22	15	12	11
+4389	No description	0	2018-02-12	18	19	19	4
+4390	No description	0	2018-01-03	33	73	13	18
+4391	No description	0	2018-01-01	8	55	11	20
+4392	No description	0	2018-01-19	35	45	28	11
+4393	No description	0	2018-01-31	22	28	17	3
+4394	No description	0	2018-01-05	19	80	28	4
+4395	No description	0	2018-01-16	29	97	13	11
+4396	No description	0	2018-01-15	26	44	8	19
+4397	No description	0	2018-01-27	16	32	16	7
+4398	No description	0	2018-01-31	49	43	13	25
+4399	No description	0	2018-01-11	18	77	15	15
+4400	No description	0	2018-01-16	18	26	8	25
+4401	No description	0	2018-02-03	42	72	11	19
+4402	No description	0	2018-01-10	42	53	8	25
+4403	No description	0	2018-02-22	26	27	9	7
+4404	No description	0	2018-02-19	15	9	19	11
+4405	No description	0	2018-02-25	24	89	19	19
+4406	No description	0	2018-01-09	19	25	26	18
+4407	No description	0	2018-02-06	40	3	19	24
+4408	No description	0	2018-01-29	42	14	19	6
+4409	No description	0	2018-01-23	41	78	23	24
+4410	No description	0	2018-01-01	11	46	3	21
+4411	No description	0	2018-01-09	24	41	8	21
+4412	No description	0	2018-01-20	29	82	1	25
+4413	No description	0	2018-02-20	31	40	12	18
+4414	No description	0	2018-02-27	29	46	30	12
+4415	No description	0	2018-01-23	15	32	30	2
+4416	No description	0	2018-02-08	12	64	7	11
+4417	No description	0	2018-02-03	20	40	7	8
+4418	No description	0	2018-01-20	13	30	1	21
+4419	No description	0	2018-02-10	43	95	22	9
+4420	No description	0	2018-02-14	6	10	30	23
+4421	No description	0	2018-01-19	44	85	26	16
+4422	No description	0	2018-01-16	21	69	20	7
+4423	No description	0	2018-01-10	9	60	5	14
+4424	No description	0	2018-02-26	13	61	30	3
+4425	No description	0	2018-01-04	9	63	16	8
+4426	No description	0	2018-02-12	23	16	21	12
+4427	No description	0	2018-02-25	48	59	27	4
+4428	No description	0	2018-01-21	31	6	25	8
+4429	No description	0	2018-01-04	11	17	12	8
+4430	No description	0	2018-01-20	9	77	15	11
+4431	No description	0	2018-02-16	7	12	12	12
+4432	No description	0	2018-01-17	7	92	12	5
+4433	No description	0	2018-01-30	6	74	17	25
+4434	No description	0	2018-01-21	46	22	4	14
+4435	No description	0	2018-01-05	13	51	9	9
+4436	No description	0	2018-02-04	42	10	29	18
+4437	No description	0	2018-01-27	13	16	30	8
+4438	No description	0	2018-01-11	18	13	8	3
+4439	No description	0	2018-01-23	7	34	27	16
+4440	No description	0	2018-01-24	46	24	4	21
+4441	No description	0	2018-02-22	15	27	30	14
+4442	No description	0	2018-02-24	10	65	12	18
+4443	No description	0	2018-02-25	43	53	23	19
+4444	No description	0	2018-01-14	8	70	5	5
+4445	No description	0	2018-01-13	34	50	22	10
+4446	No description	0	2018-01-19	22	50	10	13
+4447	No description	0	2018-02-01	24	93	4	22
+4448	No description	0	2018-02-21	17	10	3	3
+4449	No description	0	2018-02-16	12	12	17	18
+4450	No description	0	2018-01-03	43	38	1	13
+4451	No description	0	2018-01-10	30	66	6	23
+4452	No description	0	2018-01-30	13	43	15	17
+4453	No description	0	2018-02-14	13	9	14	12
+4454	No description	0	2018-01-21	47	11	21	19
+4455	No description	0	2018-01-06	49	37	5	14
+4456	No description	0	2018-02-22	42	79	8	3
+4457	No description	0	2018-02-26	42	48	18	12
+4458	No description	0	2018-02-20	33	87	2	21
+4459	No description	0	2018-02-18	23	50	3	2
+4460	No description	0	2018-02-17	49	56	17	12
+4461	No description	0	2018-01-22	8	83	3	12
+4462	No description	0	2018-01-16	24	85	21	13
+4463	No description	0	2018-01-14	6	47	24	14
+4464	No description	0	2018-01-05	12	37	20	9
+4465	No description	0	2018-02-25	7	20	3	22
+4466	No description	0	2018-02-27	24	5	18	12
+4467	No description	0	2018-01-05	47	45	6	25
+4468	No description	0	2018-01-08	50	44	20	20
+4469	No description	0	2018-01-11	44	30	8	11
+4470	No description	0	2018-01-19	39	9	28	23
+4471	No description	0	2018-01-29	39	41	14	6
+4472	No description	0	2018-01-06	17	62	23	10
+4473	No description	0	2018-01-17	29	18	6	20
+4474	No description	0	2018-01-24	7	23	22	6
+4475	No description	0	2018-02-08	40	82	20	14
+4476	No description	0	2018-01-09	9	45	14	11
+4477	No description	0	2018-01-20	31	46	3	24
+4478	No description	0	2018-02-12	8	70	23	25
+4479	No description	0	2018-02-22	20	13	15	14
+4480	No description	0	2018-01-07	15	81	2	8
+4481	No description	0	2018-02-02	45	82	9	4
+4482	No description	0	2018-01-01	21	74	16	25
+4483	No description	0	2018-02-02	22	69	9	1
+4484	No description	0	2018-01-12	45	41	12	6
+4485	No description	0	2018-02-01	5	76	26	17
+4486	No description	0	2018-01-20	48	9	26	16
+4487	No description	0	2018-01-04	6	11	2	6
+4488	No description	0	2018-01-23	10	6	4	12
+4489	No description	0	2018-01-30	29	70	22	6
+4490	No description	0	2018-01-17	6	67	15	23
+4491	No description	0	2018-02-18	9	88	10	17
+4492	No description	0	2018-02-18	42	50	2	16
+4493	No description	0	2018-02-07	25	43	28	21
+4494	No description	0	2018-01-08	8	76	16	23
+4495	No description	0	2018-02-17	15	37	23	18
+4496	No description	0	2018-01-30	39	78	7	14
+4497	No description	0	2018-02-21	32	66	14	19
+4498	No description	0	2018-01-10	15	19	20	22
+4499	No description	0	2018-01-26	50	89	26	3
+4500	No description	0	2018-01-02	42	40	18	7
+4501	No description	0	2018-02-05	26	68	20	21
+4502	No description	0	2018-01-14	24	94	4	12
+4503	No description	0	2018-02-27	17	40	30	16
+4504	No description	0	2018-02-05	43	50	30	24
+4505	No description	0	2018-01-09	18	6	12	25
+4506	No description	0	2018-01-26	37	84	1	2
+4507	No description	0	2018-01-30	6	97	9	3
+4508	No description	0	2018-02-16	29	91	15	20
+4509	No description	0	2018-02-14	15	67	28	4
+4510	No description	0	2018-01-16	50	68	16	17
+4511	No description	0	2018-02-25	44	81	3	4
+4512	No description	0	2018-02-15	20	7	12	1
+4513	No description	0	2018-02-11	12	35	14	10
+4514	No description	0	2018-01-09	9	74	29	4
+4515	No description	0	2018-01-15	10	56	10	13
+4516	No description	0	2018-01-27	45	28	7	14
+4517	No description	0	2018-02-01	22	56	2	2
+4518	No description	0	2018-01-19	13	46	22	23
+4519	No description	0	2018-01-27	5	22	3	22
+4520	No description	0	2018-01-25	32	35	16	25
+4521	No description	0	2018-02-22	14	41	12	6
+4522	No description	0	2018-02-19	25	38	7	18
+4523	No description	0	2018-02-23	50	73	16	10
+4524	No description	0	2018-01-10	18	66	3	1
+4525	No description	0	2018-01-05	7	48	17	11
+4526	No description	0	2018-01-12	38	30	15	14
+4527	No description	0	2018-01-14	7	88	18	4
+4528	No description	0	2018-01-02	46	22	15	24
+4529	No description	0	2018-02-03	19	74	23	17
+4530	No description	0	2018-02-19	23	86	17	5
+4531	No description	0	2018-01-07	25	60	26	22
+4532	No description	0	2018-01-22	30	37	29	23
+4533	No description	0	2018-01-29	7	99	18	18
+4534	No description	0	2018-01-01	43	11	13	4
+4535	No description	0	2018-02-17	41	56	2	20
+4536	No description	0	2018-02-08	46	78	19	3
+4537	No description	0	2018-02-27	43	9	2	23
+4538	No description	0	2018-02-12	30	63	13	24
+4539	No description	0	2018-02-07	13	2	24	17
+4540	No description	0	2018-02-24	30	11	4	24
+4541	No description	0	2018-02-08	13	37	5	3
+4542	No description	0	2018-01-04	31	40	9	16
+4543	No description	0	2018-01-05	42	56	11	8
+4544	No description	0	2018-01-25	46	37	2	20
+4545	No description	0	2018-02-15	40	35	6	13
+4546	No description	0	2018-01-09	17	88	24	13
+4547	No description	0	2018-02-27	20	56	19	23
+4548	No description	0	2018-01-06	36	81	5	7
+4549	No description	0	2018-02-19	33	87	8	1
+4550	No description	0	2018-01-27	11	25	10	8
+4551	No description	0	2018-02-06	10	46	13	24
+4552	No description	0	2018-02-23	6	19	10	18
+4553	No description	0	2018-02-26	14	35	30	13
+4554	No description	0	2018-02-12	27	71	14	18
+4555	No description	0	2018-02-24	48	50	24	24
+4556	No description	0	2018-01-20	21	60	1	6
+4557	No description	0	2018-02-23	12	42	24	17
+4558	No description	0	2018-02-15	28	38	25	17
+4559	No description	0	2018-02-04	6	11	26	6
+4560	No description	0	2018-02-18	23	97	2	2
+4561	No description	0	2018-02-17	29	76	7	16
+4562	No description	0	2018-02-12	38	96	8	5
+4563	No description	0	2018-02-09	18	62	8	18
+4564	No description	0	2018-02-21	40	71	16	13
+4565	No description	0	2018-01-05	6	93	6	8
+4566	No description	0	2018-01-25	10	40	17	20
+4567	No description	0	2018-02-10	28	93	2	22
+4568	No description	0	2018-01-28	19	82	28	21
+4569	No description	0	2018-02-06	34	30	20	25
+4570	No description	0	2018-01-29	16	92	1	1
+4571	No description	0	2018-01-12	18	29	19	2
+4572	No description	0	2018-02-28	9	49	28	6
+4573	No description	0	2018-01-03	32	24	14	25
+4574	No description	0	2018-02-12	10	23	27	13
+4575	No description	0	2018-02-02	30	36	6	21
+4576	No description	0	2018-01-04	48	80	26	17
+4577	No description	0	2018-02-18	32	66	12	6
+4578	No description	0	2018-01-04	25	2	15	11
+4579	No description	0	2018-02-18	15	57	8	24
+4580	No description	0	2018-01-21	19	57	2	10
+4581	No description	0	2018-02-20	8	97	7	5
+4582	No description	0	2018-02-14	7	49	23	21
+4583	No description	0	2018-02-24	30	30	28	2
+4584	No description	0	2018-02-04	22	64	22	16
+4585	No description	0	2018-01-25	11	6	19	11
+4586	No description	0	2018-01-24	43	36	4	18
+4587	No description	0	2018-02-13	38	62	22	15
+4588	No description	0	2018-01-15	16	30	12	25
+4589	No description	0	2018-02-12	40	55	12	21
+4590	No description	0	2018-01-25	22	94	14	8
+4591	No description	0	2018-01-29	10	28	3	19
+4592	No description	0	2018-02-24	28	42	24	7
+4593	No description	0	2018-02-20	29	76	10	5
+4594	No description	0	2018-02-27	40	21	22	8
+4595	No description	0	2018-02-24	23	4	28	23
+4596	No description	0	2018-02-07	42	67	24	11
+4597	No description	0	2018-02-22	43	28	5	9
+4598	No description	0	2018-01-06	17	43	2	6
+4599	No description	0	2018-02-26	34	19	7	13
+4600	No description	0	2018-02-27	45	33	10	14
+4601	No description	0	2018-02-11	6	57	5	20
+4602	No description	0	2018-01-20	36	77	6	11
+4603	No description	0	2018-01-03	41	20	18	21
+4604	No description	0	2018-02-23	38	63	7	23
+4605	No description	0	2018-02-10	6	59	21	25
+4606	No description	0	2018-02-08	38	84	15	14
+4607	No description	0	2018-02-08	47	7	12	8
+4608	No description	0	2018-01-16	38	88	11	21
+4609	No description	0	2018-01-06	24	82	26	7
+4610	No description	0	2018-02-24	14	8	10	25
+4611	No description	0	2018-01-21	35	60	3	4
+4612	No description	0	2018-02-16	47	32	25	12
+4613	No description	0	2018-01-23	23	37	3	24
+4614	No description	0	2018-01-29	24	72	7	4
+4615	No description	0	2018-01-01	46	26	3	22
+4616	No description	0	2018-01-26	12	60	3	1
+4617	No description	0	2018-01-27	5	85	16	14
+4618	No description	0	2018-01-09	23	85	19	11
+4619	No description	0	2018-02-18	18	75	28	23
+4620	No description	0	2018-02-17	17	62	10	6
+4621	No description	0	2018-01-31	22	78	25	25
+4622	No description	0	2018-01-12	26	16	24	11
+4623	No description	0	2018-01-14	36	84	23	8
+4624	No description	0	2018-01-08	49	17	15	22
+4625	No description	0	2018-01-25	7	36	25	17
+4626	No description	0	2018-02-21	16	18	16	22
+4627	No description	0	2018-02-22	21	100	5	17
+4628	No description	0	2018-01-24	20	19	20	1
+4629	No description	0	2018-01-16	27	55	5	6
+4630	No description	0	2018-01-03	19	93	15	12
+4631	No description	0	2018-01-27	30	24	18	20
+4632	No description	0	2018-02-08	16	94	11	6
+4633	No description	0	2018-02-28	13	92	17	19
+4634	No description	0	2018-01-08	28	12	15	18
+4635	No description	0	2018-02-09	39	79	25	25
+4636	No description	0	2018-02-15	14	44	1	14
+4637	No description	0	2018-02-12	8	63	2	22
+4638	No description	0	2018-02-16	15	90	27	14
+4639	No description	0	2018-02-19	9	75	28	3
+4640	No description	0	2018-01-04	5	9	11	17
+4641	No description	0	2018-01-29	16	81	20	10
+4642	No description	0	2018-02-19	17	96	1	15
+4643	No description	0	2018-02-17	20	76	29	25
+4644	No description	0	2018-02-25	40	66	9	11
+4645	No description	0	2018-02-10	46	92	10	21
+4646	No description	0	2018-01-25	44	80	7	13
+4647	No description	0	2018-01-20	13	31	8	6
+4648	No description	0	2018-01-09	27	48	11	9
+4649	No description	0	2018-01-25	45	78	25	10
+4650	No description	0	2018-01-29	21	32	29	15
+4651	No description	0	2018-02-06	25	65	24	24
+4652	No description	0	2018-02-24	37	85	30	12
+4653	No description	0	2018-02-23	41	30	11	4
+4654	No description	0	2018-01-14	29	64	30	1
+4655	No description	0	2018-01-20	41	65	20	1
+4656	No description	0	2018-01-18	42	83	8	14
+4657	No description	0	2018-02-22	47	34	23	16
+4658	No description	0	2018-02-01	28	40	8	5
+4659	No description	0	2018-02-11	43	6	25	23
+4660	No description	0	2018-01-02	24	6	24	19
+4661	No description	0	2018-02-16	45	24	3	12
+4662	No description	0	2018-02-21	19	22	1	15
+4663	No description	0	2018-01-17	15	32	4	10
+4664	No description	0	2018-02-15	18	39	4	23
+4665	No description	0	2018-01-12	13	20	28	24
+4666	No description	0	2018-02-11	20	19	24	22
+4667	No description	0	2018-01-17	12	3	7	12
+4668	No description	0	2018-02-14	33	81	27	16
+4669	No description	0	2018-02-05	47	27	30	7
+4670	No description	0	2018-01-28	15	46	5	10
+4671	No description	0	2018-02-15	46	70	7	14
+4672	No description	0	2018-01-04	32	10	15	16
+4673	No description	0	2018-01-29	36	38	14	19
+4674	No description	0	2018-02-19	37	29	17	23
+4675	No description	0	2018-01-07	12	98	6	23
+4676	No description	0	2018-02-16	11	98	21	15
+4677	No description	0	2018-01-19	49	13	25	24
+4678	No description	0	2018-01-24	23	70	13	21
+4679	No description	0	2018-01-20	38	30	8	2
+4680	No description	0	2018-01-25	14	87	15	14
+4681	No description	0	2018-02-17	17	67	28	17
+4682	No description	0	2018-01-20	38	32	27	2
+4683	No description	0	2018-02-14	20	85	2	21
+4684	No description	0	2018-01-01	5	100	9	8
+4685	No description	0	2018-02-01	6	59	25	5
+4686	No description	0	2018-02-10	13	73	1	20
+4687	No description	0	2018-01-31	11	62	29	8
+4688	No description	0	2018-01-03	14	23	9	1
+4689	No description	0	2018-02-09	46	94	26	2
+4690	No description	0	2018-02-21	26	9	10	5
+4691	No description	0	2018-02-11	27	31	7	11
+4692	No description	0	2018-01-21	9	12	23	14
+4693	No description	0	2018-01-31	16	44	8	22
+4694	No description	0	2018-01-11	25	75	26	24
+4695	No description	0	2018-01-29	21	40	28	11
+4696	No description	0	2018-02-28	21	96	19	20
+4697	No description	0	2018-02-23	29	19	10	8
+4698	No description	0	2018-01-12	27	69	23	5
+4699	No description	0	2018-01-29	17	40	2	23
+4700	No description	0	2018-01-22	5	20	29	5
+4701	No description	0	2018-01-19	49	25	23	2
+4702	No description	0	2018-02-23	29	19	8	19
+4703	No description	0	2018-02-17	39	44	22	14
+4704	No description	0	2018-02-09	23	78	8	23
+4705	No description	0	2018-01-28	32	5	8	9
+4706	No description	0	2018-02-09	41	75	17	2
+4707	No description	0	2018-02-18	30	49	17	6
+4708	No description	0	2018-02-02	46	35	3	13
+4709	No description	0	2018-02-27	6	54	7	25
+4710	No description	0	2018-01-19	20	87	18	4
+4711	No description	0	2018-01-18	27	41	9	5
+4712	No description	0	2018-01-31	9	21	25	17
+4713	No description	0	2018-02-21	43	57	6	24
+4714	No description	0	2018-01-15	39	48	13	25
+4715	No description	0	2018-01-19	26	2	26	1
+4716	No description	0	2018-01-20	43	28	6	23
+4717	No description	0	2018-01-14	45	50	17	8
+4718	No description	0	2018-02-01	29	38	17	17
+4719	No description	0	2018-01-25	12	40	24	10
+4720	No description	0	2018-02-15	38	31	6	14
+4721	No description	0	2018-01-29	22	38	20	9
+4722	No description	0	2018-01-05	50	52	20	10
+4723	No description	0	2018-02-28	37	18	10	9
+4724	No description	0	2018-02-19	24	56	18	24
+4725	No description	0	2018-02-21	28	71	26	12
+4726	No description	0	2018-01-23	25	93	25	15
+4727	No description	0	2018-01-07	41	87	29	10
+4728	No description	0	2018-02-25	10	38	11	14
+4729	No description	0	2018-02-15	47	77	2	6
+4730	No description	0	2018-02-24	10	71	16	7
+4731	No description	0	2018-01-15	33	65	24	8
+4732	No description	0	2018-02-12	21	34	10	14
+4733	No description	0	2018-01-03	45	63	27	14
+4734	No description	0	2018-01-30	8	81	20	3
+4735	No description	0	2018-02-20	37	46	15	16
+4736	No description	0	2018-01-28	41	6	22	15
+4737	No description	0	2018-01-21	42	90	16	8
+4738	No description	0	2018-01-19	27	20	6	3
+4739	No description	0	2018-02-03	50	14	23	13
+4740	No description	0	2018-02-18	39	96	9	3
+4741	No description	0	2018-02-01	15	69	13	15
+4742	No description	0	2018-02-05	32	50	15	5
+4743	No description	0	2018-02-25	50	24	7	4
+4744	No description	0	2018-01-14	12	14	6	19
+4745	No description	0	2018-01-26	19	73	2	7
+4746	No description	0	2018-01-05	22	44	29	8
+4747	No description	0	2018-01-26	49	78	6	1
+4748	No description	0	2018-02-06	20	68	7	15
+4749	No description	0	2018-02-10	19	42	18	23
+4750	No description	0	2018-02-19	20	58	19	8
+4751	No description	0	2018-01-24	40	32	5	9
+4752	No description	0	2018-01-18	44	88	20	13
+4753	No description	0	2018-01-09	28	43	19	19
+4754	No description	0	2018-02-17	19	20	12	1
+4755	No description	0	2018-01-25	10	84	16	13
+4756	No description	0	2018-01-18	43	55	28	21
+4757	No description	0	2018-02-10	46	30	29	17
+4758	No description	0	2018-01-26	29	46	22	16
+4759	No description	0	2018-01-21	41	91	9	15
+4760	No description	0	2018-01-12	18	73	5	2
+4761	No description	0	2018-01-17	16	46	19	7
+4762	No description	0	2018-01-16	46	48	22	24
+4763	No description	0	2018-02-14	28	25	23	7
+4764	No description	0	2018-01-27	28	32	21	9
+4765	No description	0	2018-01-02	49	52	25	15
+4766	No description	0	2018-01-07	48	20	16	25
+4767	No description	0	2018-02-03	8	48	19	17
+4768	No description	0	2018-01-03	30	19	5	3
+4769	No description	0	2018-01-19	18	32	11	24
+4770	No description	0	2018-02-05	17	36	2	23
+4771	No description	0	2018-02-27	49	42	10	3
+4772	No description	0	2018-02-01	32	98	9	23
+4773	No description	0	2018-02-11	50	81	25	24
+4774	No description	0	2018-01-16	29	73	26	8
+4775	No description	0	2018-01-22	25	16	8	21
+4776	No description	0	2018-02-02	40	53	7	4
+4777	No description	0	2018-02-10	7	26	15	22
+4778	No description	0	2018-01-06	16	65	25	3
+4779	No description	0	2018-02-20	29	81	2	2
+4780	No description	0	2018-01-18	26	57	3	22
+4781	No description	0	2018-02-21	23	78	21	12
+4782	No description	0	2018-02-17	40	58	24	20
+4783	No description	0	2018-02-16	34	3	5	20
+4784	No description	0	2018-02-07	6	44	30	15
+4785	No description	0	2018-02-11	48	96	17	15
+4786	No description	0	2018-01-04	9	15	21	25
+4787	No description	0	2018-01-17	19	34	13	2
+4788	No description	0	2018-01-28	9	13	21	16
+4789	No description	0	2018-01-22	49	23	4	6
+4790	No description	0	2018-02-06	28	56	12	17
+4791	No description	0	2018-01-03	10	32	20	9
+4792	No description	0	2018-02-01	45	79	15	24
+4793	No description	0	2018-01-27	49	85	4	10
+4794	No description	0	2018-01-05	35	10	14	4
+4795	No description	0	2018-02-11	36	90	15	24
+4796	No description	0	2018-02-04	8	84	18	25
+4797	No description	0	2018-02-20	20	54	4	12
+4798	No description	0	2018-02-08	32	15	15	24
+4799	No description	0	2018-01-17	9	12	24	19
+4800	No description	0	2018-01-16	30	51	19	16
+4801	No description	0	2018-02-27	34	70	26	3
+4802	No description	0	2018-01-16	29	77	9	24
+4803	No description	0	2018-01-30	14	79	1	15
+4804	No description	0	2018-02-13	26	61	17	6
+4805	No description	0	2018-01-16	33	78	3	5
+4806	No description	0	2018-01-25	24	17	20	16
+4807	No description	0	2018-01-26	38	39	12	21
+4808	No description	0	2018-02-01	12	42	20	6
+4809	No description	0	2018-02-27	31	43	27	1
+4810	No description	0	2018-01-28	29	48	8	23
+4811	No description	0	2018-01-18	38	89	19	25
+4812	No description	0	2018-01-16	25	74	11	12
+4813	No description	0	2018-01-12	48	21	9	8
+4814	No description	0	2018-02-14	40	82	6	10
+4815	No description	0	2018-02-06	18	43	9	3
+4816	No description	0	2018-01-24	13	66	9	22
+4817	No description	0	2018-01-14	14	5	9	2
+4818	No description	0	2018-01-31	49	67	26	1
+4819	No description	0	2018-01-02	11	64	2	11
+4820	No description	0	2018-01-31	22	81	11	9
+4821	No description	0	2018-01-24	41	41	24	8
+4822	No description	0	2018-01-12	27	81	14	18
+4823	No description	0	2018-01-12	17	25	11	11
+4824	No description	0	2018-02-09	22	14	26	3
+4825	No description	0	2018-02-18	13	67	25	15
+4826	No description	0	2018-02-26	41	7	15	4
+4827	No description	0	2018-01-11	44	40	21	19
+4828	No description	0	2018-02-01	32	33	13	6
+4829	No description	0	2018-02-07	22	89	13	20
+4830	No description	0	2018-01-17	47	21	3	24
+4831	No description	0	2018-01-09	29	83	22	12
+4832	No description	0	2018-02-14	36	79	29	1
+4833	No description	0	2018-01-10	34	72	15	14
+4834	No description	0	2018-01-30	42	12	3	23
+4835	No description	0	2018-01-08	28	19	17	10
+4836	No description	0	2018-02-07	20	100	29	10
+4837	No description	0	2018-02-02	8	84	25	11
+4838	No description	0	2018-01-07	43	64	13	12
+4839	No description	0	2018-02-01	15	31	28	12
+4840	No description	0	2018-02-06	11	91	16	5
+4841	No description	0	2018-02-07	49	61	22	25
+4842	No description	0	2018-02-04	29	32	26	23
+4843	No description	0	2018-01-10	16	83	14	23
+4844	No description	0	2018-01-15	46	41	8	4
+4845	No description	0	2018-02-01	31	59	29	12
+4846	No description	0	2018-01-14	42	59	17	4
+4847	No description	0	2018-01-25	44	26	12	8
+4848	No description	0	2018-02-22	6	14	28	15
+4849	No description	0	2018-02-03	9	13	22	12
+4850	No description	0	2018-02-09	50	64	11	20
+4851	No description	0	2018-01-19	15	68	19	21
+4852	No description	0	2018-01-31	24	44	25	24
+4853	No description	0	2018-02-08	42	59	25	14
+4854	No description	0	2018-02-25	13	63	20	14
+4855	No description	0	2018-01-25	50	80	24	15
+4856	No description	0	2018-01-04	36	12	28	6
+4857	No description	0	2018-02-19	40	86	22	24
+4858	No description	0	2018-01-23	21	82	9	20
+4859	No description	0	2018-02-25	7	66	8	17
+4860	No description	0	2018-02-18	30	40	5	10
+4861	No description	0	2018-01-04	16	4	1	18
+4862	No description	0	2018-02-18	32	48	21	19
+4863	No description	0	2018-01-30	47	97	19	8
+4864	No description	0	2018-02-23	15	86	8	14
+4865	No description	0	2018-01-29	46	35	30	10
+4866	No description	0	2018-02-26	38	82	6	16
+4867	No description	0	2018-01-26	44	86	28	12
+4868	No description	0	2018-02-18	33	72	24	25
+4869	No description	0	2018-02-22	45	23	23	11
+4870	No description	0	2018-02-16	45	8	19	5
+4871	No description	0	2018-02-17	23	15	6	8
+4872	No description	0	2018-02-19	29	7	8	12
+4873	No description	0	2018-02-02	38	52	17	23
+4874	No description	0	2018-01-07	5	62	24	9
+4875	No description	0	2018-02-08	32	73	10	4
+4876	No description	0	2018-01-13	49	95	23	15
+4877	No description	0	2018-01-29	9	19	1	12
+4878	No description	0	2018-02-03	8	84	22	21
+4879	No description	0	2018-02-23	43	88	13	20
+4880	No description	0	2018-01-11	21	83	21	6
+4881	No description	0	2018-01-22	31	10	20	18
+4882	No description	0	2018-01-10	24	59	13	22
+4883	No description	0	2018-01-31	43	46	1	22
+4884	No description	0	2018-02-04	12	87	4	22
+4885	No description	0	2018-02-14	29	73	15	4
+4886	No description	0	2018-02-07	9	41	30	14
+4887	No description	0	2018-01-28	31	99	4	22
+4888	No description	0	2018-01-17	8	5	27	5
+4889	No description	0	2018-01-09	35	30	23	6
+4890	No description	0	2018-01-13	28	69	5	1
+4891	No description	0	2018-02-23	44	93	28	25
+4892	No description	0	2018-02-27	26	62	16	1
+4893	No description	0	2018-01-28	15	50	10	3
+4894	No description	0	2018-01-02	44	86	16	6
+4895	No description	0	2018-02-21	9	20	19	5
+4896	No description	0	2018-02-03	36	18	12	25
+4897	No description	0	2018-01-27	24	32	17	6
+4898	No description	0	2018-01-10	19	18	15	5
+4899	No description	0	2018-01-16	16	83	28	13
+4900	No description	0	2018-01-20	14	81	30	23
+4901	No description	0	2018-02-14	21	60	5	1
+4902	No description	0	2018-02-17	33	28	27	6
+4903	No description	0	2018-01-10	48	72	23	19
+4904	No description	0	2018-02-23	43	100	2	20
+4905	No description	0	2018-01-13	34	49	25	5
+4906	No description	0	2018-03-01	34	57	14	16
+4907	No description	0	2018-02-27	12	59	2	5
+4908	No description	0	2018-01-13	30	2	10	22
+4909	No description	0	2018-01-28	9	91	10	11
+4910	No description	0	2018-01-04	14	82	7	3
+4911	No description	0	2018-01-24	23	10	29	8
+4912	No description	0	2018-01-29	13	4	4	5
+4913	No description	0	2018-01-29	44	92	8	22
+4914	No description	0	2018-02-24	42	72	21	23
+4915	No description	0	2018-01-07	39	74	23	7
+4916	No description	0	2018-02-10	8	65	28	21
+4917	No description	0	2018-01-26	5	7	18	18
+4918	No description	0	2018-01-02	32	96	19	4
+4919	No description	0	2018-01-06	13	65	6	19
+4920	No description	0	2018-01-20	6	59	3	25
+4921	No description	0	2018-02-12	50	83	6	10
+4922	No description	0	2018-01-12	25	54	11	12
+4923	No description	0	2018-02-11	17	25	28	4
+4924	No description	0	2018-02-12	19	41	16	3
+4925	No description	0	2018-02-03	40	23	25	17
+4926	No description	0	2018-02-24	20	88	15	23
+4927	No description	0	2018-02-08	35	72	20	6
+4928	No description	0	2018-01-26	32	100	2	15
+4929	No description	0	2018-01-14	36	10	9	11
+4930	No description	0	2018-01-09	25	12	22	9
+4931	No description	0	2018-01-10	5	36	11	22
+4932	No description	0	2018-01-11	37	95	19	19
+4933	No description	0	2018-02-27	26	82	14	25
+4934	No description	0	2018-02-13	20	43	13	17
+4935	No description	0	2018-02-16	7	20	13	2
+4936	No description	0	2018-02-21	45	23	7	21
+4937	No description	0	2018-01-16	37	19	14	10
+4938	No description	0	2018-01-08	33	22	9	10
+4939	No description	0	2018-02-10	27	68	16	18
+4940	No description	0	2018-01-14	31	1	17	23
+4941	No description	0	2018-01-08	34	36	9	24
+4942	No description	0	2018-01-31	38	9	2	7
+4943	No description	0	2018-02-06	17	11	9	11
+4944	No description	0	2018-01-01	14	92	5	25
+4945	No description	0	2018-02-01	16	87	11	13
+4946	No description	0	2018-01-06	17	16	28	16
+4947	No description	0	2018-02-24	42	51	4	8
+4948	No description	0	2018-01-25	38	42	25	5
+4949	No description	0	2018-01-24	38	57	30	5
+4950	No description	0	2018-01-17	5	87	29	10
+4951	No description	0	2018-01-19	13	58	18	24
+4952	No description	0	2018-01-18	6	75	27	6
+4953	No description	0	2018-02-24	8	16	10	3
+4954	No description	0	2018-01-19	12	31	22	2
+4955	No description	0	2018-01-28	23	89	23	14
+4956	No description	0	2018-01-03	9	61	12	9
+4957	No description	0	2018-01-09	40	35	17	18
+4958	No description	0	2018-01-05	18	1	17	17
+4959	No description	0	2018-02-11	28	40	25	1
+4960	No description	0	2018-01-21	26	31	18	3
+4961	No description	0	2018-01-16	5	93	5	3
+4962	No description	0	2018-02-27	23	52	26	7
+4963	No description	0	2018-02-15	36	2	19	13
+4964	No description	0	2018-02-28	16	59	17	10
+4965	No description	0	2018-01-24	14	28	17	15
+4966	No description	0	2018-02-16	6	96	4	2
+4967	No description	0	2018-02-27	9	24	27	19
+4968	No description	0	2018-01-30	21	29	6	7
+4969	No description	0	2018-01-14	34	57	16	2
+4970	No description	0	2018-02-02	11	8	17	22
+4971	No description	0	2018-02-20	49	51	28	15
+4972	No description	0	2018-02-08	45	48	26	1
+4973	No description	0	2018-01-17	29	41	29	23
+4974	No description	0	2018-02-06	20	48	22	9
+4975	No description	0	2018-01-22	30	78	7	12
+4976	No description	0	2018-01-04	23	45	9	5
+4977	No description	0	2018-01-06	48	69	28	17
+4978	No description	0	2018-01-10	16	32	18	20
+4979	No description	0	2018-01-19	10	88	26	22
+4980	No description	0	2018-01-10	37	96	14	9
+4981	No description	0	2018-01-20	11	57	21	7
+4982	No description	0	2018-01-20	38	89	12	6
+4983	No description	0	2018-01-10	11	47	1	2
+4984	No description	0	2018-01-13	6	82	3	7
+4985	No description	0	2018-01-22	43	55	9	20
+4986	No description	0	2018-01-28	27	81	28	4
+4987	No description	0	2018-01-20	44	48	1	11
+4988	No description	0	2018-02-23	30	53	25	22
+4989	No description	0	2018-01-02	46	93	21	16
+4990	No description	0	2018-01-04	13	4	14	23
+4991	No description	0	2018-01-10	37	13	20	16
+4992	No description	0	2018-01-07	6	45	11	7
+4993	No description	0	2018-02-12	44	89	15	13
+4994	No description	0	2018-02-01	20	34	30	9
+4995	No description	0	2018-02-18	14	55	2	4
+4996	No description	0	2018-01-03	25	90	5	1
+4997	No description	0	2018-01-19	37	26	17	12
+4998	No description	0	2018-01-11	38	7	29	3
+4999	No description	0	2018-01-05	10	75	7	12
+5000	No description	0	2018-01-25	28	28	5	16
+5001	No description	0	2018-01-09	7	59	28	24
+5002	No description	0	2018-01-23	8	40	4	10
+5003	No description	0	2018-01-13	18	15	28	5
+5004	No description	0	2018-02-02	33	39	23	8
+5005	No description	0	2018-01-04	35	22	6	11
+5006	No description	0	2018-01-27	26	30	10	2
+5007	No description	0	2018-01-22	34	39	28	20
+5008	No description	0	2018-01-10	41	95	28	13
+5009	No description	0	2018-02-28	13	89	21	17
+5010	No description	0	2018-02-12	21	76	7	1
+5011	No description	0	2018-02-17	32	54	14	19
+5012	No description	0	2018-01-08	45	42	7	20
+5013	No description	0	2018-01-16	5	62	21	17
+5014	No description	0	2018-02-13	35	53	23	1
+5015	No description	0	2018-01-16	13	2	5	1
+5016	No description	0	2018-01-14	28	29	2	2
+5017	No description	0	2018-01-19	44	27	12	13
+5018	No description	0	2018-02-24	18	30	1	5
+5019	No description	0	2018-02-01	40	62	9	16
+5020	No description	0	2018-02-10	38	68	19	22
+5021	No description	0	2018-01-18	39	47	9	22
+5022	No description	0	2018-02-23	36	87	7	7
+5023	No description	0	2018-01-24	6	32	4	23
+5024	No description	0	2018-01-21	26	12	14	4
+5025	No description	0	2018-02-09	27	79	20	4
+5026	No description	0	2018-01-10	33	62	21	8
+5027	No description	0	2018-01-04	22	86	3	15
+5028	No description	0	2018-02-27	31	23	27	24
+5029	No description	0	2018-01-15	29	54	6	12
+5030	No description	0	2018-02-19	21	82	23	4
+5031	No description	0	2018-02-01	36	79	16	7
+5032	No description	0	2018-01-06	38	18	2	22
+5033	No description	0	2018-01-09	9	99	1	6
+5034	No description	0	2018-02-18	24	76	25	25
+5035	No description	0	2018-02-23	8	33	4	4
+5036	No description	0	2018-02-11	24	34	3	13
+5037	No description	0	2018-01-05	47	50	6	5
+5038	No description	0	2018-02-26	21	81	14	11
+5039	No description	0	2018-02-15	10	80	29	25
+5040	No description	0	2018-02-07	25	52	20	13
+5041	No description	0	2018-01-31	48	36	17	6
+5042	No description	0	2018-01-16	36	60	3	18
+5043	No description	0	2018-02-17	34	9	15	24
+5044	No description	0	2018-02-27	8	84	4	22
+5045	No description	0	2018-01-18	22	84	14	2
+5046	No description	0	2018-01-31	13	39	9	4
+5047	No description	0	2018-02-26	16	16	30	6
+5048	No description	0	2018-01-10	28	24	13	2
+5049	No description	0	2018-02-24	46	22	3	17
+5050	No description	0	2018-02-24	35	88	12	6
+5051	No description	0	2018-01-24	32	96	2	17
+5052	No description	0	2018-01-01	40	54	22	10
+5053	No description	0	2018-01-19	16	19	16	23
+5054	No description	0	2018-01-07	28	26	25	11
+5055	No description	0	2018-01-11	7	63	13	3
+5056	No description	0	2018-01-09	9	5	11	11
+5057	No description	0	2018-01-28	30	39	18	15
+5058	No description	0	2018-02-16	18	41	21	4
+5059	No description	0	2018-01-13	11	79	1	15
+5060	No description	0	2018-01-28	10	67	27	11
+5061	No description	0	2018-01-06	22	37	15	12
+5062	No description	0	2018-02-20	16	11	9	1
+5063	No description	0	2018-01-03	40	75	29	10
+5064	No description	0	2018-01-19	23	50	14	11
+5065	No description	0	2018-02-12	21	18	22	12
+5066	No description	0	2018-01-23	33	89	27	9
+5067	No description	0	2018-01-15	50	57	27	2
+5068	No description	0	2018-01-22	35	17	30	15
+5069	No description	0	2018-02-03	37	46	28	24
+5070	No description	0	2018-02-04	39	32	24	6
+5071	No description	0	2018-01-01	34	51	1	14
+5072	No description	0	2018-02-10	42	9	9	16
+5073	No description	0	2018-02-21	50	98	28	25
+5074	No description	0	2018-01-27	16	10	2	22
+5075	No description	0	2018-02-23	23	68	8	21
+5076	No description	0	2018-01-11	41	49	16	23
+5077	No description	0	2018-02-10	14	6	9	20
+5078	No description	0	2018-02-01	10	29	20	2
+5079	No description	0	2018-01-16	40	88	29	8
+5080	No description	0	2018-01-27	42	10	12	13
+5081	No description	0	2018-01-18	37	19	17	12
+5082	No description	0	2018-02-07	30	51	16	1
+5083	No description	0	2018-02-13	42	25	10	7
+5084	No description	0	2018-01-04	31	71	18	16
+5085	No description	0	2018-01-10	20	31	9	22
+5086	No description	0	2018-02-22	8	54	16	20
+5087	No description	0	2018-01-22	44	12	21	20
+5088	No description	0	2018-02-26	28	78	10	5
+5089	No description	0	2018-02-21	10	36	10	19
+5090	No description	0	2018-01-18	19	45	11	13
+5091	No description	0	2018-02-11	16	54	15	15
+5092	No description	0	2018-01-27	11	54	21	5
+5093	No description	0	2018-02-12	14	90	25	19
+5094	No description	0	2018-01-22	40	33	25	17
+5095	No description	0	2018-01-09	49	85	19	16
+5096	No description	0	2018-01-02	47	91	14	13
+5097	No description	0	2018-01-31	7	78	5	16
+5098	No description	0	2018-02-17	16	34	6	7
+5099	No description	0	2018-02-22	26	43	27	18
+5100	No description	0	2018-01-16	13	13	29	14
+5101	No description	0	2018-01-08	50	58	17	11
+5102	No description	0	2018-01-10	34	20	13	19
+5103	No description	0	2018-02-22	19	32	15	9
+5104	No description	0	2018-02-23	46	3	25	6
+5105	No description	0	2018-02-18	48	73	20	17
+5106	No description	0	2018-02-11	50	45	16	23
+5107	No description	0	2018-02-01	9	34	23	17
+5108	No description	0	2018-01-06	5	29	16	1
+5109	No description	0	2018-01-10	25	22	23	9
+5110	No description	0	2018-02-13	33	13	29	3
+5111	No description	0	2018-02-13	35	91	8	5
+5112	No description	0	2018-01-12	26	9	5	16
+5113	No description	0	2018-01-03	8	23	1	23
+5114	No description	0	2018-01-07	33	43	26	17
+5115	No description	0	2018-02-23	33	84	12	9
+5116	No description	0	2018-02-19	22	59	13	17
+5117	No description	0	2018-01-17	50	9	27	21
+5118	No description	0	2018-01-14	36	48	27	24
+5119	No description	0	2018-01-12	22	39	5	15
+5120	No description	0	2018-02-13	30	33	11	10
+5121	No description	0	2018-01-03	38	22	3	14
+5122	No description	0	2018-01-08	26	93	17	11
+5123	No description	0	2018-02-17	42	45	14	18
+5124	No description	0	2018-01-25	25	40	4	14
+5125	No description	0	2018-01-30	28	42	21	23
+5126	No description	0	2018-01-07	14	48	22	17
+5127	No description	0	2018-01-23	31	76	6	11
+5128	No description	0	2018-02-11	13	34	17	22
+5129	No description	0	2018-02-10	11	48	15	9
+5130	No description	0	2018-01-25	23	76	23	6
+5131	No description	0	2018-02-02	44	43	9	5
+5132	No description	0	2018-01-23	37	4	28	2
+5133	No description	0	2018-01-25	15	28	21	3
+5134	No description	0	2018-01-09	12	95	9	12
+5135	No description	0	2018-01-17	47	28	1	13
+5136	No description	0	2018-02-04	24	32	29	17
+5137	No description	0	2018-02-28	9	52	5	11
+5138	No description	0	2018-01-20	50	56	26	4
+5139	No description	0	2018-01-10	9	65	20	5
+5140	No description	0	2018-01-04	47	53	30	24
+5141	No description	0	2018-02-14	29	56	24	7
+5142	No description	0	2018-02-27	31	49	2	11
+5143	No description	0	2018-01-09	15	21	15	17
+5144	No description	0	2018-02-01	19	51	16	11
+5145	No description	0	2018-01-20	9	42	7	13
+5146	No description	0	2018-02-18	14	3	12	16
+5147	No description	0	2018-02-03	50	56	27	24
+5148	No description	0	2018-02-25	41	86	21	20
+5149	No description	0	2018-02-28	9	40	7	17
+5150	No description	0	2018-02-18	49	93	8	23
+5151	No description	0	2018-02-20	8	5	11	25
+5152	No description	0	2018-01-06	39	10	10	25
+5153	No description	0	2018-01-04	46	85	10	14
+5154	No description	0	2018-01-23	13	11	12	20
+5155	No description	0	2018-02-12	24	39	2	6
+5156	No description	0	2018-02-20	18	26	19	5
+5157	No description	0	2018-02-08	29	31	24	1
+5158	No description	0	2018-01-08	11	40	10	2
+5159	No description	0	2018-02-01	30	29	30	21
+5160	No description	0	2018-01-06	40	46	12	10
+5161	No description	0	2018-02-08	49	18	8	4
+5162	No description	0	2018-01-25	28	69	26	8
+5163	No description	0	2018-01-13	25	4	24	3
+5164	No description	0	2018-01-29	49	27	20	20
+5165	No description	0	2018-01-19	22	7	24	18
+5166	No description	0	2018-02-07	10	84	23	13
+5167	No description	0	2018-01-10	28	85	7	22
+5168	No description	0	2018-02-26	31	85	18	6
+5169	No description	0	2018-01-23	23	99	12	20
+5170	No description	0	2018-02-18	10	17	14	5
+5171	No description	0	2018-01-28	19	24	7	4
+5172	No description	0	2018-01-30	39	97	23	12
+5173	No description	0	2018-01-30	49	52	6	19
+5174	No description	0	2018-02-24	8	80	14	13
+5175	No description	0	2018-01-30	28	85	10	9
+5176	No description	0	2018-01-20	28	64	4	13
+5177	No description	0	2018-01-17	16	75	23	25
+5178	No description	0	2018-02-15	21	52	9	23
+5179	No description	0	2018-01-14	29	41	8	25
+5180	No description	0	2018-01-23	20	35	29	18
+5181	No description	0	2018-02-10	22	87	10	10
+5182	No description	0	2018-01-06	22	23	25	14
+5183	No description	0	2018-01-17	46	4	9	6
+5184	No description	0	2018-02-28	16	89	8	20
+5185	No description	0	2018-01-13	49	63	4	23
+5186	No description	0	2018-01-07	32	60	30	2
+5187	No description	0	2018-01-23	27	62	10	22
+5188	No description	0	2018-02-26	47	58	19	18
+5189	No description	0	2018-01-30	43	61	29	20
+5190	No description	0	2018-02-23	20	96	29	19
+5191	No description	0	2018-01-06	25	92	19	6
+5192	No description	0	2018-01-31	8	38	6	13
+5193	No description	0	2018-02-23	39	21	21	19
+5194	No description	0	2018-01-23	46	28	30	20
+5195	No description	0	2018-02-20	40	80	24	7
+5196	No description	0	2018-02-11	47	81	17	7
+5197	No description	0	2018-01-28	50	54	3	23
+5198	No description	0	2018-01-26	11	60	14	12
+5199	No description	0	2018-01-19	39	54	18	7
+5200	No description	0	2018-01-13	15	10	15	10
+5201	No description	0	2018-01-31	21	55	16	1
+5202	No description	0	2018-01-22	13	20	8	1
+5203	No description	0	2018-01-16	44	74	6	14
+5204	No description	0	2018-02-24	32	52	17	5
+5205	No description	0	2018-01-27	19	50	30	11
+5206	No description	0	2018-02-02	34	63	16	6
+5207	No description	0	2018-01-29	26	34	28	23
+5208	No description	0	2018-02-12	29	90	23	14
+5209	No description	0	2018-01-17	38	3	3	20
+5210	No description	0	2018-02-09	30	95	18	15
+5211	No description	0	2018-01-23	6	91	1	23
+5212	No description	0	2018-02-14	10	91	10	10
+5213	No description	0	2018-02-19	13	37	25	22
+5214	No description	0	2018-01-11	38	89	4	11
+5215	No description	0	2018-01-30	42	81	26	6
+5216	No description	0	2018-01-09	28	94	8	21
+5217	No description	0	2018-01-25	6	48	14	5
+5218	No description	0	2018-01-10	27	59	24	14
+5219	No description	0	2018-02-09	38	84	2	8
+5220	No description	0	2018-01-27	37	81	1	14
+5221	No description	0	2018-02-22	37	65	2	22
+5222	No description	0	2018-02-21	47	71	21	23
+5223	No description	0	2018-01-29	20	37	7	5
+5224	No description	0	2018-01-27	40	97	11	19
+5225	No description	0	2018-01-24	19	86	20	18
+5226	No description	0	2018-02-23	35	31	28	5
+5227	No description	0	2018-01-28	39	96	12	11
+5228	No description	0	2018-01-13	40	47	26	22
+5229	No description	0	2018-01-22	25	40	22	7
+5230	No description	0	2018-02-26	35	8	19	25
+5231	No description	0	2018-01-14	10	64	13	3
+5232	No description	0	2018-01-19	15	2	26	14
+5233	No description	0	2018-01-23	47	2	10	14
+5234	No description	0	2018-01-08	10	32	22	25
+5235	No description	0	2018-01-25	21	68	14	4
+5236	No description	0	2018-02-06	12	74	1	7
+5237	No description	0	2018-02-06	13	20	3	6
+5238	No description	0	2018-01-25	37	10	23	24
+5239	No description	0	2018-01-02	18	42	25	18
+5240	No description	0	2018-02-07	14	53	3	7
+5241	No description	0	2018-01-26	40	44	28	25
+5242	No description	0	2018-01-08	20	40	29	18
+5243	No description	0	2018-01-17	13	22	20	3
+5244	No description	0	2018-02-05	45	37	4	20
+5245	No description	0	2018-02-05	5	62	12	25
+5246	No description	0	2018-01-28	32	18	21	17
+5247	No description	0	2018-01-25	12	80	8	2
+5248	No description	0	2018-01-06	11	86	29	25
+5249	No description	0	2018-02-02	30	29	24	3
+5250	No description	0	2018-02-03	16	84	26	6
+5251	No description	0	2018-01-06	45	21	27	23
+5252	No description	0	2018-01-18	8	31	26	18
+5253	No description	0	2018-01-26	6	71	22	1
+5254	No description	0	2018-02-04	43	50	9	10
+5255	No description	0	2018-01-09	36	49	21	10
+5256	No description	0	2018-02-01	30	94	3	11
+5257	No description	0	2018-02-25	49	90	12	14
+5258	No description	0	2018-01-23	26	17	2	17
+5259	No description	0	2018-02-20	41	87	26	23
+5260	No description	0	2018-02-25	27	60	5	5
+5261	No description	0	2018-01-28	33	45	17	2
+5262	No description	0	2018-01-02	25	60	26	9
+5263	No description	0	2018-01-07	7	74	29	7
+5264	No description	0	2018-01-16	32	22	24	21
+5265	No description	0	2018-02-18	19	17	26	6
+5266	No description	0	2018-02-01	24	81	29	20
+5267	No description	0	2018-01-01	15	80	17	9
+5268	No description	0	2018-02-12	32	93	2	13
+5269	No description	0	2018-02-19	33	46	24	3
+5270	No description	0	2018-01-14	40	80	23	6
+5271	No description	0	2018-01-27	37	66	10	16
+5272	No description	0	2018-01-30	35	85	10	11
+5273	No description	0	2018-01-14	43	65	4	19
+5274	No description	0	2018-02-19	30	86	26	8
+5275	No description	0	2018-01-31	25	49	18	19
+5276	No description	0	2018-01-15	11	88	3	4
+5277	No description	0	2018-02-28	5	71	4	2
+5278	No description	0	2018-01-03	38	95	18	7
+5279	No description	0	2018-01-28	35	76	18	6
+5280	No description	0	2018-02-27	12	97	30	13
+5281	No description	0	2018-01-02	11	72	3	24
+5282	No description	0	2018-02-02	45	63	30	1
+5283	No description	0	2018-01-19	47	45	14	17
+5284	No description	0	2018-01-22	41	19	8	11
+5285	No description	0	2018-02-22	42	48	10	8
+5286	No description	0	2018-01-06	46	89	29	18
+5287	No description	0	2018-02-18	47	25	19	10
+5288	No description	0	2018-02-22	50	8	7	8
+5289	No description	0	2018-01-28	15	58	22	20
+5290	No description	0	2018-01-11	15	64	21	23
+5291	No description	0	2018-01-10	31	24	28	23
+5292	No description	0	2018-02-21	47	76	13	4
+5293	No description	0	2018-01-27	42	9	20	17
+5294	No description	0	2018-01-02	13	28	17	1
+5295	No description	0	2018-01-15	5	45	10	11
+5296	No description	0	2018-01-06	46	30	9	7
+5297	No description	0	2018-02-16	30	1	16	5
+5298	No description	0	2018-01-31	25	44	21	11
+5299	No description	0	2018-02-02	20	21	12	25
+5300	No description	0	2018-02-18	24	79	14	7
+5301	No description	0	2018-02-27	14	83	20	6
+5302	No description	0	2018-01-30	13	87	3	24
+5303	No description	0	2018-02-28	50	40	25	21
+5304	No description	0	2018-01-29	20	82	14	2
+5305	No description	0	2018-02-02	45	67	29	17
+5306	No description	0	2018-02-01	11	28	26	19
+5307	No description	0	2018-01-08	35	22	15	1
+5308	No description	0	2018-01-04	15	30	30	9
+5309	No description	0	2018-01-01	27	51	10	24
+5310	No description	0	2018-02-06	40	86	23	2
+5311	No description	0	2018-01-15	24	22	7	13
+5312	No description	0	2018-02-21	23	6	22	24
+5313	No description	0	2018-02-26	43	61	13	23
+5314	No description	0	2018-01-16	26	30	24	15
+5315	No description	0	2018-02-23	28	74	13	13
+5316	No description	0	2018-01-01	39	27	4	4
+5317	No description	0	2018-01-24	28	50	11	18
+5318	No description	0	2018-02-22	11	29	15	14
+5319	No description	0	2018-01-27	38	30	10	11
+5320	No description	0	2018-01-24	23	74	28	1
+5321	No description	0	2018-02-15	6	83	23	25
+5322	No description	0	2018-02-22	29	59	12	1
+5323	No description	0	2018-02-20	38	64	27	25
+5324	No description	0	2018-02-16	26	93	28	13
+5325	No description	0	2018-01-29	48	62	3	2
+5326	No description	0	2018-01-07	12	17	12	6
+5327	No description	0	2018-01-28	42	20	8	2
+5328	No description	0	2018-02-09	28	69	21	16
+5329	No description	0	2018-02-22	17	9	2	2
+5330	No description	0	2018-01-07	19	61	5	9
+5331	No description	0	2018-02-04	35	67	12	18
+5332	No description	0	2018-02-14	34	28	6	19
+5333	No description	0	2018-01-18	19	85	5	16
+5334	No description	0	2018-01-09	31	67	8	22
+5335	No description	0	2018-02-17	49	86	1	14
+5336	No description	0	2018-02-07	19	81	19	5
+5337	No description	0	2018-02-18	23	51	20	12
+5338	No description	0	2018-01-31	31	5	29	15
+5339	No description	0	2018-01-23	33	66	19	11
+5340	No description	0	2018-02-08	16	9	13	15
+5341	No description	0	2018-02-11	28	37	29	18
+5342	No description	0	2018-01-08	41	94	11	21
+5343	No description	0	2018-02-20	17	84	24	16
+5344	No description	0	2018-02-25	30	94	9	18
+5345	No description	0	2018-02-03	41	94	6	22
+5346	No description	0	2018-02-14	27	57	23	5
+5347	No description	0	2018-02-26	26	63	20	13
+5348	No description	0	2018-01-03	33	63	25	5
+5349	No description	0	2018-01-08	9	95	15	10
+5350	No description	0	2018-01-17	22	4	9	22
+5351	No description	0	2018-01-14	7	68	10	15
+5352	No description	0	2018-01-12	15	29	10	22
+5353	No description	0	2018-02-10	45	58	20	11
+5354	No description	0	2018-01-11	5	22	21	4
+5355	No description	0	2018-01-01	35	76	29	14
+5356	No description	0	2018-02-03	46	77	23	7
+5357	No description	0	2018-02-11	44	60	7	22
+5358	No description	0	2018-01-01	49	86	1	4
+5359	No description	0	2018-01-03	35	71	6	8
+5360	No description	0	2018-02-06	41	48	18	12
+5361	No description	0	2018-01-28	15	1	29	10
+5362	No description	0	2018-01-08	19	43	2	21
+5363	No description	0	2018-01-22	50	13	18	14
+5364	No description	0	2018-02-24	5	32	28	22
+5365	No description	0	2018-01-18	9	74	30	18
+5366	No description	0	2018-01-05	50	88	4	10
+5367	No description	0	2018-02-22	20	50	18	7
+5368	No description	0	2018-02-13	28	62	30	24
+5369	No description	0	2018-01-16	29	21	27	9
+5370	No description	0	2018-01-24	10	6	15	20
+5371	No description	0	2018-02-14	11	98	7	4
+5372	No description	0	2018-02-12	14	95	13	11
+5373	No description	0	2018-02-01	38	27	26	17
+5374	No description	0	2018-02-26	5	74	6	23
+5375	No description	0	2018-01-25	13	77	7	11
+5376	No description	0	2018-02-12	6	12	8	3
+5377	No description	0	2018-02-16	35	19	22	14
+5378	No description	0	2018-01-27	22	34	6	15
+5379	No description	0	2018-01-20	14	88	8	17
+5380	No description	0	2018-01-04	13	88	20	20
+5381	No description	0	2018-01-16	29	16	19	8
+5382	No description	0	2018-01-11	10	47	16	1
+5383	No description	0	2018-02-04	45	68	13	15
+5384	No description	0	2018-01-11	28	56	15	12
+5385	No description	0	2018-01-31	12	19	18	13
+5386	No description	0	2018-02-14	8	21	9	24
+5387	No description	0	2018-01-08	41	45	17	9
+5388	No description	0	2018-02-13	23	67	5	19
+5389	No description	0	2018-01-29	8	42	29	9
+5390	No description	0	2018-02-28	9	77	9	20
+5391	No description	0	2018-01-13	18	34	23	7
+5392	No description	0	2018-01-23	48	93	1	3
+5393	No description	0	2018-02-02	30	54	10	9
+5394	No description	0	2018-01-19	44	91	17	11
+5395	No description	0	2018-02-24	40	3	3	1
+5396	No description	0	2018-01-11	10	75	5	18
+5397	No description	0	2018-02-17	26	29	6	2
+5398	No description	0	2018-01-06	29	12	5	5
+5399	No description	0	2018-01-18	31	59	17	6
+5400	No description	0	2018-01-07	43	46	27	11
+5401	No description	0	2018-01-25	5	33	8	22
+5402	No description	0	2018-02-13	16	23	8	22
+5403	No description	0	2018-01-29	29	52	22	20
+5404	No description	0	2018-01-22	6	71	25	3
+5405	No description	0	2018-01-17	18	25	12	14
+5406	No description	0	2018-02-22	44	84	23	15
+5407	No description	0	2018-01-27	12	39	27	12
+5408	No description	0	2018-01-21	46	49	3	15
+5409	No description	0	2018-02-11	30	66	29	3
+5410	No description	0	2018-01-08	18	48	10	5
+5411	No description	0	2018-01-31	17	27	30	25
+5412	No description	0	2018-01-20	8	36	15	16
+5413	No description	0	2018-02-09	37	87	15	10
+5414	No description	0	2018-02-14	20	47	12	8
+5415	No description	0	2018-01-22	38	2	17	25
+5416	No description	0	2018-02-24	49	29	21	21
+5417	No description	0	2018-01-29	15	96	15	21
+5418	No description	0	2018-01-14	44	86	16	23
+5419	No description	0	2018-02-15	33	18	9	24
+5420	No description	0	2018-01-19	38	32	7	11
+5421	No description	0	2018-02-11	41	41	3	22
+5422	No description	0	2018-01-10	13	99	9	3
+5423	No description	0	2018-02-19	19	62	16	18
+5424	No description	0	2018-01-18	39	18	5	17
+5425	No description	0	2018-01-08	34	25	4	4
+5426	No description	0	2018-01-06	14	37	16	16
+5427	No description	0	2018-02-14	10	20	28	19
+5428	No description	0	2018-01-29	5	65	8	7
+5429	No description	0	2018-02-24	41	79	10	10
+5430	No description	0	2018-02-22	41	1	4	19
+5431	No description	0	2018-01-16	33	77	12	13
+5432	No description	0	2018-02-24	21	12	2	24
+5433	No description	0	2018-01-06	34	93	7	18
+5434	No description	0	2018-02-06	43	22	21	4
+5435	No description	0	2018-01-18	22	32	15	4
+5436	No description	0	2018-01-25	50	63	22	2
+5437	No description	0	2018-01-11	43	88	15	5
+5438	No description	0	2018-01-09	26	13	21	13
+5439	No description	0	2018-02-24	13	88	21	22
+5440	No description	0	2018-02-06	9	59	19	3
+5441	No description	0	2018-02-14	45	46	2	13
+5442	No description	0	2018-02-17	28	57	28	2
+5443	No description	0	2018-01-15	41	72	9	23
+5444	No description	0	2018-01-25	9	5	23	22
+5445	No description	0	2018-02-25	6	24	6	20
+5446	No description	0	2018-01-18	50	7	25	13
+5447	No description	0	2018-01-04	23	23	17	17
+5448	No description	0	2018-01-27	29	40	20	20
+5449	No description	0	2018-01-05	22	57	27	5
+5450	No description	0	2018-02-28	36	40	27	19
+5451	No description	0	2018-01-10	10	86	16	22
+5452	No description	0	2018-01-04	49	18	5	10
+5453	No description	0	2018-02-16	8	75	16	9
+5454	No description	0	2018-01-14	36	16	20	8
+5455	No description	0	2018-02-11	42	9	8	6
+5456	No description	0	2018-01-10	49	98	13	11
+5457	No description	0	2018-02-16	27	50	19	13
+5458	No description	0	2018-02-03	48	29	11	2
+5459	No description	0	2018-02-03	30	18	23	9
+5460	No description	0	2018-01-04	26	56	11	15
+5461	No description	0	2018-02-05	8	99	11	9
+5462	No description	0	2018-02-17	42	44	30	3
+5463	No description	0	2018-01-31	35	27	26	6
+5464	No description	0	2018-02-24	14	81	15	1
+5465	No description	0	2018-02-27	45	58	5	7
+5466	No description	0	2018-02-22	11	83	16	7
+5467	No description	0	2018-01-22	36	92	11	6
+5468	No description	0	2018-01-30	31	83	4	22
+5469	No description	0	2018-01-28	47	13	7	24
+5470	No description	0	2018-01-13	13	20	28	9
+5471	No description	0	2018-02-13	33	10	9	19
+5472	No description	0	2018-01-03	34	4	1	15
+5473	No description	0	2018-01-20	40	19	26	21
+5474	No description	0	2018-02-12	45	69	4	18
+5475	No description	0	2018-01-30	12	19	22	18
+5476	No description	0	2018-02-06	47	26	20	5
+5477	No description	0	2018-01-07	47	92	7	6
+5478	No description	0	2018-02-27	43	69	30	21
+5479	No description	0	2018-01-27	6	63	3	24
+5480	No description	0	2018-02-01	22	25	29	6
+5481	No description	0	2018-02-27	40	11	14	15
+5482	No description	0	2018-02-15	28	62	8	2
+5483	No description	0	2018-01-24	8	43	5	1
+5484	No description	0	2018-02-04	6	37	15	18
+5485	No description	0	2018-02-03	7	53	30	10
+5486	No description	0	2018-01-09	19	23	3	13
+5487	No description	0	2018-01-25	8	63	1	18
+5488	No description	0	2018-01-17	6	90	1	9
+5489	No description	0	2018-01-06	35	22	29	1
+5490	No description	0	2018-03-01	39	96	22	7
+5491	No description	0	2018-01-20	18	33	27	18
+5492	No description	0	2018-02-19	21	32	12	1
+5493	No description	0	2018-01-05	29	59	17	4
+5494	No description	0	2018-01-31	50	82	6	12
+5495	No description	0	2018-01-08	49	93	4	18
+5496	No description	0	2018-02-20	10	19	19	2
+5497	No description	0	2018-02-26	48	3	13	9
+5498	No description	0	2018-02-22	39	80	2	15
+5499	No description	0	2018-01-23	18	55	11	15
+5500	No description	0	2018-01-06	36	78	9	1
+5501	No description	0	2018-02-17	21	93	10	1
+5502	No description	0	2018-02-05	49	5	2	24
+5503	No description	0	2018-02-18	16	94	11	23
+5504	No description	0	2018-02-09	41	19	14	5
+5505	No description	0	2018-02-19	38	62	1	21
+5506	No description	0	2018-01-09	17	48	8	7
+5507	No description	0	2018-01-07	49	88	3	1
+5508	No description	0	2018-01-18	10	95	26	16
+5509	No description	0	2018-01-14	33	57	3	22
+5510	No description	0	2018-01-22	43	91	13	13
+5511	No description	0	2018-01-13	38	34	11	14
+5512	No description	0	2018-02-26	34	3	1	5
+5513	No description	0	2018-02-20	48	20	1	15
+5514	No description	0	2018-01-22	25	9	15	5
+5515	No description	0	2018-02-24	17	40	14	1
+5516	No description	0	2018-02-09	49	71	5	1
+5517	No description	0	2018-01-27	40	92	10	14
+5518	No description	0	2018-02-23	35	32	29	8
+5519	No description	0	2018-01-05	38	78	4	15
+5520	No description	0	2018-01-08	41	18	1	12
+5521	No description	0	2018-01-14	27	78	4	23
+5522	No description	0	2018-02-05	34	9	25	22
+5523	No description	0	2018-02-19	22	77	19	7
+5524	No description	0	2018-01-11	46	1	6	14
+5525	No description	0	2018-01-10	9	85	24	25
+5526	No description	0	2018-02-23	45	86	19	1
+5527	No description	0	2018-01-05	24	50	17	8
+5528	No description	0	2018-02-28	30	37	13	18
+5529	No description	0	2018-02-14	11	17	1	9
+5530	No description	0	2018-01-16	30	75	26	18
+5531	No description	0	2018-01-04	11	48	17	21
+5532	No description	0	2018-01-25	16	26	10	12
+5533	No description	0	2018-02-04	43	29	28	14
+5534	No description	0	2018-02-18	10	83	26	16
+5535	No description	0	2018-01-26	23	2	17	11
+5536	No description	0	2018-01-23	13	69	5	2
+5537	No description	0	2018-01-29	19	63	29	25
+5538	No description	0	2018-02-20	8	28	24	21
+5539	No description	0	2018-01-24	49	69	21	19
+5540	No description	0	2018-02-16	16	89	4	8
+5541	No description	0	2018-01-10	40	9	26	11
+5542	No description	0	2018-01-28	20	86	24	24
+5543	No description	0	2018-01-27	32	11	10	13
+5544	No description	0	2018-02-27	11	89	23	18
+5545	No description	0	2018-02-18	32	80	15	1
+5546	No description	0	2018-02-01	48	37	3	18
+5547	No description	0	2018-02-16	36	83	8	14
+5548	No description	0	2018-02-09	29	23	22	25
+5549	No description	0	2018-01-07	5	86	8	25
+5550	No description	0	2018-01-29	24	48	22	11
+5551	No description	0	2018-02-22	21	50	30	5
+5552	No description	0	2018-02-06	7	68	22	24
+5553	No description	0	2018-01-05	8	52	16	12
+5554	No description	0	2018-01-01	49	30	7	10
+5555	No description	0	2018-01-29	29	87	18	10
+5556	No description	0	2018-01-26	15	57	11	10
+5557	No description	0	2018-02-27	12	75	16	20
+5558	No description	0	2018-01-19	14	63	15	20
+5559	No description	0	2018-01-11	22	97	9	10
+5560	No description	0	2018-01-31	33	63	6	12
+5561	No description	0	2018-01-01	47	4	13	12
+5562	No description	0	2018-02-14	39	82	28	15
+5563	No description	0	2018-02-04	36	27	28	18
+5564	No description	0	2018-02-27	22	31	9	21
+5565	No description	0	2018-01-08	36	17	2	22
+5566	No description	0	2018-01-01	32	77	1	23
+5567	No description	0	2018-02-15	32	45	7	1
+5568	No description	0	2018-02-20	44	12	21	2
+5569	No description	0	2018-01-06	47	74	5	21
+5570	No description	0	2018-02-10	34	2	13	12
+5571	No description	0	2018-01-28	31	71	5	23
+5572	No description	0	2018-02-26	44	49	25	3
+5573	No description	0	2018-01-30	6	52	13	2
+5574	No description	0	2018-02-12	36	16	21	25
+5575	No description	0	2018-02-23	27	40	11	22
+5576	No description	0	2018-01-12	21	41	29	20
+5577	No description	0	2018-02-03	16	53	9	24
+5578	No description	0	2018-02-08	46	86	7	25
+5579	No description	0	2018-01-17	41	97	27	2
+5580	No description	0	2018-01-30	39	50	11	16
+5581	No description	0	2018-01-18	28	31	1	10
+5582	No description	0	2018-02-14	50	21	15	1
+5583	No description	0	2018-01-27	22	11	2	14
+5584	No description	0	2018-01-18	5	75	4	2
+5585	No description	0	2018-01-09	16	20	28	24
+5586	No description	0	2018-01-03	37	34	11	10
+5587	No description	0	2018-02-17	26	12	4	5
+5588	No description	0	2018-01-16	9	78	17	23
+5589	No description	0	2018-02-15	7	87	29	22
+5590	No description	0	2018-02-15	13	18	28	13
+5591	No description	0	2018-02-01	21	70	11	25
+5592	No description	0	2018-01-16	8	73	1	8
+5593	No description	0	2018-02-17	48	48	12	21
+5594	No description	0	2018-01-27	32	26	17	25
+5595	No description	0	2018-02-23	50	20	28	15
+5596	No description	0	2018-01-01	30	47	13	25
+5597	No description	0	2018-01-27	8	6	27	16
+5598	No description	0	2018-01-27	12	19	2	10
+5599	No description	0	2018-02-20	17	76	1	24
+5600	No description	0	2018-01-01	16	69	18	17
+5601	No description	0	2018-01-23	9	74	19	8
+5602	No description	0	2018-01-20	31	55	23	24
+5603	No description	0	2018-02-24	34	31	9	25
+5604	No description	0	2018-02-18	15	28	26	21
+5605	No description	0	2018-02-07	40	65	17	1
+5606	No description	0	2018-01-11	21	75	15	18
+5607	No description	0	2018-01-03	24	38	23	8
+5608	No description	0	2018-02-12	44	5	1	3
+5609	No description	0	2018-01-18	5	26	1	8
+5610	No description	0	2018-01-28	11	48	5	3
+5611	No description	0	2018-02-07	44	17	10	19
+5612	No description	0	2018-02-20	23	30	1	21
+5613	No description	0	2018-01-24	20	31	28	23
+5614	No description	0	2018-02-11	6	59	29	22
+5615	No description	0	2018-02-28	6	19	11	8
+5616	No description	0	2018-01-12	30	86	6	17
+5617	No description	0	2018-01-06	12	1	18	13
+5618	No description	0	2018-01-14	48	97	13	6
+5619	No description	0	2018-02-21	10	41	26	8
+5620	No description	0	2018-02-06	47	6	7	10
+5621	No description	0	2018-01-01	33	31	15	15
+5622	No description	0	2018-01-01	18	2	7	3
+5623	No description	0	2018-01-28	45	8	16	2
+5624	No description	0	2018-01-03	30	20	26	23
+5625	No description	0	2018-02-17	43	21	21	21
+5626	No description	0	2018-01-24	31	3	10	1
+5627	No description	0	2018-02-10	7	63	29	11
+5628	No description	0	2018-01-20	38	1	15	25
+5629	No description	0	2018-02-12	49	11	2	12
+5630	No description	0	2018-01-01	42	46	26	6
+5631	No description	0	2018-02-16	46	20	15	2
+5632	No description	0	2018-02-27	35	31	8	19
+5633	No description	0	2018-01-26	31	70	28	5
+5634	No description	0	2018-02-26	22	6	8	7
+5635	No description	0	2018-01-15	18	33	17	15
+5636	No description	0	2018-01-25	24	3	14	8
+5637	No description	0	2018-01-27	50	12	28	16
+5638	No description	0	2018-01-21	6	51	9	17
+5639	No description	0	2018-02-02	35	28	16	15
+5640	No description	0	2018-01-03	39	42	5	1
+5641	No description	0	2018-02-12	37	67	14	18
+5642	No description	0	2018-01-28	45	7	19	8
+5643	No description	0	2018-02-05	8	56	3	15
+5644	No description	0	2018-01-10	38	44	11	23
+5645	No description	0	2018-01-09	10	57	3	13
+5646	No description	0	2018-01-18	10	95	2	11
+5647	No description	0	2018-01-14	12	37	24	14
+5648	No description	0	2018-02-21	49	6	29	16
+5649	No description	0	2018-02-27	18	99	24	9
+5650	No description	0	2018-02-06	30	64	29	13
+5651	No description	0	2018-01-04	19	88	14	22
+5652	No description	0	2018-02-09	15	97	21	9
+5653	No description	0	2018-02-22	15	77	22	22
+5654	No description	0	2018-01-14	27	53	10	17
+5655	No description	0	2018-01-05	49	78	7	21
+5656	No description	0	2018-01-06	17	7	5	8
+5657	No description	0	2018-02-16	8	47	20	3
+5658	No description	0	2018-01-16	19	75	18	12
+5659	No description	0	2018-01-05	24	89	11	15
+5660	No description	0	2018-02-13	15	34	20	3
+5661	No description	0	2018-02-07	43	71	27	10
+5662	No description	0	2018-01-28	30	86	25	3
+5663	No description	0	2018-01-20	46	46	12	22
+5664	No description	0	2018-02-22	11	85	26	7
+5665	No description	0	2018-01-08	11	1	7	3
+5666	No description	0	2018-01-13	25	20	26	24
+5667	No description	0	2018-02-18	11	43	30	10
+5668	No description	0	2018-01-10	14	88	13	4
+5669	No description	0	2018-01-21	50	61	5	9
+5670	No description	0	2018-02-02	50	29	1	10
+5671	No description	0	2018-01-25	23	46	11	19
+5672	No description	0	2018-01-07	6	22	30	11
+5673	No description	0	2018-02-19	26	40	30	23
+5674	No description	0	2018-02-08	15	29	23	21
+5675	No description	0	2018-01-18	7	21	26	25
+5676	No description	0	2018-01-15	12	47	25	19
+5677	No description	0	2018-02-18	13	17	15	9
+5678	No description	0	2018-02-18	42	85	14	11
+5679	No description	0	2018-01-19	45	11	8	21
+5680	No description	0	2018-01-26	18	18	13	4
+5681	No description	0	2018-01-27	24	43	3	3
+5682	No description	0	2018-02-01	24	52	8	13
+5683	No description	0	2018-02-07	11	79	15	9
+5684	No description	0	2018-02-19	11	55	27	9
+5685	No description	0	2018-01-29	46	45	20	21
+5686	No description	0	2018-02-04	15	69	26	12
+5687	No description	0	2018-02-11	31	41	29	17
+5688	No description	0	2018-01-06	20	23	7	14
+5689	No description	0	2018-01-13	35	63	5	1
+5690	No description	0	2018-01-28	35	16	15	6
+5691	No description	0	2018-01-24	45	96	12	2
+5692	No description	0	2018-02-18	48	30	18	18
+5693	No description	0	2018-02-24	13	74	27	5
+5694	No description	0	2018-02-07	17	14	19	21
+5695	No description	0	2018-02-28	39	34	12	6
+5696	No description	0	2018-02-01	14	82	20	12
+5697	No description	0	2018-01-03	44	43	24	6
+5698	No description	0	2018-02-19	35	65	26	8
+5699	No description	0	2018-02-12	25	32	28	3
+5700	No description	0	2018-01-28	43	59	8	7
+5701	No description	0	2018-02-06	18	1	20	10
+5702	No description	0	2018-02-10	26	86	6	6
+5703	No description	0	2018-01-14	9	71	30	10
+5704	No description	0	2018-01-11	29	30	25	6
+5705	No description	0	2018-02-20	41	72	11	3
+5706	No description	0	2018-01-15	16	97	26	4
+5707	No description	0	2018-02-15	5	60	24	10
+5708	No description	0	2018-02-02	48	69	17	23
+5709	No description	0	2018-01-07	11	20	28	10
+5710	No description	0	2018-01-25	31	1	9	23
+5711	No description	0	2018-02-28	5	30	14	25
+5712	No description	0	2018-02-09	37	73	16	5
+5713	No description	0	2018-01-12	22	81	3	4
+5714	No description	0	2018-01-07	15	21	14	24
+5715	No description	0	2018-01-01	43	42	8	4
+5716	No description	0	2018-02-14	42	80	29	4
+5717	No description	0	2018-02-13	13	83	20	21
+5718	No description	0	2018-01-11	50	78	20	12
+5719	No description	0	2018-01-20	44	34	11	19
+5720	No description	0	2018-01-14	48	17	10	13
+5721	No description	0	2018-01-21	5	21	25	13
+5722	No description	0	2018-01-07	14	18	28	5
+5723	No description	0	2018-01-29	19	48	6	24
+5724	No description	0	2018-01-05	25	70	8	23
+5725	No description	0	2018-01-01	10	75	26	14
+5726	No description	0	2018-02-27	20	97	29	23
+5727	No description	0	2018-02-10	47	47	21	6
+5728	No description	0	2018-01-28	5	53	17	11
+5729	No description	0	2018-02-15	41	65	14	5
+5730	No description	0	2018-02-28	14	16	21	12
+5731	No description	0	2018-02-21	21	74	28	23
+5732	No description	0	2018-03-01	14	15	15	17
+5733	No description	0	2018-02-23	22	32	20	1
+5734	No description	0	2018-01-20	50	74	2	20
+5735	No description	0	2018-01-03	30	43	6	10
+5736	No description	0	2018-02-12	41	19	21	13
+5737	No description	0	2018-02-27	24	27	5	24
+5738	No description	0	2018-01-30	21	82	20	25
+5739	No description	0	2018-02-04	38	8	6	5
+5740	No description	0	2018-01-30	40	63	27	13
+5741	No description	0	2018-01-27	26	12	27	1
+5742	No description	0	2018-01-27	7	9	8	25
+5743	No description	0	2018-02-02	17	85	17	19
+5744	No description	0	2018-02-06	42	42	19	7
+5745	No description	0	2018-02-09	14	91	1	21
+5746	No description	0	2018-01-03	22	74	17	11
+5747	No description	0	2018-01-19	6	60	7	19
+5748	No description	0	2018-02-26	29	84	19	20
+5749	No description	0	2018-01-19	9	52	21	20
+5750	No description	0	2018-01-25	17	13	1	21
+5751	No description	0	2018-02-13	26	2	12	10
+5752	No description	0	2018-02-08	45	64	14	4
+5753	No description	0	2018-01-27	10	7	14	21
+5754	No description	0	2018-01-28	44	7	26	21
+5755	No description	0	2018-02-02	12	70	10	25
+5756	No description	0	2018-01-09	46	85	27	7
+5757	No description	0	2018-02-03	28	64	5	6
+5758	No description	0	2018-01-16	25	51	15	25
+5759	No description	0	2018-01-29	27	33	30	15
+5760	No description	0	2018-01-02	42	37	11	7
+5761	No description	0	2018-01-22	13	37	25	3
+5762	No description	0	2018-02-11	47	32	3	8
+5763	No description	0	2018-01-05	6	64	29	14
+5764	No description	0	2018-02-12	8	32	18	7
+5765	No description	0	2018-02-15	45	30	10	23
+5766	No description	0	2018-01-02	15	27	20	11
+5767	No description	0	2018-02-05	34	47	24	5
+5768	No description	0	2018-02-27	8	32	8	1
+5769	No description	0	2018-01-22	6	18	17	11
+5770	No description	0	2018-02-15	10	18	6	4
+5771	No description	0	2018-01-17	14	32	3	7
+5772	No description	0	2018-02-02	29	25	29	10
+5773	No description	0	2018-01-05	50	31	22	14
+5774	No description	0	2018-01-28	33	17	18	20
+5775	No description	0	2018-01-06	28	26	26	19
+5776	No description	0	2018-02-21	12	24	13	15
+5777	No description	0	2018-02-10	24	79	10	15
+5778	No description	0	2018-02-13	32	35	23	17
+5779	No description	0	2018-01-23	44	90	14	24
+5780	No description	0	2018-01-27	27	33	11	21
+5781	No description	0	2018-01-15	13	40	8	4
+5782	No description	0	2018-02-03	20	65	17	16
+5783	No description	0	2018-01-01	50	36	6	17
+5784	No description	0	2018-02-13	41	33	22	9
+5785	No description	0	2018-02-26	30	98	5	22
+5786	No description	0	2018-01-18	50	28	14	13
+5787	No description	0	2018-02-13	8	73	2	18
+5788	No description	0	2018-02-04	40	100	29	24
+5789	No description	0	2018-02-04	14	72	8	2
+5790	No description	0	2018-02-28	24	37	22	25
+5791	No description	0	2018-02-19	36	6	16	19
+5792	No description	0	2018-01-04	36	90	6	14
+5793	No description	0	2018-02-10	30	83	10	14
+5794	No description	0	2018-01-12	23	10	27	9
+5795	No description	0	2018-01-26	17	25	29	6
+5796	No description	0	2018-02-23	50	57	2	21
+5797	No description	0	2018-01-15	36	3	19	8
+5798	No description	0	2018-02-07	30	99	14	22
+5799	No description	0	2018-01-17	9	47	19	10
+5800	No description	0	2018-01-31	10	35	11	15
+5801	No description	0	2018-02-19	24	20	27	9
+5802	No description	0	2018-02-15	33	5	9	14
+5803	No description	0	2018-01-04	29	37	24	7
+5804	No description	0	2018-01-02	47	75	26	23
+5805	No description	0	2018-02-22	34	71	29	15
+5806	No description	0	2018-02-16	42	30	17	6
+5807	No description	0	2018-01-03	25	7	23	7
+5808	No description	0	2018-02-22	32	60	28	16
+5809	No description	0	2018-02-23	33	5	23	14
+5810	No description	0	2018-01-23	44	44	26	2
+5811	No description	0	2018-01-04	38	60	5	9
+5812	No description	0	2018-02-02	23	1	6	17
+5813	No description	0	2018-02-13	43	36	20	10
+5814	No description	0	2018-01-18	48	49	15	7
+5815	No description	0	2018-01-19	22	72	29	17
+5816	No description	0	2018-01-30	21	54	13	7
+5817	No description	0	2018-01-31	40	46	21	25
+5818	No description	0	2018-02-25	14	89	26	16
+5819	No description	0	2018-02-26	34	63	14	4
+5820	No description	0	2018-02-24	37	79	17	19
+5821	No description	0	2018-01-18	47	74	29	15
+5822	No description	0	2018-01-20	50	21	19	10
+5823	No description	0	2018-02-28	19	46	29	24
+5824	No description	0	2018-02-04	13	60	1	11
+5825	No description	0	2018-01-26	23	52	21	20
+5826	No description	0	2018-02-05	30	14	13	8
+5827	No description	0	2018-02-23	24	41	8	10
+5828	No description	0	2018-01-01	9	80	3	9
+5829	No description	0	2018-01-06	37	18	23	2
+5830	No description	0	2018-02-05	41	61	8	17
+5831	No description	0	2018-02-03	5	8	25	4
+5832	No description	0	2018-01-04	15	52	29	1
+5833	No description	0	2018-01-27	27	96	3	13
+5834	No description	0	2018-02-11	39	44	8	2
+5835	No description	0	2018-02-27	33	8	24	20
+5836	No description	0	2018-02-26	26	25	13	20
+5837	No description	0	2018-01-20	11	84	19	15
+5838	No description	0	2018-02-10	21	87	19	20
+5839	No description	0	2018-01-05	41	2	9	17
+5840	No description	0	2018-02-11	34	91	21	19
+5841	No description	0	2018-01-16	50	20	24	17
+5842	No description	0	2018-02-09	23	64	12	8
+5843	No description	0	2018-02-22	48	33	30	16
+5844	No description	0	2018-02-25	15	29	21	17
+5845	No description	0	2018-01-02	26	45	3	23
+5846	No description	0	2018-02-01	28	43	7	9
+5847	No description	0	2018-01-23	14	81	5	13
+5848	No description	0	2018-01-14	13	11	2	3
+5849	No description	0	2018-01-30	12	75	10	6
+5850	No description	0	2018-01-19	27	79	8	21
+5851	No description	0	2018-02-01	48	29	13	16
+5852	No description	0	2018-01-01	35	97	5	17
+5853	No description	0	2018-02-04	41	77	6	10
+5854	No description	0	2018-01-11	10	13	11	25
+5855	No description	0	2018-01-04	21	60	28	19
+5856	No description	0	2018-02-13	27	27	28	18
+5857	No description	0	2018-01-31	37	80	16	19
+5858	No description	0	2018-01-08	41	51	23	9
+5859	No description	0	2018-02-05	47	52	1	17
+5860	No description	0	2018-01-07	5	5	30	20
+5861	No description	0	2018-01-06	50	74	17	1
+5862	No description	0	2018-02-06	46	49	19	11
+5863	No description	0	2018-02-26	23	38	16	12
+5864	No description	0	2018-02-09	25	86	13	18
+5865	No description	0	2018-02-06	34	98	29	25
+5866	No description	0	2018-02-16	41	3	8	13
+5867	No description	0	2018-02-12	47	5	21	7
+5868	No description	0	2018-01-09	35	91	14	19
+5869	No description	0	2018-01-19	35	91	6	13
+5870	No description	0	2018-01-24	6	19	25	9
+5871	No description	0	2018-01-05	31	63	14	12
+5872	No description	0	2018-02-23	22	63	12	25
+5873	No description	0	2018-01-14	26	28	21	1
+5874	No description	0	2018-02-16	25	43	13	10
+5875	No description	0	2018-01-19	10	9	12	7
+5876	No description	0	2018-02-26	24	12	23	22
+5877	No description	0	2018-02-01	14	95	23	8
+5878	No description	0	2018-01-15	13	19	19	6
+5879	No description	0	2018-01-01	30	99	27	21
+5880	No description	0	2018-02-05	47	62	30	6
+5881	No description	0	2018-01-23	23	5	16	23
+5882	No description	0	2018-01-02	12	83	10	5
+5883	No description	0	2018-01-18	16	50	24	2
+5884	No description	0	2018-01-02	44	78	6	17
+5885	No description	0	2018-02-06	28	71	2	17
+5886	No description	0	2018-01-18	7	24	26	15
+5887	No description	0	2018-01-31	6	41	30	11
+5888	No description	0	2018-01-16	48	70	28	22
+5889	No description	0	2018-01-25	9	51	22	22
+5890	No description	0	2018-01-11	25	9	16	3
+5891	No description	0	2018-02-11	38	19	10	15
+5892	No description	0	2018-02-08	29	43	8	4
+5893	No description	0	2018-01-17	15	96	30	6
+5894	No description	0	2018-01-15	20	18	6	8
+5895	No description	0	2018-01-24	14	6	13	12
+5896	No description	0	2018-01-29	15	28	24	2
+5897	No description	0	2018-01-16	44	64	5	10
+5898	No description	0	2018-02-26	14	19	14	2
+5899	No description	0	2018-01-09	11	74	19	11
+5900	No description	0	2018-02-11	27	57	28	12
+5901	No description	0	2018-01-12	30	79	10	11
+5902	No description	0	2018-01-14	26	70	15	15
+5903	No description	0	2018-01-08	41	24	26	15
+5904	No description	0	2018-01-03	5	49	6	8
+5905	No description	0	2018-01-26	16	1	10	6
+5906	No description	0	2018-01-07	27	58	28	8
+5907	No description	0	2018-02-16	8	46	10	13
+5908	No description	0	2018-01-24	32	68	12	10
+5909	No description	0	2018-02-16	16	70	3	1
+5910	No description	0	2018-02-12	35	73	22	10
+5911	No description	0	2018-02-10	46	30	22	4
+5912	No description	0	2018-02-19	20	30	28	24
+5913	No description	0	2018-02-25	35	84	8	7
+5914	No description	0	2018-02-15	50	43	3	20
+5915	No description	0	2018-02-21	19	42	26	25
+5916	No description	0	2018-02-11	39	74	22	24
+5917	No description	0	2018-02-07	30	32	26	8
+5918	No description	0	2018-01-23	28	36	8	18
+5919	No description	0	2018-02-24	10	94	25	15
+5920	No description	0	2018-01-04	10	19	2	13
+5921	No description	0	2018-02-05	48	21	11	10
+5922	No description	0	2018-02-11	6	51	3	18
+5923	No description	0	2018-02-15	9	83	22	19
+5924	No description	0	2018-01-06	8	40	6	20
+5925	No description	0	2018-02-25	48	14	29	8
+5926	No description	0	2018-01-06	38	67	1	19
+5927	No description	0	2018-02-12	41	13	30	15
+5928	No description	0	2018-02-04	41	22	3	20
+5929	No description	0	2018-01-19	27	35	6	10
+5930	No description	0	2018-01-26	34	5	20	9
+5931	No description	0	2018-01-08	40	28	20	24
+5932	No description	0	2018-01-11	30	59	18	18
+5933	No description	0	2018-01-20	24	10	10	22
+5934	No description	0	2018-02-22	22	42	27	15
+5935	No description	0	2018-02-12	39	14	24	20
+5936	No description	0	2018-01-04	10	76	28	15
+5937	No description	0	2018-02-09	37	84	2	7
+5938	No description	0	2018-02-12	27	50	3	16
+5939	No description	0	2018-01-09	11	66	19	24
+5940	No description	0	2018-01-10	44	82	21	15
+5941	No description	0	2018-01-09	11	68	15	19
+5942	No description	0	2018-02-03	27	3	16	8
+5943	No description	0	2018-01-25	46	90	13	8
+5944	No description	0	2018-02-21	31	97	12	25
+5945	No description	0	2018-01-05	38	78	22	13
+5946	No description	0	2018-02-03	48	79	30	16
+5947	No description	0	2018-02-18	9	90	7	14
+5948	No description	0	2018-02-17	10	38	30	13
+5949	No description	0	2018-02-15	8	74	11	17
+5950	No description	0	2018-01-21	30	70	8	12
+5951	No description	0	2018-02-25	36	18	13	14
+5952	No description	0	2018-02-23	47	6	27	10
+5953	No description	0	2018-02-26	18	19	24	4
+5954	No description	0	2018-01-20	26	53	29	21
+5955	No description	0	2018-01-30	32	3	23	16
+5956	No description	0	2018-02-27	35	25	22	15
+5957	No description	0	2018-02-07	39	24	8	18
+5958	No description	0	2018-02-10	16	37	16	25
+5959	No description	0	2018-01-16	13	76	3	18
+5960	No description	0	2018-02-06	45	40	23	6
+5961	No description	0	2018-01-12	29	30	6	15
+5962	No description	0	2018-02-17	6	74	25	5
+5963	No description	0	2018-01-08	15	18	7	16
+5964	No description	0	2018-01-08	16	50	21	3
+5965	No description	0	2018-01-31	21	55	15	7
+5966	No description	0	2018-01-06	37	35	13	23
+5967	No description	0	2018-02-24	20	15	17	4
+5968	No description	0	2018-01-14	18	71	5	18
+5969	No description	0	2018-02-26	12	45	3	6
+5970	No description	0	2018-01-15	17	8	10	24
+5971	No description	0	2018-01-08	49	25	8	19
+5972	No description	0	2018-02-24	48	55	1	20
+5973	No description	0	2018-02-23	32	13	19	14
+5974	No description	0	2018-01-17	28	12	11	15
+5975	No description	0	2018-02-11	25	78	10	18
+5976	No description	0	2018-01-10	5	31	20	15
+5977	No description	0	2018-02-25	47	26	7	13
+5978	No description	0	2018-02-10	30	52	21	25
+5979	No description	0	2018-02-01	42	53	18	25
+5980	No description	0	2018-01-04	11	69	7	25
+5981	No description	0	2018-01-02	42	36	14	8
+5982	No description	0	2018-02-06	33	13	19	15
+5983	No description	0	2018-02-13	37	48	28	9
+5984	No description	0	2018-02-20	11	4	14	8
+5985	No description	0	2018-01-20	15	96	11	11
+5986	No description	0	2018-01-04	27	12	13	10
+5987	No description	0	2018-02-16	12	63	14	10
+5988	No description	0	2018-02-19	40	35	3	6
+5989	No description	0	2018-01-24	5	24	23	10
+5990	No description	0	2018-01-16	47	83	11	6
+5991	No description	0	2018-01-10	50	42	18	22
+5992	No description	0	2018-02-16	33	55	29	10
+5993	No description	0	2018-01-26	17	8	14	4
+5994	No description	0	2018-02-21	20	12	2	4
+5995	No description	0	2018-01-02	10	39	7	18
+5996	No description	0	2018-02-23	27	13	4	8
+5997	No description	0	2018-01-07	47	65	20	17
+5998	No description	0	2018-01-19	17	61	12	7
+5999	No description	0	2018-01-04	29	98	8	21
+6000	No description	0	2018-02-07	45	77	23	5
+6001	No description	0	2018-01-25	32	34	16	24
+6002	No description	0	2018-01-22	30	20	3	2
+6003	No description	0	2018-02-15	29	70	5	19
+6004	No description	0	2018-01-15	27	9	21	18
+6005	No description	0	2018-01-23	45	96	13	1
+6006	No description	0	2018-01-13	28	15	9	23
+6007	No description	0	2018-02-19	33	41	9	7
+6008	No description	0	2018-02-09	32	24	18	11
+6009	No description	0	2018-02-23	47	98	7	18
+6010	No description	0	2018-01-29	39	55	28	15
+6011	No description	0	2018-01-14	12	40	4	24
+6012	No description	0	2018-01-11	28	81	12	3
+6013	No description	0	2018-01-10	43	41	29	20
+6014	No description	0	2018-02-23	40	70	25	1
+6015	No description	0	2018-01-13	26	56	23	15
+6016	No description	0	2018-02-08	7	63	8	12
+6017	No description	0	2018-02-21	45	29	26	16
+6018	No description	0	2018-01-26	28	20	30	2
+6019	No description	0	2018-01-05	37	17	17	25
+6020	No description	0	2018-02-11	44	99	30	17
+6021	No description	0	2018-02-04	13	74	13	17
+6022	No description	0	2018-01-28	9	28	26	15
+6023	No description	0	2018-01-28	41	78	4	6
+6024	No description	0	2018-01-03	37	77	20	22
+6025	No description	0	2018-02-24	33	39	15	23
+6026	No description	0	2018-01-30	34	66	15	5
+6027	No description	0	2018-02-27	43	46	5	20
+6028	No description	0	2018-01-03	46	47	27	7
+6029	No description	0	2018-02-21	28	47	17	7
+6030	No description	0	2018-01-06	15	22	23	21
+6031	No description	0	2018-01-12	34	90	4	24
+6032	No description	0	2018-01-21	44	78	26	2
+6033	No description	0	2018-01-22	6	13	11	25
+6034	No description	0	2018-02-08	44	25	23	21
+6035	No description	0	2018-01-09	18	15	20	1
+6036	No description	0	2018-02-23	13	47	20	18
+6037	No description	0	2018-01-31	35	47	6	22
+6038	No description	0	2018-01-24	49	53	14	13
+6039	No description	0	2018-02-27	36	46	22	10
+6040	No description	0	2018-02-04	50	97	22	15
+6041	No description	0	2018-01-30	8	62	2	8
+6042	No description	0	2018-01-07	25	41	20	25
+6043	No description	0	2018-02-28	50	55	27	10
+6044	No description	0	2018-02-04	13	91	2	7
+6045	No description	0	2018-02-18	46	25	14	21
+6046	No description	0	2018-01-26	39	55	7	17
+6047	No description	0	2018-01-09	9	47	12	14
+6048	No description	0	2018-01-20	34	57	6	1
+6049	No description	0	2018-01-24	17	43	3	8
+6050	No description	0	2018-01-30	42	97	27	17
+6051	No description	0	2018-01-27	47	82	16	15
+6052	No description	0	2018-01-22	13	46	8	9
+6053	No description	0	2018-01-23	11	44	10	7
+6054	No description	0	2018-01-31	16	37	20	14
+6055	No description	0	2018-01-16	23	89	12	6
+6056	No description	0	2018-02-22	33	13	12	21
+6057	No description	0	2018-01-23	43	77	2	9
+6058	No description	0	2018-02-15	22	33	16	17
+6059	No description	0	2018-02-27	18	42	4	16
+6060	No description	0	2018-02-16	30	65	21	13
+6061	No description	0	2018-01-04	27	91	11	6
+6062	No description	0	2018-02-07	20	32	4	12
+6063	No description	0	2018-02-01	37	49	18	4
+6064	No description	0	2018-02-19	48	55	22	22
+6065	No description	0	2018-02-15	27	66	27	3
+6066	No description	0	2018-01-01	50	21	24	16
+6067	No description	0	2018-01-10	35	76	27	23
+6068	No description	0	2018-02-23	18	48	8	1
+6069	No description	0	2018-02-20	22	63	25	11
+6070	No description	0	2018-02-06	12	36	9	20
+6071	No description	0	2018-02-24	10	75	13	21
+6072	No description	0	2018-01-13	40	12	17	11
+6073	No description	0	2018-01-27	6	12	23	19
+6074	No description	0	2018-02-06	29	1	25	25
+6075	No description	0	2018-01-07	25	67	23	13
+6076	No description	0	2018-01-28	45	73	17	13
+6077	No description	0	2018-02-24	39	33	16	11
+6078	No description	0	2018-01-05	17	46	15	3
+6079	No description	0	2018-02-21	6	4	29	13
+6080	No description	0	2018-01-11	24	29	19	11
+6081	No description	0	2018-01-13	24	38	8	7
+6082	No description	0	2018-02-07	11	25	7	7
+6083	No description	0	2018-01-20	45	60	19	20
+6084	No description	0	2018-01-30	44	52	22	25
+6085	No description	0	2018-02-20	40	25	11	25
+6086	No description	0	2018-01-17	49	74	11	8
+6087	No description	0	2018-01-14	31	24	11	17
+6088	No description	0	2018-02-19	32	43	7	16
+6089	No description	0	2018-01-19	33	7	19	24
+6090	No description	0	2018-02-10	30	86	14	4
+6091	No description	0	2018-01-03	15	88	3	7
+6092	No description	0	2018-01-08	26	23	28	1
+6093	No description	0	2018-02-23	18	24	10	22
+6094	No description	0	2018-01-09	48	83	27	11
+6095	No description	0	2018-01-23	41	70	18	25
+6096	No description	0	2018-01-04	18	80	21	10
+6097	No description	0	2018-02-03	17	37	4	25
+6098	No description	0	2018-02-06	35	49	8	22
+6099	No description	0	2018-02-16	8	93	9	5
+6100	No description	0	2018-01-08	28	57	26	11
+6101	No description	0	2018-02-09	36	39	11	22
+6102	No description	0	2018-01-19	8	6	29	16
+6103	No description	0	2018-01-11	47	71	28	12
+6104	No description	0	2018-01-17	16	83	3	22
+6105	No description	0	2018-02-03	35	69	3	18
+6106	No description	0	2018-02-21	28	67	23	13
+6107	No description	0	2018-01-20	26	76	22	14
+6108	No description	0	2018-01-17	37	94	26	11
+6109	No description	0	2018-02-10	48	47	24	9
+6110	No description	0	2018-01-14	33	68	2	8
+6111	No description	0	2018-02-09	33	84	3	25
+6112	No description	0	2018-01-26	23	9	9	1
+6113	No description	0	2018-01-25	16	71	2	5
+6114	No description	0	2018-02-15	27	86	18	24
+6115	No description	0	2018-02-12	13	89	4	5
+6116	No description	0	2018-02-26	47	37	6	3
+6117	No description	0	2018-02-07	48	38	4	14
+6118	No description	0	2018-01-26	48	9	10	19
+6119	No description	0	2018-01-04	5	92	19	1
+6120	No description	0	2018-02-22	16	55	22	14
+6121	No description	0	2018-02-27	37	44	7	5
+6122	No description	0	2018-01-29	31	5	23	19
+6123	No description	0	2018-01-31	14	44	11	6
+6124	No description	0	2018-01-04	49	24	3	5
+6125	No description	0	2018-02-14	19	81	27	16
+6126	No description	0	2018-01-03	39	12	9	21
+6127	No description	0	2018-01-10	22	49	11	7
+6128	No description	0	2018-01-11	33	68	28	25
+6129	No description	0	2018-01-08	48	9	2	6
+6130	No description	0	2018-01-16	14	87	5	16
+6131	No description	0	2018-02-26	47	39	5	4
+6132	No description	0	2018-02-02	22	3	18	7
+6133	No description	0	2018-01-13	11	90	23	4
+6134	No description	0	2018-02-05	50	3	29	4
+6135	No description	0	2018-02-02	8	64	11	24
+6136	No description	0	2018-02-09	18	40	21	10
+6137	No description	0	2018-01-04	31	92	14	7
+6138	No description	0	2018-01-25	47	42	11	18
+6139	No description	0	2018-02-18	36	53	14	1
+6140	No description	0	2018-02-09	24	15	21	10
+6141	No description	0	2018-01-27	6	91	30	18
+6142	No description	0	2018-01-16	49	36	29	12
+6143	No description	0	2018-01-26	29	23	30	2
+6144	No description	0	2018-02-09	28	51	17	6
+6145	No description	0	2018-01-27	8	28	16	22
+6146	No description	0	2018-01-25	10	76	21	4
+6147	No description	0	2018-01-28	7	19	5	22
+6148	No description	0	2018-01-31	31	2	27	24
+6149	No description	0	2018-01-11	7	9	8	14
+6150	No description	0	2018-01-22	44	8	9	9
+6151	No description	0	2018-02-21	38	11	14	17
+6152	No description	0	2018-02-26	49	2	27	25
+6153	No description	0	2018-01-29	46	81	4	25
+6154	No description	0	2018-01-31	29	44	11	16
+6155	No description	0	2018-01-17	35	14	13	1
+6156	No description	0	2018-01-14	43	66	5	18
+6157	No description	0	2018-01-18	36	57	18	23
+6158	No description	0	2018-01-31	7	17	26	5
+6159	No description	0	2018-02-26	41	99	9	17
+6160	No description	0	2018-01-20	46	58	21	13
+6161	No description	0	2018-01-16	11	78	24	7
+6162	No description	0	2018-02-03	16	67	19	24
+6163	No description	0	2018-01-18	18	38	5	14
+6164	No description	0	2018-01-12	26	87	20	4
+6165	No description	0	2018-02-18	30	11	28	2
+6166	No description	0	2018-01-26	34	1	28	5
+6167	No description	0	2018-01-07	24	30	16	4
+6168	No description	0	2018-02-19	29	65	17	25
+6169	No description	0	2018-02-28	26	22	1	6
+6170	No description	0	2018-02-12	35	99	19	3
+6171	No description	0	2018-01-04	20	16	1	22
+6172	No description	0	2018-01-06	21	96	23	12
+6173	No description	0	2018-02-22	10	70	13	8
+6174	No description	0	2018-02-12	45	63	8	25
+6175	No description	0	2018-02-16	18	36	10	10
+6176	No description	0	2018-01-27	11	62	16	9
+6177	No description	0	2018-01-10	45	97	3	22
+6178	No description	0	2018-02-06	12	77	24	23
+6179	No description	0	2018-01-11	33	65	19	17
+6180	No description	0	2018-02-15	27	9	12	5
+6181	No description	0	2018-02-18	10	51	6	20
+6182	No description	0	2018-01-10	17	7	21	24
+6183	No description	0	2018-01-11	5	42	27	7
+6184	No description	0	2018-02-16	6	32	29	17
+6185	No description	0	2018-01-05	18	93	29	9
+6186	No description	0	2018-01-02	17	12	24	16
+6187	No description	0	2018-02-12	19	42	1	19
+6188	No description	0	2018-02-08	11	63	23	12
+6189	No description	0	2018-02-24	7	57	4	6
+6190	No description	0	2018-01-07	42	76	13	1
+6191	No description	0	2018-01-23	9	18	23	2
+6192	No description	0	2018-02-26	50	69	11	23
+6193	No description	0	2018-02-28	35	42	8	11
+6194	No description	0	2018-01-17	42	6	1	16
+6195	No description	0	2018-01-28	24	29	5	2
+6196	No description	0	2018-02-21	46	58	23	25
+6197	No description	0	2018-01-25	37	44	15	25
+6198	No description	0	2018-01-29	43	93	22	18
+6199	No description	0	2018-01-02	49	80	5	9
+6200	No description	0	2018-01-12	24	34	30	16
+6201	No description	0	2018-02-16	34	13	14	3
+6202	No description	0	2018-01-13	48	98	22	21
+6203	No description	0	2018-02-01	24	31	6	18
+6204	No description	0	2018-02-09	13	39	9	9
+6205	No description	0	2018-01-10	21	11	2	25
+6206	No description	0	2018-01-19	47	53	26	11
+6207	No description	0	2018-02-04	13	43	2	17
+6208	No description	0	2018-02-09	23	87	14	6
+6209	No description	0	2018-02-26	32	38	23	3
+6210	No description	0	2018-02-23	12	6	14	23
+6211	No description	0	2018-02-02	41	61	28	10
+6212	No description	0	2018-01-24	47	37	28	15
+6213	No description	0	2018-01-08	11	46	14	16
+6214	No description	0	2018-01-03	15	25	1	20
+6215	No description	0	2018-01-08	42	28	1	6
+6216	No description	0	2018-01-22	6	32	17	5
+6217	No description	0	2018-01-18	34	80	13	21
+6218	No description	0	2018-02-27	12	34	21	11
+6219	No description	0	2018-01-17	30	3	29	24
+6220	No description	0	2018-01-24	44	1	28	12
+6221	No description	0	2018-02-14	48	3	19	9
+6222	No description	0	2018-02-27	13	60	7	4
+6223	No description	0	2018-01-14	27	78	26	23
+6224	No description	0	2018-01-26	7	23	21	8
+6225	No description	0	2018-02-25	21	92	23	19
+6226	No description	0	2018-02-15	30	91	4	21
+6227	No description	0	2018-01-25	45	100	5	6
+6228	No description	0	2018-01-13	37	42	16	14
+6229	No description	0	2018-02-17	12	20	19	18
+6230	No description	0	2018-01-10	49	38	17	17
+6231	No description	0	2018-01-15	6	80	19	18
+6232	No description	0	2018-01-23	41	51	18	6
+6233	No description	0	2018-01-29	44	91	16	6
+6234	No description	0	2018-02-15	47	90	17	10
+6235	No description	0	2018-01-16	7	31	16	10
+6236	No description	0	2018-02-12	32	72	28	25
+6237	No description	0	2018-02-05	10	15	30	5
+6238	No description	0	2018-02-27	11	10	2	9
+6239	No description	0	2018-02-15	22	78	15	13
+6240	No description	0	2018-02-07	17	48	8	8
+6241	No description	0	2018-02-14	12	26	30	22
+6242	No description	0	2018-02-09	15	100	24	16
+6243	No description	0	2018-02-14	37	48	20	18
+6244	No description	0	2018-01-19	19	35	25	18
+6245	No description	0	2018-02-04	27	5	24	12
+6246	No description	0	2018-01-06	14	78	23	24
+6247	No description	0	2018-01-03	9	53	15	11
+6248	No description	0	2018-01-15	14	64	21	15
+6249	No description	0	2018-01-06	43	49	5	11
+6250	No description	0	2018-01-05	6	64	17	13
+6251	No description	0	2018-01-28	29	7	2	25
+6252	No description	0	2018-02-11	7	78	20	16
+6253	No description	0	2018-01-19	18	30	18	6
+6254	No description	0	2018-02-02	48	72	9	5
+6255	No description	0	2018-02-27	14	72	11	5
+6256	No description	0	2018-01-26	9	90	16	10
+6257	No description	0	2018-02-07	31	95	3	25
+6258	No description	0	2018-02-22	36	38	14	9
+6259	No description	0	2018-02-01	38	2	5	18
+6260	No description	0	2018-02-28	15	46	12	21
+6261	No description	0	2018-02-03	18	78	28	8
+6262	No description	0	2018-01-29	22	31	19	25
+6263	No description	0	2018-01-22	31	26	27	9
+6264	No description	0	2018-01-09	26	99	16	11
+6265	No description	0	2018-02-07	48	38	16	10
+6266	No description	0	2018-02-25	46	8	6	25
+6267	No description	0	2018-02-14	23	7	9	13
+6268	No description	0	2018-01-14	39	70	28	23
+6269	No description	0	2018-01-07	13	39	14	3
+6270	No description	0	2018-01-31	9	76	20	7
+6271	No description	0	2018-02-19	21	31	30	15
+6272	No description	0	2018-01-18	33	47	24	11
+6273	No description	0	2018-02-15	24	95	22	22
+6274	No description	0	2018-01-19	32	23	19	15
+6275	No description	0	2018-02-23	29	40	12	17
+6276	No description	0	2018-01-31	10	40	20	12
+6277	No description	0	2018-02-06	25	47	7	21
+6278	No description	0	2018-01-19	7	87	30	25
+6279	No description	0	2018-01-27	9	50	16	10
+6280	No description	0	2018-01-10	24	50	25	4
+6281	No description	0	2018-02-11	38	64	20	22
+6282	No description	0	2018-01-18	15	44	26	15
+6283	No description	0	2018-01-28	33	12	16	15
+6284	No description	0	2018-01-11	9	7	24	23
+6285	No description	0	2018-01-13	17	38	13	25
+6286	No description	0	2018-02-17	19	67	23	9
+6287	No description	0	2018-02-09	7	64	9	17
+6288	No description	0	2018-01-09	7	22	16	23
+6289	No description	0	2018-01-04	19	94	17	11
+6290	No description	0	2018-01-23	18	58	10	7
+6291	No description	0	2018-02-01	39	83	1	16
+6292	No description	0	2018-01-04	14	53	26	13
+6293	No description	0	2018-02-14	29	8	8	1
+6294	No description	0	2018-02-14	31	15	5	24
+6295	No description	0	2018-02-22	26	6	22	19
+6296	No description	0	2018-02-23	27	18	6	9
+6297	No description	0	2018-02-17	19	79	30	5
+6298	No description	0	2018-02-27	32	39	13	1
+6299	No description	0	2018-02-17	28	97	20	18
+6300	No description	0	2018-01-08	27	96	18	21
+6301	No description	0	2018-01-25	33	91	30	3
+6302	No description	0	2018-01-15	13	89	2	9
+6303	No description	0	2018-02-03	5	76	14	21
+6304	No description	0	2018-01-20	9	3	10	21
+6305	No description	0	2018-02-17	30	24	14	23
+6306	No description	0	2018-01-13	34	57	18	2
+6307	No description	0	2018-01-06	44	79	11	6
+6308	No description	0	2018-01-18	27	5	1	11
+6309	No description	0	2018-01-11	50	54	18	24
+6310	No description	0	2018-01-01	23	92	29	1
+6311	No description	0	2018-02-19	37	37	6	16
+6312	No description	0	2018-01-25	31	42	26	7
+6313	No description	0	2018-02-17	8	4	26	10
+6314	No description	0	2018-02-27	29	15	14	4
+6315	No description	0	2018-01-07	47	81	15	18
+6316	No description	0	2018-01-03	33	79	22	23
+6317	No description	0	2018-01-09	31	63	9	3
+6318	No description	0	2018-01-05	40	14	6	20
+6319	No description	0	2018-01-12	45	75	17	3
+6320	No description	0	2018-01-07	48	67	24	25
+6321	No description	0	2018-02-16	26	100	16	10
+6322	No description	0	2018-01-25	32	57	21	7
+6323	No description	0	2018-02-16	27	35	19	9
+6324	No description	0	2018-01-29	17	41	9	6
+6325	No description	0	2018-02-11	23	74	19	12
+6326	No description	0	2018-02-15	25	88	27	24
+6327	No description	0	2018-02-10	7	82	8	10
+6328	No description	0	2018-02-15	21	28	2	22
+6329	No description	0	2018-02-20	32	29	28	2
+6330	No description	0	2018-01-12	29	92	25	22
+6331	No description	0	2018-02-27	31	66	15	23
+6332	No description	0	2018-02-17	31	43	21	11
+6333	No description	0	2018-02-13	7	14	5	17
+6334	No description	0	2018-02-19	15	32	7	2
+6335	No description	0	2018-01-26	21	47	7	4
+6336	No description	0	2018-02-01	5	57	17	18
+6337	No description	0	2018-01-15	37	76	11	4
+6338	No description	0	2018-02-11	29	84	1	7
+6339	No description	0	2018-02-10	19	23	17	2
+6340	No description	0	2018-02-13	14	83	13	21
+6341	No description	0	2018-01-13	35	14	14	9
+6342	No description	0	2018-01-02	46	36	27	3
+6343	No description	0	2018-02-15	44	41	18	10
+6344	No description	0	2018-02-08	28	95	23	18
+6345	No description	0	2018-01-29	6	17	16	25
+6346	No description	0	2018-02-11	19	70	2	12
+6347	No description	0	2018-01-12	17	49	19	1
+6348	No description	0	2018-02-21	24	70	22	22
+6349	No description	0	2018-01-14	43	13	19	14
+6350	No description	0	2018-02-17	48	65	6	1
+6351	No description	0	2018-02-19	49	49	1	12
+6352	No description	0	2018-01-15	46	10	7	4
+6353	No description	0	2018-02-25	47	32	22	19
+6354	No description	0	2018-01-02	35	75	21	7
+6355	No description	0	2018-01-07	41	75	27	12
+6356	No description	0	2018-01-23	29	50	26	20
+6357	No description	0	2018-01-31	27	81	18	22
+6358	No description	0	2018-02-16	7	13	23	16
+6359	No description	0	2018-02-27	16	34	30	24
+6360	No description	0	2018-02-18	29	88	24	20
+6361	No description	0	2018-02-17	15	5	28	12
+6362	No description	0	2018-02-25	38	5	21	1
+6363	No description	0	2018-02-28	35	55	20	8
+6364	No description	0	2018-01-24	31	40	1	2
+6365	No description	0	2018-01-25	25	22	16	13
+6366	No description	0	2018-02-25	24	20	30	23
+6367	No description	0	2018-01-01	39	25	8	9
+6368	No description	0	2018-02-05	30	16	1	18
+6369	No description	0	2018-02-18	49	37	23	23
+6370	No description	0	2018-02-22	5	62	1	12
+6371	No description	0	2018-02-01	34	21	27	3
+6372	No description	0	2018-01-28	26	2	6	24
+6373	No description	0	2018-01-14	15	27	10	17
+6374	No description	0	2018-01-03	9	32	29	20
+6375	No description	0	2018-02-20	50	59	25	1
+6376	No description	0	2018-01-27	12	1	20	14
+6377	No description	0	2018-02-06	34	7	23	13
+6378	No description	0	2018-02-15	45	79	23	2
+6379	No description	0	2018-02-14	12	87	27	7
+6380	No description	0	2018-01-17	39	28	24	4
+6381	No description	0	2018-01-21	25	55	27	3
+6382	No description	0	2018-02-22	31	4	15	18
+6383	No description	0	2018-01-24	7	76	8	21
+6384	No description	0	2018-01-21	31	22	5	17
+6385	No description	0	2018-01-15	15	62	20	14
+6386	No description	0	2018-01-23	45	100	15	11
+6387	No description	0	2018-01-09	20	32	26	14
+6388	No description	0	2018-02-13	34	71	5	25
+6389	No description	0	2018-02-07	7	20	11	21
+6390	No description	0	2018-02-09	30	96	27	12
+6391	No description	0	2018-02-19	34	13	13	21
+6392	No description	0	2018-01-22	27	17	10	6
+6393	No description	0	2018-01-07	21	73	26	23
+6394	No description	0	2018-01-06	21	30	27	15
+6395	No description	0	2018-01-19	37	98	5	4
+6396	No description	0	2018-01-26	46	82	24	9
+6397	No description	0	2018-01-11	26	43	26	25
+6398	No description	0	2018-01-12	15	87	18	18
+6399	No description	0	2018-01-18	33	5	9	2
+6400	No description	0	2018-01-12	48	39	29	1
+6401	No description	0	2018-02-23	33	37	30	11
+6402	No description	0	2018-01-18	45	6	1	15
+6403	No description	0	2018-01-03	50	25	24	14
+6404	No description	0	2018-01-21	36	98	6	1
+6405	No description	0	2018-01-31	37	60	11	18
+6406	No description	0	2018-02-19	38	81	21	18
+6407	No description	0	2018-02-14	44	55	17	22
+6408	No description	0	2018-01-21	22	86	21	10
+6409	No description	0	2018-01-02	11	40	9	11
+6410	No description	0	2018-02-16	34	34	28	25
+6411	No description	0	2018-01-16	21	97	2	16
+6412	No description	0	2018-01-01	11	51	23	3
+6413	No description	0	2018-01-20	12	4	11	21
+6414	No description	0	2018-01-14	11	65	18	22
+6415	No description	0	2018-01-20	48	41	30	18
+6416	No description	0	2018-01-20	17	17	8	16
+6417	No description	0	2018-01-06	6	93	7	1
+6418	No description	0	2018-02-16	25	24	21	2
+6419	No description	0	2018-02-16	8	2	23	20
+6420	No description	0	2018-01-19	38	24	8	10
+6421	No description	0	2018-01-02	34	98	5	20
+6422	No description	0	2018-01-09	46	41	10	25
+6423	No description	0	2018-01-05	33	63	14	11
+6424	No description	0	2018-02-06	48	74	20	18
+6425	No description	0	2018-01-13	29	12	20	24
+6426	No description	0	2018-02-04	37	28	17	23
+6427	No description	0	2018-01-16	17	24	7	1
+6428	No description	0	2018-01-30	25	7	24	3
+6429	No description	0	2018-02-23	36	92	21	20
+6430	No description	0	2018-01-13	11	42	26	23
+6431	No description	0	2018-01-19	22	83	13	6
+6432	No description	0	2018-01-21	38	14	7	21
+6433	No description	0	2018-02-02	6	97	23	24
+6434	No description	0	2018-02-14	30	75	15	5
+6435	No description	0	2018-01-31	5	84	3	5
+6436	No description	0	2018-01-22	6	31	2	21
+6437	No description	0	2018-01-15	18	61	30	20
+6438	No description	0	2018-01-24	18	66	22	5
+6439	No description	0	2018-01-28	5	61	22	21
+6440	No description	0	2018-02-06	21	22	21	23
+6441	No description	0	2018-02-25	36	53	9	13
+6442	No description	0	2018-02-14	29	99	6	21
+6443	No description	0	2018-02-08	5	29	1	12
+6444	No description	0	2018-01-16	5	15	16	7
+6445	No description	0	2018-02-15	50	50	21	5
+6446	No description	0	2018-01-22	38	28	4	6
+6447	No description	0	2018-01-23	37	87	16	9
+6448	No description	0	2018-01-25	21	57	14	5
+6449	No description	0	2018-01-05	11	97	1	21
+6450	No description	0	2018-02-27	33	93	15	5
+6451	No description	0	2018-01-28	15	50	30	7
+6452	No description	0	2018-02-10	36	6	26	14
+6453	No description	0	2018-02-03	17	17	19	9
+6454	No description	0	2018-01-05	40	60	17	1
+6455	No description	0	2018-02-17	14	45	2	22
+6456	No description	0	2018-01-24	13	86	3	16
+6457	No description	0	2018-02-28	20	80	20	7
+6458	No description	0	2018-02-11	40	73	13	6
+6459	No description	0	2018-02-25	32	2	24	14
+6460	No description	0	2018-02-09	48	19	16	8
+6461	No description	0	2018-02-20	32	55	5	6
+6462	No description	0	2018-02-01	45	63	21	22
+6463	No description	0	2018-02-06	24	86	18	18
+6464	No description	0	2018-02-10	14	49	6	25
+6465	No description	0	2018-01-24	31	52	8	25
+6466	No description	0	2018-02-11	27	6	22	16
+6467	No description	0	2018-01-12	28	43	30	24
+6468	No description	0	2018-01-20	5	86	11	14
+6469	No description	0	2018-01-11	38	79	3	13
+6470	No description	0	2018-02-28	37	5	24	25
+6471	No description	0	2018-02-06	31	33	11	18
+6472	No description	0	2018-01-17	34	49	5	22
+6473	No description	0	2018-01-24	20	16	4	11
+6474	No description	0	2018-02-15	18	80	9	17
+6475	No description	0	2018-01-30	21	57	30	12
+6476	No description	0	2018-02-08	38	77	19	2
+6477	No description	0	2018-02-04	35	82	6	6
+6478	No description	0	2018-02-07	44	29	14	23
+6479	No description	0	2018-01-21	14	86	13	9
+6480	No description	0	2018-01-08	10	35	18	21
+6481	No description	0	2018-01-20	16	2	3	21
+6482	No description	0	2018-01-01	32	47	25	2
+6483	No description	0	2018-01-19	14	99	16	4
+6484	No description	0	2018-02-11	39	12	5	9
+6485	No description	0	2018-02-18	8	29	11	19
+6486	No description	0	2018-02-08	25	82	9	23
+6487	No description	0	2018-02-23	5	11	5	22
+6488	No description	0	2018-02-03	42	47	4	16
+6489	No description	0	2018-02-09	14	93	19	14
+6490	No description	0	2018-02-27	28	93	16	14
+6491	No description	0	2018-02-22	8	91	27	24
+6492	No description	0	2018-02-01	24	88	14	20
+6493	No description	0	2018-02-26	31	78	25	21
+6494	No description	0	2018-01-02	18	100	5	14
+6495	No description	0	2018-02-20	9	34	22	7
+6496	No description	0	2018-02-23	16	55	13	6
+6497	No description	0	2018-01-16	46	68	23	18
+6498	No description	0	2018-01-10	17	53	9	6
+6499	No description	0	2018-02-19	50	72	9	3
+6500	No description	0	2018-01-14	34	80	15	19
+6501	No description	0	2018-01-09	15	35	6	13
+6502	No description	0	2018-01-21	38	90	27	17
+6503	No description	0	2018-02-14	32	25	26	1
+6504	No description	0	2018-01-03	21	34	4	5
+6505	No description	0	2018-02-20	24	42	20	25
+6506	No description	0	2018-02-22	44	49	14	18
+6507	No description	0	2018-01-08	18	91	25	17
+6508	No description	0	2018-01-01	50	34	1	7
+6509	No description	0	2018-02-11	30	59	19	13
+6510	No description	0	2018-02-09	33	64	9	16
+6511	No description	0	2018-01-18	31	53	4	6
+6512	No description	0	2018-02-20	30	32	6	3
+6513	No description	0	2018-01-22	32	11	16	10
+6514	No description	0	2018-02-03	29	8	26	15
+6515	No description	0	2018-02-06	48	61	14	4
+6516	No description	0	2018-02-28	10	69	28	3
+6517	No description	0	2018-01-22	43	14	24	4
+6518	No description	0	2018-01-05	25	41	30	13
+6519	No description	0	2018-01-22	14	71	2	16
+6520	No description	0	2018-01-13	49	75	14	8
+6521	No description	0	2018-02-11	17	15	15	19
+6522	No description	0	2018-02-19	49	60	11	17
+6523	No description	0	2018-02-19	37	84	27	3
+6524	No description	0	2018-01-31	48	64	25	6
+6525	No description	0	2018-02-13	43	88	3	24
+6526	No description	0	2018-02-08	18	52	29	2
+6527	No description	0	2018-02-04	36	82	4	16
+6528	No description	0	2018-02-14	34	1	16	22
+6529	No description	0	2018-02-06	36	26	4	21
+6530	No description	0	2018-02-09	9	8	12	13
+6531	No description	0	2018-01-18	30	92	23	5
+6532	No description	0	2018-02-26	17	72	18	21
+6533	No description	0	2018-02-23	33	21	16	5
+6534	No description	0	2018-02-05	42	13	4	15
+6535	No description	0	2018-02-19	22	19	23	3
+6536	No description	0	2018-01-03	43	62	17	25
+6537	No description	0	2018-02-27	24	86	18	10
+6538	No description	0	2018-02-21	49	20	9	9
+6539	No description	0	2018-02-24	39	13	22	22
+6540	No description	0	2018-02-26	47	28	13	22
+6541	No description	0	2018-02-12	25	61	10	7
+6542	No description	0	2018-02-21	27	86	10	20
+6543	No description	0	2018-02-20	50	79	27	5
+6544	No description	0	2018-01-26	37	72	24	25
+6545	No description	0	2018-02-18	18	68	7	16
+6546	No description	0	2018-02-03	27	48	22	11
+6547	No description	0	2018-02-23	26	82	5	21
+6548	No description	0	2018-02-23	24	76	24	19
+6549	No description	0	2018-02-07	32	19	11	24
+6550	No description	0	2018-01-19	7	35	14	5
+6551	No description	0	2018-02-01	29	95	15	3
+6552	No description	0	2018-01-05	28	85	13	7
+6553	No description	0	2018-01-09	45	91	29	24
+6554	No description	0	2018-01-18	45	3	13	8
+6555	No description	0	2018-01-31	8	13	9	12
+6556	No description	0	2018-01-01	27	97	1	21
+6557	No description	0	2018-01-15	49	12	26	24
+6558	No description	0	2018-01-31	23	27	27	18
+6559	No description	0	2018-01-07	35	91	15	4
+6560	No description	0	2018-01-04	30	19	18	12
+6561	No description	0	2018-01-12	31	94	27	12
+6562	No description	0	2018-01-27	24	50	30	25
+6563	No description	0	2018-01-21	32	89	9	16
+6564	No description	0	2018-01-31	33	67	21	18
+6565	No description	0	2018-01-25	30	54	7	23
+6566	No description	0	2018-02-26	26	69	23	15
+6567	No description	0	2018-02-08	32	22	29	2
+6568	No description	0	2018-01-21	47	4	8	20
+6569	No description	0	2018-01-17	21	76	2	23
+6570	No description	0	2018-02-11	27	95	6	4
+6571	No description	0	2018-01-14	40	23	14	12
+6572	No description	0	2018-02-07	19	70	23	12
+6573	No description	0	2018-01-26	8	86	4	23
+6574	No description	0	2018-02-17	16	18	16	3
+6575	No description	0	2018-01-14	19	25	16	1
+6576	No description	0	2018-01-23	31	8	7	1
+6577	No description	0	2018-02-07	41	69	25	2
+6578	No description	0	2018-02-27	11	59	13	2
+6579	No description	0	2018-01-19	8	73	26	2
+6580	No description	0	2018-02-24	19	70	27	5
+6581	No description	0	2018-02-01	49	5	11	4
+6582	No description	0	2018-01-25	26	68	9	9
+6583	No description	0	2018-01-14	37	27	21	19
+6584	No description	0	2018-02-15	48	85	22	25
+6585	No description	0	2018-02-10	47	61	16	19
+6586	No description	0	2018-01-14	38	82	8	4
+6587	No description	0	2018-02-02	33	65	28	7
+6588	No description	0	2018-02-25	16	70	8	19
+6589	No description	0	2018-01-18	7	41	10	9
+6590	No description	0	2018-01-25	42	63	17	24
+6591	No description	0	2018-01-20	31	46	15	10
+6592	No description	0	2018-01-07	5	99	29	21
+6593	No description	0	2018-01-22	10	58	28	13
+6594	No description	0	2018-01-15	37	70	15	7
+6595	No description	0	2018-01-04	24	79	16	21
+6596	No description	0	2018-01-26	47	45	11	17
+6597	No description	0	2018-01-06	43	92	1	3
+6598	No description	0	2018-02-04	27	52	1	11
+6599	No description	0	2018-01-15	41	75	20	21
+6600	No description	0	2018-01-21	26	79	4	13
+6601	No description	0	2018-01-27	33	48	21	24
+6602	No description	0	2018-01-27	40	80	9	6
+6603	No description	0	2018-02-23	32	26	20	22
+6604	No description	0	2018-02-06	14	66	25	19
+6605	No description	0	2018-02-18	46	9	21	6
+6606	No description	0	2018-01-14	24	22	24	19
+6607	No description	0	2018-02-13	22	51	27	19
+6608	No description	0	2018-01-30	20	79	23	9
+6609	No description	0	2018-01-05	9	74	9	4
+6610	No description	0	2018-02-07	30	54	5	5
+6611	No description	0	2018-01-24	37	45	8	12
+6612	No description	0	2018-01-20	35	21	27	16
+6613	No description	0	2018-01-18	28	44	20	13
+6614	No description	0	2018-01-23	7	76	27	3
+6615	No description	0	2018-01-02	47	98	6	3
+6616	No description	0	2018-02-10	26	70	2	13
+6617	No description	0	2018-02-17	25	51	20	18
+6618	No description	0	2018-01-20	20	60	28	16
+6619	No description	0	2018-02-16	38	60	3	24
+6620	No description	0	2018-02-12	36	83	30	13
+6621	No description	0	2018-02-16	30	53	3	22
+6622	No description	0	2018-02-15	43	15	4	24
+6623	No description	0	2018-02-24	31	2	28	20
+6624	No description	0	2018-01-28	43	55	6	20
+6625	No description	0	2018-01-21	48	60	21	7
+6626	No description	0	2018-01-06	28	58	16	8
+6627	No description	0	2018-01-18	18	45	3	12
+6628	No description	0	2018-02-27	25	16	7	17
+6629	No description	0	2018-01-17	13	23	3	24
+6630	No description	0	2018-01-04	47	29	29	6
+6631	No description	0	2018-02-23	34	68	2	14
+6632	No description	0	2018-01-09	42	64	15	11
+6633	No description	0	2018-01-27	37	90	17	20
+6634	No description	0	2018-02-26	46	16	9	8
+6635	No description	0	2018-01-03	25	28	7	21
+6636	No description	0	2018-01-17	17	91	1	11
+6637	No description	0	2018-02-26	26	29	13	21
+6638	No description	0	2018-02-05	14	63	10	15
+6639	No description	0	2018-01-31	5	92	9	21
+6640	No description	0	2018-02-07	33	22	30	25
+6641	No description	0	2018-02-23	24	33	22	12
+6642	No description	0	2018-02-11	30	39	21	13
+6643	No description	0	2018-02-05	35	64	20	7
+6644	No description	0	2018-02-16	31	67	5	15
+6645	No description	0	2018-01-12	34	90	6	4
+6646	No description	0	2018-01-24	33	71	15	17
+6647	No description	0	2018-02-18	35	73	14	15
+6648	No description	0	2018-02-17	32	75	4	7
+6649	No description	0	2018-01-23	22	43	6	25
+6650	No description	0	2018-02-19	18	28	25	8
+6651	No description	0	2018-01-23	20	58	8	2
+6652	No description	0	2018-02-08	39	11	3	17
+6653	No description	0	2018-01-20	19	8	29	10
+6654	No description	0	2018-01-24	42	20	22	11
+6655	No description	0	2018-02-21	19	6	12	13
+6656	No description	0	2018-02-16	40	45	25	7
+6657	No description	0	2018-01-31	6	94	9	10
+6658	No description	0	2018-02-17	42	91	5	8
+6659	No description	0	2018-01-11	36	25	6	7
+6660	No description	0	2018-01-09	13	32	18	25
+6661	No description	0	2018-01-21	29	49	20	11
+6662	No description	0	2018-01-03	7	39	14	24
+6663	No description	0	2018-01-31	25	17	2	10
+6664	No description	0	2018-01-11	14	22	28	9
+6665	No description	0	2018-02-14	45	47	11	9
+6666	No description	0	2018-01-20	12	54	28	19
+6667	No description	0	2018-01-31	20	57	20	24
+6668	No description	0	2018-01-07	27	80	17	23
+6669	No description	0	2018-02-09	48	25	28	8
+6670	No description	0	2018-02-24	25	62	15	21
+6671	No description	0	2018-02-04	42	52	29	5
+6672	No description	0	2018-01-27	12	77	3	24
+6673	No description	0	2018-02-21	39	18	18	6
+6674	No description	0	2018-01-28	16	3	21	4
+6675	No description	0	2018-02-17	31	56	16	21
+6676	No description	0	2018-01-18	29	60	21	4
+6677	No description	0	2018-02-09	34	92	8	14
+6678	No description	0	2018-02-13	6	77	4	2
+6679	No description	0	2018-01-25	13	19	2	25
+6680	No description	0	2018-02-04	45	68	6	5
+6681	No description	0	2018-02-10	43	12	14	5
+6682	No description	0	2018-01-17	9	53	7	9
+6683	No description	0	2018-02-19	45	2	5	13
+6684	No description	0	2018-02-24	14	42	20	3
+6685	No description	0	2018-02-25	43	4	15	1
+6686	No description	0	2018-02-21	36	17	25	11
+6687	No description	0	2018-01-05	5	44	9	17
+6688	No description	0	2018-01-16	9	4	5	11
+6689	No description	0	2018-02-27	44	6	17	9
+6690	No description	0	2018-02-09	23	95	5	4
+6691	No description	0	2018-01-17	45	34	14	11
+6692	No description	0	2018-01-22	31	51	6	16
+6693	No description	0	2018-02-05	47	41	23	8
+6694	No description	0	2018-01-11	35	50	8	23
+6695	No description	0	2018-01-21	20	45	18	21
+6696	No description	0	2018-01-31	46	30	8	20
+6697	No description	0	2018-01-29	33	29	20	15
+6698	No description	0	2018-01-07	43	8	13	20
+6699	No description	0	2018-02-02	24	63	12	18
+6700	No description	0	2018-01-22	41	73	29	16
+6701	No description	0	2018-02-07	42	70	20	22
+6702	No description	0	2018-01-07	48	66	17	25
+6703	No description	0	2018-01-14	40	25	16	19
+6704	No description	0	2018-02-03	5	37	10	25
+6705	No description	0	2018-01-17	42	17	1	8
+6706	No description	0	2018-01-19	22	4	26	6
+6707	No description	0	2018-01-19	9	94	27	24
+6708	No description	0	2018-02-02	38	71	26	19
+6709	No description	0	2018-01-09	24	48	3	8
+6710	No description	0	2018-02-08	16	3	7	8
+6711	No description	0	2018-02-25	20	6	24	2
+6712	No description	0	2018-01-24	22	81	10	19
+6713	No description	0	2018-01-27	7	22	2	25
+6714	No description	0	2018-01-20	21	87	20	24
+6715	No description	0	2018-01-19	39	2	3	21
+6716	No description	0	2018-01-11	50	11	11	2
+6717	No description	0	2018-01-08	31	3	24	22
+6718	No description	0	2018-01-15	8	23	14	15
+6719	No description	0	2018-01-08	12	2	30	18
+6720	No description	0	2018-01-24	17	31	2	8
+6721	No description	0	2018-02-23	17	20	5	2
+6722	No description	0	2018-02-10	48	27	24	10
+6723	No description	0	2018-02-04	15	79	6	19
+6724	No description	0	2018-01-03	15	54	6	12
+6725	No description	0	2018-02-17	23	51	26	20
+6726	No description	0	2018-01-28	15	58	22	17
+6727	No description	0	2018-02-20	50	20	23	8
+6728	No description	0	2018-01-25	11	97	11	12
+6729	No description	0	2018-01-19	25	42	23	2
+6730	No description	0	2018-02-23	12	28	13	10
+6731	No description	0	2018-02-27	15	97	8	5
+6732	No description	0	2018-02-17	20	40	21	1
+6733	No description	0	2018-02-03	47	98	22	18
+6734	No description	0	2018-01-22	13	70	20	16
+6735	No description	0	2018-02-28	8	3	15	9
+6736	No description	0	2018-01-16	5	29	16	9
+6737	No description	0	2018-02-11	31	95	20	19
+6738	No description	0	2018-02-27	12	24	8	15
+6739	No description	0	2018-02-12	40	36	28	4
+6740	No description	0	2018-02-01	6	36	8	24
+6741	No description	0	2018-01-28	45	80	18	8
+6742	No description	0	2018-02-20	23	23	18	13
+6743	No description	0	2018-02-26	26	36	2	25
+6744	No description	0	2018-02-06	11	85	2	11
+6745	No description	0	2018-01-11	37	33	18	14
+6746	No description	0	2018-01-06	6	3	14	8
+6747	No description	0	2018-01-24	27	27	19	1
+6748	No description	0	2018-02-06	36	84	8	7
+6749	No description	0	2018-01-14	9	86	4	1
+6750	No description	0	2018-02-14	40	76	10	10
+6751	No description	0	2018-01-28	19	100	7	18
+6752	No description	0	2018-01-15	7	33	25	10
+6753	No description	0	2018-01-29	29	97	17	22
+6754	No description	0	2018-01-03	46	84	19	11
+6755	No description	0	2018-01-13	29	52	16	4
+6756	No description	0	2018-02-12	26	8	20	3
+6757	No description	0	2018-01-05	9	48	1	14
+6758	No description	0	2018-01-23	6	78	28	4
+6759	No description	0	2018-01-31	48	71	24	15
+6760	No description	0	2018-02-25	8	56	20	2
+6761	No description	0	2018-01-14	28	84	29	13
+6762	No description	0	2018-01-31	27	82	18	2
+6763	No description	0	2018-02-04	20	20	1	21
+6764	No description	0	2018-01-19	42	83	10	17
+6765	No description	0	2018-01-14	43	30	14	15
+6766	No description	0	2018-02-17	27	16	6	11
+6767	No description	0	2018-01-11	34	90	28	5
+6768	No description	0	2018-02-09	49	68	23	7
+6769	No description	0	2018-02-14	35	11	5	13
+6770	No description	0	2018-01-03	46	84	30	4
+6771	No description	0	2018-01-18	37	70	12	14
+6772	No description	0	2018-01-21	39	37	26	24
+6773	No description	0	2018-01-27	39	25	15	21
+6774	No description	0	2018-01-21	29	20	8	4
+6775	No description	0	2018-02-20	14	42	14	21
+6776	No description	0	2018-01-16	49	53	6	16
+6777	No description	0	2018-01-08	6	66	18	5
+6778	No description	0	2018-02-26	45	83	10	8
+6779	No description	0	2018-01-17	9	57	28	20
+6780	No description	0	2018-02-09	29	35	1	17
+6781	No description	0	2018-02-17	29	31	8	24
+6782	No description	0	2018-01-16	25	36	29	2
+6783	No description	0	2018-02-15	41	64	23	23
+6784	No description	0	2018-02-14	12	67	9	6
+6785	No description	0	2018-02-26	33	74	29	24
+6786	No description	0	2018-01-19	47	12	13	9
+6787	No description	0	2018-02-13	41	26	17	4
+6788	No description	0	2018-02-23	30	60	7	23
+6789	No description	0	2018-01-26	28	60	29	23
+6790	No description	0	2018-01-21	40	7	29	15
+6791	No description	0	2018-01-20	33	48	19	16
+6792	No description	0	2018-01-20	11	90	14	18
+6793	No description	0	2018-02-09	19	70	21	24
+6794	No description	0	2018-01-22	26	82	14	8
+6795	No description	0	2018-01-28	19	3	10	24
+6796	No description	0	2018-01-11	46	66	23	8
+6797	No description	0	2018-02-21	13	33	30	23
+6798	No description	0	2018-02-24	27	3	26	20
+6799	No description	0	2018-02-28	44	64	30	25
+6800	No description	0	2018-01-26	34	93	22	3
+6801	No description	0	2018-01-06	29	51	9	11
+6802	No description	0	2018-02-10	34	13	3	21
+6803	No description	0	2018-02-12	35	65	21	17
+6804	No description	0	2018-02-03	27	8	2	8
+6805	No description	0	2018-01-22	40	16	18	24
+6806	No description	0	2018-01-26	13	32	7	8
+6807	No description	0	2018-02-06	22	51	8	1
+6808	No description	0	2018-01-28	34	76	1	4
+6809	No description	0	2018-02-03	26	45	17	13
+6810	No description	0	2018-01-01	26	53	25	16
+6811	No description	0	2018-02-21	49	33	24	24
+6812	No description	0	2018-01-09	7	68	26	16
+6813	No description	0	2018-01-22	29	16	21	3
+6814	No description	0	2018-01-11	48	43	5	25
+6815	No description	0	2018-01-26	13	2	2	4
+6816	No description	0	2018-01-28	38	30	2	9
+6817	No description	0	2018-01-21	7	82	1	20
+6818	No description	0	2018-02-19	5	38	5	3
+6819	No description	0	2018-02-03	30	62	11	6
+6820	No description	0	2018-02-07	39	95	7	18
+6821	No description	0	2018-01-29	27	78	8	10
+6822	No description	0	2018-02-27	32	30	11	16
+6823	No description	0	2018-01-15	50	2	26	3
+6824	No description	0	2018-02-06	14	58	13	15
+6825	No description	0	2018-01-08	48	10	22	20
+6826	No description	0	2018-02-17	40	43	13	18
+6827	No description	0	2018-01-01	34	84	1	6
+6828	No description	0	2018-01-03	39	68	2	4
+6829	No description	0	2018-01-09	10	52	5	2
+6830	No description	0	2018-02-09	7	65	1	25
+6831	No description	0	2018-01-30	26	31	24	1
+6832	No description	0	2018-02-20	15	78	2	6
+6833	No description	0	2018-02-12	14	35	7	17
+6834	No description	0	2018-01-12	40	62	26	2
+6835	No description	0	2018-02-13	18	26	1	10
+6836	No description	0	2018-01-31	18	68	2	11
+6837	No description	0	2018-01-16	33	27	29	16
+6838	No description	0	2018-01-27	19	95	5	1
+6839	No description	0	2018-02-06	18	23	19	19
+6840	No description	0	2018-01-01	40	12	30	17
+6841	No description	0	2018-02-08	16	47	6	3
+6842	No description	0	2018-02-22	19	60	27	23
+6843	No description	0	2018-02-09	20	33	6	6
+6844	No description	0	2018-01-03	9	92	30	20
+6845	No description	0	2018-01-26	50	50	27	16
+6846	No description	0	2018-01-08	28	88	28	5
+6847	No description	0	2018-02-16	41	29	22	19
+6848	No description	0	2018-01-21	25	31	19	13
+6849	No description	0	2018-02-25	12	22	27	12
+6850	No description	0	2018-01-19	35	22	26	17
+6851	No description	0	2018-02-23	26	83	4	3
+6852	No description	0	2018-01-28	7	3	11	22
+6853	No description	0	2018-01-22	15	48	2	24
+6854	No description	0	2018-01-22	29	40	10	9
+6855	No description	0	2018-01-26	5	70	25	7
+6856	No description	0	2018-02-15	32	57	26	23
+6857	No description	0	2018-02-16	48	73	24	3
+6858	No description	0	2018-01-26	22	74	29	17
+6859	No description	0	2018-02-17	48	68	1	21
+6860	No description	0	2018-02-11	13	93	25	1
+6861	No description	0	2018-02-15	36	62	10	9
+6862	No description	0	2018-01-09	7	83	7	10
+6863	No description	0	2018-02-16	30	93	5	6
+6864	No description	0	2018-02-06	50	26	8	4
+6865	No description	0	2018-02-26	49	80	29	18
+6866	No description	0	2018-02-13	37	11	9	23
+6867	No description	0	2018-01-17	45	4	23	9
+6868	No description	0	2018-02-05	10	9	22	8
+6869	No description	0	2018-02-17	23	81	6	25
+6870	No description	0	2018-02-12	19	78	27	18
+6871	No description	0	2018-01-27	50	11	18	16
+6872	No description	0	2018-01-07	6	77	30	5
+6873	No description	0	2018-02-11	10	58	14	20
+6874	No description	0	2018-01-08	47	48	22	18
+6875	No description	0	2018-02-21	35	73	24	17
+6876	No description	0	2018-01-20	15	73	6	24
+6877	No description	0	2018-02-24	26	60	2	16
+6878	No description	0	2018-01-09	48	74	21	4
+6879	No description	0	2018-02-21	10	74	4	23
+6880	No description	0	2018-02-28	15	70	15	13
+6881	No description	0	2018-01-25	30	26	15	3
+6882	No description	0	2018-01-04	19	77	5	6
+6883	No description	0	2018-01-09	27	56	21	18
+6884	No description	0	2018-01-25	48	28	20	11
+6885	No description	0	2018-02-01	40	94	15	23
+6886	No description	0	2018-01-19	18	15	9	8
+6887	No description	0	2018-02-23	28	86	26	5
+6888	No description	0	2018-01-03	45	37	28	19
+6889	No description	0	2018-01-23	41	86	21	18
+6890	No description	0	2018-01-05	36	46	4	14
+6891	No description	0	2018-01-19	46	78	24	7
+6892	No description	0	2018-02-10	36	14	8	5
+6893	No description	0	2018-02-24	6	84	8	21
+6894	No description	0	2018-02-19	14	12	24	23
+6895	No description	0	2018-02-11	18	70	11	19
+6896	No description	0	2018-01-05	48	87	8	14
+6897	No description	0	2018-02-06	36	48	7	22
+6898	No description	0	2018-01-08	47	17	18	10
+6899	No description	0	2018-01-13	45	17	27	14
+6900	No description	0	2018-02-26	9	95	22	11
+6901	No description	0	2018-01-03	23	8	12	10
+6902	No description	0	2018-02-09	36	48	1	22
+6903	No description	0	2018-02-07	13	93	17	22
+6904	No description	0	2018-01-04	10	60	16	10
+6905	No description	0	2018-01-22	39	3	9	15
+6906	No description	0	2018-02-11	20	20	6	4
+6907	No description	0	2018-02-12	17	22	14	1
+6908	No description	0	2018-01-11	20	16	15	14
+6909	No description	0	2018-02-26	27	80	30	13
+6910	No description	0	2018-01-11	47	1	11	18
+6911	No description	0	2018-02-11	17	45	27	20
+6912	No description	0	2018-02-06	22	92	21	25
+6913	No description	0	2018-01-12	14	54	23	8
+6914	No description	0	2018-01-21	39	5	26	10
+6915	No description	0	2018-01-03	9	3	6	22
+6916	No description	0	2018-01-06	5	10	7	25
+6917	No description	0	2018-01-10	23	93	1	12
+6918	No description	0	2018-02-09	41	60	8	4
+6919	No description	0	2018-01-09	19	64	13	24
+6920	No description	0	2018-02-19	43	86	4	2
+6921	No description	0	2018-01-29	22	78	12	14
+6922	No description	0	2018-02-21	15	23	19	24
+6923	No description	0	2018-01-22	19	4	28	21
+6924	No description	0	2018-01-07	30	9	25	2
+6925	No description	0	2018-02-04	47	54	22	20
+6926	No description	0	2018-01-11	25	42	29	13
+6927	No description	0	2018-02-14	23	68	30	14
+6928	No description	0	2018-01-15	39	18	11	15
+6929	No description	0	2018-02-03	45	17	2	6
+6930	No description	0	2018-02-10	30	4	14	24
+6931	No description	0	2018-01-20	18	81	21	11
+6932	No description	0	2018-01-11	49	55	14	20
+6933	No description	0	2018-01-25	49	30	24	15
+6934	No description	0	2018-01-12	6	55	14	20
+6935	No description	0	2018-01-27	10	51	10	7
+6936	No description	0	2018-01-11	24	54	3	21
+6937	No description	0	2018-01-23	27	52	27	6
+6938	No description	0	2018-01-31	16	16	22	14
+6939	No description	0	2018-01-19	9	28	19	3
+6940	No description	0	2018-02-03	50	2	5	19
+6941	No description	0	2018-01-01	17	64	13	18
+6942	No description	0	2018-01-28	23	58	30	5
+6943	No description	0	2018-02-22	11	75	21	15
+6944	No description	0	2018-02-26	44	88	15	25
+6945	No description	0	2018-01-04	42	9	29	7
+6946	No description	0	2018-02-11	19	26	20	21
+6947	No description	0	2018-02-01	47	10	6	12
+6948	No description	0	2018-01-01	15	86	30	10
+6949	No description	0	2018-02-25	24	78	21	22
+6950	No description	0	2018-01-12	6	14	20	18
+6951	No description	0	2018-02-25	37	81	13	17
+6952	No description	0	2018-01-05	10	26	15	25
+6953	No description	0	2018-01-30	47	90	12	3
+6954	No description	0	2018-02-14	47	62	22	12
+6955	No description	0	2018-02-10	6	22	9	18
+6956	No description	0	2018-01-24	33	98	15	5
+6957	No description	0	2018-02-21	40	20	9	20
+6958	No description	0	2018-01-28	6	10	15	4
+6959	No description	0	2018-01-26	6	98	4	2
+6960	No description	0	2018-01-30	32	90	12	13
+6961	No description	0	2018-01-18	10	11	8	6
+6962	No description	0	2018-02-15	17	87	27	11
+6963	No description	0	2018-01-31	39	23	19	16
+6964	No description	0	2018-01-08	43	46	8	14
+6965	No description	0	2018-01-06	25	51	1	6
+6966	No description	0	2018-01-28	10	90	24	15
+6967	No description	0	2018-02-10	23	49	22	3
+6968	No description	0	2018-01-12	26	92	13	10
+6969	No description	0	2018-02-13	29	1	29	14
+6970	No description	0	2018-01-08	36	79	12	8
+6971	No description	0	2018-01-17	32	3	29	6
+6972	No description	0	2018-01-06	42	74	27	19
+6973	No description	0	2018-01-09	20	43	28	12
+6974	No description	0	2018-01-26	17	8	23	20
+6975	No description	0	2018-02-02	29	63	14	15
+6976	No description	0	2018-01-20	31	21	9	7
+6977	No description	0	2018-02-12	12	96	11	8
+6978	No description	0	2018-01-15	10	87	23	16
+6979	No description	0	2018-02-18	50	89	16	4
+6980	No description	0	2018-01-05	39	99	13	16
+6981	No description	0	2018-02-21	22	46	6	6
+6982	No description	0	2018-01-05	33	41	8	18
+6983	No description	0	2018-02-18	16	100	24	25
+6984	No description	0	2018-01-04	32	3	15	11
+6985	No description	0	2018-01-16	26	13	23	2
+6986	No description	0	2018-01-23	5	82	13	13
+6987	No description	0	2018-02-07	5	86	27	1
+6988	No description	0	2018-02-13	28	11	18	9
+6989	No description	0	2018-01-06	30	96	15	11
+6990	No description	0	2018-02-03	38	99	7	2
+6991	No description	0	2018-01-19	36	99	26	13
+6992	No description	0	2018-01-28	50	30	18	20
+6993	No description	0	2018-01-16	44	29	11	4
+6994	No description	0	2018-01-29	23	52	17	2
+6995	No description	0	2018-02-24	11	38	9	9
+6996	No description	0	2018-01-17	23	15	14	22
+6997	No description	0	2018-02-19	48	72	26	12
+6998	No description	0	2018-02-18	8	4	14	5
+6999	No description	0	2018-02-14	29	75	18	24
+7000	No description	0	2018-02-07	39	72	3	19
+7001	No description	0	2018-02-22	11	78	20	9
+7002	No description	0	2018-01-05	46	3	8	8
+7003	No description	0	2018-01-24	31	91	30	25
+7004	No description	0	2018-02-13	43	21	22	9
+7005	No description	0	2018-02-28	36	37	19	19
+7006	No description	0	2018-01-22	29	51	17	14
+7007	No description	0	2018-02-27	11	27	11	11
+7008	No description	0	2018-02-04	29	85	3	7
+7009	No description	0	2018-01-02	25	88	20	4
+7010	No description	0	2018-01-14	7	73	17	21
+7011	No description	0	2018-02-12	47	88	20	16
+7012	No description	0	2018-02-02	17	20	20	25
+7013	No description	0	2018-02-25	48	79	7	16
+7014	No description	0	2018-02-03	11	88	10	25
+7015	No description	0	2018-02-04	7	90	26	9
+7016	No description	0	2018-01-13	19	6	11	18
+7017	No description	0	2018-02-27	9	26	23	1
+7018	No description	0	2018-01-16	12	39	20	17
+7019	No description	0	2018-01-02	37	76	25	23
+7020	No description	0	2018-02-10	8	50	29	3
+7021	No description	0	2018-02-19	39	3	23	13
+7022	No description	0	2018-02-24	36	90	25	18
+7023	No description	0	2018-02-08	41	3	30	4
+7024	No description	0	2018-01-28	32	41	8	7
+7025	No description	0	2018-02-19	10	14	11	25
+7026	No description	0	2018-02-05	41	59	1	10
+7027	No description	0	2018-02-04	15	31	9	3
+7028	No description	0	2018-02-19	7	42	5	13
+7029	No description	0	2018-02-01	40	93	27	25
+7030	No description	0	2018-01-13	13	39	28	25
+7031	No description	0	2018-01-19	29	84	1	1
+7032	No description	0	2018-02-17	49	75	9	1
+7033	No description	0	2018-02-22	33	73	21	3
+7034	No description	0	2018-02-28	36	5	16	6
+7035	No description	0	2018-01-06	48	53	23	2
+7036	No description	0	2018-01-27	7	36	2	22
+7037	No description	0	2018-02-04	6	69	21	20
+7038	No description	0	2018-02-28	34	44	30	3
+7039	No description	0	2018-02-24	34	72	21	23
+7040	No description	0	2018-02-20	42	8	24	9
+7041	No description	0	2018-02-11	49	27	28	21
+7042	No description	0	2018-01-12	34	21	27	1
+7043	No description	0	2018-01-09	31	53	14	12
+7044	No description	0	2018-02-10	22	54	30	13
+7045	No description	0	2018-01-09	44	46	7	8
+7046	No description	0	2018-02-05	43	42	12	5
+7047	No description	0	2018-01-17	42	15	28	17
+7048	No description	0	2018-02-01	44	80	27	21
+7049	No description	0	2018-01-14	12	82	8	7
+7050	No description	0	2018-01-19	27	70	24	9
+7051	No description	0	2018-01-24	41	56	17	6
+7052	No description	0	2018-02-12	7	51	5	1
+7053	No description	0	2018-01-10	44	10	14	10
+7054	No description	0	2018-01-21	26	17	16	7
+7055	No description	0	2018-02-03	37	71	20	21
+7056	No description	0	2018-01-10	37	64	17	18
+7057	No description	0	2018-02-21	17	2	9	11
+7058	No description	0	2018-02-11	26	49	19	21
+7059	No description	0	2018-02-01	32	17	27	13
+7060	No description	0	2018-02-12	38	32	27	8
+7061	No description	0	2018-02-23	20	42	12	19
+7062	No description	0	2018-01-22	25	32	10	1
+7063	No description	0	2018-02-17	34	34	5	14
+7064	No description	0	2018-02-08	23	74	11	10
+7065	No description	0	2018-02-09	37	89	30	14
+7066	No description	0	2018-02-01	27	48	9	6
+7067	No description	0	2018-02-20	22	34	8	1
+7068	No description	0	2018-02-12	6	7	21	23
+7069	No description	0	2018-01-27	27	88	28	8
+7070	No description	0	2018-02-18	29	40	30	15
+7071	No description	0	2018-01-06	6	82	28	18
+7072	No description	0	2018-02-24	6	71	2	21
+7073	No description	0	2018-01-05	10	91	29	23
+7074	No description	0	2018-02-13	10	49	5	22
+7075	No description	0	2018-03-01	29	6	25	12
+7076	No description	0	2018-01-14	10	14	14	7
+7077	No description	0	2018-01-02	37	19	29	7
+7078	No description	0	2018-02-27	16	95	17	23
+7079	No description	0	2018-02-11	50	72	1	9
+7080	No description	0	2018-01-31	14	61	30	15
+7081	No description	0	2018-02-14	43	15	6	22
+7082	No description	0	2018-01-24	15	84	27	1
+7083	No description	0	2018-01-01	20	54	4	16
+7084	No description	0	2018-01-12	36	92	30	16
+7085	No description	0	2018-02-26	7	100	6	13
+7086	No description	0	2018-02-20	41	21	29	6
+7087	No description	0	2018-01-01	14	19	28	12
+7088	No description	0	2018-01-30	38	78	1	20
+7089	No description	0	2018-02-07	22	30	22	15
+7090	No description	0	2018-02-21	45	96	24	10
+7091	No description	0	2018-01-29	38	87	1	15
+7092	No description	0	2018-01-03	15	11	7	4
+7093	No description	0	2018-02-16	43	93	29	2
+7094	No description	0	2018-01-17	8	37	4	19
+7095	No description	0	2018-02-25	50	54	3	21
+7096	No description	0	2018-01-14	14	90	21	24
+7097	No description	0	2018-02-14	42	32	29	9
+7098	No description	0	2018-02-12	16	50	11	3
+7099	No description	0	2018-02-06	5	93	15	21
+7100	No description	0	2018-02-08	17	57	7	20
+7101	No description	0	2018-01-28	45	43	15	20
+7102	No description	0	2018-01-28	26	97	6	24
+7103	No description	0	2018-01-21	45	84	28	2
+7104	No description	0	2018-01-31	27	9	6	8
+7105	No description	0	2018-01-30	11	58	20	6
+7106	No description	0	2018-02-06	27	34	12	17
+7107	No description	0	2018-02-09	33	91	15	24
+7108	No description	0	2018-02-27	40	44	2	23
+7109	No description	0	2018-02-03	11	87	23	1
+7110	No description	0	2018-01-23	16	91	26	8
+7111	No description	0	2018-02-15	49	5	23	7
+7112	No description	0	2018-02-21	21	38	18	9
+7113	No description	0	2018-01-26	37	99	24	9
+7114	No description	0	2018-02-07	48	58	3	4
+7115	No description	0	2018-02-07	25	14	19	3
+7116	No description	0	2018-01-17	44	39	9	11
+7117	No description	0	2018-01-01	45	60	23	1
+7118	No description	0	2018-01-23	29	77	3	13
+7119	No description	0	2018-02-06	37	35	8	18
+7120	No description	0	2018-01-31	49	81	18	17
+7121	No description	0	2018-01-09	15	57	1	19
+7122	No description	0	2018-02-03	11	49	14	13
+7123	No description	0	2018-01-10	8	63	1	17
+7124	No description	0	2018-02-20	26	22	23	1
+7125	No description	0	2018-01-26	28	58	24	6
+7126	No description	0	2018-02-03	39	23	21	5
+7127	No description	0	2018-02-12	6	92	25	4
+7128	No description	0	2018-01-17	20	14	14	15
+7129	No description	0	2018-02-11	36	6	4	21
+7130	No description	0	2018-02-17	40	78	14	15
+7131	No description	0	2018-01-30	23	55	14	3
+7132	No description	0	2018-02-05	36	52	26	11
+7133	No description	0	2018-02-25	16	92	19	18
+7134	No description	0	2018-02-17	10	62	22	14
+7135	No description	0	2018-02-24	48	89	5	4
+7136	No description	0	2018-01-26	24	1	3	9
+7137	No description	0	2018-02-01	43	73	3	8
+7138	No description	0	2018-01-09	43	15	10	24
+7139	No description	0	2018-01-05	36	48	15	1
+7140	No description	0	2018-02-12	22	65	2	11
+7141	No description	0	2018-02-11	18	17	17	3
+7142	No description	0	2018-01-27	15	43	26	7
+7143	No description	0	2018-01-21	8	50	27	17
+7144	No description	0	2018-01-14	12	21	26	22
+7145	No description	0	2018-02-06	37	61	13	7
+7146	No description	0	2018-02-23	46	2	4	1
+7147	No description	0	2018-01-30	27	81	26	23
+7148	No description	0	2018-01-18	30	72	29	10
+7149	No description	0	2018-02-15	30	34	28	24
+7150	No description	0	2018-02-20	25	27	2	6
+7151	No description	0	2018-01-05	23	85	20	11
+7152	No description	0	2018-01-09	32	58	2	12
+7153	No description	0	2018-02-17	20	64	13	7
+7154	No description	0	2018-01-13	37	9	22	10
+7155	No description	0	2018-01-18	37	15	19	17
+7156	No description	0	2018-01-03	11	2	26	6
+7157	No description	0	2018-02-04	9	23	12	2
+7158	No description	0	2018-01-21	45	17	21	1
+7159	No description	0	2018-01-12	41	15	2	18
+7160	No description	0	2018-01-23	32	51	27	16
+7161	No description	0	2018-02-23	10	42	16	8
+7162	No description	0	2018-01-04	8	87	9	17
+7163	No description	0	2018-01-24	44	50	24	4
+7164	No description	0	2018-01-24	39	57	10	6
+7165	No description	0	2018-02-28	42	10	30	16
+7166	No description	0	2018-02-28	21	40	12	22
+7167	No description	0	2018-02-28	5	39	12	13
+7168	No description	0	2018-01-01	25	35	30	12
+7169	No description	0	2018-01-24	47	26	17	2
+7170	No description	0	2018-01-21	9	96	13	23
+7171	No description	0	2018-01-04	19	54	24	4
+7172	No description	0	2018-02-20	23	71	21	3
+7173	No description	0	2018-01-23	25	54	18	20
+7174	No description	0	2018-02-23	13	33	7	16
+7175	No description	0	2018-01-11	40	78	9	7
+7176	No description	0	2018-01-02	36	96	9	25
+7177	No description	0	2018-02-12	37	29	2	23
+7178	No description	0	2018-02-06	25	73	8	10
+7179	No description	0	2018-01-05	36	85	6	11
+7180	No description	0	2018-01-05	34	12	21	13
+7181	No description	0	2018-01-29	30	41	17	8
+7182	No description	0	2018-02-26	35	59	6	23
+7183	No description	0	2018-02-17	16	59	16	23
+7184	No description	0	2018-01-12	34	30	8	3
+7185	No description	0	2018-01-05	40	34	14	24
+7186	No description	0	2018-02-21	46	74	9	5
+7187	No description	0	2018-01-20	45	35	1	2
+7188	No description	0	2018-02-07	30	87	10	3
+7189	No description	0	2018-02-02	38	65	19	1
+7190	No description	0	2018-01-13	17	71	14	21
+7191	No description	0	2018-01-09	11	76	26	12
+7192	No description	0	2018-01-03	36	26	30	12
+7193	No description	0	2018-01-06	17	40	6	15
+7194	No description	0	2018-01-02	12	12	25	8
+7195	No description	0	2018-01-18	6	10	18	10
+7196	No description	0	2018-01-05	22	27	5	7
+7197	No description	0	2018-01-06	50	59	12	12
+7198	No description	0	2018-01-25	39	67	19	10
+7199	No description	0	2018-02-21	38	27	20	16
+7200	No description	0	2018-01-07	16	33	8	21
+7201	No description	0	2018-01-29	41	39	15	1
+7202	No description	0	2018-02-09	24	13	14	19
+7203	No description	0	2018-01-27	35	26	21	6
+7204	No description	0	2018-01-04	37	15	3	23
+7205	No description	0	2018-01-23	19	25	4	7
+7206	No description	0	2018-01-20	40	84	8	7
+7207	No description	0	2018-01-23	17	92	19	4
+7208	No description	0	2018-02-16	40	27	25	19
+7209	No description	0	2018-02-21	18	94	18	3
+7210	No description	0	2018-02-08	16	48	2	16
+7211	No description	0	2018-02-26	43	59	16	14
+7212	No description	0	2018-02-26	31	100	2	19
+7213	No description	0	2018-01-12	31	11	13	14
+7214	No description	0	2018-02-19	15	90	7	25
+7215	No description	0	2018-01-23	35	92	17	13
+7216	No description	0	2018-02-15	26	1	2	23
+7217	No description	0	2018-02-25	48	90	15	19
+7218	No description	0	2018-02-19	44	44	2	21
+7219	No description	0	2018-01-12	41	62	18	18
+7220	No description	0	2018-02-11	13	49	14	8
+7221	No description	0	2018-01-08	49	40	30	8
+7222	No description	0	2018-02-23	30	69	7	3
+7223	No description	0	2018-01-21	12	30	6	8
+7224	No description	0	2018-01-22	6	100	27	8
+7225	No description	0	2018-01-07	20	27	16	12
+7226	No description	0	2018-02-27	27	50	10	8
+7227	No description	0	2018-01-14	38	1	26	7
+7228	No description	0	2018-01-09	24	5	5	8
+7229	No description	0	2018-02-28	42	70	1	17
+7230	No description	0	2018-01-12	23	17	14	23
+7231	No description	0	2018-02-02	38	88	2	13
+7232	No description	0	2018-01-10	44	99	24	7
+7233	No description	0	2018-01-18	36	96	8	17
+7234	No description	0	2018-01-04	17	81	20	11
+7235	No description	0	2018-01-20	10	2	3	21
+7236	No description	0	2018-01-06	6	5	26	15
+7237	No description	0	2018-01-08	9	38	21	19
+7238	No description	0	2018-02-24	32	23	15	17
+7239	No description	0	2018-01-29	5	10	5	20
+7240	No description	0	2018-02-03	22	18	18	6
+7241	No description	0	2018-01-28	22	7	29	7
+7242	No description	0	2018-02-07	50	46	18	3
+7243	No description	0	2018-01-21	16	90	26	14
+7244	No description	0	2018-02-22	38	12	2	9
+7245	No description	0	2018-02-24	44	31	13	9
+7246	No description	0	2018-02-04	12	40	27	5
+7247	No description	0	2018-01-12	30	69	5	6
+7248	No description	0	2018-01-11	28	8	24	10
+7249	No description	0	2018-01-01	26	45	24	23
+7250	No description	0	2018-02-25	40	31	19	13
+7251	No description	0	2018-01-12	47	98	16	19
+7252	No description	0	2018-01-03	11	44	21	14
+7253	No description	0	2018-02-18	5	25	29	11
+7254	No description	0	2018-02-16	38	5	12	20
+7255	No description	0	2018-01-27	50	25	8	9
+7256	No description	0	2018-01-10	29	87	3	6
+7257	No description	0	2018-02-13	40	2	26	14
+7258	No description	0	2018-01-24	32	27	8	6
+7259	No description	0	2018-02-08	18	56	17	20
+7260	No description	0	2018-02-18	32	42	3	24
+7261	No description	0	2018-01-29	28	87	12	13
+7262	No description	0	2018-01-25	26	84	17	4
+7263	No description	0	2018-01-22	41	91	30	20
+7264	No description	0	2018-01-03	29	8	5	5
+7265	No description	0	2018-02-01	25	23	12	12
+7266	No description	0	2018-01-13	39	19	4	24
+7267	No description	0	2018-02-02	45	73	15	23
+7268	No description	0	2018-01-09	29	48	21	12
+7269	No description	0	2018-02-01	12	34	27	24
+7270	No description	0	2018-02-17	6	94	7	7
+7271	No description	0	2018-02-04	13	26	19	18
+7272	No description	0	2018-01-06	24	29	16	18
+7273	No description	0	2018-02-03	7	95	19	25
+7274	No description	0	2018-01-28	26	96	20	16
+7275	No description	0	2018-02-19	44	3	29	21
+7276	No description	0	2018-01-26	14	7	26	8
+7277	No description	0	2018-02-10	42	47	14	3
+7278	No description	0	2018-02-03	29	29	11	5
+7279	No description	0	2018-01-12	14	31	10	16
+7280	No description	0	2018-02-17	19	19	17	12
+7281	No description	0	2018-02-16	26	99	11	20
+7282	No description	0	2018-02-26	45	31	1	13
+7283	No description	0	2018-01-14	48	18	14	23
+7284	No description	0	2018-01-30	15	18	15	13
+7285	No description	0	2018-01-16	37	26	27	3
+7286	No description	0	2018-02-23	15	1	12	20
+7287	No description	0	2018-02-18	47	54	20	20
+7288	No description	0	2018-01-12	16	46	21	19
+7289	No description	0	2018-02-21	27	61	13	19
+7290	No description	0	2018-02-05	23	16	25	23
+7291	No description	0	2018-02-26	45	37	25	9
+7292	No description	0	2018-01-28	13	25	30	23
+7293	No description	0	2018-02-09	16	35	22	6
+7294	No description	0	2018-02-23	43	88	17	1
+7295	No description	0	2018-01-21	19	81	4	10
+7296	No description	0	2018-02-25	33	84	14	14
+7297	No description	0	2018-01-28	11	13	10	1
+7298	No description	0	2018-02-16	40	39	17	9
+7299	No description	0	2018-01-13	14	70	20	20
+7300	No description	0	2018-02-28	36	1	24	24
+7301	No description	0	2018-02-21	20	70	1	5
+7302	No description	0	2018-01-22	6	16	24	12
+7303	No description	0	2018-01-09	18	91	25	6
+7304	No description	0	2018-01-02	14	1	22	6
+7305	No description	0	2018-01-29	20	45	3	3
+7306	No description	0	2018-02-05	25	47	11	14
+7307	No description	0	2018-01-25	27	19	21	13
+7308	No description	0	2018-02-04	28	80	3	15
+7309	No description	0	2018-02-05	37	26	23	11
+7310	No description	0	2018-01-30	10	40	10	3
+7311	No description	0	2018-01-09	18	54	30	1
+7312	No description	0	2018-02-16	11	22	13	7
+7313	No description	0	2018-01-12	34	93	8	10
+7314	No description	0	2018-01-19	5	15	5	15
+7315	No description	0	2018-01-09	48	84	12	18
+7316	No description	0	2018-01-03	14	54	27	21
+7317	No description	0	2018-01-30	6	70	1	4
+7318	No description	0	2018-02-03	45	36	8	12
+7319	No description	0	2018-01-07	14	49	17	15
+7320	No description	0	2018-01-29	34	75	27	19
+7321	No description	0	2018-01-11	38	21	27	18
+7322	No description	0	2018-01-04	20	2	29	24
+7323	No description	0	2018-02-11	29	59	6	8
+7324	No description	0	2018-02-24	41	40	10	25
+7325	No description	0	2018-01-13	15	37	19	11
+7326	No description	0	2018-01-11	7	48	20	19
+7327	No description	0	2018-01-25	25	35	14	3
+7328	No description	0	2018-02-05	18	45	6	9
+7329	No description	0	2018-02-12	32	71	10	21
+7330	No description	0	2018-01-30	23	64	13	14
+7331	No description	0	2018-02-10	33	30	21	20
+7332	No description	0	2018-01-28	32	100	14	12
+7333	No description	0	2018-02-01	49	28	13	15
+7334	No description	0	2018-02-01	45	13	21	12
+7335	No description	0	2018-02-03	33	2	9	3
+7336	No description	0	2018-02-08	14	90	4	11
+7337	No description	0	2018-02-25	30	86	17	13
+7338	No description	0	2018-02-08	14	9	13	16
+7339	No description	0	2018-02-12	5	98	4	25
+7340	No description	0	2018-01-02	18	31	25	5
+7341	No description	0	2018-02-22	12	42	7	9
+7342	No description	0	2018-02-05	32	98	1	23
+7343	No description	0	2018-01-11	18	87	6	17
+7344	No description	0	2018-01-02	18	12	23	11
+7345	No description	0	2018-01-03	47	79	25	14
+7346	No description	0	2018-02-19	16	67	1	20
+7347	No description	0	2018-02-09	34	46	24	25
+7348	No description	0	2018-01-24	27	97	18	8
+7349	No description	0	2018-02-18	8	36	5	6
+7350	No description	0	2018-01-31	44	27	24	22
+7351	No description	0	2018-01-23	33	64	16	13
+7352	No description	0	2018-02-09	11	96	10	21
+7353	No description	0	2018-02-07	23	71	26	11
+7354	No description	0	2018-02-23	6	76	13	22
+7355	No description	0	2018-02-11	17	98	2	12
+7356	No description	0	2018-02-14	50	30	6	4
+7357	No description	0	2018-02-06	12	82	5	15
+7358	No description	0	2018-01-09	34	72	30	24
+7359	No description	0	2018-02-11	11	21	23	6
+7360	No description	0	2018-01-13	16	66	18	13
+7361	No description	0	2018-02-08	24	94	12	21
+7362	No description	0	2018-01-25	8	59	2	19
+7363	No description	0	2018-02-24	36	75	9	25
+7364	No description	0	2018-01-05	33	23	15	16
+7365	No description	0	2018-01-24	10	96	3	10
+7366	No description	0	2018-01-24	35	80	19	13
+7367	No description	0	2018-02-10	24	84	5	19
+7368	No description	0	2018-02-14	6	27	19	22
+7369	No description	0	2018-01-22	40	9	6	15
+7370	No description	0	2018-02-19	47	36	1	20
+7371	No description	0	2018-02-13	25	1	28	11
+7372	No description	0	2018-01-30	18	15	30	18
+7373	No description	0	2018-02-12	25	3	3	3
+7374	No description	0	2018-02-07	41	64	23	6
+7375	No description	0	2018-01-14	6	81	24	23
+7376	No description	0	2018-02-07	48	67	6	22
+7377	No description	0	2018-01-30	34	12	6	7
+7378	No description	0	2018-01-31	41	29	21	3
+7379	No description	0	2018-01-24	20	84	13	16
+7380	No description	0	2018-02-03	14	8	29	23
+7381	No description	0	2018-01-15	24	73	18	4
+7382	No description	0	2018-01-05	29	33	18	2
+7383	No description	0	2018-01-26	22	67	30	2
+7384	No description	0	2018-02-17	8	41	15	21
+7385	No description	0	2018-01-23	12	27	5	18
+7386	No description	0	2018-02-14	12	10	10	18
+7387	No description	0	2018-02-26	18	13	23	23
+7388	No description	0	2018-01-01	14	26	17	16
+7389	No description	0	2018-02-05	36	21	25	25
+7390	No description	0	2018-01-20	27	31	26	20
+7391	No description	0	2018-01-18	13	70	3	23
+7392	No description	0	2018-01-02	38	80	4	7
+7393	No description	0	2018-02-06	6	2	12	25
+7394	No description	0	2018-01-29	17	84	27	12
+7395	No description	0	2018-02-04	38	55	22	5
+7396	No description	0	2018-01-03	49	96	8	22
+7397	No description	0	2018-02-01	24	24	16	16
+7398	No description	0	2018-01-06	7	35	16	11
+7399	No description	0	2018-02-13	16	33	24	25
+7400	No description	0	2018-01-29	8	84	28	9
+7401	No description	0	2018-01-15	21	21	18	11
+7402	No description	0	2018-02-01	29	51	29	16
+7403	No description	0	2018-02-09	41	39	21	21
+7404	No description	0	2018-02-21	41	6	28	8
+7405	No description	0	2018-01-22	23	38	27	11
+7406	No description	0	2018-01-30	20	88	12	23
+7407	No description	0	2018-02-24	43	31	26	3
+7408	No description	0	2018-01-28	5	34	13	18
+7409	No description	0	2018-01-06	17	36	12	10
+7410	No description	0	2018-02-07	28	17	18	9
+7411	No description	0	2018-01-28	20	81	29	12
+7412	No description	0	2018-01-26	45	95	16	14
+7413	No description	0	2018-02-13	42	70	5	19
+7414	No description	0	2018-02-09	42	89	15	23
+7415	No description	0	2018-01-26	44	61	13	19
+7416	No description	0	2018-01-31	32	68	21	12
+7417	No description	0	2018-02-02	28	3	9	15
+7418	No description	0	2018-02-08	50	17	14	23
+7419	No description	0	2018-02-12	25	79	7	6
+7420	No description	0	2018-01-20	39	63	27	12
+7421	No description	0	2018-01-20	15	51	2	16
+7422	No description	0	2018-01-11	19	74	9	20
+7423	No description	0	2018-02-24	23	58	16	22
+7424	No description	0	2018-02-02	36	42	20	23
+7425	No description	0	2018-01-10	15	98	17	20
+7426	No description	0	2018-01-05	10	36	10	7
+7427	No description	0	2018-02-24	39	53	27	1
+7428	No description	0	2018-02-03	12	5	6	16
+7429	No description	0	2018-02-23	18	10	1	9
+7430	No description	0	2018-02-27	36	73	12	13
+7431	No description	0	2018-02-12	33	80	4	8
+7432	No description	0	2018-01-26	41	41	26	3
+7433	No description	0	2018-01-12	28	26	6	3
+7434	No description	0	2018-02-16	21	41	21	8
+7435	No description	0	2018-01-31	44	11	17	2
+7436	No description	0	2018-01-29	32	90	4	8
+7437	No description	0	2018-02-15	46	56	1	17
+7438	No description	0	2018-01-19	49	86	9	16
+7439	No description	0	2018-01-16	21	35	23	1
+7440	No description	0	2018-02-05	16	64	12	3
+7441	No description	0	2018-02-05	24	5	20	18
+7442	No description	0	2018-02-13	13	96	3	10
+7443	No description	0	2018-02-01	26	26	4	1
+7444	No description	0	2018-02-18	16	62	27	19
+7445	No description	0	2018-01-31	15	15	7	21
+7446	No description	0	2018-02-27	39	23	27	9
+7447	No description	0	2018-01-01	37	94	23	19
+7448	No description	0	2018-02-05	42	23	7	12
+7449	No description	0	2018-02-06	39	30	26	23
+7450	No description	0	2018-01-08	16	4	29	3
+7451	No description	0	2018-02-10	45	44	23	6
+7452	No description	0	2018-01-12	10	26	4	11
+7453	No description	0	2018-01-22	11	52	4	3
+7454	No description	0	2018-02-21	17	33	24	21
+7455	No description	0	2018-02-23	42	97	29	12
+7456	No description	0	2018-01-20	16	20	10	9
+7457	No description	0	2018-02-18	43	93	10	23
+7458	No description	0	2018-01-23	21	58	5	6
+7459	No description	0	2018-02-03	43	27	12	1
+7460	No description	0	2018-02-27	43	7	29	24
+7461	No description	0	2018-01-21	45	87	3	24
+7462	No description	0	2018-02-26	19	76	30	15
+7463	No description	0	2018-01-10	40	41	12	14
+7464	No description	0	2018-02-09	49	77	6	14
+7465	No description	0	2018-01-03	26	38	11	5
+7466	No description	0	2018-02-26	14	55	20	3
+7467	No description	0	2018-01-28	14	28	9	25
+7468	No description	0	2018-01-17	45	38	27	2
+7469	No description	0	2018-02-24	26	2	23	11
+7470	No description	0	2018-01-13	30	29	13	4
+7471	No description	0	2018-02-07	45	37	18	13
+7472	No description	0	2018-01-20	47	99	17	1
+7473	No description	0	2018-02-11	14	50	19	1
+7474	No description	0	2018-01-16	25	56	29	18
+7475	No description	0	2018-02-09	47	93	8	3
+7476	No description	0	2018-01-20	19	91	28	14
+7477	No description	0	2018-01-23	34	77	25	24
+7478	No description	0	2018-01-17	44	58	7	6
+7479	No description	0	2018-01-10	22	30	23	17
+7480	No description	0	2018-01-06	11	91	18	3
+7481	No description	0	2018-02-02	13	87	25	19
+7482	No description	0	2018-02-04	16	46	18	8
+7483	No description	0	2018-02-28	32	38	7	7
+7484	No description	0	2018-02-07	44	4	13	24
+7485	No description	0	2018-01-20	30	87	14	21
+7486	No description	0	2018-02-06	48	90	1	19
+7487	No description	0	2018-02-10	8	70	28	20
+7488	No description	0	2018-02-18	10	94	27	7
+7489	No description	0	2018-01-07	27	62	18	3
+7490	No description	0	2018-02-03	42	91	7	18
+7491	No description	0	2018-01-04	18	97	27	22
+7492	No description	0	2018-01-30	30	27	11	24
+7493	No description	0	2018-02-14	48	65	2	25
+7494	No description	0	2018-01-13	43	31	23	4
+7495	No description	0	2018-02-09	39	35	12	14
+7496	No description	0	2018-01-28	18	30	11	7
+7497	No description	0	2018-01-08	47	33	29	11
+7498	No description	0	2018-02-10	30	92	3	14
+7499	No description	0	2018-01-18	34	98	15	2
+7500	No description	0	2018-02-13	9	26	13	2
+7501	No description	0	2018-01-29	38	42	29	15
+7502	No description	0	2018-02-27	39	17	2	14
+7503	No description	0	2018-01-22	32	64	5	2
+7504	No description	0	2018-02-11	6	11	29	24
+7505	No description	0	2018-02-26	8	30	28	13
+7506	No description	0	2018-01-14	42	15	10	13
+7507	No description	0	2018-02-14	50	17	29	4
+7508	No description	0	2018-01-28	16	67	18	24
+7509	No description	0	2018-02-13	36	24	29	24
+7510	No description	0	2018-01-20	26	76	7	15
+7511	No description	0	2018-01-23	28	17	2	24
+7512	No description	0	2018-02-23	39	82	12	10
+7513	No description	0	2018-01-09	19	55	1	14
+7514	No description	0	2018-01-06	37	46	22	7
+7515	No description	0	2018-02-20	50	56	20	5
+7516	No description	0	2018-02-21	27	10	9	18
+7517	No description	0	2018-02-22	17	55	23	11
+7518	No description	0	2018-02-20	32	4	5	12
+7519	No description	0	2018-02-22	16	16	11	12
+7520	No description	0	2018-01-02	23	56	23	8
+7521	No description	0	2018-02-24	6	19	5	19
+7522	No description	0	2018-02-28	26	97	11	24
+7523	No description	0	2018-02-12	24	36	5	17
+7524	No description	0	2018-01-19	32	85	13	14
+7525	No description	0	2018-01-02	27	98	14	6
+7526	No description	0	2018-01-11	16	34	16	15
+7527	No description	0	2018-02-21	18	54	8	20
+7528	No description	0	2018-02-07	24	96	7	12
+7529	No description	0	2018-02-02	38	4	13	12
+7530	No description	0	2018-02-20	24	85	3	14
+7531	No description	0	2018-01-12	31	67	13	9
+7532	No description	0	2018-02-05	8	98	6	13
+7533	No description	0	2018-01-26	30	45	2	4
+7534	No description	0	2018-02-15	27	79	22	15
+7535	No description	0	2018-02-20	13	81	23	20
+7536	No description	0	2018-01-06	19	54	30	16
+7537	No description	0	2018-02-10	25	89	25	9
+7538	No description	0	2018-01-04	49	27	12	1
+7539	No description	0	2018-02-03	44	22	23	24
+7540	No description	0	2018-01-23	31	79	27	9
+7541	No description	0	2018-01-09	15	53	1	21
+7542	No description	0	2018-01-14	41	44	15	21
+7543	No description	0	2018-02-18	38	81	23	16
+7544	No description	0	2018-01-04	36	24	26	9
+7545	No description	0	2018-01-30	43	28	6	22
+7546	No description	0	2018-01-29	37	16	2	8
+7547	No description	0	2018-02-22	43	53	5	16
+7548	No description	0	2018-02-18	6	42	5	3
+7549	No description	0	2018-01-16	45	61	29	7
+7550	No description	0	2018-01-07	16	59	9	1
+7551	No description	0	2018-02-17	30	1	21	12
+7552	No description	0	2018-01-30	21	39	5	4
+7553	No description	0	2018-02-08	46	14	5	2
+7554	No description	0	2018-02-27	7	38	28	23
+7555	No description	0	2018-01-07	10	54	15	10
+7556	No description	0	2018-01-25	13	90	19	4
+7557	No description	0	2018-02-13	39	34	7	25
+7558	No description	0	2018-01-29	38	38	2	11
+7559	No description	0	2018-02-16	39	58	21	11
+7560	No description	0	2018-01-26	22	7	20	22
+7561	No description	0	2018-02-08	45	55	19	11
+7562	No description	0	2018-02-05	46	68	16	12
+7563	No description	0	2018-02-21	16	45	17	21
+7564	No description	0	2018-01-26	44	37	3	25
+7565	No description	0	2018-02-06	37	95	30	22
+7566	No description	0	2018-02-16	41	30	19	16
+7567	No description	0	2018-02-24	38	41	17	16
+7568	No description	0	2018-02-04	13	45	4	5
+7569	No description	0	2018-02-07	40	23	24	11
+7570	No description	0	2018-01-06	8	75	17	1
+7571	No description	0	2018-02-12	42	43	12	25
+7572	No description	0	2018-01-27	20	55	11	6
+7573	No description	0	2018-01-10	47	83	9	13
+7574	No description	0	2018-01-22	16	53	17	19
+7575	No description	0	2018-01-12	8	19	1	8
+7576	No description	0	2018-02-03	47	61	6	12
+7577	No description	0	2018-02-26	16	69	20	24
+7578	No description	0	2018-01-13	12	45	23	15
+7579	No description	0	2018-01-09	27	22	29	14
+7580	No description	0	2018-01-16	19	40	2	5
+7581	No description	0	2018-01-03	35	99	23	15
+7582	No description	0	2018-01-12	36	70	17	21
+7583	No description	0	2018-02-02	19	80	3	6
+7584	No description	0	2018-01-09	7	86	9	21
+7585	No description	0	2018-01-26	9	14	18	12
+7586	No description	0	2018-01-30	49	58	5	24
+7587	No description	0	2018-01-06	8	68	10	14
+7588	No description	0	2018-01-03	8	75	22	6
+7589	No description	0	2018-01-12	34	54	2	5
+7590	No description	0	2018-02-11	48	20	15	12
+7591	No description	0	2018-02-12	8	85	26	15
+7592	No description	0	2018-02-11	12	14	10	15
+7593	No description	0	2018-02-01	19	71	10	18
+7594	No description	0	2018-02-09	20	58	26	12
+7595	No description	0	2018-01-13	19	35	2	12
+7596	No description	0	2018-02-22	20	99	3	25
+7597	No description	0	2018-01-24	17	61	29	8
+7598	No description	0	2018-01-31	29	25	23	5
+7599	No description	0	2018-01-08	19	33	21	8
+7600	No description	0	2018-01-07	36	84	3	9
+7601	No description	0	2018-02-22	37	16	10	15
+7602	No description	0	2018-02-27	28	99	14	13
+7603	No description	0	2018-02-07	49	92	30	3
+7604	No description	0	2018-02-08	14	77	5	13
+7605	No description	0	2018-01-29	50	54	5	3
+7606	No description	0	2018-02-22	9	83	23	18
+7607	No description	0	2018-01-20	25	93	18	9
+7608	No description	0	2018-02-10	12	28	22	1
+7609	No description	0	2018-02-17	46	86	16	1
+7610	No description	0	2018-01-21	21	34	30	1
+7611	No description	0	2018-01-30	23	36	22	24
+7612	No description	0	2018-02-10	33	39	14	23
+7613	No description	0	2018-02-07	14	63	20	23
+7614	No description	0	2018-01-23	5	85	17	9
+7615	No description	0	2018-02-16	14	4	8	12
+7616	No description	0	2018-02-15	11	11	14	17
+7617	No description	0	2018-01-19	36	61	2	22
+7618	No description	0	2018-01-21	31	47	30	19
+7619	No description	0	2018-02-25	9	39	19	19
+7620	No description	0	2018-02-22	38	30	13	5
+7621	No description	0	2018-02-22	5	82	30	7
+7622	No description	0	2018-02-08	43	16	6	1
+7623	No description	0	2018-01-03	10	55	15	1
+7624	No description	0	2018-01-12	22	65	18	9
+7625	No description	0	2018-01-06	31	54	4	17
+7626	No description	0	2018-02-23	32	23	12	21
+7627	No description	0	2018-01-08	20	79	25	9
+7628	No description	0	2018-01-06	37	59	18	16
+7629	No description	0	2018-02-07	38	43	28	3
+7630	No description	0	2018-01-15	41	8	4	6
+7631	No description	0	2018-02-12	17	54	9	11
+7632	No description	0	2018-01-10	32	86	8	5
+7633	No description	0	2018-01-26	19	68	26	12
+7634	No description	0	2018-01-06	12	40	11	18
+7635	No description	0	2018-02-13	42	43	1	2
+7636	No description	0	2018-01-26	14	54	14	7
+7637	No description	0	2018-02-21	35	76	6	4
+7638	No description	0	2018-01-04	6	22	10	20
+7639	No description	0	2018-02-11	27	70	21	10
+7640	No description	0	2018-01-04	48	25	21	2
+7641	No description	0	2018-01-10	7	17	2	4
+7642	No description	0	2018-01-12	50	14	1	24
+7643	No description	0	2018-02-15	33	9	30	18
+7644	No description	0	2018-01-21	7	14	15	2
+7645	No description	0	2018-02-20	44	92	18	22
+7646	No description	0	2018-01-24	37	80	5	16
+7647	No description	0	2018-02-27	41	24	26	12
+7648	No description	0	2018-01-24	40	49	29	3
+7649	No description	0	2018-02-26	21	31	3	13
+7650	No description	0	2018-01-14	37	31	20	22
+7651	No description	0	2018-01-28	5	47	1	8
+7652	No description	0	2018-01-05	39	26	2	24
+7653	No description	0	2018-02-26	7	93	30	4
+7654	No description	0	2018-02-12	7	42	28	25
+7655	No description	0	2018-02-04	30	24	14	22
+7656	No description	0	2018-01-22	20	42	17	10
+7657	No description	0	2018-02-08	12	81	10	2
+7658	No description	0	2018-01-03	27	38	9	11
+7659	No description	0	2018-02-26	39	14	8	18
+7660	No description	0	2018-02-08	44	43	9	20
+7661	No description	0	2018-01-06	15	80	18	19
+7662	No description	0	2018-02-22	25	7	14	10
+7663	No description	0	2018-02-13	26	83	26	21
+7664	No description	0	2018-01-14	13	88	13	8
+7665	No description	0	2018-01-14	34	38	24	9
+7666	No description	0	2018-02-12	19	54	24	8
+7667	No description	0	2018-01-02	48	31	12	1
+7668	No description	0	2018-02-03	23	72	15	4
+7669	No description	0	2018-02-25	41	33	23	2
+7670	No description	0	2018-01-28	7	15	23	25
+7671	No description	0	2018-01-31	40	60	28	24
+7672	No description	0	2018-02-20	32	42	10	20
+7673	No description	0	2018-02-17	16	3	26	9
+7674	No description	0	2018-01-07	17	95	7	19
+7675	No description	0	2018-01-01	7	56	2	2
+7676	No description	0	2018-02-02	35	43	5	24
+7677	No description	0	2018-02-21	18	87	17	4
+7678	No description	0	2018-01-06	24	63	2	2
+7679	No description	0	2018-02-24	48	31	22	9
+7680	No description	0	2018-01-01	31	68	16	18
+7681	No description	0	2018-02-06	9	68	13	3
+7682	No description	0	2018-01-21	44	27	12	1
+7683	No description	0	2018-01-01	7	29	26	8
+7684	No description	0	2018-02-02	24	13	5	25
+7685	No description	0	2018-02-16	49	55	30	3
+7686	No description	0	2018-01-22	8	31	5	2
+7687	No description	0	2018-02-18	19	36	19	15
+7688	No description	0	2018-02-03	15	75	28	9
+7689	No description	0	2018-02-13	20	11	8	8
+7690	No description	0	2018-02-16	46	82	1	25
+7691	No description	0	2018-02-18	25	81	13	23
+7692	No description	0	2018-02-17	6	72	10	3
+7693	No description	0	2018-01-06	39	72	29	13
+7694	No description	0	2018-01-30	49	100	15	14
+7695	No description	0	2018-02-24	41	7	13	6
+7696	No description	0	2018-02-20	24	8	13	17
+7697	No description	0	2018-02-18	25	17	28	24
+7698	No description	0	2018-01-14	50	7	28	20
+7699	No description	0	2018-01-28	32	52	13	20
+7700	No description	0	2018-02-07	10	65	12	4
+7701	No description	0	2018-01-21	7	36	19	14
+7702	No description	0	2018-01-11	23	77	11	15
+7703	No description	0	2018-02-04	8	29	19	9
+7704	No description	0	2018-02-12	43	31	15	12
+7705	No description	0	2018-02-05	46	26	16	23
+7706	No description	0	2018-01-11	29	21	15	14
+7707	No description	0	2018-01-02	49	21	25	1
+7708	No description	0	2018-02-27	10	80	1	22
+7709	No description	0	2018-02-09	22	3	29	24
+7710	No description	0	2018-02-23	9	20	24	1
+7711	No description	0	2018-02-13	32	98	25	2
+7712	No description	0	2018-02-12	40	82	8	23
+7713	No description	0	2018-02-12	23	11	10	25
+7714	No description	0	2018-01-01	36	2	19	20
+7715	No description	0	2018-01-19	10	45	16	1
+7716	No description	0	2018-02-22	10	27	13	8
+7717	No description	0	2018-01-09	8	18	11	10
+7718	No description	0	2018-02-18	8	90	15	8
+7719	No description	0	2018-01-18	5	99	7	3
+7720	No description	0	2018-01-10	13	32	27	21
+7721	No description	0	2018-01-21	45	1	3	17
+7722	No description	0	2018-01-06	9	42	12	5
+7723	No description	0	2018-01-24	11	16	16	3
+7724	No description	0	2018-02-02	46	70	13	18
+7725	No description	0	2018-01-24	15	4	22	25
+7726	No description	0	2018-02-25	47	53	28	6
+7727	No description	0	2018-01-21	15	25	9	11
+7728	No description	0	2018-01-27	41	83	23	4
+7729	No description	0	2018-02-22	17	19	19	4
+7730	No description	0	2018-02-18	15	32	19	16
+7731	No description	0	2018-02-16	29	62	26	18
+7732	No description	0	2018-02-13	19	94	11	21
+7733	No description	0	2018-02-21	14	35	14	24
+7734	No description	0	2018-01-27	7	17	7	13
+7735	No description	0	2018-02-01	44	12	6	11
+7736	No description	0	2018-02-24	6	98	4	17
+7737	No description	0	2018-02-04	11	37	28	8
+7738	No description	0	2018-01-23	12	54	1	20
+7739	No description	0	2018-01-16	6	20	18	13
+7740	No description	0	2018-01-16	37	24	17	15
+7741	No description	0	2018-01-17	33	87	12	15
+7742	No description	0	2018-02-20	45	65	21	6
+7743	No description	0	2018-02-28	37	72	2	4
+7744	No description	0	2018-01-20	24	83	4	2
+7745	No description	0	2018-01-28	20	16	1	1
+7746	No description	0	2018-02-24	12	91	24	25
+7747	No description	0	2018-02-04	9	10	5	1
+7748	No description	0	2018-01-26	46	25	22	18
+7749	No description	0	2018-01-17	21	22	6	24
+7750	No description	0	2018-01-30	25	62	26	13
+7751	No description	0	2018-02-17	23	52	15	4
+7752	No description	0	2018-02-11	8	96	10	12
+7753	No description	0	2018-01-30	27	82	20	18
+7754	No description	0	2018-02-16	9	20	5	13
+7755	No description	0	2018-01-13	40	96	28	1
+7756	No description	0	2018-02-02	19	71	3	2
+7757	No description	0	2018-01-01	31	25	2	10
+7758	No description	0	2018-02-19	34	87	25	5
+7759	No description	0	2018-02-01	9	13	2	20
+7760	No description	0	2018-02-28	6	23	8	3
+7761	No description	0	2018-02-04	7	93	28	12
+7762	No description	0	2018-02-20	9	3	24	10
+7763	No description	0	2018-01-24	36	38	1	16
+7764	No description	0	2018-02-17	33	29	16	22
+7765	No description	0	2018-01-11	20	39	20	6
+7766	No description	0	2018-01-24	25	82	1	23
+7767	No description	0	2018-01-17	46	54	29	16
+7768	No description	0	2018-01-17	21	7	22	12
+7769	No description	0	2018-01-17	12	97	17	2
+7770	No description	0	2018-01-04	31	55	3	23
+7771	No description	0	2018-01-03	45	23	8	11
+7772	No description	0	2018-02-07	33	2	22	14
+7773	No description	0	2018-01-20	5	80	9	16
+7774	No description	0	2018-01-04	30	100	16	25
+7775	No description	0	2018-02-14	38	89	5	5
+7776	No description	0	2018-01-30	44	58	15	18
+7777	No description	0	2018-01-15	49	60	14	17
+7778	No description	0	2018-01-24	43	41	29	16
+7779	No description	0	2018-02-28	25	80	10	19
+7780	No description	0	2018-02-23	10	34	28	10
+7781	No description	0	2018-01-09	27	88	6	22
+7782	No description	0	2018-01-02	49	69	14	22
+7783	No description	0	2018-02-15	32	13	22	22
+7784	No description	0	2018-02-25	28	76	1	23
+7785	No description	0	2018-01-13	42	51	7	9
+7786	No description	0	2018-02-25	38	31	17	13
+7787	No description	0	2018-02-18	23	41	23	16
+7788	No description	0	2018-01-02	28	8	1	17
+7789	No description	0	2018-02-09	19	84	3	19
+7790	No description	0	2018-01-23	48	56	10	2
+7791	No description	0	2018-02-23	10	46	2	10
+7792	No description	0	2018-02-20	15	77	10	25
+7793	No description	0	2018-01-31	18	22	17	24
+7794	No description	0	2018-02-09	14	73	17	24
+7795	No description	0	2018-02-23	9	84	15	17
+7796	No description	0	2018-02-21	21	28	28	22
+7797	No description	0	2018-02-25	29	85	2	21
+7798	No description	0	2018-02-16	16	40	29	23
+7799	No description	0	2018-01-03	19	95	18	16
+7800	No description	0	2018-01-18	28	54	21	10
+7801	No description	0	2018-01-28	25	30	16	15
+7802	No description	0	2018-01-22	35	90	15	20
+7803	No description	0	2018-02-09	40	15	10	1
+7804	No description	0	2018-02-06	25	33	14	24
+7805	No description	0	2018-01-27	22	73	17	3
+7806	No description	0	2018-01-10	41	79	6	11
+7807	No description	0	2018-01-03	16	86	14	12
+7808	No description	0	2018-01-30	46	4	21	6
+7809	No description	0	2018-02-03	10	6	17	21
+7810	No description	0	2018-01-09	50	84	19	21
+7811	No description	0	2018-02-21	13	18	1	20
+7812	No description	0	2018-02-06	22	88	9	10
+7813	No description	0	2018-01-26	36	58	9	7
+7814	No description	0	2018-01-02	48	69	30	12
+7815	No description	0	2018-01-21	14	65	19	16
+7816	No description	0	2018-01-08	7	5	19	16
+7817	No description	0	2018-01-27	50	78	5	24
+7818	No description	0	2018-01-31	43	16	9	13
+7819	No description	0	2018-01-20	45	88	25	14
+7820	No description	0	2018-01-02	10	72	22	2
+7821	No description	0	2018-01-02	36	71	3	6
+7822	No description	0	2018-01-01	28	29	12	21
+7823	No description	0	2018-01-03	47	46	26	4
+7824	No description	0	2018-02-03	15	58	27	9
+7825	No description	0	2018-01-01	47	38	11	23
+7826	No description	0	2018-02-01	13	12	28	9
+7827	No description	0	2018-02-24	24	52	15	14
+7828	No description	0	2018-01-18	12	14	17	17
+7829	No description	0	2018-01-22	37	72	1	8
+7830	No description	0	2018-02-26	24	92	2	8
+7831	No description	0	2018-01-13	47	32	1	4
+7832	No description	0	2018-02-06	26	100	20	21
+7833	No description	0	2018-02-09	36	97	15	7
+7834	No description	0	2018-01-17	42	23	7	20
+7835	No description	0	2018-01-06	38	85	12	12
+7836	No description	0	2018-01-12	13	11	5	17
+7837	No description	0	2018-02-08	30	55	13	5
+7838	No description	0	2018-02-10	20	45	21	24
+7839	No description	0	2018-02-05	47	76	7	23
+7840	No description	0	2018-01-11	6	78	10	14
+7841	No description	0	2018-02-18	41	82	21	14
+7842	No description	0	2018-01-26	42	77	16	14
+7843	No description	0	2018-01-13	8	9	25	17
+7844	No description	0	2018-01-21	43	71	29	1
+7845	No description	0	2018-02-02	50	74	17	1
+7846	No description	0	2018-01-25	35	87	5	8
+7847	No description	0	2018-02-01	17	28	23	9
+7848	No description	0	2018-01-24	48	24	29	18
+7849	No description	0	2018-01-02	14	45	7	3
+7850	No description	0	2018-01-03	12	93	15	21
+7851	No description	0	2018-02-16	36	11	12	2
+7852	No description	0	2018-01-10	39	26	17	7
+7853	No description	0	2018-01-20	25	45	20	13
+7854	No description	0	2018-01-07	15	29	1	21
+7855	No description	0	2018-01-27	15	81	6	6
+7856	No description	0	2018-01-18	49	24	23	1
+7857	No description	0	2018-01-19	47	50	17	22
+7858	No description	0	2018-01-02	15	29	17	4
+7859	No description	0	2018-02-17	35	96	23	5
+7860	No description	0	2018-02-19	13	98	11	2
+7861	No description	0	2018-02-17	21	64	27	23
+7862	No description	0	2018-02-08	31	81	30	4
+7863	No description	0	2018-01-11	48	42	17	25
+7864	No description	0	2018-01-17	25	18	29	25
+7865	No description	0	2018-01-14	42	64	23	13
+7866	No description	0	2018-01-25	12	97	3	3
+7867	No description	0	2018-02-11	41	7	13	17
+7868	No description	0	2018-02-06	42	2	15	8
+7869	No description	0	2018-01-07	32	94	18	3
+7870	No description	0	2018-01-20	36	38	24	22
+7871	No description	0	2018-01-30	12	37	19	6
+7872	No description	0	2018-01-04	11	70	30	4
+7873	No description	0	2018-02-06	16	39	11	1
+7874	No description	0	2018-02-09	44	92	2	24
+7875	No description	0	2018-01-21	7	67	7	12
+7876	No description	0	2018-01-22	22	63	3	10
+7877	No description	0	2018-02-08	44	13	19	23
+7878	No description	0	2018-02-15	23	3	29	22
+7879	No description	0	2018-02-06	15	46	7	23
+7880	No description	0	2018-01-10	23	30	26	14
+7881	No description	0	2018-02-19	25	22	22	3
+7882	No description	0	2018-02-25	19	43	8	14
+7883	No description	0	2018-01-18	7	71	30	1
+7884	No description	0	2018-01-30	10	22	24	5
+7885	No description	0	2018-02-09	11	22	26	12
+7886	No description	0	2018-01-13	21	26	10	17
+7887	No description	0	2018-02-05	6	81	2	17
+7888	No description	0	2018-01-02	46	93	4	17
+7889	No description	0	2018-01-23	30	12	9	11
+7890	No description	0	2018-02-14	11	29	22	7
+7891	No description	0	2018-02-19	23	39	24	14
+7892	No description	0	2018-01-01	8	94	28	13
+7893	No description	0	2018-01-07	27	84	7	20
+7894	No description	0	2018-01-09	37	79	12	4
+7895	No description	0	2018-01-10	42	41	14	4
+7896	No description	0	2018-02-13	15	51	2	17
+7897	No description	0	2018-02-11	36	27	1	13
+7898	No description	0	2018-02-23	23	99	12	24
+7899	No description	0	2018-01-11	27	83	8	13
+7900	No description	0	2018-02-03	23	1	12	22
+7901	No description	0	2018-01-26	15	42	10	23
+7902	No description	0	2018-01-02	19	34	3	7
+7903	No description	0	2018-01-02	36	2	19	8
+7904	No description	0	2018-02-24	41	82	28	21
+7905	No description	0	2018-01-30	50	87	14	9
+7906	No description	0	2018-01-15	44	11	11	17
+7907	No description	0	2018-01-03	13	67	15	2
+7908	No description	0	2018-02-16	24	12	10	23
+7909	No description	0	2018-01-09	39	6	10	13
+7910	No description	0	2018-01-20	19	81	3	18
+7911	No description	0	2018-02-16	44	51	23	2
+7912	No description	0	2018-02-15	50	54	29	23
+7913	No description	0	2018-02-24	41	68	20	3
+7914	No description	0	2018-01-15	50	56	25	8
+7915	No description	0	2018-01-27	27	71	9	14
+7916	No description	0	2018-02-27	34	12	15	5
+7917	No description	0	2018-01-21	38	66	30	21
+7918	No description	0	2018-01-11	25	2	12	4
+7919	No description	0	2018-02-10	5	69	3	17
+7920	No description	0	2018-01-19	35	69	15	23
+7921	No description	0	2018-01-12	38	23	3	11
+7922	No description	0	2018-01-21	20	95	13	15
+7923	No description	0	2018-01-09	20	32	28	5
+7924	No description	0	2018-02-22	30	28	5	11
+7925	No description	0	2018-01-13	26	61	28	14
+7926	No description	0	2018-02-17	11	78	28	7
+7927	No description	0	2018-02-07	8	15	4	21
+7928	No description	0	2018-02-02	6	45	1	14
+7929	No description	0	2018-01-04	16	44	20	17
+7930	No description	0	2018-02-08	8	64	3	20
+7931	No description	0	2018-01-23	48	42	30	24
+7932	No description	0	2018-01-11	7	42	2	16
+7933	No description	0	2018-02-02	38	63	6	22
+7934	No description	0	2018-01-05	10	69	29	6
+7935	No description	0	2018-01-01	39	78	6	15
+7936	No description	0	2018-02-01	20	70	2	23
+7937	No description	0	2018-02-17	18	37	9	18
+7938	No description	0	2018-02-03	9	32	24	12
+7939	No description	0	2018-01-20	47	26	5	12
+7940	No description	0	2018-01-22	17	71	2	10
+7941	No description	0	2018-02-18	35	5	4	12
+7942	No description	0	2018-02-24	30	69	7	19
+7943	No description	0	2018-02-13	14	61	21	15
+7944	No description	0	2018-02-11	25	30	19	3
+7945	No description	0	2018-01-30	31	98	4	4
+7946	No description	0	2018-02-04	32	36	3	21
+7947	No description	0	2018-01-23	38	40	4	21
+7948	No description	0	2018-02-17	38	49	7	16
+7949	No description	0	2018-01-20	31	69	23	19
+7950	No description	0	2018-02-24	30	72	28	17
+7951	No description	0	2018-02-01	34	61	7	15
+7952	No description	0	2018-01-01	11	70	27	12
+7953	No description	0	2018-02-18	49	77	28	7
+7954	No description	0	2018-01-21	11	11	25	9
+7955	No description	0	2018-02-07	45	11	9	5
+7956	No description	0	2018-02-21	31	17	28	21
+7957	No description	0	2018-02-23	9	27	2	10
+7958	No description	0	2018-02-07	33	77	3	6
+7959	No description	0	2018-01-12	7	73	15	19
+7960	No description	0	2018-01-17	11	72	4	24
+7961	No description	0	2018-01-24	37	39	21	14
+7962	No description	0	2018-02-14	16	40	6	1
+7963	No description	0	2018-01-14	20	55	24	4
+7964	No description	0	2018-01-08	13	33	29	7
+7965	No description	0	2018-01-07	35	18	14	12
+7966	No description	0	2018-01-05	39	92	3	7
+7967	No description	0	2018-01-26	8	17	25	21
+7968	No description	0	2018-02-21	24	84	12	2
+7969	No description	0	2018-02-11	22	35	16	25
+7970	No description	0	2018-02-03	12	19	17	3
+7971	No description	0	2018-02-28	44	96	29	13
+7972	No description	0	2018-01-29	24	44	3	8
+7973	No description	0	2018-01-21	34	55	10	13
+7974	No description	0	2018-02-06	31	88	20	13
+7975	No description	0	2018-02-02	13	61	24	6
+7976	No description	0	2018-02-26	14	94	12	17
+7977	No description	0	2018-01-24	20	2	18	20
+7978	No description	0	2018-02-05	12	27	11	19
+7979	No description	0	2018-02-10	18	97	17	18
+7980	No description	0	2018-02-16	46	41	18	18
+7981	No description	0	2018-01-08	17	1	26	23
+7982	No description	0	2018-02-06	44	66	1	3
+7983	No description	0	2018-02-01	30	86	18	20
+7984	No description	0	2018-02-10	16	98	15	8
+7985	No description	0	2018-02-16	18	73	14	6
+7986	No description	0	2018-01-27	49	85	19	4
+7987	No description	0	2018-01-24	10	29	7	18
+7988	No description	0	2018-01-15	33	35	26	18
+7989	No description	0	2018-01-22	30	100	20	12
+7990	No description	0	2018-02-22	8	97	17	14
+7991	No description	0	2018-01-28	37	84	4	20
+7992	No description	0	2018-01-26	39	84	26	8
+7993	No description	0	2018-01-23	29	14	24	11
+7994	No description	0	2018-01-15	37	22	22	21
+7995	No description	0	2018-01-16	10	36	15	6
+7996	No description	0	2018-02-06	21	64	21	17
+7997	No description	0	2018-01-11	49	5	10	18
+7998	No description	0	2018-01-15	16	70	22	15
+7999	No description	0	2018-01-10	25	54	2	3
+8000	No description	0	2018-02-24	38	71	10	23
+8001	No description	0	2018-01-09	10	12	21	2
+8002	No description	0	2018-01-17	42	12	8	1
+8003	No description	0	2018-02-11	14	38	26	24
+8004	No description	0	2018-02-04	30	54	16	7
+8005	No description	0	2018-02-22	27	86	22	19
+8006	No description	0	2018-01-11	46	82	23	5
+8007	No description	0	2018-01-30	35	93	23	5
+8008	No description	0	2018-02-25	46	82	4	13
+8009	No description	0	2018-01-19	14	4	29	11
+8010	No description	0	2018-02-16	23	55	9	14
+8011	No description	0	2018-02-19	33	22	25	23
+8012	No description	0	2018-01-06	23	99	28	5
+8013	No description	0	2018-01-11	36	56	6	5
+8014	No description	0	2018-01-03	29	73	3	4
+8015	No description	0	2018-01-18	37	65	15	9
+8016	No description	0	2018-01-08	40	92	13	19
+8017	No description	0	2018-01-06	21	76	9	18
+8018	No description	0	2018-01-28	21	46	21	12
+8019	No description	0	2018-02-03	20	70	13	10
+8020	No description	0	2018-01-15	22	11	23	11
+8021	No description	0	2018-01-05	29	94	20	11
+8022	No description	0	2018-02-10	15	65	25	5
+8023	No description	0	2018-01-15	12	98	6	1
+8024	No description	0	2018-02-01	43	16	23	8
+8025	No description	0	2018-02-25	10	73	27	2
+8026	No description	0	2018-02-13	30	85	19	1
+8027	No description	0	2018-01-17	20	13	21	11
+8028	No description	0	2018-01-21	6	90	12	23
+8029	No description	0	2018-01-09	14	64	7	25
+8030	No description	0	2018-02-09	32	66	17	25
+8031	No description	0	2018-01-15	33	3	5	24
+8032	No description	0	2018-01-15	31	51	27	10
+8033	No description	0	2018-02-05	30	50	23	13
+8034	No description	0	2018-01-06	36	83	19	24
+8035	No description	0	2018-02-03	42	32	30	5
+8036	No description	0	2018-01-19	42	51	4	17
+8037	No description	0	2018-01-25	34	26	9	6
+8038	No description	0	2018-02-10	39	62	4	11
+8039	No description	0	2018-01-20	13	55	23	2
+8040	No description	0	2018-02-03	7	47	23	6
+8041	No description	0	2018-02-12	14	82	2	5
+8042	No description	0	2018-01-13	6	23	15	22
+8043	No description	0	2018-02-02	45	65	12	10
+8044	No description	0	2018-01-19	17	19	4	24
+8045	No description	0	2018-02-20	41	61	18	10
+8046	No description	0	2018-01-23	20	66	21	20
+8047	No description	0	2018-02-24	49	60	12	21
+8048	No description	0	2018-02-14	9	18	13	5
+8049	No description	0	2018-02-27	44	66	10	11
+8050	No description	0	2018-02-20	48	87	28	21
+8051	No description	0	2018-02-21	28	57	7	21
+8052	No description	0	2018-02-14	40	27	8	16
+8053	No description	0	2018-01-13	27	60	4	6
+8054	No description	0	2018-02-25	11	38	22	11
+8055	No description	0	2018-02-01	25	49	13	5
+8056	No description	0	2018-01-02	36	91	3	8
+8057	No description	0	2018-02-02	33	44	26	2
+8058	No description	0	2018-01-29	9	23	21	12
+8059	No description	0	2018-01-03	14	81	30	25
+8060	No description	0	2018-02-08	12	9	5	11
+8061	No description	0	2018-01-09	32	8	1	17
+8062	No description	0	2018-01-13	38	49	2	14
+8063	No description	0	2018-02-23	50	58	10	7
+8064	No description	0	2018-02-28	13	43	11	1
+8065	No description	0	2018-02-01	41	99	22	23
+8066	No description	0	2018-02-27	22	23	25	4
+8067	No description	0	2018-01-16	42	27	15	18
+8068	No description	0	2018-02-22	13	73	24	1
+8069	No description	0	2018-02-22	35	82	21	9
+8070	No description	0	2018-01-31	16	34	15	23
+8071	No description	0	2018-02-22	20	88	24	11
+8072	No description	0	2018-01-14	10	36	30	18
+8073	No description	0	2018-01-25	44	43	9	22
+8074	No description	0	2018-01-20	47	24	21	2
+8075	No description	0	2018-02-21	40	2	13	24
+8076	No description	0	2018-01-02	18	60	14	1
+8077	No description	0	2018-01-23	45	85	13	11
+8078	No description	0	2018-01-14	23	35	17	21
+8079	No description	0	2018-01-01	16	7	30	23
+8080	No description	0	2018-02-23	44	93	6	15
+8081	No description	0	2018-02-16	23	52	7	17
+8082	No description	0	2018-02-03	29	56	16	20
+8083	No description	0	2018-02-22	16	68	12	3
+8084	No description	0	2018-01-25	9	21	13	5
+8085	No description	0	2018-01-14	16	92	6	1
+8086	No description	0	2018-02-19	6	58	27	2
+8087	No description	0	2018-02-19	14	35	18	13
+8088	No description	0	2018-01-03	38	13	14	4
+8089	No description	0	2018-01-03	29	88	13	24
+8090	No description	0	2018-02-06	42	68	2	19
+8091	No description	0	2018-02-26	7	62	24	16
+8092	No description	0	2018-01-21	37	63	11	18
+8093	No description	0	2018-02-08	15	40	15	21
+8094	No description	0	2018-01-08	5	100	27	19
+8095	No description	0	2018-02-09	8	58	17	9
+8096	No description	0	2018-01-23	10	10	14	21
+8097	No description	0	2018-01-03	33	97	12	16
+8098	No description	0	2018-02-13	17	8	10	6
+8099	No description	0	2018-02-23	28	36	30	9
+8100	No description	0	2018-02-24	41	11	1	15
+8101	No description	0	2018-01-26	44	56	5	24
+8102	No description	0	2018-01-09	20	57	18	17
+8103	No description	0	2018-02-03	6	73	7	1
+8104	No description	0	2018-01-29	9	63	17	4
+8105	No description	0	2018-02-03	24	72	18	18
+8106	No description	0	2018-01-26	49	69	19	2
+8107	No description	0	2018-01-23	16	41	30	5
+8108	No description	0	2018-02-25	40	92	27	16
+8109	No description	0	2018-02-21	46	14	26	14
+8110	No description	0	2018-02-21	24	54	14	10
+8111	No description	0	2018-02-07	44	100	27	22
+8112	No description	0	2018-02-01	41	30	9	22
+8113	No description	0	2018-01-05	8	63	5	20
+8114	No description	0	2018-01-28	6	22	29	19
+8115	No description	0	2018-02-02	20	47	20	19
+8116	No description	0	2018-01-24	34	98	5	23
+8117	No description	0	2018-02-21	12	42	28	24
+8118	No description	0	2018-01-29	50	15	3	21
+8119	No description	0	2018-01-21	44	64	16	5
+8120	No description	0	2018-02-21	48	21	27	17
+8121	No description	0	2018-02-26	6	66	10	17
+8122	No description	0	2018-02-28	19	94	9	14
+8123	No description	0	2018-01-22	8	5	12	19
+8124	No description	0	2018-02-04	7	28	3	7
+8125	No description	0	2018-02-13	45	81	20	19
+8126	No description	0	2018-02-10	26	69	20	4
+8127	No description	0	2018-02-22	24	10	19	19
+8128	No description	0	2018-02-14	20	51	10	3
+8129	No description	0	2018-02-17	49	9	14	20
+8130	No description	0	2018-02-15	43	27	19	20
+8131	No description	0	2018-01-23	29	11	1	3
+8132	No description	0	2018-02-05	47	99	29	25
+8133	No description	0	2018-01-02	48	21	1	10
+8134	No description	0	2018-02-14	6	24	1	11
+8135	No description	0	2018-01-28	43	7	20	15
+8136	No description	0	2018-01-19	32	74	13	7
+8137	No description	0	2018-01-29	18	90	28	5
+8138	No description	0	2018-02-12	32	4	5	5
+8139	No description	0	2018-01-11	34	37	8	6
+8140	No description	0	2018-01-13	7	33	9	25
+8141	No description	0	2018-02-15	7	100	14	7
+8142	No description	0	2018-02-26	7	57	25	23
+8143	No description	0	2018-02-15	31	83	13	15
+8144	No description	0	2018-02-08	20	83	23	6
+8145	No description	0	2018-01-10	10	1	19	1
+8146	No description	0	2018-02-17	20	26	4	19
+8147	No description	0	2018-02-16	38	46	2	9
+8148	No description	0	2018-01-29	24	12	14	5
+8149	No description	0	2018-01-07	17	28	4	12
+8150	No description	0	2018-01-13	47	30	18	7
+8151	No description	0	2018-02-28	16	99	2	4
+8152	No description	0	2018-02-08	37	3	19	6
+8153	No description	0	2018-02-17	35	62	6	17
+8154	No description	0	2018-01-06	7	83	26	21
+8155	No description	0	2018-02-27	14	71	9	9
+8156	No description	0	2018-01-21	43	83	7	2
+8157	No description	0	2018-01-07	35	70	5	9
+8158	No description	0	2018-02-15	11	18	11	3
+8159	No description	0	2018-01-29	39	36	2	15
+8160	No description	0	2018-01-13	16	29	17	25
+8161	No description	0	2018-01-01	42	30	10	1
+8162	No description	0	2018-02-07	14	52	1	12
+8163	No description	0	2018-01-07	47	61	26	16
+8164	No description	0	2018-01-30	5	75	5	16
+8165	No description	0	2018-02-08	42	87	8	15
+8166	No description	0	2018-01-22	6	63	13	22
+8167	No description	0	2018-01-19	24	16	19	23
+8168	No description	0	2018-02-04	24	71	15	23
+8169	No description	0	2018-01-25	34	43	3	3
+8170	No description	0	2018-02-25	35	14	25	20
+8171	No description	0	2018-02-18	9	74	19	20
+8172	No description	0	2018-02-25	40	21	24	13
+8173	No description	0	2018-02-23	27	16	29	3
+8174	No description	0	2018-02-24	23	23	19	2
+8175	No description	0	2018-02-22	48	73	28	8
+8176	No description	0	2018-02-21	31	42	16	8
+8177	No description	0	2018-02-12	47	97	11	4
+8178	No description	0	2018-02-17	38	66	5	10
+8179	No description	0	2018-01-05	43	56	18	25
+8180	No description	0	2018-01-01	18	28	28	12
+8181	No description	0	2018-02-20	26	74	18	25
+8182	No description	0	2018-01-21	40	9	9	12
+8183	No description	0	2018-02-28	42	58	20	16
+8184	No description	0	2018-01-31	24	51	24	21
+8185	No description	0	2018-01-30	8	55	25	18
+8186	No description	0	2018-02-07	39	73	12	12
+8187	No description	0	2018-02-28	37	54	21	15
+8188	No description	0	2018-02-22	45	14	11	17
+8189	No description	0	2018-02-24	42	90	24	18
+8190	No description	0	2018-02-10	7	92	3	9
+8191	No description	0	2018-01-19	7	86	22	14
+8192	No description	0	2018-02-22	31	75	17	13
+8193	No description	0	2018-01-30	18	45	4	14
+8194	No description	0	2018-01-24	14	77	28	22
+8195	No description	0	2018-02-01	47	93	25	9
+8196	No description	0	2018-01-06	18	69	3	7
+8197	No description	0	2018-01-06	43	86	19	4
+8198	No description	0	2018-01-16	19	31	23	7
+8199	No description	0	2018-02-12	18	99	20	8
+8200	No description	0	2018-01-26	49	98	2	19
+8201	No description	0	2018-02-22	11	1	12	14
+8202	No description	0	2018-01-01	36	13	7	25
+8203	No description	0	2018-01-25	44	64	3	17
+8204	No description	0	2018-02-12	23	2	15	4
+8205	No description	0	2018-02-09	41	45	9	18
+8206	No description	0	2018-01-03	34	92	4	19
+8207	No description	0	2018-01-14	18	2	19	5
+8208	No description	0	2018-01-01	45	15	16	7
+8209	No description	0	2018-02-10	11	68	21	22
+8210	No description	0	2018-02-12	39	91	16	5
+8211	No description	0	2018-01-02	27	51	17	25
+8212	No description	0	2018-02-18	45	19	27	24
+8213	No description	0	2018-02-06	29	90	8	9
+8214	No description	0	2018-02-16	31	79	2	25
+8215	No description	0	2018-01-25	18	39	17	18
+8216	No description	0	2018-02-14	29	34	21	11
+8217	No description	0	2018-02-06	28	19	28	22
+8218	No description	0	2018-02-16	8	44	25	25
+8219	No description	0	2018-01-09	13	31	25	14
+8220	No description	0	2018-01-20	25	54	16	5
+8221	No description	0	2018-02-20	44	55	7	3
+8222	No description	0	2018-01-08	44	7	16	22
+8223	No description	0	2018-01-23	47	45	19	3
+8224	No description	0	2018-02-06	15	59	3	2
+8225	No description	0	2018-01-02	50	18	4	17
+8226	No description	0	2018-02-24	31	8	4	23
+8227	No description	0	2018-01-11	14	12	19	10
+8228	No description	0	2018-01-10	6	60	8	15
+8229	No description	0	2018-01-29	17	95	4	1
+8230	No description	0	2018-01-09	40	44	24	5
+8231	No description	0	2018-01-15	35	68	4	20
+8232	No description	0	2018-02-26	29	77	28	7
+8233	No description	0	2018-02-28	22	8	25	3
+8234	No description	0	2018-01-10	28	25	16	21
+8235	No description	0	2018-02-28	23	42	22	6
+8236	No description	0	2018-02-09	34	62	5	11
+8237	No description	0	2018-02-03	44	23	5	18
+8238	No description	0	2018-02-08	38	86	13	2
+8239	No description	0	2018-02-16	11	43	23	20
+8240	No description	0	2018-01-05	26	33	20	8
+8241	No description	0	2018-02-27	38	90	25	19
+8242	No description	0	2018-02-28	16	5	19	14
+8243	No description	0	2018-02-26	28	49	24	15
+8244	No description	0	2018-01-28	27	29	1	1
+8245	No description	0	2018-01-28	29	50	25	6
+8246	No description	0	2018-01-08	43	48	3	13
+8247	No description	0	2018-01-22	8	2	3	12
+8248	No description	0	2018-01-20	10	67	15	4
+8249	No description	0	2018-02-18	30	80	13	11
+8250	No description	0	2018-02-19	47	21	25	3
+8251	No description	0	2018-02-18	7	59	13	4
+8252	No description	0	2018-02-22	7	18	14	3
+8253	No description	0	2018-02-18	21	34	4	15
+8254	No description	0	2018-02-27	13	7	13	14
+8255	No description	0	2018-01-13	11	26	15	15
+8256	No description	0	2018-02-03	37	6	5	11
+8257	No description	0	2018-01-18	6	40	15	24
+8258	No description	0	2018-01-07	30	28	19	20
+8259	No description	0	2018-02-15	50	10	21	24
+8260	No description	0	2018-01-16	12	70	1	19
+8261	No description	0	2018-01-01	34	83	27	22
+8262	No description	0	2018-02-15	31	5	27	3
+8263	No description	0	2018-01-30	15	49	7	6
+8264	No description	0	2018-01-22	10	68	1	22
+8265	No description	0	2018-02-26	21	97	19	12
+8266	No description	0	2018-02-03	41	64	8	17
+8267	No description	0	2018-02-17	17	3	22	19
+8268	No description	0	2018-01-14	44	61	16	6
+8269	No description	0	2018-02-27	23	15	7	23
+8270	No description	0	2018-02-12	8	89	14	25
+8271	No description	0	2018-02-03	34	23	21	19
+8272	No description	0	2018-01-18	7	67	6	21
+8273	No description	0	2018-01-17	49	13	29	11
+8274	No description	0	2018-02-16	16	64	25	3
+8275	No description	0	2018-02-22	44	40	18	15
+8276	No description	0	2018-02-09	37	70	19	9
+8277	No description	0	2018-01-22	42	14	7	4
+8278	No description	0	2018-01-17	20	5	30	13
+8279	No description	0	2018-02-08	15	51	13	21
+8280	No description	0	2018-02-06	50	79	7	1
+8281	No description	0	2018-02-16	32	92	5	18
+8282	No description	0	2018-02-09	44	60	5	7
+8283	No description	0	2018-01-13	18	11	19	13
+8284	No description	0	2018-01-08	7	88	28	7
+8285	No description	0	2018-01-07	6	54	26	21
+8286	No description	0	2018-01-24	41	98	30	7
+8287	No description	0	2018-02-19	36	78	13	6
+8288	No description	0	2018-02-25	42	16	24	9
+8289	No description	0	2018-02-22	36	74	23	8
+8290	No description	0	2018-01-11	27	68	17	8
+8291	No description	0	2018-01-18	13	67	14	16
+8292	No description	0	2018-02-09	5	49	20	1
+8293	No description	0	2018-02-04	41	7	12	14
+8294	No description	0	2018-01-26	39	33	10	9
+8295	No description	0	2018-01-11	39	79	8	25
+8296	No description	0	2018-01-07	41	75	16	5
+8297	No description	0	2018-01-03	28	17	24	2
+8298	No description	0	2018-02-04	46	21	22	19
+8299	No description	0	2018-02-03	32	83	13	10
+8300	No description	0	2018-02-22	43	62	26	11
+8301	No description	0	2018-01-21	39	65	15	22
+8302	No description	0	2018-01-14	5	93	23	2
+8303	No description	0	2018-02-17	21	72	4	6
+8304	No description	0	2018-01-23	30	45	19	4
+8305	No description	0	2018-02-11	32	27	20	18
+8306	No description	0	2018-01-26	39	24	7	7
+8307	No description	0	2018-01-21	9	52	29	20
+8308	No description	0	2018-02-04	16	22	21	20
+8309	No description	0	2018-02-01	18	54	19	14
+8310	No description	0	2018-01-29	37	68	12	7
+8311	No description	0	2018-02-09	6	74	19	8
+8312	No description	0	2018-02-02	43	87	17	15
+8313	No description	0	2018-02-09	44	86	12	19
+8314	No description	0	2018-02-26	17	76	24	4
+8315	No description	0	2018-01-21	16	81	18	24
+8316	No description	0	2018-02-11	26	50	19	19
+8317	No description	0	2018-02-27	45	19	23	18
+8318	No description	0	2018-01-16	33	75	15	22
+8319	No description	0	2018-01-02	5	36	28	25
+8320	No description	0	2018-01-10	15	24	7	9
+8321	No description	0	2018-01-02	45	98	23	10
+8322	No description	0	2018-02-26	24	32	5	4
+8323	No description	0	2018-02-26	31	23	23	7
+8324	No description	0	2018-02-04	44	63	18	21
+8325	No description	0	2018-02-10	6	97	16	23
+8326	No description	0	2018-01-19	22	46	10	17
+8327	No description	0	2018-01-08	42	35	25	19
+8328	No description	0	2018-01-08	21	25	17	25
+8329	No description	0	2018-01-24	31	8	7	13
+8330	No description	0	2018-02-10	13	3	6	6
+8331	No description	0	2018-01-25	46	31	8	12
+8332	No description	0	2018-01-18	33	79	11	12
+8333	No description	0	2018-01-02	37	66	17	2
+8334	No description	0	2018-02-02	14	11	30	3
+8335	No description	0	2018-01-03	38	44	8	18
+8336	No description	0	2018-01-02	35	79	22	3
+8337	No description	0	2018-01-30	16	31	27	23
+8338	No description	0	2018-01-06	43	58	27	17
+8339	No description	0	2018-02-14	19	6	22	15
+8340	No description	0	2018-01-25	43	98	30	17
+8341	No description	0	2018-02-18	20	99	8	21
+8342	No description	0	2018-01-29	9	61	13	21
+8343	No description	0	2018-01-11	20	5	12	25
+8344	No description	0	2018-02-18	14	94	3	18
+8345	No description	0	2018-01-03	16	46	26	5
+8346	No description	0	2018-01-31	33	50	22	6
+8347	No description	0	2018-02-27	50	45	15	7
+8348	No description	0	2018-01-11	20	61	20	7
+8349	No description	0	2018-01-29	12	76	11	15
+8350	No description	0	2018-01-13	24	75	2	15
+8351	No description	0	2018-01-06	17	65	26	24
+8352	No description	0	2018-01-25	47	3	24	1
+8353	No description	0	2018-01-22	12	48	24	11
+8354	No description	0	2018-01-18	22	29	9	11
+8355	No description	0	2018-02-23	21	77	14	7
+8356	No description	0	2018-01-12	46	100	11	6
+8357	No description	0	2018-02-13	14	92	2	13
+8358	No description	0	2018-01-21	34	8	18	16
+8359	No description	0	2018-02-04	37	28	16	17
+8360	No description	0	2018-01-06	9	56	22	23
+8361	No description	0	2018-02-05	34	2	27	18
+8362	No description	0	2018-01-13	33	69	16	21
+8363	No description	0	2018-02-14	39	83	16	17
+8364	No description	0	2018-01-27	11	14	1	20
+8365	No description	0	2018-01-13	25	20	17	13
+8366	No description	0	2018-02-17	30	15	21	18
+8367	No description	0	2018-01-30	24	40	24	23
+8368	No description	0	2018-02-18	27	75	9	24
+8369	No description	0	2018-01-05	47	67	20	15
+8370	No description	0	2018-01-25	31	10	1	21
+8371	No description	0	2018-02-14	27	33	9	17
+8372	No description	0	2018-01-23	9	71	1	2
+8373	No description	0	2018-02-03	42	3	21	21
+8374	No description	0	2018-02-05	17	68	27	9
+8375	No description	0	2018-02-27	20	88	24	19
+8376	No description	0	2018-02-27	16	75	18	3
+8377	No description	0	2018-02-24	36	31	30	20
+8378	No description	0	2018-01-31	44	58	21	15
+8379	No description	0	2018-02-16	6	35	4	22
+8380	No description	0	2018-02-22	30	16	3	14
+8381	No description	0	2018-01-09	32	40	15	13
+8382	No description	0	2018-02-11	46	19	8	1
+8383	No description	0	2018-01-27	24	83	30	23
+8384	No description	0	2018-01-22	5	71	28	5
+8385	No description	0	2018-02-07	39	54	4	12
+8386	No description	0	2018-02-12	11	20	15	22
+8387	No description	0	2018-02-14	6	16	5	5
+8388	No description	0	2018-01-04	47	25	5	11
+8389	No description	0	2018-01-11	46	63	8	2
+8390	No description	0	2018-02-04	12	47	30	13
+8391	No description	0	2018-02-22	9	56	22	12
+8392	No description	0	2018-01-05	14	8	16	13
+8393	No description	0	2018-01-08	39	55	19	21
+8394	No description	0	2018-02-23	40	97	29	25
+8395	No description	0	2018-01-23	48	87	9	17
+8396	No description	0	2018-02-07	20	3	3	1
+8397	No description	0	2018-02-16	42	5	18	19
+8398	No description	0	2018-02-21	50	89	9	8
+8399	No description	0	2018-02-25	39	36	3	11
+8400	No description	0	2018-01-21	38	34	2	9
+8401	No description	0	2018-02-16	34	12	16	12
+8402	No description	0	2018-02-07	48	78	18	20
+8403	No description	0	2018-02-23	17	96	12	1
+8404	No description	0	2018-02-17	49	34	7	7
+8405	No description	0	2018-02-10	21	56	1	1
+8406	No description	0	2018-02-01	48	92	3	7
+8407	No description	0	2018-02-20	16	43	13	19
+8408	No description	0	2018-02-15	39	85	24	5
+8409	No description	0	2018-02-20	39	38	30	6
+8410	No description	0	2018-01-15	48	55	10	12
+8411	No description	0	2018-02-23	27	100	26	25
+8412	No description	0	2018-01-19	6	13	25	8
+8413	No description	0	2018-01-23	5	38	25	25
+8414	No description	0	2018-02-11	18	62	4	5
+8415	No description	0	2018-01-09	14	96	21	14
+8416	No description	0	2018-02-10	30	31	22	6
+8417	No description	0	2018-01-10	19	14	27	15
+8418	No description	0	2018-01-14	26	97	14	16
+8419	No description	0	2018-02-12	14	52	6	16
+8420	No description	0	2018-02-17	23	39	19	11
+8421	No description	0	2018-02-02	25	100	23	11
+8422	No description	0	2018-02-08	27	28	14	5
+8423	No description	0	2018-01-12	47	88	26	8
+8424	No description	0	2018-02-04	22	76	14	22
+8425	No description	0	2018-02-27	32	5	14	25
+8426	No description	0	2018-02-05	47	43	9	3
+8427	No description	0	2018-01-17	8	42	16	1
+8428	No description	0	2018-01-20	5	96	19	7
+8429	No description	0	2018-02-23	47	65	4	8
+8430	No description	0	2018-01-26	7	82	21	10
+8431	No description	0	2018-01-29	7	91	22	18
+8432	No description	0	2018-01-23	47	20	19	7
+8433	No description	0	2018-01-23	34	20	6	11
+8434	No description	0	2018-02-08	45	82	9	9
+8435	No description	0	2018-01-29	42	98	23	25
+8436	No description	0	2018-02-01	7	67	6	23
+8437	No description	0	2018-01-24	27	1	29	2
+8438	No description	0	2018-01-15	23	53	8	11
+8439	No description	0	2018-01-26	13	9	19	9
+8440	No description	0	2018-01-07	48	29	10	15
+8441	No description	0	2018-01-13	45	57	3	11
+8442	No description	0	2018-01-31	25	5	5	11
+8443	No description	0	2018-01-03	18	43	1	22
+8444	No description	0	2018-01-15	42	31	11	17
+8445	No description	0	2018-01-06	8	96	19	5
+8446	No description	0	2018-02-21	46	85	10	24
+8447	No description	0	2018-02-11	15	76	6	18
+8448	No description	0	2018-02-16	16	38	18	23
+8449	No description	0	2018-01-31	36	84	20	24
+8450	No description	0	2018-02-04	9	78	1	25
+8451	No description	0	2018-02-06	20	50	21	15
+8452	No description	0	2018-01-31	9	66	3	3
+8453	No description	0	2018-01-27	20	48	18	16
+8454	No description	0	2018-01-08	45	7	26	6
+8455	No description	0	2018-01-31	50	23	21	7
+8456	No description	0	2018-01-09	15	99	2	2
+8457	No description	0	2018-01-08	7	75	11	23
+8458	No description	0	2018-02-12	34	38	19	23
+8459	No description	0	2018-01-31	43	16	30	6
+8460	No description	0	2018-02-19	48	38	26	7
+8461	No description	0	2018-02-02	40	43	12	6
+8462	No description	0	2018-02-20	14	71	19	18
+8463	No description	0	2018-02-24	31	10	27	6
+8464	No description	0	2018-02-17	46	62	28	9
+8465	No description	0	2018-01-27	8	82	9	5
+8466	No description	0	2018-02-24	38	34	22	20
+8467	No description	0	2018-01-03	49	83	15	22
+8468	No description	0	2018-01-09	40	4	24	21
+8469	No description	0	2018-02-16	29	47	11	5
+8470	No description	0	2018-01-25	18	83	22	18
+8471	No description	0	2018-02-10	19	73	27	9
+8472	No description	0	2018-01-18	43	41	22	11
+8473	No description	0	2018-02-25	40	51	6	18
+8474	No description	0	2018-01-03	23	80	23	16
+8475	No description	0	2018-02-01	28	86	4	4
+8476	No description	0	2018-02-04	50	82	27	18
+8477	No description	0	2018-01-05	20	99	9	24
+8478	No description	0	2018-01-20	6	64	13	3
+8479	No description	0	2018-01-05	9	12	26	6
+8480	No description	0	2018-02-26	16	87	23	9
+8481	No description	0	2018-01-13	11	90	10	7
+8482	No description	0	2018-01-16	36	26	22	20
+8483	No description	0	2018-02-20	29	62	1	6
+8484	No description	0	2018-01-12	33	39	30	12
+8485	No description	0	2018-01-17	23	62	21	15
+8486	No description	0	2018-01-07	22	29	28	13
+8487	No description	0	2018-02-13	11	18	16	10
+8488	No description	0	2018-01-14	25	66	3	24
+8489	No description	0	2018-02-12	10	1	30	12
+8490	No description	0	2018-01-09	27	5	23	24
+8491	No description	0	2018-01-05	23	4	20	19
+8492	No description	0	2018-01-18	50	49	8	23
+8493	No description	0	2018-02-06	10	71	25	8
+8494	No description	0	2018-02-16	33	57	29	12
+8495	No description	0	2018-02-08	42	54	2	7
+8496	No description	0	2018-02-05	14	82	6	6
+8497	No description	0	2018-01-08	11	62	20	18
+8498	No description	0	2018-01-20	15	32	18	16
+8499	No description	0	2018-01-27	39	93	14	21
+8500	No description	0	2018-02-19	11	27	13	9
+8501	No description	0	2018-01-19	42	53	29	4
+8502	No description	0	2018-01-20	31	37	2	2
+8503	No description	0	2018-01-18	46	36	6	1
+8504	No description	0	2018-02-23	14	14	14	19
+8505	No description	0	2018-02-05	24	26	29	10
+8506	No description	0	2018-01-27	44	62	16	1
+8507	No description	0	2018-01-22	31	93	24	25
+8508	No description	0	2018-01-24	16	29	4	12
+8509	No description	0	2018-01-27	35	71	10	11
+8510	No description	0	2018-01-25	17	70	3	25
+8511	No description	0	2018-01-17	21	52	12	19
+8512	No description	0	2018-01-02	41	28	15	13
+8513	No description	0	2018-02-14	47	31	8	14
+8514	No description	0	2018-01-08	19	85	13	2
+8515	No description	0	2018-02-11	36	47	11	23
+8516	No description	0	2018-01-09	42	26	20	24
+8517	No description	0	2018-02-05	46	22	14	14
+8518	No description	0	2018-02-08	13	80	12	21
+8519	No description	0	2018-01-07	8	70	12	25
+8520	No description	0	2018-02-04	49	43	6	9
+8521	No description	0	2018-02-28	5	17	27	23
+8522	No description	0	2018-01-25	30	6	29	14
+8523	No description	0	2018-02-26	48	89	4	8
+8524	No description	0	2018-01-20	46	4	26	11
+8525	No description	0	2018-02-02	25	44	13	22
+8526	No description	0	2018-01-20	28	83	6	8
+8527	No description	0	2018-01-15	37	40	22	13
+8528	No description	0	2018-01-01	49	31	23	6
+8529	No description	0	2018-02-23	28	100	15	23
+8530	No description	0	2018-01-02	8	83	11	10
+8531	No description	0	2018-01-16	24	24	22	6
+8532	No description	0	2018-02-21	44	86	25	23
+8533	No description	0	2018-01-12	38	22	4	12
+8534	No description	0	2018-01-20	47	54	30	2
+8535	No description	0	2018-02-25	16	98	3	9
+8536	No description	0	2018-01-20	38	11	25	24
+8537	No description	0	2018-02-12	11	65	23	5
+8538	No description	0	2018-02-20	44	41	22	19
+8539	No description	0	2018-02-18	29	58	27	2
+8540	No description	0	2018-02-25	47	90	15	21
+8541	No description	0	2018-01-21	16	74	16	12
+8542	No description	0	2018-01-24	48	5	15	7
+8543	No description	0	2018-02-22	49	62	15	3
+8544	No description	0	2018-01-30	33	22	1	14
+8545	No description	0	2018-01-07	9	27	3	5
+8546	No description	0	2018-01-09	39	91	4	21
+8547	No description	0	2018-01-09	36	65	4	13
+8548	No description	0	2018-01-24	21	35	6	18
+8549	No description	0	2018-01-27	31	32	17	7
+8550	No description	0	2018-01-05	48	2	30	22
+8551	No description	0	2018-02-20	46	56	16	17
+8552	No description	0	2018-02-26	44	10	1	18
+8553	No description	0	2018-01-25	9	100	22	4
+8554	No description	0	2018-02-11	20	87	17	24
+8555	No description	0	2018-01-13	32	67	29	5
+8556	No description	0	2018-01-16	36	81	11	19
+8557	No description	0	2018-01-26	21	71	9	17
+8558	No description	0	2018-01-08	21	82	29	4
+8559	No description	0	2018-01-31	34	62	9	21
+8560	No description	0	2018-02-27	17	38	18	12
+8561	No description	0	2018-02-23	33	9	5	7
+8562	No description	0	2018-01-04	50	84	11	2
+8563	No description	0	2018-02-05	21	42	21	13
+8564	No description	0	2018-02-06	48	57	13	23
+8565	No description	0	2018-02-14	26	97	14	7
+8566	No description	0	2018-01-11	15	85	19	22
+8567	No description	0	2018-02-23	31	45	18	14
+8568	No description	0	2018-01-25	30	41	11	23
+8569	No description	0	2018-01-24	10	53	4	18
+8570	No description	0	2018-02-02	26	86	26	2
+8571	No description	0	2018-02-26	43	30	10	1
+8572	No description	0	2018-02-06	47	72	5	24
+8573	No description	0	2018-01-03	50	28	12	23
+8574	No description	0	2018-01-01	13	35	26	11
+8575	No description	0	2018-01-07	15	24	23	10
+8576	No description	0	2018-02-17	33	61	9	22
+8577	No description	0	2018-01-21	37	17	5	15
+8578	No description	0	2018-01-02	8	8	27	11
+8579	No description	0	2018-02-16	21	94	21	17
+8580	No description	0	2018-01-27	29	82	4	12
+8581	No description	0	2018-01-02	30	21	5	23
+8582	No description	0	2018-01-05	21	91	12	1
+8583	No description	0	2018-01-28	26	70	23	23
+8584	No description	0	2018-01-16	36	34	9	16
+8585	No description	0	2018-02-25	9	52	27	11
+8586	No description	0	2018-01-01	8	44	22	2
+8587	No description	0	2018-01-10	22	40	16	22
+8588	No description	0	2018-02-11	15	19	7	6
+8589	No description	0	2018-01-09	6	24	19	21
+8590	No description	0	2018-02-28	38	23	30	1
+8591	No description	0	2018-02-14	17	89	25	10
+8592	No description	0	2018-01-06	44	32	26	2
+8593	No description	0	2018-02-27	40	99	15	19
+8594	No description	0	2018-02-07	7	60	9	9
+8595	No description	0	2018-01-19	13	49	15	11
+8596	No description	0	2018-02-01	19	16	29	4
+8597	No description	0	2018-02-07	18	31	14	6
+8598	No description	0	2018-02-08	28	24	23	18
+8599	No description	0	2018-01-25	47	88	29	1
+8600	No description	0	2018-01-12	34	33	23	10
+8601	No description	0	2018-02-23	22	76	10	1
+8602	No description	0	2018-02-11	5	51	5	11
+8603	No description	0	2018-02-11	24	41	8	3
+8604	No description	0	2018-02-09	18	22	29	21
+8605	No description	0	2018-01-16	26	24	8	20
+8606	No description	0	2018-01-10	35	69	7	8
+8607	No description	0	2018-02-25	24	78	17	2
+8608	No description	0	2018-01-07	8	71	14	5
+8609	No description	0	2018-01-29	39	68	13	4
+8610	No description	0	2018-02-23	21	47	21	23
+8611	No description	0	2018-01-13	49	48	7	23
+8612	No description	0	2018-02-28	9	9	15	7
+8613	No description	0	2018-01-23	49	5	17	7
+8614	No description	0	2018-01-08	5	39	17	4
+8615	No description	0	2018-01-25	18	93	4	6
+8616	No description	0	2018-02-10	37	20	24	15
+8617	No description	0	2018-01-09	33	73	9	23
+8618	No description	0	2018-01-17	45	99	1	17
+8619	No description	0	2018-02-22	19	21	15	21
+8620	No description	0	2018-02-19	29	65	19	7
+8621	No description	0	2018-02-07	39	6	6	22
+8622	No description	0	2018-02-25	37	69	3	12
+8623	No description	0	2018-01-03	7	92	12	6
+8624	No description	0	2018-01-12	8	51	25	21
+8625	No description	0	2018-02-14	20	40	29	18
+8626	No description	0	2018-01-01	18	32	24	11
+8627	No description	0	2018-02-24	21	54	20	12
+8628	No description	0	2018-01-24	12	35	30	23
+8629	No description	0	2018-02-20	26	11	28	21
+8630	No description	0	2018-02-24	10	84	14	25
+8631	No description	0	2018-01-01	44	1	29	14
+8632	No description	0	2018-01-20	19	39	25	22
+8633	No description	0	2018-02-14	25	92	2	17
+8634	No description	0	2018-01-23	44	8	27	20
+8635	No description	0	2018-02-10	5	51	9	2
+8636	No description	0	2018-01-13	24	58	4	19
+8637	No description	0	2018-01-09	29	12	25	5
+8638	No description	0	2018-01-07	7	47	3	5
+8639	No description	0	2018-02-03	29	21	28	14
+8640	No description	0	2018-01-11	41	6	3	13
+8641	No description	0	2018-01-11	47	97	9	20
+8642	No description	0	2018-01-04	11	25	30	23
+8643	No description	0	2018-01-18	11	93	5	8
+8644	No description	0	2018-01-24	14	38	30	11
+8645	No description	0	2018-02-16	26	66	28	1
+8646	No description	0	2018-01-04	17	49	13	18
+8647	No description	0	2018-02-08	17	5	28	3
+8648	No description	0	2018-01-04	36	89	29	22
+8649	No description	0	2018-02-22	24	56	5	22
+8650	No description	0	2018-01-01	22	34	19	8
+8651	No description	0	2018-02-08	30	18	20	7
+8652	No description	0	2018-01-14	37	80	25	4
+8653	No description	0	2018-02-04	26	81	21	16
+8654	No description	0	2018-01-03	14	38	15	1
+8655	No description	0	2018-01-11	11	88	20	14
+8656	No description	0	2018-01-08	42	10	17	10
+8657	No description	0	2018-01-23	16	2	6	15
+8658	No description	0	2018-01-21	21	95	12	22
+8659	No description	0	2018-02-16	31	35	27	12
+8660	No description	0	2018-02-07	28	99	23	16
+8661	No description	0	2018-01-02	37	29	6	12
+8662	No description	0	2018-02-11	16	53	5	25
+8663	No description	0	2018-02-08	22	87	25	14
+8664	No description	0	2018-01-26	35	52	10	23
+8665	No description	0	2018-02-16	11	19	28	18
+8666	No description	0	2018-02-24	50	30	9	9
+8667	No description	0	2018-02-27	30	25	12	24
+8668	No description	0	2018-02-27	39	16	2	10
+8669	No description	0	2018-02-19	34	65	21	19
+8670	No description	0	2018-01-08	22	5	25	19
+8671	No description	0	2018-02-23	45	11	10	18
+8672	No description	0	2018-02-25	33	96	24	21
+8673	No description	0	2018-01-08	34	50	8	14
+8674	No description	0	2018-02-27	36	45	27	16
+8675	No description	0	2018-02-17	18	39	2	9
+8676	No description	0	2018-01-05	50	6	7	22
+8677	No description	0	2018-01-13	5	99	1	5
+8678	No description	0	2018-01-01	19	32	10	18
+8679	No description	0	2018-02-18	14	7	4	24
+8680	No description	0	2018-02-12	7	67	17	5
+8681	No description	0	2018-01-20	12	52	3	10
+8682	No description	0	2018-02-25	6	91	11	24
+8683	No description	0	2018-01-10	14	25	18	2
+8684	No description	0	2018-02-23	27	15	9	2
+8685	No description	0	2018-02-07	17	8	6	18
+8686	No description	0	2018-01-26	22	23	26	8
+8687	No description	0	2018-01-28	34	55	27	24
+8688	No description	0	2018-02-15	19	69	7	13
+8689	No description	0	2018-02-05	8	40	11	1
+8690	No description	0	2018-02-28	11	64	18	6
+8691	No description	0	2018-01-03	12	43	24	19
+8692	No description	0	2018-01-09	13	49	28	8
+8693	No description	0	2018-01-14	10	4	8	18
+8694	No description	0	2018-01-17	28	53	25	25
+8695	No description	0	2018-01-19	45	68	5	17
+8696	No description	0	2018-01-22	9	30	8	17
+8697	No description	0	2018-02-26	34	65	5	23
+8698	No description	0	2018-01-01	8	40	12	23
+8699	No description	0	2018-01-06	50	70	30	24
+8700	No description	0	2018-01-15	49	66	19	18
+8701	No description	0	2018-01-16	41	95	2	21
+8702	No description	0	2018-01-19	27	5	6	12
+8703	No description	0	2018-02-25	25	42	4	19
+8704	No description	0	2018-01-21	25	75	20	9
+8705	No description	0	2018-01-08	37	81	13	3
+8706	No description	0	2018-01-25	26	70	26	23
+8707	No description	0	2018-01-03	36	18	14	24
+8708	No description	0	2018-02-21	45	67	12	13
+8709	No description	0	2018-01-22	16	69	26	14
+8710	No description	0	2018-02-20	9	69	11	18
+8711	No description	0	2018-01-11	47	16	2	4
+8712	No description	0	2018-01-26	50	57	25	12
+8713	No description	0	2018-01-22	47	66	23	20
+8714	No description	0	2018-02-25	47	14	1	1
+8715	No description	0	2018-01-18	37	68	15	23
+8716	No description	0	2018-01-01	39	69	21	18
+8717	No description	0	2018-01-31	15	49	22	16
+8718	No description	0	2018-01-18	6	43	18	5
+8719	No description	0	2018-02-12	37	10	7	16
+8720	No description	0	2018-02-11	19	43	18	9
+8721	No description	0	2018-01-12	30	88	23	15
+8722	No description	0	2018-01-10	27	62	21	4
+8723	No description	0	2018-02-04	34	61	19	10
+8724	No description	0	2018-01-15	5	50	26	4
+8725	No description	0	2018-02-25	37	2	5	5
+8726	No description	0	2018-01-12	50	11	8	25
+8727	No description	0	2018-01-23	32	72	18	17
+8728	No description	0	2018-02-04	11	19	21	2
+8729	No description	0	2018-01-12	21	4	4	10
+8730	No description	0	2018-02-26	5	75	14	6
+8731	No description	0	2018-01-26	38	55	9	25
+8732	No description	0	2018-01-30	33	38	6	21
+8733	No description	0	2018-02-26	13	26	30	11
+8734	No description	0	2018-01-24	12	85	3	12
+8735	No description	0	2018-01-25	48	19	12	11
+8736	No description	0	2018-02-21	23	52	5	20
+8737	No description	0	2018-02-07	41	14	24	23
+8738	No description	0	2018-01-11	36	99	27	16
+8739	No description	0	2018-01-02	38	76	5	7
+8740	No description	0	2018-01-27	5	68	17	2
+8741	No description	0	2018-01-26	46	98	9	16
+8742	No description	0	2018-01-13	38	76	10	22
+8743	No description	0	2018-01-21	16	94	10	9
+8744	No description	0	2018-02-22	35	80	4	4
+8745	No description	0	2018-02-22	23	58	21	12
+8746	No description	0	2018-01-20	21	97	18	4
+8747	No description	0	2018-02-11	41	85	13	21
+8748	No description	0	2018-02-07	23	57	16	16
+8749	No description	0	2018-01-23	47	40	10	21
+8750	No description	0	2018-01-17	35	32	14	3
+8751	No description	0	2018-01-21	44	81	4	13
+8752	No description	0	2018-02-27	11	83	25	24
+8753	No description	0	2018-01-01	40	8	28	15
+8754	No description	0	2018-02-06	35	91	16	20
+8755	No description	0	2018-02-05	24	10	25	3
+8756	No description	0	2018-01-11	23	93	23	23
+8757	No description	0	2018-02-22	11	23	4	14
+8758	No description	0	2018-01-04	25	77	2	4
+8759	No description	0	2018-01-05	46	75	12	1
+8760	No description	0	2018-01-19	32	68	20	11
+8761	No description	0	2018-02-28	49	44	21	25
+8762	No description	0	2018-02-03	35	8	24	10
+8763	No description	0	2018-01-17	28	75	4	5
+8764	No description	0	2018-02-09	31	40	2	23
+8765	No description	0	2018-01-02	28	42	4	24
+8766	No description	0	2018-02-20	27	39	30	5
+8767	No description	0	2018-01-10	9	62	30	14
+8768	No description	0	2018-02-02	5	53	3	5
+8769	No description	0	2018-02-09	41	5	18	3
+8770	No description	0	2018-01-09	40	71	29	21
+8771	No description	0	2018-02-19	10	90	2	21
+8772	No description	0	2018-01-07	8	22	20	10
+8773	No description	0	2018-01-06	17	67	20	16
+8774	No description	0	2018-02-01	8	32	6	7
+8775	No description	0	2018-02-17	27	81	1	10
+8776	No description	0	2018-01-02	22	35	30	18
+8777	No description	0	2018-01-18	43	59	15	18
+8778	No description	0	2018-02-11	39	90	18	17
+8779	No description	0	2018-01-31	24	60	13	10
+8780	No description	0	2018-02-16	16	62	12	24
+8781	No description	0	2018-02-04	12	37	19	15
+8782	No description	0	2018-01-10	41	46	1	12
+8783	No description	0	2018-01-25	39	54	16	9
+8784	No description	0	2018-02-08	13	25	15	20
+8785	No description	0	2018-02-23	7	22	23	23
+8786	No description	0	2018-01-15	30	20	22	25
+8787	No description	0	2018-02-04	36	67	17	12
+8788	No description	0	2018-01-02	9	84	26	4
+8789	No description	0	2018-02-16	38	27	27	14
+8790	No description	0	2018-02-03	48	46	27	22
+8791	No description	0	2018-02-06	44	45	17	20
+8792	No description	0	2018-01-18	23	93	20	5
+8793	No description	0	2018-02-20	42	53	1	12
+8794	No description	0	2018-01-20	43	93	17	9
+8795	No description	0	2018-02-10	44	55	3	5
+8796	No description	0	2018-01-23	19	26	3	4
+8797	No description	0	2018-02-07	35	46	23	3
+8798	No description	0	2018-01-03	48	99	24	19
+8799	No description	0	2018-02-11	44	54	9	25
+8800	No description	0	2018-02-24	44	92	29	1
+8801	No description	0	2018-02-16	28	2	12	19
+8802	No description	0	2018-02-06	41	100	10	6
+8803	No description	0	2018-01-10	7	88	8	11
+8804	No description	0	2018-02-27	12	45	29	23
+8805	No description	0	2018-02-25	32	7	19	1
+8806	No description	0	2018-02-05	28	24	11	6
+8807	No description	0	2018-01-28	9	20	14	19
+8808	No description	0	2018-01-28	41	46	26	22
+8809	No description	0	2018-02-03	15	55	18	2
+8810	No description	0	2018-01-29	13	50	6	3
+8811	No description	0	2018-01-09	43	95	27	4
+8812	No description	0	2018-02-10	13	83	14	10
+8813	No description	0	2018-02-06	24	84	2	24
+8814	No description	0	2018-01-07	29	42	29	14
+8815	No description	0	2018-01-08	12	24	5	18
+8816	No description	0	2018-02-14	21	63	23	15
+8817	No description	0	2018-01-08	20	66	1	14
+8818	No description	0	2018-02-28	6	41	26	2
+8819	No description	0	2018-02-19	16	59	17	11
+8820	No description	0	2018-02-07	16	67	7	6
+8821	No description	0	2018-01-06	20	84	10	18
+8822	No description	0	2018-01-02	37	95	4	24
+8823	No description	0	2018-01-19	34	18	29	17
+8824	No description	0	2018-01-07	32	39	21	5
+8825	No description	0	2018-02-03	32	20	21	4
+8826	No description	0	2018-02-24	36	69	18	22
+8827	No description	0	2018-02-03	19	37	14	6
+8828	No description	0	2018-02-03	10	89	3	6
+8829	No description	0	2018-02-16	39	42	9	22
+8830	No description	0	2018-01-14	32	37	6	4
+8831	No description	0	2018-02-07	38	15	5	22
+8832	No description	0	2018-01-22	40	4	20	10
+8833	No description	0	2018-02-02	26	17	5	11
+8834	No description	0	2018-02-05	24	44	3	18
+8835	No description	0	2018-02-17	5	84	5	18
+8836	No description	0	2018-01-22	33	30	13	11
+8837	No description	0	2018-01-16	10	23	7	1
+8838	No description	0	2018-01-19	37	92	28	3
+8839	No description	0	2018-02-04	49	95	4	8
+8840	No description	0	2018-01-11	36	84	25	24
+8841	No description	0	2018-01-01	38	35	29	22
+8842	No description	0	2018-01-09	15	11	8	8
+8843	No description	0	2018-02-23	20	9	3	14
+8844	No description	0	2018-01-08	18	18	22	10
+8845	No description	0	2018-02-07	24	81	10	10
+8846	No description	0	2018-02-05	40	74	29	6
+8847	No description	0	2018-02-21	43	64	30	13
+8848	No description	0	2018-02-22	5	69	10	23
+8849	No description	0	2018-01-21	14	56	19	12
+8850	No description	0	2018-02-25	49	80	3	5
+8851	No description	0	2018-01-28	19	73	23	6
+8852	No description	0	2018-02-10	49	21	24	9
+8853	No description	0	2018-01-12	25	73	12	13
+8854	No description	0	2018-02-05	36	81	12	17
+8855	No description	0	2018-02-12	10	86	3	12
+8856	No description	0	2018-01-25	44	72	6	20
+8857	No description	0	2018-02-20	21	10	18	8
+8858	No description	0	2018-02-16	6	54	22	20
+8859	No description	0	2018-02-20	20	70	2	12
+8860	No description	0	2018-02-14	44	15	1	14
+8861	No description	0	2018-01-09	9	70	15	2
+8862	No description	0	2018-02-05	10	11	14	2
+8863	No description	0	2018-02-11	42	43	22	25
+8864	No description	0	2018-02-05	38	86	10	10
+8865	No description	0	2018-01-30	21	17	29	6
+8866	No description	0	2018-02-03	32	61	3	8
+8867	No description	0	2018-02-15	49	93	5	4
+8868	No description	0	2018-02-13	29	20	9	24
+8869	No description	0	2018-02-14	48	23	24	19
+8870	No description	0	2018-01-08	37	59	26	8
+8871	No description	0	2018-02-07	35	99	12	8
+8872	No description	0	2018-02-26	5	96	21	1
+8873	No description	0	2018-01-31	27	74	15	14
+8874	No description	0	2018-01-20	19	65	24	2
+8875	No description	0	2018-01-19	32	96	5	23
+8876	No description	0	2018-02-23	35	57	10	17
+8877	No description	0	2018-02-13	49	23	26	1
+8878	No description	0	2018-02-08	39	19	7	2
+8879	No description	0	2018-01-16	15	95	26	19
+8880	No description	0	2018-02-21	9	22	10	13
+8881	No description	0	2018-01-06	24	52	3	7
+8882	No description	0	2018-02-05	42	53	7	20
+8883	No description	0	2018-01-21	23	99	29	2
+8884	No description	0	2018-01-22	12	87	22	12
+8885	No description	0	2018-01-15	48	49	28	23
+8886	No description	0	2018-01-12	37	65	20	2
+8887	No description	0	2018-01-13	25	83	6	23
+8888	No description	0	2018-01-25	38	74	17	13
+8889	No description	0	2018-01-12	35	84	1	18
+8890	No description	0	2018-02-19	12	96	23	4
+8891	No description	0	2018-01-09	43	43	25	12
+8892	No description	0	2018-01-20	8	78	24	23
+8893	No description	0	2018-01-17	30	30	14	19
+8894	No description	0	2018-01-08	42	33	4	11
+8895	No description	0	2018-01-06	16	86	11	5
+8896	No description	0	2018-02-17	47	21	10	8
+8897	No description	0	2018-01-29	37	92	6	19
+8898	No description	0	2018-01-08	44	69	17	15
+8899	No description	0	2018-01-26	36	92	13	8
+8900	No description	0	2018-01-21	35	9	11	4
+8901	No description	0	2018-01-12	37	12	15	22
+8902	No description	0	2018-01-24	48	71	8	20
+8903	No description	0	2018-01-05	15	79	27	2
+8904	No description	0	2018-01-05	47	90	6	13
+8905	No description	0	2018-01-04	16	94	6	11
+8906	No description	0	2018-01-21	16	100	28	8
+8907	No description	0	2018-02-13	12	38	3	22
+8908	No description	0	2018-01-03	36	22	5	3
+8909	No description	0	2018-02-21	32	41	13	14
+8910	No description	0	2018-01-16	22	69	23	19
+8911	No description	0	2018-02-18	15	22	5	22
+8912	No description	0	2018-01-01	11	53	16	13
+8913	No description	0	2018-01-04	44	27	29	19
+8914	No description	0	2018-01-06	25	4	27	13
+8915	No description	0	2018-02-24	21	65	13	2
+8916	No description	0	2018-01-19	11	84	18	2
+8917	No description	0	2018-01-21	23	66	5	5
+8918	No description	0	2018-02-16	14	25	11	7
+8919	No description	0	2018-01-10	21	79	9	8
+8920	No description	0	2018-01-28	31	34	30	10
+8921	No description	0	2018-01-07	26	48	2	19
+8922	No description	0	2018-02-27	48	49	26	8
+8923	No description	0	2018-01-05	20	64	15	1
+8924	No description	0	2018-01-30	30	26	10	14
+8925	No description	0	2018-02-26	17	39	13	9
+8926	No description	0	2018-01-26	8	22	30	19
+8927	No description	0	2018-01-18	13	18	14	19
+8928	No description	0	2018-01-01	43	93	13	9
+8929	No description	0	2018-01-30	34	14	4	1
+8930	No description	0	2018-01-16	10	3	23	25
+8931	No description	0	2018-01-09	41	92	30	13
+8932	No description	0	2018-02-24	11	90	22	9
+8933	No description	0	2018-02-22	50	63	23	9
+8934	No description	0	2018-02-13	49	29	30	1
+8935	No description	0	2018-02-21	13	59	7	6
+8936	No description	0	2018-02-13	33	16	19	2
+8937	No description	0	2018-02-20	49	45	8	2
+8938	No description	0	2018-01-22	18	44	22	4
+8939	No description	0	2018-01-04	16	40	23	13
+8940	No description	0	2018-01-22	28	34	20	25
+8941	No description	0	2018-02-22	48	21	23	11
+8942	No description	0	2018-01-09	40	43	16	3
+8943	No description	0	2018-01-05	24	69	10	19
+8944	No description	0	2018-02-03	41	91	30	19
+8945	No description	0	2018-01-31	30	35	7	21
+8946	No description	0	2018-02-14	16	54	22	2
+8947	No description	0	2018-01-20	34	93	21	16
+8948	No description	0	2018-01-07	23	13	6	15
+8949	No description	0	2018-02-11	14	90	13	6
+8950	No description	0	2018-01-08	45	74	28	7
+8951	No description	0	2018-02-25	23	30	25	9
+8952	No description	0	2018-02-13	29	27	11	20
+8953	No description	0	2018-01-22	12	44	19	17
+8954	No description	0	2018-02-21	9	25	16	15
+8955	No description	0	2018-01-15	50	51	5	16
+8956	No description	0	2018-02-09	23	29	15	2
+8957	No description	0	2018-02-25	22	20	7	23
+8958	No description	0	2018-02-06	21	79	3	24
+8959	No description	0	2018-01-10	39	20	22	20
+8960	No description	0	2018-02-27	13	61	6	21
+8961	No description	0	2018-02-15	10	49	17	10
+8962	No description	0	2018-02-24	38	83	15	5
+8963	No description	0	2018-01-13	37	58	7	3
+8964	No description	0	2018-01-27	45	38	24	15
+8965	No description	0	2018-01-30	36	9	8	16
+8966	No description	0	2018-02-22	7	69	10	4
+8967	No description	0	2018-02-24	42	34	19	15
+8968	No description	0	2018-02-26	38	80	17	13
+8969	No description	0	2018-02-21	5	24	30	14
+8970	No description	0	2018-01-23	33	98	23	3
+8971	No description	0	2018-01-25	16	15	19	22
+8972	No description	0	2018-01-22	24	64	29	23
+8973	No description	0	2018-01-19	42	34	29	10
+8974	No description	0	2018-02-10	7	29	29	20
+8975	No description	0	2018-02-21	16	22	22	17
+8976	No description	0	2018-02-02	8	90	5	17
+8977	No description	0	2018-02-19	5	5	4	11
+8978	No description	0	2018-02-04	26	61	13	16
+8979	No description	0	2018-02-25	22	90	6	4
+8980	No description	0	2018-01-27	39	91	19	23
+8981	No description	0	2018-01-03	37	9	9	7
+8982	No description	0	2018-01-17	44	100	2	12
+8983	No description	0	2018-02-18	5	2	6	14
+8984	No description	0	2018-02-18	20	86	15	6
+8985	No description	0	2018-01-30	48	85	22	23
+8986	No description	0	2018-01-11	49	58	11	17
+8987	No description	0	2018-01-09	33	47	10	22
+8988	No description	0	2018-01-25	24	100	16	13
+8989	No description	0	2018-01-26	5	2	27	21
+8990	No description	0	2018-02-20	37	56	8	20
+8991	No description	0	2018-01-17	31	94	21	25
+8992	No description	0	2018-01-24	18	31	11	25
+8993	No description	0	2018-02-26	28	97	11	19
+8994	No description	0	2018-02-02	22	86	6	4
+8995	No description	0	2018-01-04	18	8	11	2
+8996	No description	0	2018-02-26	31	55	6	19
+8997	No description	0	2018-01-17	46	37	14	11
+8998	No description	0	2018-02-23	21	93	21	15
+8999	No description	0	2018-02-12	25	64	1	17
+9000	No description	0	2018-02-04	26	51	24	15
+9001	No description	0	2018-01-26	27	75	24	5
+9002	No description	0	2018-01-21	41	44	1	19
+9003	No description	0	2018-01-24	43	74	25	16
+9004	No description	0	2018-02-19	26	39	9	21
+9005	No description	0	2018-01-30	28	3	12	19
+9006	No description	0	2018-01-11	38	84	8	21
+9007	No description	0	2018-02-22	29	25	15	22
+9008	No description	0	2018-01-18	40	1	24	25
+9009	No description	0	2018-02-16	6	15	27	19
+9010	No description	0	2018-01-26	18	60	23	17
+9011	No description	0	2018-01-22	31	80	2	12
+9012	No description	0	2018-02-16	40	28	3	23
+9013	No description	0	2018-01-04	29	9	29	7
+9014	No description	0	2018-02-21	26	89	18	17
+9015	No description	0	2018-01-24	50	34	1	23
+9016	No description	0	2018-01-20	11	5	7	18
+9017	No description	0	2018-02-17	46	85	15	19
+9018	No description	0	2018-02-22	25	94	30	24
+9019	No description	0	2018-02-23	18	61	10	11
+9020	No description	0	2018-02-21	27	23	10	21
+9021	No description	0	2018-02-10	47	36	25	3
+9022	No description	0	2018-02-16	21	31	12	9
+9023	No description	0	2018-01-03	22	94	27	17
+9024	No description	0	2018-02-23	48	85	1	7
+9025	No description	0	2018-02-04	48	12	19	5
+9026	No description	0	2018-02-28	49	51	6	9
+9027	No description	0	2018-01-16	41	94	12	7
+9028	No description	0	2018-02-24	8	71	30	21
+9029	No description	0	2018-01-22	41	22	25	23
+9030	No description	0	2018-01-30	12	4	11	22
+9031	No description	0	2018-01-03	37	14	7	14
+9032	No description	0	2018-02-18	16	1	8	7
+9033	No description	0	2018-01-25	10	47	3	11
+9034	No description	0	2018-02-04	24	51	1	10
+9035	No description	0	2018-02-19	41	2	17	13
+9036	No description	0	2018-01-30	22	34	12	2
+9037	No description	0	2018-02-20	18	93	7	2
+9038	No description	0	2018-01-30	7	97	20	5
+9039	No description	0	2018-01-18	46	56	10	7
+9040	No description	0	2018-01-25	40	93	6	14
+9041	No description	0	2018-01-14	25	37	22	21
+9042	No description	0	2018-02-16	13	65	6	13
+9043	No description	0	2018-02-03	39	1	7	10
+9044	No description	0	2018-02-10	9	2	8	8
+9045	No description	0	2018-01-28	15	86	9	20
+9046	No description	0	2018-01-16	29	49	2	4
+9047	No description	0	2018-01-17	16	51	14	21
+9048	No description	0	2018-01-08	31	53	12	10
+9049	No description	0	2018-01-17	12	71	26	2
+9050	No description	0	2018-02-09	39	41	8	15
+9051	No description	0	2018-02-27	6	57	26	15
+9052	No description	0	2018-01-10	45	83	3	23
+9053	No description	0	2018-01-01	7	10	15	15
+9054	No description	0	2018-01-05	41	92	7	15
+9055	No description	0	2018-02-08	6	47	12	23
+9056	No description	0	2018-01-09	49	79	18	5
+9057	No description	0	2018-02-19	30	86	10	7
+9058	No description	0	2018-01-17	5	5	14	15
+9059	No description	0	2018-02-10	13	27	19	22
+9060	No description	0	2018-02-24	34	21	3	22
+9061	No description	0	2018-01-26	17	52	24	23
+9062	No description	0	2018-01-02	31	21	1	16
+9063	No description	0	2018-01-26	15	47	23	17
+9064	No description	0	2018-01-14	26	89	29	24
+9065	No description	0	2018-02-22	48	5	1	7
+9066	No description	0	2018-01-24	20	24	5	23
+9067	No description	0	2018-02-23	8	74	15	17
+9068	No description	0	2018-01-05	46	94	29	13
+9069	No description	0	2018-01-09	15	94	3	12
+9070	No description	0	2018-02-19	35	88	17	9
+9071	No description	0	2018-02-27	20	96	11	23
+9072	No description	0	2018-02-21	10	45	9	19
+9073	No description	0	2018-01-06	9	57	17	4
+9074	No description	0	2018-01-04	7	89	22	2
+9075	No description	0	2018-01-07	30	92	12	6
+9076	No description	0	2018-02-15	26	30	24	7
+9077	No description	0	2018-01-12	21	60	30	14
+9078	No description	0	2018-01-08	6	19	16	10
+9079	No description	0	2018-01-05	43	8	18	7
+9080	No description	0	2018-02-09	38	15	5	14
+9081	No description	0	2018-02-11	35	86	13	3
+9082	No description	0	2018-02-09	40	1	22	1
+9083	No description	0	2018-01-19	17	65	11	24
+9084	No description	0	2018-01-13	19	12	20	13
+9085	No description	0	2018-02-25	16	3	25	18
+9086	No description	0	2018-02-18	33	6	9	24
+9087	No description	0	2018-02-01	48	96	8	13
+9088	No description	0	2018-02-07	14	71	10	7
+9089	No description	0	2018-01-30	22	57	16	13
+9090	No description	0	2018-01-20	27	85	3	5
+9091	No description	0	2018-01-02	29	64	22	19
+9092	No description	0	2018-02-26	15	17	19	11
+9093	No description	0	2018-01-27	9	40	2	15
+9094	No description	0	2018-01-16	22	50	19	9
+9095	No description	0	2018-01-17	35	75	5	21
+9096	No description	0	2018-01-20	24	30	30	23
+9097	No description	0	2018-01-18	42	13	24	15
+9098	No description	0	2018-01-24	21	43	6	19
+9099	No description	0	2018-02-06	17	49	20	7
+9100	No description	0	2018-01-06	48	63	3	11
+9101	No description	0	2018-01-11	48	3	10	15
+9102	No description	0	2018-02-20	14	10	9	3
+9103	No description	0	2018-01-05	37	66	13	8
+9104	No description	0	2018-01-04	30	82	11	13
+9105	No description	0	2018-02-01	40	48	6	9
+9106	No description	0	2018-01-29	31	98	5	2
+9107	No description	0	2018-02-13	33	89	18	4
+9108	No description	0	2018-01-13	12	43	11	3
+9109	No description	0	2018-02-11	29	23	11	9
+9110	No description	0	2018-02-15	26	9	22	19
+9111	No description	0	2018-01-26	41	27	17	17
+9112	No description	0	2018-01-12	18	43	5	19
+9113	No description	0	2018-01-14	47	90	6	20
+9114	No description	0	2018-01-16	43	49	17	15
+9115	No description	0	2018-02-25	46	73	19	23
+9116	No description	0	2018-01-16	29	51	24	14
+9117	No description	0	2018-02-06	26	76	11	13
+9118	No description	0	2018-01-31	17	72	29	25
+9119	No description	0	2018-02-18	20	68	2	17
+9120	No description	0	2018-02-25	10	15	24	23
+9121	No description	0	2018-02-01	41	37	5	1
+9122	No description	0	2018-02-13	44	81	8	24
+9123	No description	0	2018-01-07	16	98	20	19
+9124	No description	0	2018-02-25	30	26	12	24
+9125	No description	0	2018-01-18	49	45	9	25
+9126	No description	0	2018-02-04	32	21	16	19
+9127	No description	0	2018-02-04	49	1	26	20
+9128	No description	0	2018-02-04	32	33	21	13
+9129	No description	0	2018-01-10	19	70	24	7
+9130	No description	0	2018-02-14	40	11	22	25
+9131	No description	0	2018-01-14	17	98	11	2
+9132	No description	0	2018-01-11	45	44	3	17
+9133	No description	0	2018-01-18	30	52	14	24
+9134	No description	0	2018-01-23	19	73	2	21
+9135	No description	0	2018-01-19	27	96	13	24
+9136	No description	0	2018-02-16	43	50	20	5
+9137	No description	0	2018-02-27	28	79	1	9
+9138	No description	0	2018-02-14	8	43	13	14
+9139	No description	0	2018-02-22	23	93	29	24
+9140	No description	0	2018-01-10	31	3	20	3
+9141	No description	0	2018-01-01	28	93	23	22
+9142	No description	0	2018-02-13	8	7	11	18
+9143	No description	0	2018-02-17	47	75	12	24
+9144	No description	0	2018-01-22	17	30	25	25
+9145	No description	0	2018-01-10	25	29	1	7
+9146	No description	0	2018-02-28	17	31	19	3
+9147	No description	0	2018-01-12	44	46	30	24
+9148	No description	0	2018-02-14	33	92	26	16
+9149	No description	0	2018-01-13	42	10	4	3
+9150	No description	0	2018-01-25	20	29	12	15
+9151	No description	0	2018-02-18	42	81	30	13
+9152	No description	0	2018-02-28	20	73	7	6
+9153	No description	0	2018-02-01	22	43	10	6
+9154	No description	0	2018-01-12	17	54	29	4
+9155	No description	0	2018-01-29	30	35	11	21
+9156	No description	0	2018-01-19	31	9	27	15
+9157	No description	0	2018-02-17	11	37	15	11
+9158	No description	0	2018-01-03	28	21	29	3
+9159	No description	0	2018-02-28	12	74	26	8
+9160	No description	0	2018-02-15	15	80	4	17
+9161	No description	0	2018-02-18	12	20	19	19
+9162	No description	0	2018-02-17	7	78	18	21
+9163	No description	0	2018-01-01	23	44	10	3
+9164	No description	0	2018-02-28	36	16	2	8
+9165	No description	0	2018-01-23	23	9	17	17
+9166	No description	0	2018-01-10	9	75	7	19
+9167	No description	0	2018-02-06	6	28	20	1
+9168	No description	0	2018-02-19	19	92	12	7
+9169	No description	0	2018-02-11	10	53	12	25
+9170	No description	0	2018-01-07	11	65	30	6
+9171	No description	0	2018-01-05	49	21	13	7
+9172	No description	0	2018-02-01	21	23	29	23
+9173	No description	0	2018-01-13	10	19	19	12
+9174	No description	0	2018-02-26	37	48	24	15
+9175	No description	0	2018-01-15	17	45	27	10
+9176	No description	0	2018-01-29	21	37	21	22
+9177	No description	0	2018-02-02	17	84	21	5
+9178	No description	0	2018-02-11	30	11	16	2
+9179	No description	0	2018-01-31	44	79	21	7
+9180	No description	0	2018-01-12	42	27	4	9
+9181	No description	0	2018-01-09	47	99	22	3
+9182	No description	0	2018-02-28	46	43	1	11
+9183	No description	0	2018-02-14	35	61	29	12
+9184	No description	0	2018-01-10	50	32	10	4
+9185	No description	0	2018-01-28	30	32	26	13
+9186	No description	0	2018-01-27	8	48	14	13
+9187	No description	0	2018-01-12	13	22	16	11
+9188	No description	0	2018-01-23	29	71	28	15
+9189	No description	0	2018-02-26	14	38	23	1
+9190	No description	0	2018-02-11	7	2	8	8
+9191	No description	0	2018-02-09	11	24	22	15
+9192	No description	0	2018-01-17	22	79	20	12
+9193	No description	0	2018-01-26	50	94	8	11
+9194	No description	0	2018-02-06	16	37	3	22
+9195	No description	0	2018-02-25	12	15	13	17
+9196	No description	0	2018-01-16	9	36	3	9
+9197	No description	0	2018-02-03	39	28	27	4
+9198	No description	0	2018-01-22	17	56	18	25
+9199	No description	0	2018-01-24	26	25	1	17
+9200	No description	0	2018-01-10	33	47	17	2
+9201	No description	0	2018-01-11	19	39	1	8
+9202	No description	0	2018-02-09	41	64	23	10
+9203	No description	0	2018-02-25	23	51	27	10
+9204	No description	0	2018-01-14	41	68	18	6
+9205	No description	0	2018-01-24	13	58	7	12
+9206	No description	0	2018-01-26	24	77	9	2
+9207	No description	0	2018-01-29	34	51	25	1
+9208	No description	0	2018-01-14	34	26	2	21
+9209	No description	0	2018-02-14	18	80	11	6
+9210	No description	0	2018-02-15	43	16	13	8
+9211	No description	0	2018-02-08	27	1	14	24
+9212	No description	0	2018-01-31	24	18	16	20
+9213	No description	0	2018-01-09	29	65	25	1
+9214	No description	0	2018-02-03	37	6	28	14
+9215	No description	0	2018-01-23	11	59	24	20
+9216	No description	0	2018-01-12	32	27	5	12
+9217	No description	0	2018-01-08	15	50	17	7
+9218	No description	0	2018-01-20	39	84	23	1
+9219	No description	0	2018-01-30	47	59	24	10
+9220	No description	0	2018-01-15	18	66	12	8
+9221	No description	0	2018-01-27	9	78	29	25
+9222	No description	0	2018-01-13	13	5	10	6
+9223	No description	0	2018-01-19	43	18	1	8
+9224	No description	0	2018-02-05	34	64	24	2
+9225	No description	0	2018-02-28	50	13	19	3
+9226	No description	0	2018-01-11	8	33	1	18
+9227	No description	0	2018-01-28	46	81	1	15
+9228	No description	0	2018-02-28	44	12	29	11
+9229	No description	0	2018-02-23	25	88	28	20
+9230	No description	0	2018-01-12	37	36	4	21
+9231	No description	0	2018-01-06	45	93	30	22
+9232	No description	0	2018-01-06	46	95	17	22
+9233	No description	0	2018-01-16	38	22	16	21
+9234	No description	0	2018-01-11	35	50	18	20
+9235	No description	0	2018-02-18	22	68	28	3
+9236	No description	0	2018-01-12	12	62	27	2
+9237	No description	0	2018-02-13	40	46	2	21
+9238	No description	0	2018-01-25	43	63	23	4
+9239	No description	0	2018-02-08	16	29	26	15
+9240	No description	0	2018-02-19	30	9	24	20
+9241	No description	0	2018-02-23	17	39	7	22
+9242	No description	0	2018-01-24	38	24	19	22
+9243	No description	0	2018-01-05	18	91	29	16
+9244	No description	0	2018-01-11	39	85	11	11
+9245	No description	0	2018-02-17	49	48	28	16
+9246	No description	0	2018-02-19	14	38	22	20
+9247	No description	0	2018-01-05	35	94	30	9
+9248	No description	0	2018-01-02	47	31	22	12
+9249	No description	0	2018-01-13	47	95	19	4
+9250	No description	0	2018-02-09	16	36	6	9
+9251	No description	0	2018-02-24	12	60	6	11
+9252	No description	0	2018-02-19	21	98	2	3
+9253	No description	0	2018-01-06	34	55	6	7
+9254	No description	0	2018-02-01	26	55	9	13
+9255	No description	0	2018-02-15	11	18	15	6
+9256	No description	0	2018-01-31	48	77	4	1
+9257	No description	0	2018-01-02	24	71	9	10
+9258	No description	0	2018-01-31	24	87	23	19
+9259	No description	0	2018-02-24	47	95	20	4
+9260	No description	0	2018-01-02	29	59	15	2
+9261	No description	0	2018-02-17	36	24	23	25
+9262	No description	0	2018-01-17	46	62	3	3
+9263	No description	0	2018-01-05	26	100	20	16
+9264	No description	0	2018-01-14	10	40	18	1
+9265	No description	0	2018-01-24	8	18	28	12
+9266	No description	0	2018-01-30	42	6	20	24
+9267	No description	0	2018-02-26	11	98	22	3
+9268	No description	0	2018-02-04	17	45	8	18
+9269	No description	0	2018-02-25	5	23	15	23
+9270	No description	0	2018-01-15	32	15	12	16
+9271	No description	0	2018-01-09	35	73	13	15
+9272	No description	0	2018-02-14	37	39	17	8
+9273	No description	0	2018-02-25	48	94	27	18
+9274	No description	0	2018-02-23	27	41	23	7
+9275	No description	0	2018-01-12	34	93	1	17
+9276	No description	0	2018-02-04	31	6	8	1
+9277	No description	0	2018-02-26	29	18	17	18
+9278	No description	0	2018-01-11	33	58	3	20
+9279	No description	0	2018-02-20	18	9	22	15
+9280	No description	0	2018-01-13	50	63	28	4
+9281	No description	0	2018-01-21	42	14	5	7
+9282	No description	0	2018-01-08	43	24	21	4
+9283	No description	0	2018-02-27	19	22	23	18
+9284	No description	0	2018-02-07	26	72	24	16
+9285	No description	0	2018-01-26	25	76	24	7
+9286	No description	0	2018-01-14	38	44	10	2
+9287	No description	0	2018-01-09	10	64	28	7
+9288	No description	0	2018-02-17	21	19	23	3
+9289	No description	0	2018-02-27	33	17	21	11
+9290	No description	0	2018-01-01	29	3	25	25
+9291	No description	0	2018-02-19	46	84	20	10
+9292	No description	0	2018-01-25	26	57	8	10
+9293	No description	0	2018-02-20	10	28	28	13
+9294	No description	0	2018-01-14	47	64	7	10
+9295	No description	0	2018-01-02	7	14	22	1
+9296	No description	0	2018-02-24	25	23	17	12
+9297	No description	0	2018-01-19	28	61	7	19
+9298	No description	0	2018-02-17	19	30	1	6
+9299	No description	0	2018-01-06	7	99	14	9
+9300	No description	0	2018-02-03	7	85	11	16
+9301	No description	0	2018-01-30	46	65	28	9
+9302	No description	0	2018-01-07	21	69	26	24
+9303	No description	0	2018-01-13	31	47	6	21
+9304	No description	0	2018-02-21	23	62	12	3
+9305	No description	0	2018-02-28	20	96	25	2
+9306	No description	0	2018-02-04	27	12	10	22
+9307	No description	0	2018-02-02	32	67	13	17
+9308	No description	0	2018-01-09	29	13	22	15
+9309	No description	0	2018-02-23	43	58	14	21
+9310	No description	0	2018-02-08	22	14	18	21
+9311	No description	0	2018-01-30	26	78	9	24
+9312	No description	0	2018-01-31	7	1	29	19
+9313	No description	0	2018-02-22	48	45	23	18
+9314	No description	0	2018-02-02	9	42	18	19
+9315	No description	0	2018-02-19	18	54	27	16
+9316	No description	0	2018-01-29	14	19	5	15
+9317	No description	0	2018-02-02	11	50	28	11
+9318	No description	0	2018-01-26	20	9	7	15
+9319	No description	0	2018-02-10	21	65	18	4
+9320	No description	0	2018-01-17	41	83	12	8
+9321	No description	0	2018-01-24	34	35	6	8
+9322	No description	0	2018-01-18	30	28	27	8
+9323	No description	0	2018-01-20	46	100	5	14
+9324	No description	0	2018-01-17	16	56	22	12
+9325	No description	0	2018-02-04	36	91	14	24
+9326	No description	0	2018-02-02	32	73	18	22
+9327	No description	0	2018-01-17	26	16	21	19
+9328	No description	0	2018-02-17	32	97	6	4
+9329	No description	0	2018-01-05	17	70	2	11
+9330	No description	0	2018-01-24	20	58	3	7
+9331	No description	0	2018-02-20	37	9	7	24
+9332	No description	0	2018-02-25	22	18	27	12
+9333	No description	0	2018-02-22	15	8	9	10
+9334	No description	0	2018-02-20	44	25	2	18
+9335	No description	0	2018-01-13	44	35	4	23
+9336	No description	0	2018-02-20	32	74	25	9
+9337	No description	0	2018-02-17	17	77	26	7
+9338	No description	0	2018-02-06	39	33	29	16
+9339	No description	0	2018-02-16	29	98	27	23
+9340	No description	0	2018-02-13	46	79	29	23
+9341	No description	0	2018-01-26	32	89	10	1
+9342	No description	0	2018-02-16	11	41	20	13
+9343	No description	0	2018-02-10	17	71	6	3
+9344	No description	0	2018-01-12	9	15	16	23
+9345	No description	0	2018-02-13	24	94	22	23
+9346	No description	0	2018-01-04	14	89	9	4
+9347	No description	0	2018-01-18	40	44	17	11
+9348	No description	0	2018-02-28	20	55	4	7
+9349	No description	0	2018-02-22	30	20	15	18
+9350	No description	0	2018-01-11	8	13	7	6
+9351	No description	0	2018-02-13	38	14	14	5
+9352	No description	0	2018-02-27	32	72	18	24
+9353	No description	0	2018-01-24	14	26	27	2
+9354	No description	0	2018-01-13	29	69	24	17
+9355	No description	0	2018-01-13	33	6	26	1
+9356	No description	0	2018-02-20	23	1	23	25
+9357	No description	0	2018-02-24	19	58	28	14
+9358	No description	0	2018-02-09	47	100	22	17
+9359	No description	0	2018-01-19	31	23	6	1
+9360	No description	0	2018-02-24	27	76	17	23
+9361	No description	0	2018-01-25	6	31	6	18
+9362	No description	0	2018-01-24	28	85	23	3
+9363	No description	0	2018-01-07	16	87	1	2
+9364	No description	0	2018-01-01	20	79	22	15
+9365	No description	0	2018-01-19	23	61	9	2
+9366	No description	0	2018-02-03	20	80	30	9
+9367	No description	0	2018-01-22	42	81	26	7
+9368	No description	0	2018-02-05	23	44	23	25
+9369	No description	0	2018-01-22	44	53	6	15
+9370	No description	0	2018-02-22	30	50	30	23
+9371	No description	0	2018-02-23	11	75	29	9
+9372	No description	0	2018-01-12	22	59	13	23
+9373	No description	0	2018-02-19	18	25	6	22
+9374	No description	0	2018-01-29	48	49	21	12
+9375	No description	0	2018-02-23	25	64	25	22
+9376	No description	0	2018-01-25	46	24	13	3
+9377	No description	0	2018-01-19	50	56	20	14
+9378	No description	0	2018-02-23	7	69	29	1
+9379	No description	0	2018-01-14	14	4	7	13
+9380	No description	0	2018-02-06	10	87	30	2
+9381	No description	0	2018-01-13	42	51	11	25
+9382	No description	0	2018-02-11	7	45	24	1
+9383	No description	0	2018-01-14	26	74	14	23
+9384	No description	0	2018-02-19	36	49	30	3
+9385	No description	0	2018-01-29	34	54	10	2
+9386	No description	0	2018-01-29	24	87	9	10
+9387	No description	0	2018-02-06	43	85	16	18
+9388	No description	0	2018-02-20	36	75	9	12
+9389	No description	0	2018-02-26	26	49	25	3
+9390	No description	0	2018-02-11	15	13	20	22
+9391	No description	0	2018-01-26	46	29	5	9
+9392	No description	0	2018-01-25	28	92	28	1
+9393	No description	0	2018-01-03	9	53	11	21
+9394	No description	0	2018-01-17	15	39	5	11
+9395	No description	0	2018-02-14	14	44	10	14
+9396	No description	0	2018-02-05	40	41	21	18
+9397	No description	0	2018-01-23	9	56	3	7
+9398	No description	0	2018-02-27	22	74	15	4
+9399	No description	0	2018-02-11	13	59	27	15
+9400	No description	0	2018-01-29	13	60	13	20
+9401	No description	0	2018-02-27	43	91	17	18
+9402	No description	0	2018-01-28	20	30	19	11
+9403	No description	0	2018-01-19	11	68	17	14
+9404	No description	0	2018-02-19	12	11	7	6
+9405	No description	0	2018-01-19	47	54	19	6
+9406	No description	0	2018-02-24	6	75	30	15
+9407	No description	0	2018-01-16	16	22	17	11
+9408	No description	0	2018-01-20	31	38	3	2
+9409	No description	0	2018-01-27	19	97	16	19
+9410	No description	0	2018-01-24	17	74	2	14
+9411	No description	0	2018-02-05	21	55	3	2
+9412	No description	0	2018-01-16	24	81	30	5
+9413	No description	0	2018-02-23	22	32	19	18
+9414	No description	0	2018-01-13	28	98	18	8
+9415	No description	0	2018-01-12	35	93	1	4
+9416	No description	0	2018-01-20	15	82	25	23
+9417	No description	0	2018-01-09	42	71	29	18
+9418	No description	0	2018-01-19	37	78	18	22
+9419	No description	0	2018-01-15	10	19	8	11
+9420	No description	0	2018-01-17	29	58	20	11
+9421	No description	0	2018-01-06	42	27	1	2
+9422	No description	0	2018-01-06	38	66	21	24
+9423	No description	0	2018-01-27	18	26	30	21
+9424	No description	0	2018-01-11	39	79	7	20
+9425	No description	0	2018-02-01	18	54	29	11
+9426	No description	0	2018-01-18	40	62	19	20
+9427	No description	0	2018-01-19	32	19	2	5
+9428	No description	0	2018-01-27	14	61	3	8
+9429	No description	0	2018-01-11	45	22	11	18
+9430	No description	0	2018-01-18	33	17	9	1
+9431	No description	0	2018-01-04	47	13	13	17
+9432	No description	0	2018-01-31	35	5	14	9
+9433	No description	0	2018-01-09	28	56	22	11
+9434	No description	0	2018-01-30	23	43	7	23
+9435	No description	0	2018-01-20	48	75	30	19
+9436	No description	0	2018-01-06	11	17	21	11
+9437	No description	0	2018-01-27	12	89	4	22
+9438	No description	0	2018-01-16	19	69	8	22
+9439	No description	0	2018-01-30	10	22	8	23
+9440	No description	0	2018-01-17	28	68	19	13
+9441	No description	0	2018-02-19	30	20	10	20
+9442	No description	0	2018-01-29	45	13	27	24
+9443	No description	0	2018-02-22	37	41	3	10
+9444	No description	0	2018-01-02	36	15	18	11
+9445	No description	0	2018-01-22	34	63	11	17
+9446	No description	0	2018-02-21	16	9	4	22
+9447	No description	0	2018-01-31	36	13	14	3
+9448	No description	0	2018-01-28	42	93	12	19
+9449	No description	0	2018-02-02	44	92	11	6
+9450	No description	0	2018-02-08	23	76	20	24
+9451	No description	0	2018-01-24	16	98	20	2
+9452	No description	0	2018-01-04	42	52	13	13
+9453	No description	0	2018-02-03	22	96	24	1
+9454	No description	0	2018-02-10	28	70	8	18
+9455	No description	0	2018-01-12	24	77	27	15
+9456	No description	0	2018-01-29	26	10	28	20
+9457	No description	0	2018-01-19	19	74	4	18
+9458	No description	0	2018-01-09	49	52	10	11
+9459	No description	0	2018-01-22	47	13	12	16
+9460	No description	0	2018-01-24	41	94	4	6
+9461	No description	0	2018-02-24	40	66	26	21
+9462	No description	0	2018-02-18	12	74	8	17
+9463	No description	0	2018-01-05	29	99	21	11
+9464	No description	0	2018-02-09	47	40	18	4
+9465	No description	0	2018-01-27	39	72	5	10
+9466	No description	0	2018-01-25	30	8	13	25
+9467	No description	0	2018-01-30	36	52	22	10
+9468	No description	0	2018-01-04	13	29	8	7
+9469	No description	0	2018-02-06	43	86	30	7
+9470	No description	0	2018-01-12	50	39	7	5
+9471	No description	0	2018-02-28	39	37	21	10
+9472	No description	0	2018-02-05	14	8	20	1
+9473	No description	0	2018-02-10	40	62	14	17
+9474	No description	0	2018-02-27	34	95	9	1
+9475	No description	0	2018-01-02	38	69	3	18
+9476	No description	0	2018-02-13	21	13	1	4
+9477	No description	0	2018-01-31	31	64	19	1
+9478	No description	0	2018-01-19	39	100	4	23
+9479	No description	0	2018-01-31	41	86	14	2
+9480	No description	0	2018-01-14	37	9	26	17
+9481	No description	0	2018-01-17	48	46	18	18
+9482	No description	0	2018-02-14	42	87	21	2
+9483	No description	0	2018-02-23	37	45	7	8
+9484	No description	0	2018-02-05	48	96	29	14
+9485	No description	0	2018-02-25	8	83	9	18
+9486	No description	0	2018-01-25	25	12	7	20
+9487	No description	0	2018-01-12	7	89	2	24
+9488	No description	0	2018-01-04	38	25	8	23
+9489	No description	0	2018-02-06	15	77	17	22
+9490	No description	0	2018-01-11	32	45	1	9
+9491	No description	0	2018-01-07	7	23	4	20
+9492	No description	0	2018-02-02	17	94	12	19
+9493	No description	0	2018-02-01	24	19	9	7
+9494	No description	0	2018-01-08	31	100	4	4
+9495	No description	0	2018-02-08	48	46	22	9
+9496	No description	0	2018-02-11	38	77	17	23
+9497	No description	0	2018-01-18	39	56	21	8
+9498	No description	0	2018-01-15	43	2	7	17
+9499	No description	0	2018-01-18	13	82	12	23
+9500	No description	0	2018-01-26	48	9	3	3
+9501	No description	0	2018-01-07	35	76	13	23
+9502	No description	0	2018-01-30	28	42	2	25
+9503	No description	0	2018-02-24	48	21	9	2
+9504	No description	0	2018-02-23	20	68	6	3
+9505	No description	0	2018-01-30	21	91	30	8
+9506	No description	0	2018-02-12	27	91	1	12
+9507	No description	0	2018-01-29	34	80	18	12
+9508	No description	0	2018-01-12	31	61	4	5
+9509	No description	0	2018-02-06	23	82	22	22
+9510	No description	0	2018-02-09	5	84	13	16
+9511	No description	0	2018-02-15	17	52	16	24
+9512	No description	0	2018-02-09	14	8	26	4
+9513	No description	0	2018-01-06	24	96	4	1
+9514	No description	0	2018-02-21	32	12	10	25
+9515	No description	0	2018-01-02	43	66	13	25
+9516	No description	0	2018-02-28	11	12	6	19
+9517	No description	0	2018-02-22	45	38	24	9
+9518	No description	0	2018-01-04	47	2	21	18
+9519	No description	0	2018-01-21	35	64	27	21
+9520	No description	0	2018-02-10	13	83	23	24
+9521	No description	0	2018-02-05	23	2	20	25
+9522	No description	0	2018-02-16	8	14	11	3
+9523	No description	0	2018-02-18	21	85	7	16
+9524	No description	0	2018-02-08	30	17	21	20
+9525	No description	0	2018-01-21	19	95	11	10
+9526	No description	0	2018-02-09	16	79	6	19
+9527	No description	0	2018-02-12	39	83	28	16
+9528	No description	0	2018-01-01	27	81	30	15
+9529	No description	0	2018-01-08	38	90	5	22
+9530	No description	0	2018-01-10	36	4	29	21
+9531	No description	0	2018-01-14	6	69	29	4
+9532	No description	0	2018-02-23	5	99	24	12
+9533	No description	0	2018-01-13	40	79	8	18
+9534	No description	0	2018-02-12	44	72	3	24
+9535	No description	0	2018-02-02	31	71	25	17
+9536	No description	0	2018-01-06	44	17	1	13
+9537	No description	0	2018-01-23	48	81	13	5
+9538	No description	0	2018-01-30	23	72	2	10
+9539	No description	0	2018-02-05	38	61	9	25
+9540	No description	0	2018-01-12	35	30	6	19
+9541	No description	0	2018-02-05	34	73	8	20
+9542	No description	0	2018-02-20	12	56	19	23
+9543	No description	0	2018-02-02	24	68	16	21
+9544	No description	0	2018-01-17	23	9	19	9
+9545	No description	0	2018-02-10	44	48	4	24
+9546	No description	0	2018-02-04	19	6	20	14
+9547	No description	0	2018-02-04	31	39	28	19
+9548	No description	0	2018-02-23	8	7	29	17
+9549	No description	0	2018-02-20	32	21	24	25
+9550	No description	0	2018-01-13	17	92	26	23
+9551	No description	0	2018-02-09	15	39	14	21
+9552	No description	0	2018-02-02	20	60	23	11
+9553	No description	0	2018-01-10	15	80	5	23
+9554	No description	0	2018-01-20	28	77	30	18
+9555	No description	0	2018-02-11	12	74	23	22
+9556	No description	0	2018-02-02	11	60	5	23
+9557	No description	0	2018-02-26	11	43	29	19
+9558	No description	0	2018-02-01	12	33	4	21
+9559	No description	0	2018-01-11	20	67	2	17
+9560	No description	0	2018-02-04	8	22	27	24
+9561	No description	0	2018-02-18	50	90	27	14
+9562	No description	0	2018-02-08	20	81	4	24
+9563	No description	0	2018-01-15	30	61	15	25
+9564	No description	0	2018-02-10	7	28	10	4
+9565	No description	0	2018-02-03	17	71	29	12
+9566	No description	0	2018-01-19	32	12	8	20
+9567	No description	0	2018-01-06	23	6	24	18
+9568	No description	0	2018-01-06	38	82	15	15
+9569	No description	0	2018-01-08	20	83	28	9
+9570	No description	0	2018-01-01	18	61	23	23
+9571	No description	0	2018-02-24	38	98	28	9
+9572	No description	0	2018-01-18	33	55	7	5
+9573	No description	0	2018-01-21	34	54	2	25
+9574	No description	0	2018-02-21	23	26	26	19
+9575	No description	0	2018-02-07	44	61	23	24
+9576	No description	0	2018-01-31	17	34	6	8
+9577	No description	0	2018-01-01	49	96	20	14
+9578	No description	0	2018-02-26	42	64	6	2
+9579	No description	0	2018-01-12	41	22	17	10
+9580	No description	0	2018-02-17	44	99	8	3
+9581	No description	0	2018-02-23	38	89	6	22
+9582	No description	0	2018-01-17	12	62	11	19
+9583	No description	0	2018-01-06	24	57	1	19
+9584	No description	0	2018-01-30	11	35	10	20
+9585	No description	0	2018-01-21	41	56	30	4
+9586	No description	0	2018-01-07	13	86	27	22
+9587	No description	0	2018-02-09	26	43	5	24
+9588	No description	0	2018-01-01	37	56	6	22
+9589	No description	0	2018-01-04	33	96	9	20
+9590	No description	0	2018-02-14	7	40	26	2
+9591	No description	0	2018-01-05	18	43	1	17
+9592	No description	0	2018-01-15	40	67	3	4
+9593	No description	0	2018-02-22	45	7	28	9
+9594	No description	0	2018-01-30	23	77	12	15
+9595	No description	0	2018-01-28	39	70	6	16
+9596	No description	0	2018-02-21	17	59	13	13
+9597	No description	0	2018-01-23	9	81	13	22
+9598	No description	0	2018-01-29	6	55	9	15
+9599	No description	0	2018-01-01	23	63	29	13
+9600	No description	0	2018-02-01	22	24	16	16
+9601	No description	0	2018-01-23	10	32	26	5
+9602	No description	0	2018-01-31	43	25	23	22
+9603	No description	0	2018-01-31	24	71	28	11
+9604	No description	0	2018-01-08	13	88	3	14
+9605	No description	0	2018-02-24	10	34	27	17
+9606	No description	0	2018-01-23	45	73	11	14
+9607	No description	0	2018-01-01	15	94	5	2
+9608	No description	0	2018-01-14	20	74	2	13
+9609	No description	0	2018-02-27	10	100	18	11
+9610	No description	0	2018-01-31	9	84	3	13
+9611	No description	0	2018-01-22	47	18	30	23
+9612	No description	0	2018-02-03	38	83	13	24
+9613	No description	0	2018-01-05	8	99	9	15
+9614	No description	0	2018-01-16	36	94	19	8
+9615	No description	0	2018-02-05	23	13	4	1
+9616	No description	0	2018-01-08	32	25	26	16
+9617	No description	0	2018-02-16	31	41	9	19
+9618	No description	0	2018-01-17	10	8	6	3
+9619	No description	0	2018-02-28	43	75	16	24
+9620	No description	0	2018-02-18	27	56	15	4
+9621	No description	0	2018-02-07	26	91	27	14
+9622	No description	0	2018-01-01	19	83	3	24
+9623	No description	0	2018-01-08	50	23	20	9
+9624	No description	0	2018-01-05	28	14	13	11
+9625	No description	0	2018-02-21	39	70	16	2
+9626	No description	0	2018-01-03	11	73	9	20
+9627	No description	0	2018-02-17	47	33	29	14
+9628	No description	0	2018-02-06	11	42	18	2
+9629	No description	0	2018-02-02	36	56	6	24
+9630	No description	0	2018-02-05	5	99	4	20
+9631	No description	0	2018-01-17	25	67	23	20
+9632	No description	0	2018-01-30	44	96	22	16
+9633	No description	0	2018-01-02	41	83	26	8
+9634	No description	0	2018-02-23	31	69	27	3
+9635	No description	0	2018-02-09	13	24	27	24
+9636	No description	0	2018-02-04	30	58	13	8
+9637	No description	0	2018-02-28	31	19	22	15
+9638	No description	0	2018-02-06	30	41	25	24
+9639	No description	0	2018-02-12	5	93	1	1
+9640	No description	0	2018-01-27	36	77	21	5
+9641	No description	0	2018-02-02	6	84	6	12
+9642	No description	0	2018-01-06	33	62	11	17
+9643	No description	0	2018-01-11	37	39	13	18
+9644	No description	0	2018-01-20	28	85	21	20
+9645	No description	0	2018-01-07	13	95	13	8
+9646	No description	0	2018-02-16	14	43	10	9
+9647	No description	0	2018-01-09	9	12	16	23
+9648	No description	0	2018-02-05	26	77	27	3
+9649	No description	0	2018-02-16	31	79	9	16
+9650	No description	0	2018-01-29	8	83	27	16
+9651	No description	0	2018-02-08	18	98	27	15
+9652	No description	0	2018-01-05	13	65	30	19
+9653	No description	0	2018-01-13	29	42	1	16
+9654	No description	0	2018-01-22	37	65	24	6
+9655	No description	0	2018-02-26	19	55	15	18
+9656	No description	0	2018-02-01	23	90	12	7
+9657	No description	0	2018-01-03	18	57	11	16
+9658	No description	0	2018-02-14	14	75	6	4
+9659	No description	0	2018-02-08	8	77	12	23
+9660	No description	0	2018-01-13	26	65	6	18
+9661	No description	0	2018-02-02	49	5	1	16
+9662	No description	0	2018-01-17	46	88	27	13
+9663	No description	0	2018-01-14	19	34	13	7
+9664	No description	0	2018-02-09	36	74	30	19
+9665	No description	0	2018-02-25	21	58	5	8
+9666	No description	0	2018-01-20	37	69	29	25
+9667	No description	0	2018-01-31	18	25	28	19
+9668	No description	0	2018-02-27	15	18	13	17
+9669	No description	0	2018-02-12	16	91	8	2
+9670	No description	0	2018-01-28	5	100	13	16
+9671	No description	0	2018-01-10	32	25	30	11
+9672	No description	0	2018-01-03	48	77	20	23
+9673	No description	0	2018-01-31	38	2	21	21
+9674	No description	0	2018-01-24	29	43	16	21
+9675	No description	0	2018-02-28	31	13	1	4
+9676	No description	0	2018-01-09	12	60	16	24
+9677	No description	0	2018-02-18	30	33	29	6
+9678	No description	0	2018-02-11	22	100	26	19
+9679	No description	0	2018-01-13	33	2	15	18
+9680	No description	0	2018-02-04	14	43	6	19
+9681	No description	0	2018-01-28	29	75	21	11
+9682	No description	0	2018-01-27	22	5	12	25
+9683	No description	0	2018-01-26	33	64	17	19
+9684	No description	0	2018-02-04	34	6	26	23
+9685	No description	0	2018-01-15	42	68	20	25
+9686	No description	0	2018-02-05	46	94	10	11
+9687	No description	0	2018-01-25	43	52	19	25
+9688	No description	0	2018-01-14	26	80	11	7
+9689	No description	0	2018-01-31	8	87	9	7
+9690	No description	0	2018-01-20	10	86	7	20
+9691	No description	0	2018-01-17	29	4	27	16
+9692	No description	0	2018-02-03	37	58	9	3
+9693	No description	0	2018-02-08	43	10	22	2
+9694	No description	0	2018-02-14	23	28	5	25
+9695	No description	0	2018-02-05	10	32	2	24
+9696	No description	0	2018-01-23	35	78	13	12
+9697	No description	0	2018-02-14	20	16	11	24
+9698	No description	0	2018-01-26	44	35	3	23
+9699	No description	0	2018-02-10	39	36	22	8
+9700	No description	0	2018-01-05	31	58	16	8
+9701	No description	0	2018-01-12	37	18	3	1
+9702	No description	0	2018-01-14	23	17	7	13
+9703	No description	0	2018-02-28	9	37	30	24
+9704	No description	0	2018-02-13	28	6	4	24
+9705	No description	0	2018-02-27	13	21	3	8
+9706	No description	0	2018-02-10	49	87	7	21
+9707	No description	0	2018-02-08	49	64	17	7
+9708	No description	0	2018-02-17	43	72	25	12
+9709	No description	0	2018-01-23	29	6	21	5
+9710	No description	0	2018-02-22	38	17	9	17
+9711	No description	0	2018-01-26	21	4	17	7
+9712	No description	0	2018-02-26	24	98	17	17
+9713	No description	0	2018-02-13	41	79	3	14
+9714	No description	0	2018-01-01	46	51	11	9
+9715	No description	0	2018-02-23	6	57	25	24
+9716	No description	0	2018-01-13	45	32	5	6
+9717	No description	0	2018-01-17	15	11	12	18
+9718	No description	0	2018-02-11	7	59	27	5
+9719	No description	0	2018-02-15	10	26	17	15
+9720	No description	0	2018-01-14	26	34	28	2
+9721	No description	0	2018-02-11	32	53	21	24
+9722	No description	0	2018-02-01	25	36	1	11
+9723	No description	0	2018-01-28	34	23	25	13
+9724	No description	0	2018-02-16	50	59	25	14
+9725	No description	0	2018-01-05	47	23	21	20
+9726	No description	0	2018-01-06	33	28	12	25
+9727	No description	0	2018-01-10	9	98	21	4
+9728	No description	0	2018-02-26	7	80	6	2
+9729	No description	0	2018-02-15	15	21	17	10
+9730	No description	0	2018-02-07	43	92	14	25
+9731	No description	0	2018-01-08	20	31	28	6
+9732	No description	0	2018-01-14	45	10	16	3
+9733	No description	0	2018-02-26	18	92	1	8
+9734	No description	0	2018-02-02	22	76	28	24
+9735	No description	0	2018-01-02	31	65	16	16
+9736	No description	0	2018-01-04	50	99	9	23
+9737	No description	0	2018-02-23	16	2	13	12
+9738	No description	0	2018-02-17	44	66	23	1
+9739	No description	0	2018-01-03	30	68	24	16
+9740	No description	0	2018-01-13	17	48	29	8
+9741	No description	0	2018-01-19	45	97	9	18
+9742	No description	0	2018-02-10	15	46	18	5
+9743	No description	0	2018-02-17	5	3	21	4
+9744	No description	0	2018-02-02	48	40	21	2
+9745	No description	0	2018-01-22	16	45	12	2
+9746	No description	0	2018-01-25	39	76	1	3
+9747	No description	0	2018-01-06	7	43	5	1
+9748	No description	0	2018-01-14	6	80	4	8
+9749	No description	0	2018-02-08	27	44	7	19
+9750	No description	0	2018-02-03	44	15	12	17
+9751	No description	0	2018-02-20	31	37	28	9
+9752	No description	0	2018-01-27	38	77	14	19
+9753	No description	0	2018-01-12	24	97	27	7
+9754	No description	0	2018-01-22	19	92	24	3
+9755	No description	0	2018-01-27	10	55	23	10
+9756	No description	0	2018-02-21	44	39	28	13
+9757	No description	0	2018-01-08	38	9	6	14
+9758	No description	0	2018-01-28	39	22	27	6
+9759	No description	0	2018-02-10	48	9	27	24
+9760	No description	0	2018-02-07	17	47	22	12
+9761	No description	0	2018-02-14	20	45	8	24
+9762	No description	0	2018-01-25	50	46	23	17
+9763	No description	0	2018-01-07	35	74	22	9
+9764	No description	0	2018-01-23	17	89	7	6
+9765	No description	0	2018-01-30	38	47	1	23
+9766	No description	0	2018-02-13	47	42	14	21
+9767	No description	0	2018-02-07	25	72	10	24
+9768	No description	0	2018-02-26	6	26	9	22
+9769	No description	0	2018-02-04	6	9	3	10
+9770	No description	0	2018-02-12	15	61	21	19
+9771	No description	0	2018-01-07	5	19	13	16
+9772	No description	0	2018-01-19	15	9	16	18
+9773	No description	0	2018-02-15	40	91	29	19
+9774	No description	0	2018-01-03	25	71	1	16
+9775	No description	0	2018-02-16	47	61	8	4
+9776	No description	0	2018-01-06	16	90	12	11
+9777	No description	0	2018-01-17	48	48	28	10
+9778	No description	0	2018-01-01	44	96	16	25
+9779	No description	0	2018-01-08	11	93	10	7
+9780	No description	0	2018-01-21	46	60	7	18
+9781	No description	0	2018-02-03	16	30	12	16
+9782	No description	0	2018-01-10	47	53	24	25
+9783	No description	0	2018-02-15	36	64	6	10
+9784	No description	0	2018-01-24	47	83	17	23
+9785	No description	0	2018-01-20	17	20	21	3
+9786	No description	0	2018-02-26	32	44	28	4
+9787	No description	0	2018-02-11	47	42	14	5
+9788	No description	0	2018-02-15	5	59	28	11
+9789	No description	0	2018-02-20	12	31	1	15
+9790	No description	0	2018-01-17	7	50	20	14
+9791	No description	0	2018-02-18	20	4	12	8
+9792	No description	0	2018-01-20	5	18	9	6
+9793	No description	0	2018-02-11	32	59	29	20
+9794	No description	0	2018-01-04	30	47	16	4
+9795	No description	0	2018-01-05	36	79	25	15
+9796	No description	0	2018-01-16	11	35	30	2
+9797	No description	0	2018-01-24	28	58	23	6
+9798	No description	0	2018-02-23	29	34	11	5
+9799	No description	0	2018-02-15	18	35	1	7
+9800	No description	0	2018-02-12	15	21	13	10
+9801	No description	0	2018-02-15	48	59	20	6
+9802	No description	0	2018-02-15	33	20	1	21
+9803	No description	0	2018-02-23	14	65	2	3
+9804	No description	0	2018-01-29	29	57	17	5
+9805	No description	0	2018-02-11	50	58	22	3
+9806	No description	0	2018-02-19	21	79	7	19
+9807	No description	0	2018-01-12	8	52	16	8
+9808	No description	0	2018-01-11	42	66	14	21
+9809	No description	0	2018-02-05	10	97	24	16
+9810	No description	0	2018-02-25	14	96	20	25
+9811	No description	0	2018-01-10	6	70	7	11
+9812	No description	0	2018-02-20	18	38	9	21
+9813	No description	0	2018-01-31	6	14	10	11
+9814	No description	0	2018-02-28	44	67	19	1
+9815	No description	0	2018-01-23	47	17	11	1
+9816	No description	0	2018-01-21	46	29	18	13
+9817	No description	0	2018-02-11	38	5	17	12
+9818	No description	0	2018-02-10	41	92	25	18
+9819	No description	0	2018-01-12	27	51	11	4
+9820	No description	0	2018-02-22	46	56	26	2
+9821	No description	0	2018-02-03	38	35	5	15
+9822	No description	0	2018-02-25	27	60	24	6
+9823	No description	0	2018-02-11	30	2	26	22
+9824	No description	0	2018-02-05	12	32	18	21
+9825	No description	0	2018-02-01	30	48	2	16
+9826	No description	0	2018-02-13	27	77	8	16
+9827	No description	0	2018-01-11	14	49	19	7
+9828	No description	0	2018-02-19	34	51	22	25
+9829	No description	0	2018-02-16	37	40	2	6
+9830	No description	0	2018-01-31	28	61	14	24
+9831	No description	0	2018-01-23	18	76	23	4
+9832	No description	0	2018-02-26	34	10	8	3
+9833	No description	0	2018-01-21	41	29	4	7
+9834	No description	0	2018-02-12	10	76	24	4
+9835	No description	0	2018-01-04	12	12	21	2
+9836	No description	0	2018-02-20	33	68	30	6
+9837	No description	0	2018-02-23	50	14	5	15
+9838	No description	0	2018-01-12	35	20	7	19
+9839	No description	0	2018-01-26	12	45	3	11
+9840	No description	0	2018-02-08	7	45	3	15
+9841	No description	0	2018-02-20	33	49	25	18
+9842	No description	0	2018-01-04	45	85	20	10
+9843	No description	0	2018-01-19	39	32	12	22
+9844	No description	0	2018-01-08	37	10	24	18
+9845	No description	0	2018-01-01	38	91	29	16
+9846	No description	0	2018-02-01	35	77	26	1
+9847	No description	0	2018-01-06	50	69	20	20
+9848	No description	0	2018-01-31	40	92	3	5
+9849	No description	0	2018-02-04	46	36	2	7
+9850	No description	0	2018-02-26	28	44	3	19
+9851	No description	0	2018-02-20	27	58	26	24
+9852	No description	0	2018-02-07	48	14	3	18
+9853	No description	0	2018-01-08	15	10	29	21
+9854	No description	0	2018-01-12	37	76	28	7
+9855	No description	0	2018-02-09	23	97	3	13
+9856	No description	0	2018-02-27	19	85	16	13
+9857	No description	0	2018-01-07	40	83	10	4
+9858	No description	0	2018-02-02	25	95	8	17
+9859	No description	0	2018-02-17	39	63	30	12
+9860	No description	0	2018-01-27	41	47	23	25
+9861	No description	0	2018-01-10	23	93	14	20
+9862	No description	0	2018-02-23	25	91	26	5
+9863	No description	0	2018-01-28	27	45	19	17
+9864	No description	0	2018-02-05	31	75	10	10
+9865	No description	0	2018-01-08	21	33	5	3
+9866	No description	0	2018-01-27	11	29	12	2
+9867	No description	0	2018-02-21	13	44	29	25
+9868	No description	0	2018-01-02	43	90	29	18
+9869	No description	0	2018-01-15	42	67	19	13
+9870	No description	0	2018-02-21	18	31	10	18
+9871	No description	0	2018-01-21	43	98	4	4
+9872	No description	0	2018-02-25	31	54	14	19
+9873	No description	0	2018-01-15	32	100	13	3
+9874	No description	0	2018-02-15	35	100	5	12
+9875	No description	0	2018-01-27	27	29	9	17
+9876	No description	0	2018-01-25	17	64	12	23
+9877	No description	0	2018-02-09	31	79	3	14
+9878	No description	0	2018-02-23	35	3	9	13
+9879	No description	0	2018-02-09	42	51	3	3
+9880	No description	0	2018-02-26	23	14	6	18
+9881	No description	0	2018-02-19	12	71	16	13
+9882	No description	0	2018-02-02	47	67	14	6
+9883	No description	0	2018-01-31	9	85	29	12
+9884	No description	0	2018-01-15	10	62	12	1
+9885	No description	0	2018-02-27	15	55	24	23
+9886	No description	0	2018-01-19	35	34	11	12
+9887	No description	0	2018-01-20	7	44	6	10
+9888	No description	0	2018-02-23	44	42	18	10
+9889	No description	0	2018-02-27	29	50	8	20
+9890	No description	0	2018-02-24	43	91	16	10
+9891	No description	0	2018-01-06	40	16	15	11
+9892	No description	0	2018-01-07	7	10	27	13
+9893	No description	0	2018-02-04	36	44	6	16
+9894	No description	0	2018-02-13	11	28	26	14
+9895	No description	0	2018-01-01	30	18	18	12
+9896	No description	0	2018-01-24	6	81	4	14
+9897	No description	0	2018-02-11	50	61	28	4
+9898	No description	0	2018-02-05	33	85	12	17
+9899	No description	0	2018-01-03	39	66	4	2
+9900	No description	0	2018-01-27	18	51	18	6
+9901	No description	0	2018-02-04	22	64	17	11
+9902	No description	0	2018-01-13	41	77	9	12
+9903	No description	0	2018-02-27	50	69	28	13
+9904	No description	0	2018-01-19	29	24	24	17
+9905	No description	0	2018-02-11	10	73	18	22
+9906	No description	0	2018-02-20	18	70	17	23
+9907	No description	0	2018-01-03	32	68	16	4
+9908	No description	0	2018-01-07	38	98	16	18
+9909	No description	0	2018-01-02	43	18	2	17
+9910	No description	0	2018-02-17	41	64	4	25
+9911	No description	0	2018-02-23	27	36	8	12
+9912	No description	0	2018-01-18	31	46	4	5
+9913	No description	0	2018-02-01	9	100	27	21
+9914	No description	0	2018-01-15	20	40	9	18
+9915	No description	0	2018-01-10	24	55	19	13
+9916	No description	0	2018-01-27	48	39	11	16
+9917	No description	0	2018-02-13	18	85	5	11
+9918	No description	0	2018-01-13	39	7	10	13
+9919	No description	0	2018-02-12	20	20	8	18
+9920	No description	0	2018-02-16	29	95	15	20
+9921	No description	0	2018-01-20	6	74	28	18
+9922	No description	0	2018-01-04	43	36	9	3
+9923	No description	0	2018-02-22	27	4	4	18
+9924	No description	0	2018-02-05	37	34	29	5
+9925	No description	0	2018-02-12	14	47	19	20
+9926	No description	0	2018-01-19	24	64	10	10
+9927	No description	0	2018-01-16	19	80	19	21
+9928	No description	0	2018-02-01	31	75	4	16
+9929	No description	0	2018-02-27	23	100	1	25
+9930	No description	0	2018-02-18	7	65	18	6
+9931	No description	0	2018-02-09	27	88	17	4
+9932	No description	0	2018-01-21	10	87	2	7
+9933	No description	0	2018-02-26	20	60	26	25
+9934	No description	0	2018-02-15	34	93	12	13
+9935	No description	0	2018-02-12	41	95	24	5
+9936	No description	0	2018-01-28	8	66	9	6
+9937	No description	0	2018-01-10	25	97	3	13
+9938	No description	0	2018-01-20	49	66	10	2
+9939	No description	0	2018-02-19	12	13	15	7
+9940	No description	0	2018-01-18	31	32	19	18
+9941	No description	0	2018-01-31	11	46	10	7
+9942	No description	0	2018-02-28	22	23	4	24
+9943	No description	0	2018-01-04	5	69	10	9
+9944	No description	0	2018-01-17	7	61	16	24
+9945	No description	0	2018-01-11	27	66	24	8
+9946	No description	0	2018-02-15	38	55	16	23
+9947	No description	0	2018-02-14	9	100	26	4
+9948	No description	0	2018-01-30	14	79	5	22
+9949	No description	0	2018-01-12	34	31	20	13
+9950	No description	0	2018-01-25	49	36	28	18
+9951	No description	0	2018-01-24	14	5	20	3
+9952	No description	0	2018-01-21	24	54	19	14
+9953	No description	0	2018-02-20	23	93	17	3
+9954	No description	0	2018-01-20	35	74	13	20
+9955	No description	0	2018-01-22	36	31	15	10
+9956	No description	0	2018-01-17	15	92	29	16
+9957	No description	0	2018-01-31	11	62	2	16
+9958	No description	0	2018-01-01	49	44	22	22
+9959	No description	0	2018-02-19	50	30	7	9
+9960	No description	0	2018-02-23	44	8	7	22
+9961	No description	0	2018-01-31	9	63	1	16
+9962	No description	0	2018-02-26	33	4	7	14
+9963	No description	0	2018-01-04	6	38	12	20
+9964	No description	0	2018-02-06	12	68	14	15
+9965	No description	0	2018-02-08	12	1	3	5
+9966	No description	0	2018-02-22	19	86	27	14
+9967	No description	0	2018-02-21	31	40	28	9
+9968	No description	0	2018-02-17	24	54	25	24
+9969	No description	0	2018-01-28	50	52	4	19
+9970	No description	0	2018-01-24	14	55	21	11
+9971	No description	0	2018-01-01	32	44	29	4
+9972	No description	0	2018-01-06	14	21	11	24
+9973	No description	0	2018-02-03	48	65	24	4
+9974	No description	0	2018-01-05	29	61	28	6
+9975	No description	0	2018-02-16	7	37	1	17
+9976	No description	0	2018-02-24	30	43	12	22
+9977	No description	0	2018-02-19	43	23	16	18
+9978	No description	0	2018-01-03	42	49	29	17
+9979	No description	0	2018-02-23	38	73	5	19
+9980	No description	0	2018-01-07	21	98	3	20
+9981	No description	0	2018-02-21	40	82	23	17
+9982	No description	0	2018-01-01	9	51	8	23
+9983	No description	0	2018-02-10	14	45	13	8
+9984	No description	0	2018-02-16	6	17	13	14
+9985	No description	0	2018-02-20	8	1	9	8
+9986	No description	0	2018-02-26	30	100	23	4
+9987	No description	0	2018-01-06	35	77	28	17
+9988	No description	0	2018-02-14	22	52	3	15
+9989	No description	0	2018-01-24	37	82	7	5
+9990	No description	0	2018-02-18	47	6	15	17
+9991	No description	0	2018-02-12	7	21	5	21
+9992	No description	0	2018-02-22	17	46	24	16
+9993	No description	0	2018-01-06	13	75	25	15
+9994	No description	0	2018-01-26	48	6	12	18
+9995	No description	0	2018-01-30	6	10	18	22
+9996	No description	0	2018-01-18	45	28	13	4
+9997	No description	0	2018-02-19	18	33	1	17
+9998	No description	0	2018-02-14	40	74	30	22
+9999	No description	0	2018-02-01	22	95	18	18
+10000	No description	0	2018-02-17	22	34	15	6
+\.
+
+
+--
+-- Data for Name: car_parts_provider; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.car_parts_provider (provider_id, name, phone_number, latitide, longitude) FROM stdin;
+1	Aisin Seiki Co.\n	80445295239	59.8170000000000002	29.8530000000000015
+2	Akebono Brake Industry Co.\n	11228215365	60.2740000000000009	29.6400000000000006
+3	Alcoa Inc.\n	74996164708	59.9680000000000035	29.8099999999999987
+4	Alpine Electronics Inc.\n	90162519391	59.8440000000000012	30.3120000000000012
+5	American Axle & Mfg. Holdings Inc.\n	11645298146	60.357999999999997	29.6729999999999983
+6	Asahi Glass Co.\n	52523340654	59.6289999999999978	29.6780000000000008
+7	Autoliv Inc.\n	89720889848	60.3659999999999997	30.3440000000000012
+8	Autoneum Management AG\n	80783140325	59.9859999999999971	30.1559999999999988
+9	BASF SE\n	94404289739	59.8629999999999995	30.1000000000000014
+10	Bayer MaterialScience AG\n	15790344736	59.9680000000000035	30.4170000000000016
+11	Behr GmbH\n	42363771842	59.7539999999999978	29.9490000000000016
+12	Benteler Automobiltechnik GmbH\n	78770728169	59.7340000000000018	30.463000000000001
+13	BorgWarner Inc.\n	16624633348	60.3930000000000007	29.6000000000000014
+14	Brose Fahrzeugteile GmbH\n	53890802758	59.7040000000000006	29.7330000000000005
+15	CalsonicKansei Corp.\n	38138544522	59.5940000000000012	29.8760000000000012
+16	CIE Automotive SA\n	92444990484	59.9870000000000019	30.2970000000000006
+17	CITIC Dicastal Co.\n	67975304604	60.222999999999999	30.3500000000000014
+18	Continental AG\n	27969660397	59.8629999999999995	30.1000000000000014
+19	Cooper-Standard Automotive\n	38535788463	59.6159999999999997	30.4229999999999983
+20	Cummins Inc.\n	49285284249	60.3659999999999997	30.3440000000000012
+21	Dana Holding Corp.\n	96458973549	59.7079999999999984	29.6479999999999997
+22	Delphi Automotive PLC\n	61873151938	60.4549999999999983	29.5169999999999995
+23	Denso Corp.\n	92275619920	60.2439999999999998	29.9899999999999984
+24	Draexlmaier Group\n	03211715211	60.017000000000003	30.2850000000000001
+25	DuPont	50451945920	60.3569999999999993	30.338000000000001
+\.
+
+
+--
+-- Data for Name: car_repairing_log; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.car_repairing_log (date, manager_username, workshop_id, car_license_plate, broken_car_part_id) FROM stdin;
+2018-02-07	kevenschuller	22	RI764	90
+2018-02-14	shamekalachance	10	EI983	36
+2018-01-04	vimilani	6	UB128	86
+2018-01-23	masonmardis	2	GJ528	13
+2018-01-19	shamekalachance	4	IM965	73
+2018-01-10	chiamurphey	8	GJ624	100
+2018-01-13	kashacallen	10	PL420	95
+2018-01-11	essiehempel	21	HT034	2
+2018-02-19	chiamurphey	6	IM002	27
+2018-02-06	danillewhiteside	13	XO182	63
+2018-02-01	ceolafazio	6	SG947	5
+2018-02-01	debrahdeland	20	FZ573	39
+2018-01-23	kevenschuller	22	RI764	84
+2018-01-24	marcellusmagana	13	FZ573	84
+2018-01-09	kevenschuller	12	PB088	22
+2018-01-13	kenyarumore	24	PL420	57
+2018-02-03	judithvillareal	4	UB128	18
+2018-01-10	ceolafazio	23	CZ751	41
+2018-02-05	ceolafazio	3	PB088	2
+2018-02-14	lerabreed	3	FZ573	52
+2018-02-16	julioned	22	EI983	8
+2018-01-06	sigridenger	7	PD533	69
+2018-01-22	judithvillareal	20	QL886	8
+2018-01-09	debrahdeland	27	QL886	92
+2018-01-02	marcellusmagana	14	RI764	8
+2018-01-02	shamekalachance	2	EI983	54
+2018-02-20	louisalucio	17	RI764	35
+2018-02-02	elfriededittmer	20	MA491	48
+2018-01-27	vimilani	5	EI983	64
+2018-02-17	elfriededittmer	2	AN916	65
+\.
+
+
+--
+-- Data for Name: car_type; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.car_type (car_type_id, brand, model) FROM stdin;
+1	BMW	i3\n
+2	Kia	Soul EV\n
+3	Hyundai	IONIQ Electric\n
+4	Volkswagen	e-Golf\n
+5	Nissan	LEAF\n
+6	Renault	ZOE\n
+7	Chevy	Bolt\n
+8	Tesla	Model 3\n
+9	Tesla	Model X\n
+10	Tesla	Model S
+\.
+
+
+--
+-- Data for Name: catalogue_provider; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.catalogue_provider (provider_id, car_part_id, amount_of_available, cost) FROM stdin;
+13	62	5	306.300000000000011
+25	83	16	402.269999999999982
+9	29	9	613.5
+17	80	7	638.259999999999991
+5	53	10	709.919999999999959
+11	75	18	698.17999999999995
+16	65	1	833.980000000000018
+2	23	5	921.370000000000005
+9	12	19	326.569999999999993
+23	84	7	744.730000000000018
+7	82	0	530.409999999999968
+10	90	17	627.909999999999968
+2	58	1	453.389999999999986
+15	41	14	963.049999999999955
+13	66	17	906.350000000000023
+2	8	12	120.810000000000002
+20	91	9	352.829999999999984
+13	50	5	41.1599999999999966
+16	88	15	471.259999999999991
+14	41	0	520.059999999999945
+6	58	3	101.769999999999996
+2	5	4	921.210000000000036
+7	74	3	577.259999999999991
+9	19	15	857.080000000000041
+12	24	10	49.4500000000000028
+11	72	16	177.22999999999999
+9	46	5	65.5300000000000011
+11	62	1	186.099999999999994
+6	95	7	819.590000000000032
+16	3	15	442.439999999999998
+6	53	13	846.230000000000018
+21	39	11	530.169999999999959
+19	85	0	24.9800000000000004
+7	92	18	537.67999999999995
+13	35	12	465.069999999999993
+12	28	19	736.309999999999945
+4	36	3	905.019999999999982
+18	55	9	885.57000000000005
+23	62	3	464.939999999999998
+14	39	17	576.07000000000005
+18	40	18	718.92999999999995
+20	49	6	139.72999999999999
+1	25	19	724.809999999999945
+10	27	16	280.649999999999977
+19	61	4	668.289999999999964
+8	12	9	86.2199999999999989
+2	13	5	551.789999999999964
+22	26	7	918.919999999999959
+23	52	16	148.409999999999997
+15	53	12	709.470000000000027
+12	89	12	248.870000000000005
+10	38	3	145.930000000000007
+7	95	9	556.259999999999991
+10	44	5	448.060000000000002
+6	77	11	728.67999999999995
+20	74	8	848.379999999999995
+22	51	16	715.610000000000014
+18	88	10	134.509999999999991
+8	26	10	769.840000000000032
+23	72	8	161.530000000000001
+24	20	6	550.299999999999955
+18	62	10	845.370000000000005
+2	46	11	750.009999999999991
+5	10	8	203.030000000000001
+15	88	17	948.700000000000045
+17	53	15	961.860000000000014
+4	18	3	75.1200000000000045
+16	47	8	802.120000000000005
+1	75	13	880.879999999999995
+1	3	8	492.589999999999975
+15	50	18	450.319999999999993
+5	52	13	549.200000000000045
+2	11	3	401.180000000000007
+12	57	11	412.75
+12	3	20	418.410000000000025
+9	75	20	721.970000000000027
+15	25	19	190.689999999999998
+22	45	18	743.350000000000023
+12	88	9	938.889999999999986
+10	97	0	570.25
+8	53	18	812.559999999999945
+16	86	9	601.559999999999945
+8	69	6	165.830000000000013
+19	78	19	161.27000000000001
+2	76	10	942.980000000000018
+18	98	8	483
+15	32	7	733.830000000000041
+4	3	2	786.769999999999982
+7	100	10	756.559999999999945
+20	98	3	622.340000000000032
+3	18	8	564.450000000000045
+14	90	5	599.080000000000041
+22	40	3	310.439999999999998
+11	12	12	256.439999999999998
+19	18	2	764.230000000000018
+20	69	6	255.990000000000009
+13	88	13	150.72999999999999
+25	50	15	982.149999999999977
+23	45	9	488.660000000000025
+8	32	13	689.210000000000036
+15	27	13	58.9500000000000028
+22	53	1	906.080000000000041
+19	2	5	871.399999999999977
+5	34	2	866.82000000000005
+3	34	5	216.280000000000001
+4	33	5	534.360000000000014
+25	64	9	34.3699999999999974
+3	66	4	794.950000000000045
+11	19	15	790.549999999999955
+14	44	4	737.75
+25	56	9	233.349999999999994
+9	73	10	374.519999999999982
+19	70	0	130.240000000000009
+1	77	2	811.399999999999977
+6	20	18	643.259999999999991
+9	1	6	784.42999999999995
+5	77	0	529.889999999999986
+6	46	16	789.039999999999964
+23	13	12	77.6899999999999977
+19	63	11	310.79000000000002
+19	46	4	869.17999999999995
+14	91	10	538.529999999999973
+7	23	14	941.970000000000027
+11	76	10	80.519999999999996
+16	91	9	349.04000000000002
+11	83	7	658.490000000000009
+10	49	15	793.389999999999986
+2	94	10	536.460000000000036
+11	39	11	11.5600000000000005
+10	21	4	361.649999999999977
+3	85	14	383.560000000000002
+12	76	14	638.269999999999982
+6	12	6	737.649999999999977
+11	100	2	18.7199999999999989
+7	34	18	979.850000000000023
+7	52	18	909.710000000000036
+11	58	11	840.039999999999964
+8	41	0	750.690000000000055
+1	96	18	879.340000000000032
+19	54	13	363.279999999999973
+24	3	2	728.399999999999977
+1	59	17	34.3999999999999986
+15	4	7	270.029999999999973
+5	29	2	292.110000000000014
+4	55	1	387.54000000000002
+17	21	8	853.019999999999982
+16	33	5	235.169999999999987
+11	29	6	803.730000000000018
+24	99	14	406.120000000000005
+21	67	10	896
+25	90	5	481.889999999999986
+25	89	16	414.20999999999998
+8	77	18	407.110000000000014
+13	14	10	467.79000000000002
+8	92	0	383.529999999999973
+9	97	10	917.580000000000041
+18	65	3	372.439999999999998
+4	14	15	444.050000000000011
+22	100	17	607.279999999999973
+1	40	7	102.379999999999995
+25	66	17	343.529999999999973
+15	15	2	984.360000000000014
+18	13	10	625
+23	58	12	981.799999999999955
+8	76	17	781.009999999999991
+13	95	10	602.129999999999995
+13	86	6	524.519999999999982
+17	64	19	200.120000000000005
+5	64	12	592.389999999999986
+16	29	11	788.629999999999995
+1	44	17	339.769999999999982
+12	41	19	476.269999999999982
+13	83	16	605.909999999999968
+5	35	18	932.539999999999964
+21	63	20	890.360000000000014
+24	10	6	905.080000000000041
+19	98	7	815.42999999999995
+4	12	0	799.730000000000018
+23	53	3	719.649999999999977
+7	50	14	918.519999999999982
+8	45	5	16.2899999999999991
+12	74	4	974.980000000000018
+24	59	6	584.399999999999977
+2	98	2	190.599999999999994
+25	3	3	488.850000000000023
+2	78	5	37.8999999999999986
+10	82	5	503.370000000000005
+18	51	14	599.700000000000045
+2	75	13	23.5199999999999996
+21	78	18	641.5
+8	62	13	438.300000000000011
+12	75	1	544.899999999999977
+5	88	16	327.129999999999995
+25	85	9	636.529999999999973
+11	8	18	143.960000000000008
+23	87	8	253.129999999999995
+12	94	6	676.57000000000005
+11	5	18	137.370000000000005
+4	4	6	618.159999999999968
+8	38	15	703.539999999999964
+23	78	17	660.57000000000005
+15	92	13	539.049999999999955
+6	23	13	849.129999999999995
+14	35	9	445.819999999999993
+1	17	16	576.32000000000005
+12	2	13	786
+17	17	6	456.060000000000002
+13	24	1	713.539999999999964
+10	15	11	346.29000000000002
+11	23	9	961.700000000000045
+22	25	13	48.6000000000000014
+20	21	20	598.309999999999945
+9	14	18	975.600000000000023
+6	51	15	192.400000000000006
+3	98	4	964.57000000000005
+13	60	8	203.280000000000001
+13	81	7	688.519999999999982
+5	86	2	536.419999999999959
+4	99	20	782.940000000000055
+4	16	12	648.139999999999986
+20	63	2	992.580000000000041
+22	99	2	445.399999999999977
+21	33	5	19.9100000000000001
+25	38	1	942.309999999999945
+12	9	14	81.730000000000004
+15	55	16	973.990000000000009
+14	61	11	654.769999999999982
+19	11	0	19.1400000000000006
+6	83	15	967.539999999999964
+11	43	15	910.559999999999945
+4	73	8	463.629999999999995
+1	12	14	41.6799999999999997
+22	31	0	197.219999999999999
+23	81	14	787.990000000000009
+18	91	10	170.370000000000005
+2	54	1	190.849999999999994
+11	45	13	245.039999999999992
+14	11	12	768.639999999999986
+25	88	16	804.539999999999964
+17	28	8	414.870000000000005
+16	75	8	855.899999999999977
+15	60	9	400.680000000000007
+3	33	13	959.92999999999995
+3	41	10	285.720000000000027
+3	88	16	572.580000000000041
+7	9	15	944.82000000000005
+13	46	10	937.379999999999995
+22	38	19	306.689999999999998
+6	78	5	410.120000000000005
+16	73	15	354.430000000000007
+6	75	16	215.889999999999986
+23	77	14	127.420000000000002
+10	31	12	708.029999999999973
+14	31	0	354.579999999999984
+2	36	20	426.019999999999982
+22	71	17	275.199999999999989
+13	21	7	28.7600000000000016
+21	5	19	966.669999999999959
+15	82	10	199.009999999999991
+14	93	12	296.370000000000005
+14	52	1	716.5
+19	51	8	176.199999999999989
+20	53	3	167.090000000000003
+23	100	14	987.990000000000009
+1	23	17	773.25
+5	49	1	55.490000000000002
+11	34	9	418.689999999999998
+17	86	10	733.340000000000032
+19	13	0	567.610000000000014
+20	99	14	590.470000000000027
+16	78	11	177.039999999999992
+17	66	11	283.279999999999973
+5	4	12	884.049999999999955
+21	1	12	991.009999999999991
+22	60	13	10.5
+4	58	7	887.230000000000018
+25	94	14	417.720000000000027
+2	18	5	515.029999999999973
+18	61	9	346.560000000000002
+8	61	12	443.95999999999998
+18	96	20	337.779999999999973
+1	21	13	603.720000000000027
+19	53	8	25.75
+22	84	7	377.240000000000009
+19	79	18	225.039999999999992
+13	82	13	476.95999999999998
+6	15	15	106.349999999999994
+1	36	8	37.0399999999999991
+18	57	5	420.490000000000009
+12	27	19	607.330000000000041
+4	77	11	30.3900000000000006
+22	82	10	590.539999999999964
+19	39	7	678.009999999999991
+13	31	17	649.039999999999964
+12	67	13	289.060000000000002
+22	54	13	935.029999999999973
+21	53	6	198.900000000000006
+8	47	13	791.470000000000027
+17	30	8	910.059999999999945
+10	60	12	721.659999999999968
+25	73	16	173.710000000000008
+17	43	5	77.269999999999996
+13	49	2	564.190000000000055
+21	93	1	894.799999999999955
+8	44	4	251.599999999999994
+2	6	8	422.879999999999995
+19	76	1	163.719999999999999
+3	95	15	256.519999999999982
+25	10	16	742.67999999999995
+22	28	1	678.950000000000045
+3	49	2	118.370000000000005
+6	82	15	34.5200000000000031
+11	41	11	268.930000000000007
+25	95	1	164.550000000000011
+1	100	1	185.669999999999987
+2	96	17	454.470000000000027
+11	11	6	72.2900000000000063
+6	94	0	135.169999999999987
+20	40	8	113.909999999999997
+23	82	6	775.519999999999982
+4	6	16	557.330000000000041
+7	25	18	269.370000000000005
+19	73	10	583.210000000000036
+21	91	8	119.150000000000006
+12	70	13	794.019999999999982
+20	79	9	654.440000000000055
+9	61	18	348.350000000000023
+8	51	15	733.730000000000018
+10	7	7	980.769999999999982
+5	72	20	819.809999999999945
+14	23	1	419.089999999999975
+22	89	13	357.170000000000016
+5	14	12	387.839999999999975
+25	19	2	516.470000000000027
+14	6	19	996.389999999999986
+12	83	20	343.329999999999984
+14	80	2	724.360000000000014
+7	32	7	119.120000000000005
+9	53	11	386.100000000000023
+3	23	16	140.110000000000014
+25	36	19	313.569999999999993
+6	38	16	322.220000000000027
+16	66	12	46.8500000000000014
+1	73	12	82.25
+4	23	11	997.659999999999968
+7	28	19	843.230000000000018
+3	28	9	874.120000000000005
+17	36	20	43.240000000000002
+21	49	3	188.430000000000007
+6	35	4	603.860000000000014
+12	87	15	269.800000000000011
+15	79	4	747.460000000000036
+1	8	20	323.680000000000007
+7	17	13	885.559999999999945
+23	27	1	239.789999999999992
+18	2	6	883.409999999999968
+12	46	1	772.529999999999973
+12	45	12	553.799999999999955
+14	25	16	917.190000000000055
+8	35	18	836.789999999999964
+12	36	5	309.149999999999977
+14	1	8	174.139999999999986
+10	20	9	159.069999999999993
+10	64	5	851.850000000000023
+15	5	7	360.519999999999982
+25	98	15	158.490000000000009
+24	100	15	83.6400000000000006
+1	79	0	109.180000000000007
+7	55	0	469.560000000000002
+24	11	11	823.720000000000027
+14	99	7	55.4099999999999966
+10	1	9	218.550000000000011
+21	7	9	987.370000000000005
+21	23	1	703.17999999999995
+7	89	0	501.060000000000002
+14	87	5	752.019999999999982
+20	3	2	765.039999999999964
+6	31	6	294.949999999999989
+25	8	19	948.039999999999964
+19	30	20	218.430000000000007
+5	22	17	836.009999999999991
+16	99	16	827.730000000000018
+22	27	3	280.29000000000002
+20	44	18	525.090000000000032
+10	59	13	767.07000000000005
+18	19	7	630.42999999999995
+24	7	11	273.019999999999982
+18	41	20	10.4199999999999999
+6	88	2	206.259999999999991
+4	91	7	635.049999999999955
+12	47	1	285.759999999999991
+7	22	6	652.139999999999986
+9	54	5	813.610000000000014
+20	32	3	861.899999999999977
+3	11	11	296.300000000000011
+5	21	19	178.569999999999993
+5	89	19	902.330000000000041
+18	3	16	679.210000000000036
+3	7	14	92.519999999999996
+23	36	14	894.340000000000032
+9	7	15	278.379999999999995
+22	30	15	458.430000000000007
+14	29	17	367.170000000000016
+11	90	12	105.099999999999994
+19	10	17	478.410000000000025
+11	53	12	538.879999999999995
+7	64	6	503.95999999999998
+14	13	7	621.840000000000032
+25	1	11	851.57000000000005
+14	16	11	611.759999999999991
+18	75	10	321.050000000000011
+7	88	2	833.909999999999968
+7	96	19	706.110000000000014
+15	83	18	314.199999999999989
+7	97	18	613.419999999999959
+3	72	20	102.060000000000002
+5	16	5	18.9699999999999989
+24	85	8	699.42999999999995
+3	71	16	811.889999999999986
+8	84	2	869.129999999999995
+4	57	8	840
+24	35	0	771.080000000000041
+19	23	14	601.92999999999995
+2	31	12	910.009999999999991
+17	97	17	783
+9	50	17	374
+21	61	13	488.060000000000002
+6	100	6	693.639999999999986
+14	20	0	278.939999999999998
+8	65	6	51.2800000000000011
+20	15	10	385.079999999999984
+25	5	20	966.240000000000009
+5	27	11	866.169999999999959
+7	16	17	843.269999999999982
+6	40	17	46.0700000000000003
+23	26	20	18.1099999999999994
+7	43	9	408.639999999999986
+25	87	14	933.139999999999986
+1	1	18	185.569999999999993
+25	43	17	404.220000000000027
+11	84	13	486.800000000000011
+6	19	5	241.389999999999986
+1	89	20	731.340000000000032
+14	65	9	487.720000000000027
+8	81	9	936.100000000000023
+11	99	8	477.810000000000002
+10	96	18	359.350000000000023
+17	18	8	61.8800000000000026
+18	93	20	560.659999999999968
+11	1	0	900.399999999999977
+12	18	5	896.5
+13	64	17	951.169999999999959
+5	78	2	292.779999999999973
+14	100	5	242.740000000000009
+24	88	11	27.0399999999999991
+4	43	18	604.700000000000045
+15	65	19	15.3100000000000005
+13	72	18	869.649999999999977
+17	52	13	973.82000000000005
+23	31	4	984.220000000000027
+22	98	7	275.389999999999986
+8	19	8	133.419999999999987
+2	47	16	577.879999999999995
+25	65	18	492.730000000000018
+24	65	11	987.669999999999959
+9	71	18	997.720000000000027
+9	24	19	677.990000000000009
+24	86	4	681.470000000000027
+18	78	19	218.460000000000008
+18	84	7	259.279999999999973
+24	63	5	353.730000000000018
+16	53	10	659.669999999999959
+5	81	1	309.730000000000018
+4	17	16	796.490000000000009
+12	39	14	261.569999999999993
+24	30	5	58
+14	67	13	193.340000000000003
+2	93	7	820.669999999999959
+16	37	8	249.97999999999999
+13	23	1	770.970000000000027
+22	94	17	619.57000000000005
+19	84	8	612.700000000000045
+19	68	2	27.6099999999999994
+18	80	16	337.160000000000025
+5	96	1	871.700000000000045
+15	90	20	627.230000000000018
+12	84	16	137.539999999999992
+11	85	2	325.310000000000002
+8	29	15	498.100000000000023
+9	8	8	973.169999999999959
+16	87	11	669.980000000000018
+17	79	10	477.399999999999977
+7	14	2	77.9599999999999937
+16	24	11	278.25
+23	88	9	119.409999999999997
+25	14	19	693.350000000000023
+21	51	15	37.1099999999999994
+21	11	3	629.669999999999959
+10	50	0	639.330000000000041
+10	73	18	867.049999999999955
+16	23	6	292.75
+9	21	4	11.3000000000000007
+20	2	16	874.059999999999945
+16	16	20	180.430000000000007
+9	76	1	501.370000000000005
+11	30	14	177.120000000000005
+11	96	0	45.4399999999999977
+23	80	20	366.269999999999982
+7	38	5	23.7199999999999989
+23	23	5	544.990000000000009
+13	58	2	579.190000000000055
+18	99	0	890.25
+22	91	3	732.129999999999995
+11	70	7	965.850000000000023
+5	42	15	569.57000000000005
+22	22	20	257.319999999999993
+11	2	7	639.860000000000014
+19	35	10	260.329999999999984
+17	42	15	643.470000000000027
+21	27	19	830.990000000000009
+6	89	20	932.399999999999977
+21	95	20	891.610000000000014
+12	29	18	456.70999999999998
+21	77	9	658.789999999999964
+4	70	8	838.720000000000027
+3	61	8	429.060000000000002
+12	61	17	424.670000000000016
+12	12	7	133.039999999999992
+15	9	12	166.710000000000008
+18	46	11	174.180000000000007
+3	12	5	121.739999999999995
+4	69	6	154.789999999999992
+18	39	16	211.430000000000007
+21	50	10	416.879999999999995
+22	20	15	554.25
+9	87	20	105.890000000000001
+11	13	17	798.330000000000041
+15	19	7	552.830000000000041
+14	48	18	423.680000000000007
+24	44	13	766.009999999999991
+7	93	19	33.3599999999999994
+1	70	5	571.419999999999959
+14	94	4	714.490000000000009
+10	85	20	459.569999999999993
+4	66	10	356.069999999999993
+23	54	9	188.169999999999987
+6	28	3	916.759999999999991
+4	83	14	141.159999999999997
+8	63	15	108.769999999999996
+11	25	17	716.690000000000055
+4	63	19	965.92999999999995
+9	51	9	799.419999999999959
+20	35	17	189.360000000000014
+7	45	18	627.590000000000032
+24	37	3	788.17999999999995
+7	75	11	968.509999999999991
+21	9	11	176.030000000000001
+17	70	18	629.200000000000045
+3	4	6	37.490000000000002
+13	68	2	367.25
+14	45	5	719.529999999999973
+11	54	20	903.279999999999973
+7	13	20	933.519999999999982
+4	85	10	91.0699999999999932
+19	32	11	32.8299999999999983
+10	75	3	634.169999999999959
+7	26	7	56.6799999999999997
+16	46	9	846.720000000000027
+1	48	1	703.340000000000032
+17	25	5	81.6800000000000068
+2	50	9	425.079999999999984
+18	100	16	141.090000000000003
+7	31	4	937.370000000000005
+3	50	20	668.129999999999995
+2	62	18	678.519999999999982
+21	28	17	665.950000000000045
+2	1	4	510.610000000000014
+25	79	5	617.210000000000036
+25	55	4	100.269999999999996
+7	39	16	247.939999999999998
+14	82	3	637.080000000000041
+16	14	5	408.839999999999975
+10	52	4	563.509999999999991
+2	68	0	525.299999999999955
+11	27	6	878.409999999999968
+16	5	1	818.67999999999995
+18	23	5	812.42999999999995
+16	68	4	169.210000000000008
+21	96	5	939.840000000000032
+12	15	12	15.8200000000000003
+6	59	1	957.82000000000005
+10	53	19	357.54000000000002
+13	78	16	272.819999999999993
+12	58	20	304.339999999999975
+5	57	18	430.730000000000018
+7	99	19	70.1200000000000045
+24	90	0	968.190000000000055
+24	5	4	322.379999999999995
+22	12	2	716.769999999999982
+8	15	0	810.019999999999982
+10	55	8	196.870000000000005
+4	71	12	611.009999999999991
+19	88	3	621.649999999999977
+15	61	11	622.779999999999973
+18	59	2	409.970000000000027
+11	61	1	374.550000000000011
+21	36	10	654.67999999999995
+16	41	19	572.67999999999995
+15	94	15	214.969999999999999
+7	46	13	49.7800000000000011
+14	21	11	784.899999999999977
+24	66	5	457.620000000000005
+21	73	17	591.159999999999968
+2	77	13	529.399999999999977
+20	72	12	584.019999999999982
+1	34	8	274.730000000000018
+8	39	18	485.519999999999982
+15	46	18	104.900000000000006
+4	81	19	705.200000000000045
+19	55	9	843.440000000000055
+16	35	2	593.169999999999959
+22	80	11	795.919999999999959
+3	32	19	924.25
+22	47	6	884.980000000000018
+13	71	1	165.819999999999993
+18	68	7	602.07000000000005
+22	9	15	295.449999999999989
+10	29	1	966.42999999999995
+1	99	8	88.4699999999999989
+13	19	17	25.9400000000000013
+1	41	12	762.590000000000032
+2	66	4	799.350000000000023
+9	70	12	982.389999999999986
+3	29	17	680.649999999999977
+23	49	9	739.210000000000036
+25	86	16	12.4499999999999993
+20	86	14	768.700000000000045
+16	95	15	682.059999999999945
+23	4	20	668.559999999999945
+6	56	11	812.659999999999968
+19	81	15	272.050000000000011
+2	19	6	123.430000000000007
+4	21	4	574.539999999999964
+20	96	0	709.730000000000018
+8	55	2	679.559999999999945
+11	88	7	979.289999999999964
+22	29	16	229.419999999999987
+18	72	0	366.740000000000009
+15	23	14	489.720000000000027
+20	55	19	354.360000000000014
+17	39	4	858.299999999999955
+23	33	8	672.350000000000023
+2	43	2	466.180000000000007
+6	42	4	996.57000000000005
+1	84	12	68.3499999999999943
+10	12	10	221.659999999999997
+20	12	5	49.0499999999999972
+19	43	3	95.8400000000000034
+4	86	19	359.779999999999973
+16	30	17	994.769999999999982
+24	29	18	497.079999999999984
+4	42	14	120.810000000000002
+18	24	5	942.07000000000005
+2	39	12	229.449999999999989
+6	62	11	398.269999999999982
+8	18	12	387.300000000000011
+18	9	12	185.389999999999986
+12	4	5	721.590000000000032
+21	25	2	939.980000000000018
+17	6	17	883.059999999999945
+25	26	0	184.009999999999991
+20	61	12	382.970000000000027
+16	18	8	402.04000000000002
+14	36	1	749.100000000000023
+15	96	16	334.819999999999993
+20	52	11	280.149999999999977
+1	69	6	667.159999999999968
+10	35	12	77.6200000000000045
+9	18	15	167.710000000000008
+19	9	12	126.75
+1	4	10	252.810000000000002
+22	18	20	829.710000000000036
+5	99	11	50.4500000000000028
+11	47	2	544.330000000000041
+2	92	13	654.32000000000005
+4	93	19	278.579999999999984
+2	69	19	428.769999999999982
+6	22	4	458.470000000000027
+15	80	16	253.919999999999987
+9	28	20	74.3499999999999943
+15	42	6	745.159999999999968
+16	26	5	679.309999999999945
+25	78	0	490.810000000000002
+23	61	1	898.419999999999959
+3	26	8	509.060000000000002
+3	58	20	150.080000000000013
+15	8	12	421.850000000000023
+3	91	20	877.57000000000005
+20	60	0	899.039999999999964
+23	93	19	198.530000000000001
+21	22	1	225.439999999999998
+10	43	14	483.350000000000023
+23	38	12	647.899999999999977
+7	21	5	350.980000000000018
+13	25	19	328.149999999999977
+16	61	7	295.550000000000011
+6	14	3	621.419999999999959
+17	4	10	897.549999999999955
+20	56	15	568.909999999999968
+12	64	2	514.230000000000018
+22	16	13	504.829999999999984
+17	45	10	130.449999999999989
+10	26	3	726.950000000000045
+1	5	15	791.490000000000009
+17	48	14	238.610000000000014
+17	98	18	937.509999999999991
+2	7	18	768.5
+11	69	10	514.059999999999945
+7	67	12	589.090000000000032
+16	50	1	258.769999999999982
+3	82	13	893.460000000000036
+21	65	20	574.600000000000023
+7	76	8	393.759999999999991
+3	36	5	443.639999999999986
+10	46	4	646.899999999999977
+12	93	10	837.889999999999986
+24	4	11	141.460000000000008
+16	62	17	420
+11	15	12	453.240000000000009
+11	92	15	441.100000000000023
+13	32	0	108.689999999999998
+9	39	2	85.6099999999999994
+2	84	13	346.529999999999973
+18	35	10	572.440000000000055
+2	67	10	832.399999999999977
+1	10	14	696.350000000000023
+16	4	16	113.870000000000005
+14	69	7	793.460000000000036
+12	43	10	367.259999999999991
+8	9	18	64.8299999999999983
+24	28	16	962.389999999999986
+17	11	6	188.939999999999998
+23	64	1	403.050000000000011
+16	48	8	905.950000000000045
+3	39	4	372.089999999999975
+20	68	0	359.860000000000014
+4	28	18	628.710000000000036
+16	94	17	163.129999999999995
+24	50	10	535.240000000000009
+17	46	19	99.0699999999999932
+8	95	20	573.75
+22	77	7	190.599999999999994
+10	11	16	334.329999999999984
+5	63	2	620.710000000000036
+24	41	10	337.689999999999998
+19	44	12	440.149999999999977
+19	97	0	988.330000000000041
+3	43	8	840.759999999999991
+10	70	5	611.190000000000055
+13	85	10	278.579999999999984
+12	50	6	221.550000000000011
+1	78	13	315.45999999999998
+17	59	12	208.47999999999999
+8	60	15	303.829999999999984
+16	10	5	513.57000000000005
+17	38	7	834.990000000000009
+7	69	13	497.079999999999984
+3	13	17	980.039999999999964
+25	69	8	646.720000000000027
+3	38	8	762.889999999999986
+1	27	5	474.439999999999998
+9	42	10	705.259999999999991
+18	31	19	972.110000000000014
+25	29	19	605.200000000000045
+17	34	8	876.789999999999964
+20	89	3	189.830000000000013
+5	20	6	214.25
+8	58	0	854.330000000000041
+22	64	17	210.659999999999997
+21	44	12	856.990000000000009
+8	99	0	967.190000000000055
+6	81	14	771.330000000000041
+7	18	17	417.220000000000027
+6	50	14	966.080000000000041
+7	77	10	93.2199999999999989
+17	29	16	971.210000000000036
+10	9	19	349.79000000000002
+12	49	20	498.730000000000018
+10	54	13	340.829999999999984
+18	95	8	631.950000000000045
+12	81	0	183.560000000000002
+23	39	2	448.100000000000023
+4	75	4	663.730000000000018
+21	68	11	477.019999999999982
+18	52	18	830.57000000000005
+9	66	17	452.04000000000002
+22	24	6	269.45999999999998
+2	38	16	412.160000000000025
+8	17	15	396.149999999999977
+10	99	19	861.159999999999968
+12	25	7	386.740000000000009
+1	93	16	522.5
+13	56	2	648.07000000000005
+1	85	17	973.649999999999977
+8	71	3	476.910000000000025
+19	3	11	617.629999999999995
+14	59	19	439.870000000000005
+8	67	13	883.889999999999986
+4	82	9	914.110000000000014
+11	24	2	663.120000000000005
+2	28	13	313.160000000000025
+7	20	2	743.950000000000045
+19	64	17	590.82000000000005
+2	24	4	614.909999999999968
+16	54	16	735.450000000000045
+3	62	14	817.970000000000027
+7	15	4	707.539999999999964
+23	66	8	561.57000000000005
+4	79	4	527.629999999999995
+16	17	8	540.82000000000005
+22	95	4	918.659999999999968
+22	85	19	361.379999999999995
+20	31	14	795.100000000000023
+21	90	2	692.419999999999959
+20	67	7	41.4500000000000028
+7	90	5	975.740000000000009
+7	66	2	960.909999999999968
+9	62	4	970.299999999999955
+15	81	19	521.789999999999964
+4	65	11	188.930000000000007
+24	23	11	709.149999999999977
+7	83	9	854.940000000000055
+19	94	4	444.850000000000023
+21	47	17	312.410000000000025
+18	82	0	246.650000000000006
+20	45	7	765.029999999999973
+2	57	19	152.460000000000008
+15	93	9	218.469999999999999
+12	21	19	426.649999999999977
+5	59	3	785.940000000000055
+24	40	12	609.970000000000027
+4	26	6	514.159999999999968
+18	83	7	475.639999999999986
+21	59	6	330.5
+21	32	12	206.610000000000014
+5	94	20	270.850000000000023
+5	68	4	133.939999999999998
+22	8	14	800.42999999999995
+1	82	10	576.75
+9	67	17	204.400000000000006
+18	56	6	165.949999999999989
+13	28	14	861.289999999999964
+25	30	16	309.800000000000011
+9	63	17	858.220000000000027
+16	11	16	875.759999999999991
+19	17	2	579.309999999999945
+22	76	20	577.870000000000005
+1	92	6	437.980000000000018
+2	61	16	347.610000000000014
+8	14	0	231.27000000000001
+9	15	18	773.120000000000005
+12	82	2	173.810000000000002
+9	17	16	639.110000000000014
+22	79	1	484.740000000000009
+25	61	9	934.940000000000055
+1	33	18	625.990000000000009
+6	76	4	697.67999999999995
+2	12	8	196.919999999999987
+3	84	3	921.279999999999973
+11	65	4	269.75
+6	41	9	38.8100000000000023
+10	100	8	633.32000000000005
+13	9	17	300.189999999999998
+6	63	2	677.509999999999991
+21	21	20	382.569999999999993
+15	64	7	163.159999999999997
+21	41	18	377.579999999999984
+9	44	0	834.669999999999959
+2	83	17	991.07000000000005
+18	63	18	301.279999999999973
+22	92	13	466.329999999999984
+10	76	7	819.17999999999995
+11	48	15	713.700000000000045
+4	25	12	191.849999999999994
+23	83	7	218.27000000000001
+13	37	1	957.889999999999986
+14	26	2	181.509999999999991
+12	16	8	796.559999999999945
+20	41	2	543.480000000000018
+16	15	13	244.939999999999998
+5	56	17	258.949999999999989
+12	10	11	189.039999999999992
+20	54	4	534.549999999999955
+8	86	10	183.77000000000001
+9	79	7	97.6800000000000068
+9	32	5	247.169999999999987
+11	4	16	692.799999999999955
+14	89	6	439.490000000000009
+15	35	18	455.970000000000027
+14	75	19	236.840000000000003
+16	92	11	769.509999999999991
+21	43	15	263.579999999999984
+6	68	13	941.82000000000005
+16	8	9	385.079999999999984
+17	14	20	350.589999999999975
+3	67	7	305.629999999999995
+6	44	3	706.080000000000041
+10	10	6	539.700000000000045
+25	67	3	761.230000000000018
+25	11	20	281.810000000000002
+8	98	15	845.600000000000023
+4	8	9	307.519999999999982
+2	59	20	159.830000000000013
+10	78	0	797.269999999999982
+21	79	14	942.720000000000027
+1	52	20	460.970000000000027
+1	76	11	958.909999999999968
+22	1	20	542.149999999999977
+10	8	13	721.110000000000014
+23	96	1	367.029999999999973
+13	65	9	271.860000000000014
+7	57	6	37.0700000000000003
+11	28	12	681.399999999999977
+21	2	1	279.939999999999998
+12	14	2	829.110000000000014
+14	38	19	791.159999999999968
+19	24	1	706.470000000000027
+17	26	18	457.54000000000002
+5	23	12	190.969999999999999
+11	56	15	557.059999999999945
+16	93	16	234.539999999999992
+10	66	0	820.789999999999964
+16	97	12	196.900000000000006
+21	4	13	755.629999999999995
+9	48	2	144.530000000000001
+8	33	11	525.879999999999995
+18	30	4	538.529999999999973
+17	7	15	685.440000000000055
+18	38	17	946.42999999999995
+5	15	18	890.409999999999968
+23	32	1	177.860000000000014
+6	49	17	123.569999999999993
+4	97	5	913.980000000000018
+6	96	0	337.829999999999984
+11	17	2	429.399999999999977
+7	36	16	430.25
+1	13	8	573.350000000000023
+16	27	8	540.059999999999945
+6	24	9	365.930000000000007
+2	100	10	511.480000000000018
+22	10	0	167.430000000000007
+20	19	15	303.560000000000002
+25	2	12	857.210000000000036
+5	2	6	598.210000000000036
+17	8	5	761.419999999999959
+22	68	16	369.230000000000018
+22	49	2	733.610000000000014
+15	91	12	591.259999999999991
+2	65	12	653.590000000000032
+1	66	18	496.860000000000014
+24	46	16	61.0499999999999972
+12	96	11	420.730000000000018
+23	30	9	822.840000000000032
+7	80	11	832.67999999999995
+7	8	10	321.759999999999991
+6	97	0	154.810000000000002
+22	13	0	303.20999999999998
+2	15	0	257.310000000000002
+4	2	11	196.629999999999995
+7	72	1	403.800000000000011
+25	16	1	966.720000000000027
+17	33	14	738.100000000000023
+14	15	11	899.840000000000032
+21	37	1	962.759999999999991
+16	80	20	944.950000000000045
+22	52	2	271.949999999999989
+10	79	8	856.139999999999986
+5	47	0	894.509999999999991
+23	46	1	873.200000000000045
+18	64	15	69.4300000000000068
+11	86	13	447.639999999999986
+19	47	12	283.360000000000014
+10	36	5	178.169999999999987
+25	20	12	886.389999999999986
+22	83	15	134.909999999999997
+5	40	14	993.379999999999995
+8	27	18	775.200000000000045
+24	19	3	526.190000000000055
+16	13	1	520.889999999999986
+19	91	4	393.029999999999973
+3	93	1	709
+15	76	8	835.909999999999968
+25	35	9	738.57000000000005
+3	81	6	100.609999999999999
+10	61	19	686.149999999999977
+11	68	3	763.5
+19	40	17	721.350000000000023
+15	78	6	351.949999999999989
+5	54	12	431.990000000000009
+18	50	8	117.239999999999995
+21	81	14	434.879999999999995
+20	76	18	871.210000000000036
+21	15	4	150.159999999999997
+24	93	14	49.759999999999998
+8	1	6	961.019999999999982
+8	66	17	62.9500000000000028
+2	95	11	695.460000000000036
+9	57	9	925.870000000000005
+14	47	14	109.480000000000004
+22	55	1	854.700000000000045
+1	31	17	733.07000000000005
+4	29	10	290.560000000000002
+18	85	17	583.200000000000045
+10	91	4	127.019999999999996
+17	19	3	887.600000000000023
+19	96	8	287.04000000000002
+6	64	4	553.440000000000055
+2	33	1	520.100000000000023
+1	19	6	504.379999999999995
+18	48	14	945.07000000000005
+16	51	4	617.009999999999991
+21	64	15	167.740000000000009
+17	23	13	335.589999999999975
+6	30	11	240.330000000000013
+9	49	10	102.260000000000005
+2	99	6	752.840000000000032
+16	52	17	817.870000000000005
+14	18	0	109.239999999999995
+20	9	2	913.240000000000009
+22	6	14	846.600000000000023
+20	43	17	972.710000000000036
+13	5	11	559.5
+2	22	11	393.470000000000027
+13	38	19	760.710000000000036
+20	83	12	269.420000000000016
+3	37	10	427.930000000000007
+14	17	8	469.759999999999991
+7	11	16	954.740000000000009
+5	51	19	803.710000000000036
+11	57	2	699.190000000000055
+9	90	19	187.259999999999991
+4	27	10	418.589999999999975
+11	44	5	743.350000000000023
+7	85	7	645.360000000000014
+14	78	11	40.9099999999999966
+19	69	5	458.779999999999973
+11	93	20	714.549999999999955
+1	95	0	42.2100000000000009
+1	38	15	986.399999999999977
+7	7	12	148.599999999999994
+25	41	16	653.899999999999977
+7	6	18	306.569999999999993
+18	66	14	806.82000000000005
+1	35	0	66.2999999999999972
+17	56	12	120.849999999999994
+25	77	17	318.170000000000016
+20	1	17	606.419999999999959
+16	20	14	852.110000000000014
+1	20	10	493.25
+23	44	9	104.25
+21	58	6	333.569999999999993
+11	63	16	717.42999999999995
+3	31	15	46.6099999999999994
+14	92	10	578.210000000000036
+21	14	12	52.1300000000000026
+24	77	6	226.159999999999997
+6	55	9	732.210000000000036
+14	54	9	155.460000000000008
+15	56	10	331.269999999999982
+23	17	14	307.019999999999982
+2	17	8	317.050000000000011
+3	75	11	388.339999999999975
+12	48	9	437.339999999999975
+16	67	8	924.620000000000005
+14	70	11	662.700000000000045
+24	39	9	449.689999999999998
+14	74	20	230
+4	24	9	142.939999999999998
+4	96	13	614.789999999999964
+3	99	13	221.379999999999995
+3	42	18	920.879999999999995
+17	24	14	210.97999999999999
+9	9	0	147.039999999999992
+5	58	2	149.400000000000006
+20	95	16	348.389999999999986
+13	18	2	299.079999999999984
+16	21	11	19.6099999999999994
+18	87	14	592.769999999999982
+14	68	14	996.190000000000055
+21	54	7	314.879999999999995
+21	29	17	976.490000000000009
+25	72	7	145.879999999999995
+13	59	7	62.6700000000000017
+25	34	12	434.430000000000007
+6	92	6	70.5300000000000011
+24	72	3	681.299999999999955
+9	69	7	660.860000000000014
+14	55	9	878.360000000000014
+8	73	13	125.700000000000003
+25	53	11	622.620000000000005
+19	4	12	535
+20	90	10	945.159999999999968
+16	49	14	851.480000000000018
+13	22	2	869.309999999999945
+16	96	19	16.5899999999999999
+3	92	19	257.160000000000025
+4	60	11	392.189999999999998
+25	100	11	125.859999999999999
+6	43	8	689.379999999999995
+4	35	4	23.8399999999999999
+18	92	2	80.269999999999996
+18	74	2	92.5100000000000051
+15	47	18	229.930000000000007
+1	7	20	69.7999999999999972
+7	60	18	144.759999999999991
+13	42	17	144.939999999999998
+23	28	8	254.650000000000006
+22	21	15	139.330000000000013
+3	55	4	618.399999999999977
+14	57	5	562.039999999999964
+5	69	19	431.360000000000014
+17	77	14	748.710000000000036
+10	28	12	891.379999999999995
+24	92	4	431.670000000000016
+18	27	14	532.25
+6	4	8	826.5
+24	55	6	880.799999999999955
+23	55	10	578.059999999999945
+11	6	14	976.25
+25	40	6	203.969999999999999
+1	63	11	308.740000000000009
+1	64	3	423.45999999999998
+7	1	4	563.309999999999945
+7	63	8	363.069999999999993
+5	66	16	681.299999999999955
+16	70	0	541.049999999999955
+16	9	3	843.759999999999991
+19	31	18	784.360000000000014
+15	7	16	41.0600000000000023
+18	71	3	144.75
+2	87	2	318.060000000000002
+16	69	8	839.419999999999959
+8	79	16	181.740000000000009
+10	95	16	745.909999999999968
+6	61	12	854.669999999999959
+3	96	7	57.509999999999998
+17	41	0	231.210000000000008
+12	66	15	753.980000000000018
+18	7	14	962.039999999999964
+11	49	3	868.340000000000032
+9	91	13	806.600000000000023
+8	24	4	199.669999999999987
+11	42	18	690.5
+18	22	7	362.939999999999998
+3	24	15	914.75
+21	80	9	734.009999999999991
+2	2	10	61.4600000000000009
+14	73	10	454.160000000000025
+3	44	8	509.230000000000018
+22	7	1	34.0900000000000034
+3	35	6	269.610000000000014
+9	78	6	743.330000000000041
+20	94	10	222.120000000000005
+13	47	14	49.009999999999998
+21	94	11	372.060000000000002
+2	34	3	866.990000000000009
+6	90	5	55.509999999999998
+22	74	5	710.490000000000009
+1	67	7	939.350000000000023
+1	43	18	569.75
+19	71	15	550.75
+19	90	8	880.970000000000027
+10	32	12	865.029999999999973
+20	85	5	824.840000000000032
+14	71	6	37.2000000000000028
+8	40	3	193.72999999999999
+13	98	1	370.259999999999991
+15	2	10	296.370000000000005
+23	94	1	229.319999999999993
+2	16	12	743.210000000000036
+11	55	9	886.450000000000045
+1	94	8	351.95999999999998
+11	80	2	172.930000000000007
+19	20	2	477.29000000000002
+9	92	3	287.379999999999995
+9	34	18	992.309999999999945
+1	62	18	143.650000000000006
+12	31	9	143.919999999999987
+3	8	0	866.059999999999945
+19	48	11	813.42999999999995
+21	24	20	366.769999999999982
+16	76	2	85.7000000000000028
+13	75	4	750.970000000000027
+4	37	14	712.019999999999982
+4	88	5	237
+24	84	14	70.9399999999999977
+23	40	2	649.860000000000014
+1	60	4	836.980000000000018
+20	4	16	865.940000000000055
+9	64	13	593.509999999999991
+15	31	20	381.050000000000011
+18	4	10	210.060000000000002
+2	48	6	47.9699999999999989
+3	47	11	451.230000000000018
+24	87	1	168.759999999999991
+16	25	13	436.970000000000027
+25	54	14	263.29000000000002
+20	71	20	508.980000000000018
+15	67	12	633.889999999999986
+21	16	7	469.370000000000005
+2	80	8	323.589999999999975
+17	84	0	52.8400000000000034
+15	73	2	285.930000000000007
+7	58	2	282.269999999999982
+1	53	1	884.480000000000018
+20	28	1	874.240000000000009
+19	66	14	701.240000000000009
+6	27	7	713.110000000000014
+4	95	20	577.370000000000005
+13	96	19	793.309999999999945
+14	30	19	63.0900000000000034
+20	75	17	218.259999999999991
+6	54	15	517.75
+18	89	10	870.649999999999977
+22	32	11	464.810000000000002
+5	39	14	619.049999999999955
+12	79	13	60.3100000000000023
+12	77	19	442.800000000000011
+11	51	12	973.460000000000036
+1	9	15	93.8199999999999932
+3	25	0	265.069999999999993
+20	5	0	909.25
+1	86	14	293.649999999999977
+12	37	18	402.759999999999991
+14	66	15	989.409999999999968
+4	22	17	290.439999999999998
+11	77	4	920.950000000000045
+1	74	8	629.029999999999973
+10	89	2	148.810000000000002
+11	95	10	639.149999999999977
+17	69	0	702.110000000000014
+5	46	2	128.189999999999998
+19	65	13	596.610000000000014
+10	77	8	998.409999999999968
+6	84	17	163.129999999999995
+22	86	17	254.069999999999993
+9	2	18	744.190000000000055
+15	57	6	534.620000000000005
+10	69	19	869.299999999999955
+5	92	1	526.600000000000023
+8	37	7	492.939999999999998
+22	2	17	731.629999999999995
+20	42	15	36.3900000000000006
+13	92	12	206.430000000000007
+23	51	12	211.030000000000001
+22	19	0	41.4600000000000009
+23	59	7	965.080000000000041
+16	7	4	758.5
+6	37	3	121.090000000000003
+1	29	19	467.189999999999998
+21	71	11	195.900000000000006
+2	9	20	410.360000000000014
+19	75	20	67.4699999999999989
+22	56	4	473.389999999999986
+14	3	8	870.230000000000018
+22	62	6	158.139999999999986
+3	64	4	529.120000000000005
+3	70	3	305.839999999999975
+18	15	9	882.919999999999959
+20	59	7	851.090000000000032
+25	12	16	67.4399999999999977
+3	21	18	338.920000000000016
+19	87	13	976.539999999999964
+14	76	7	155.860000000000014
+14	50	0	154.530000000000001
+13	87	17	493.199999999999989
+3	19	8	294.54000000000002
+3	52	7	852.25
+2	14	4	640.960000000000036
+21	66	19	191.349999999999994
+10	19	11	658.299999999999955
+22	3	14	606.970000000000027
+10	47	8	523.169999999999959
+21	83	12	65.980000000000004
+20	37	19	251.069999999999993
+23	24	0	442.089999999999975
+1	39	7	927.490000000000009
+24	58	15	68.9300000000000068
+6	66	14	436.54000000000002
+20	27	19	64
+17	95	2	356.430000000000007
+22	58	12	713.659999999999968
+12	23	14	811.710000000000036
+13	73	14	372.019999999999982
+20	14	3	850.139999999999986
+9	20	3	886.25
+21	52	14	659.889999999999986
+2	70	17	898.860000000000014
+3	9	5	763.450000000000045
+2	85	11	598.17999999999995
+17	82	7	493.269999999999982
+8	97	13	252.610000000000014
+18	44	14	661.950000000000045
+6	47	3	113.769999999999996
+12	54	0	941.809999999999945
+12	8	3	515.049999999999955
+24	8	2	685.870000000000005
+14	34	1	624.480000000000018
+13	43	16	987.450000000000045
+7	35	20	823.399999999999977
+11	91	2	908.309999999999945
+17	27	20	633.889999999999986
+7	78	16	937.659999999999968
+21	100	19	607.389999999999986
+20	26	0	506.819999999999993
+2	29	18	857.289999999999964
+4	62	13	895.149999999999977
+12	44	17	510.279999999999973
+3	87	7	615.289999999999964
+13	4	16	557.019999999999982
+1	91	15	411.319999999999993
+16	84	7	75.2399999999999949
+14	9	11	922.120000000000005
+13	53	15	929.75
+16	39	1	581.659999999999968
+3	27	16	58.3800000000000026
+21	46	13	710.129999999999995
+15	69	19	118.280000000000001
+4	1	10	808.299999999999955
+7	79	0	501.600000000000023
+17	90	5	155.150000000000006
+9	10	5	944.440000000000055
+24	68	13	209.819999999999993
+17	20	20	775.809999999999945
+21	76	12	619.200000000000045
+7	24	6	193.539999999999992
+16	58	9	77.1800000000000068
+19	22	1	189.039999999999992
+25	84	20	830.759999999999991
+11	52	14	721.67999999999995
+18	70	10	213.409999999999997
+2	86	19	208.349999999999994
+8	25	10	998.110000000000014
+11	3	8	793.909999999999968
+19	92	18	417.310000000000002
+16	44	11	52.2700000000000031
+4	32	1	674.82000000000005
+12	38	6	619.57000000000005
+11	26	7	795.42999999999995
+14	5	13	844.240000000000009
+17	13	17	991.200000000000045
+24	51	13	629.370000000000005
+8	5	0	785.379999999999995
+17	94	15	927.049999999999955
+17	65	14	865.379999999999995
+8	59	17	31.75
+23	79	1	733.299999999999955
+21	69	17	213.169999999999987
+8	90	11	15.1600000000000001
+3	89	3	92.2199999999999989
+22	34	3	361.870000000000005
+20	30	7	532.240000000000009
+5	60	1	538.92999999999995
+21	55	14	67.6400000000000006
+2	3	3	405.5
+19	7	2	833.720000000000027
+16	36	17	511.129999999999995
+21	88	18	689.470000000000027
+11	38	2	72.2600000000000051
+15	33	13	829.450000000000045
+15	38	17	173.580000000000013
+14	51	6	191.27000000000001
+5	48	12	617.990000000000009
+15	84	12	524.5
+14	60	20	929.299999999999955
+5	71	3	49.6099999999999994
+12	32	10	488.529999999999973
+23	75	14	987.519999999999982
+1	30	4	80.9099999999999966
+21	31	2	165.099999999999994
+20	65	10	966.710000000000036
+16	59	1	366.129999999999995
+25	51	8	440.170000000000016
+11	32	8	137.97999999999999
+1	24	5	816.610000000000014
+9	11	19	524.75
+19	60	12	252.47999999999999
+15	16	0	710.279999999999973
+22	78	20	765.330000000000041
+14	42	16	769.309999999999945
+13	20	0	309.449999999999989
+17	85	2	411.639999999999986
+13	74	2	623.090000000000032
+5	85	8	121.650000000000006
+16	2	0	162.22999999999999
+16	64	8	434.360000000000014
+24	74	7	669.169999999999959
+9	3	3	954.899999999999977
+16	19	3	909.669999999999959
+6	26	0	127.560000000000002
+8	49	7	905.220000000000027
+21	26	12	705.730000000000018
+17	60	12	774.190000000000055
+19	42	1	689.909999999999968
+7	27	12	754.990000000000009
+1	42	9	339.810000000000002
+17	93	8	267.04000000000002
+13	93	6	709.299999999999955
+10	45	7	305.5
+6	5	5	515.090000000000032
+16	57	14	310.54000000000002
+8	89	16	686.809999999999945
+25	60	5	301.300000000000011
+18	25	4	342.170000000000016
+25	93	20	173.090000000000003
+2	74	0	294.220000000000027
+25	82	0	740.100000000000023
+8	13	3	931.169999999999959
+6	25	5	33.5399999999999991
+3	6	8	639.960000000000036
+14	79	3	142.680000000000007
+9	89	15	55.7700000000000031
+14	12	6	624.879999999999995
+6	93	13	653.639999999999986
+7	30	2	476.509999999999991
+16	79	10	930.169999999999959
+15	97	6	482.410000000000025
+20	82	4	112.5
+23	37	8	741.340000000000032
+9	4	12	574.370000000000005
+24	82	2	533.590000000000032
+23	29	13	216.400000000000006
+1	22	13	409.310000000000002
+23	90	16	645.909999999999968
+13	16	8	480.420000000000016
+24	89	11	942.490000000000009
+10	6	11	957.139999999999986
+25	71	7	777.519999999999982
+22	65	6	49.9799999999999969
+5	28	15	795.909999999999968
+9	81	20	77.2099999999999937
+12	26	11	943.330000000000041
+4	67	9	142.379999999999995
+17	61	10	762.960000000000036
+6	2	12	956.610000000000014
+13	51	14	731.509999999999991
+15	39	0	16.6000000000000014
+6	73	20	180.590000000000003
+3	73	13	561.92999999999995
+12	52	14	962.879999999999995
+20	11	7	934.899999999999977
+4	39	1	496.589999999999975
+3	5	20	997.279999999999973
+20	97	2	265.79000000000002
+9	52	13	852.879999999999995
+19	26	15	632.399999999999977
+13	52	8	586.899999999999977
+23	73	18	30.6900000000000013
+24	76	9	434.089999999999975
+16	12	17	184.490000000000009
+9	43	14	113.620000000000005
+2	40	20	403.279999999999973
+14	43	17	617.460000000000036
+19	95	16	814.700000000000045
+17	51	5	244.560000000000002
+7	70	1	182.930000000000007
+12	62	11	939.919999999999959
+23	34	6	147.379999999999995
+3	30	12	409.410000000000025
+14	83	20	838.57000000000005
+14	37	1	490.810000000000002
+8	31	0	387.769999999999982
+15	75	8	676.25
+22	33	5	241.349999999999994
+22	23	3	643.509999999999991
+3	46	9	935.07000000000005
+17	31	15	22.7800000000000011
+14	84	0	607.620000000000005
+10	33	4	378.110000000000014
+8	43	10	850.009999999999991
+20	48	8	822.279999999999973
+24	57	8	765.059999999999945
+1	2	19	919.440000000000055
+5	3	16	921.720000000000027
+3	15	8	62.4699999999999989
+5	55	0	783.700000000000045
+19	19	15	861.169999999999959
+22	17	14	872.07000000000005
+25	44	13	660.100000000000023
+21	42	20	12.4000000000000004
+15	77	4	879.049999999999955
+24	6	3	948.129999999999995
+9	65	10	629.42999999999995
+23	1	16	465.439999999999998
+19	56	17	983.700000000000045
+16	56	2	309.879999999999995
+10	86	15	603.889999999999986
+19	14	2	958.17999999999995
+20	77	4	883.230000000000018
+24	45	15	331.310000000000002
+5	13	11	924.019999999999982
+10	25	10	776.610000000000014
+1	97	6	112.209999999999994
+19	15	10	154.840000000000003
+3	45	13	558.169999999999959
+25	6	3	615.610000000000014
+8	46	10	741.960000000000036
+17	67	5	723.419999999999959
+8	74	13	480.620000000000005
+22	63	20	852.090000000000032
+23	11	13	856.129999999999995
+15	71	6	658.32000000000005
+24	43	18	49.3699999999999974
+3	56	4	628.470000000000027
+11	50	6	290.089999999999975
+7	4	7	525.700000000000045
+20	38	17	118.159999999999997
+4	74	10	48.759999999999998
+7	33	0	341.230000000000018
+25	27	16	494.860000000000014
+6	74	6	477.379999999999995
+6	34	17	471.490000000000009
+1	72	16	245.189999999999998
+14	32	20	838.190000000000055
+18	81	14	120.239999999999995
+14	96	5	787.490000000000009
+25	49	1	680.009999999999991
+5	12	20	776.549999999999955
+10	56	7	466.560000000000002
+9	94	18	579
+21	12	7	651.82000000000005
+11	97	15	541.759999999999991
+5	67	18	368.529999999999973
+1	46	9	332.589999999999975
+12	7	6	242.25
+17	15	2	952.610000000000014
+10	42	19	908.669999999999959
+13	27	7	833.169999999999959
+3	53	20	361.569999999999993
+13	100	14	648.379999999999995
+8	80	5	781.580000000000041
+19	77	9	991.919999999999959
+20	24	1	522.32000000000005
+24	22	11	964.169999999999959
+19	37	0	76.4699999999999989
+15	63	7	993.740000000000009
+24	21	2	440.410000000000025
+24	38	16	391.660000000000025
+17	1	1	865.75
+2	79	6	626.029999999999973
+15	89	13	271.759999999999991
+23	85	8	838.860000000000014
+15	68	1	983.470000000000027
+25	32	16	411.610000000000014
+3	1	20	268.509999999999991
+11	78	5	542.710000000000036
+9	26	1	369.230000000000018
+3	80	14	281.139999999999986
+13	67	6	805.960000000000036
+3	77	0	967.940000000000055
+1	58	11	624.899999999999977
+9	98	3	696.169999999999959
+5	50	9	174.319999999999993
+6	13	8	773.970000000000027
+1	55	19	115.859999999999999
+15	45	14	196.72999999999999
+7	2	18	807.5
+3	57	12	264.050000000000011
+4	46	20	130.629999999999995
+20	23	7	105.379999999999995
+6	86	1	126.780000000000001
+24	13	6	848.950000000000045
+11	82	0	837.649999999999977
+9	30	3	199.539999999999992
+11	60	6	637.549999999999955
+14	85	8	713.360000000000014
+25	63	15	567.029999999999973
+22	72	18	78.6899999999999977
+24	32	12	855.710000000000036
+24	24	11	40.9299999999999997
+17	55	7	612.399999999999977
+5	19	3	585
+8	50	0	668.5
+5	30	6	562.950000000000045
+20	57	5	956.259999999999991
+11	35	10	463.810000000000002
+13	89	11	44.8400000000000034
+22	36	20	533.509999999999991
+23	70	6	365.139999999999986
+25	9	17	473.329999999999984
+12	68	13	902.009999999999991
+7	5	7	195.319999999999993
+9	77	6	324.980000000000018
+19	100	14	317.740000000000009
+24	1	0	16.8299999999999983
+18	5	11	899.17999999999995
+4	52	2	478.089999999999975
+13	3	10	267.550000000000011
+16	81	2	145.25
+13	41	0	587.389999999999986
+12	72	3	800.67999999999995
+17	73	3	121.75
+6	9	20	60.8100000000000023
+25	74	10	606.019999999999982
+19	74	13	307.949999999999989
+2	72	3	636.139999999999986
+16	90	11	135.460000000000008
+24	31	19	426.689999999999998
+23	8	19	382.189999999999998
+7	42	17	600.620000000000005
+15	95	19	658.399999999999977
+10	22	16	512.409999999999968
+22	50	1	909.389999999999986
+17	71	17	737.17999999999995
+9	22	4	222.139999999999986
+8	22	4	555.82000000000005
+7	56	12	447.220000000000027
+25	28	6	284.170000000000016
+7	62	15	118.019999999999996
+6	99	6	357.410000000000025
+12	53	17	479.569999999999993
+11	21	4	389.420000000000016
+25	7	9	132.439999999999998
+10	24	6	963.539999999999964
+8	56	7	154.199999999999989
+13	10	3	347.480000000000018
+2	32	17	177.97999999999999
+10	88	18	738.019999999999982
+23	43	16	875.110000000000014
+24	73	2	874.529999999999973
+10	2	5	966.809999999999945
+4	92	10	588.629999999999995
+3	86	4	166.159999999999997
+20	66	1	194.530000000000001
+7	10	6	658.700000000000045
+23	21	18	701.850000000000023
+4	56	1	57.0700000000000003
+23	60	16	986.07000000000005
+12	35	6	991.029999999999973
+9	37	0	599.470000000000027
+7	3	4	731.269999999999982
+1	28	11	896.129999999999995
+19	27	5	675.82000000000005
+9	35	5	644.080000000000041
+11	37	10	506.75
+11	16	9	951.5
+17	75	15	521.799999999999955
+3	74	19	931.190000000000055
+15	74	17	244.669999999999987
+18	86	10	831.850000000000023
+6	52	16	483.589999999999975
+3	59	20	392.79000000000002
+10	67	17	806.82000000000005
+8	48	19	332.430000000000007
+19	62	8	911.110000000000014
+25	39	8	719.080000000000041
+20	87	2	606.710000000000036
+14	4	13	685.019999999999982
+24	52	13	712.580000000000041
+19	41	16	479.490000000000009
+10	17	4	487.050000000000011
+25	91	10	106.480000000000004
+21	62	10	734.379999999999995
+24	64	18	626.639999999999986
+20	80	7	102.670000000000002
+16	82	14	240.699999999999989
+12	90	14	408.420000000000016
+20	18	4	679.870000000000005
+24	34	20	339.410000000000025
+20	93	15	612.759999999999991
+24	42	14	716.990000000000009
+6	72	9	815.740000000000009
+7	48	4	74.6400000000000006
+12	5	1	843.100000000000023
+1	16	13	768.850000000000023
+23	86	14	577.590000000000032
+17	10	4	420.480000000000018
+24	60	19	665.200000000000045
+15	51	14	341.589999999999975
+8	100	0	279.060000000000002
+5	6	18	108.769999999999996
+25	52	19	365.920000000000016
+21	18	8	942.620000000000005
+21	35	16	169.120000000000005
+8	72	6	779.549999999999955
+11	22	18	244.590000000000003
+21	87	12	893.370000000000005
+23	3	6	640.710000000000036
+10	81	15	326.579999999999984
+18	73	17	828.330000000000041
+8	91	15	381.70999999999998
+24	67	17	46.3400000000000034
+24	70	0	853.850000000000023
+8	7	7	353.29000000000002
+17	96	10	235.419999999999987
+16	85	1	497.75
+1	87	19	936.210000000000036
+22	37	2	497.490000000000009
+5	62	7	144.889999999999986
+13	54	1	463.769999999999982
+21	20	14	27.6600000000000001
+23	12	0	100.400000000000006
+24	69	15	577.870000000000005
+20	62	9	631.769999999999982
+6	67	10	975.889999999999986
+10	18	10	838.07000000000005
+8	88	10	698.029999999999973
+4	72	3	217.169999999999987
+10	34	20	775.490000000000009
+15	58	15	614.740000000000009
+4	68	3	646.789999999999964
+4	9	0	259.319999999999993
+17	32	8	550.590000000000032
+8	94	8	388.009999999999991
+24	79	20	963.389999999999986
+19	99	1	681.950000000000045
+10	92	6	936.809999999999945
+13	70	17	144.449999999999989
+6	11	7	853.389999999999986
+20	88	3	786.129999999999995
+10	83	12	392.660000000000025
+19	72	19	648.830000000000041
+13	57	19	926.990000000000009
+14	77	4	689.539999999999964
+15	10	3	755.490000000000009
+22	69	0	856.059999999999945
+12	59	12	859.259999999999991
+13	11	4	510.420000000000016
+6	16	17	265.20999999999998
+15	86	9	494.069999999999993
+19	67	0	157.639999999999986
+22	75	2	983.129999999999995
+25	4	14	299.339999999999975
+4	30	15	64.4899999999999949
+3	2	7	827.519999999999982
+13	1	14	110.189999999999998
+21	3	13	835.860000000000014
+9	23	12	227.289999999999992
+10	5	13	364.720000000000027
+5	43	8	356.079999999999984
+14	14	14	327.480000000000018
+7	54	17	986.620000000000005
+1	88	17	78.2099999999999937
+25	31	12	478.639999999999986
+25	96	6	993.480000000000018
+5	41	1	390.050000000000011
+2	71	13	408.670000000000016
+8	11	10	286.920000000000016
+15	98	1	158.090000000000003
+13	8	6	15.3499999999999996
+23	99	17	536
+20	29	1	589.740000000000009
+3	97	9	621.830000000000041
+13	80	7	300.420000000000016
+3	69	1	81.769999999999996
+24	16	13	519.509999999999991
+22	93	4	421.579999999999984
+14	86	0	962.529999999999973
+12	98	17	460.939999999999998
+12	51	1	49.3999999999999986
+10	39	3	315.600000000000023
+2	81	20	267.240000000000009
+19	33	13	66.5999999999999943
+24	91	5	330.949999999999989
+2	56	13	139.099999999999994
+3	100	6	983.200000000000045
+16	71	13	838.289999999999964
+12	40	7	74.25
+21	6	17	821.399999999999977
+2	44	8	196.400000000000006
+4	80	7	775.389999999999986
+5	5	17	311.470000000000027
+2	63	18	953.840000000000032
+7	41	4	813.950000000000045
+9	58	3	740.470000000000027
+7	49	12	327.519999999999982
+6	3	15	92.0699999999999932
+11	98	10	46.490000000000002
+14	22	11	159.009999999999991
+9	68	6	662.230000000000018
+5	83	0	256.680000000000007
+8	54	13	14.3399999999999999
+9	5	18	398.089999999999975
+19	59	10	643.289999999999964
+19	45	15	427.04000000000002
+9	27	6	301.420000000000016
+7	71	15	734.269999999999982
+8	4	10	802.5
+6	17	0	41.1799999999999997
+24	97	10	399.370000000000005
+1	45	19	761.67999999999995
+21	8	10	895.980000000000018
+4	19	9	698
+8	85	4	363.620000000000005
+20	36	9	206.569999999999993
+24	83	7	232.72999999999999
+21	13	6	963.57000000000005
+17	83	20	912.539999999999964
+5	61	0	822.940000000000055
+18	49	17	172.699999999999989
+6	91	9	449.509999999999991
+9	99	20	511.740000000000009
+5	24	4	411.100000000000023
+13	13	14	681.899999999999977
+5	82	15	298.009999999999991
+12	17	8	26.8200000000000003
+17	92	11	596.769999999999982
+16	22	14	421.420000000000016
+4	64	0	990.370000000000005
+8	10	13	796.769999999999982
+15	30	20	347.129999999999995
+8	70	7	215.52000000000001
+14	40	11	18.0399999999999991
+21	74	16	702.759999999999991
+23	14	12	216.349999999999994
+15	40	2	858.330000000000041
+8	20	7	387.029999999999973
+14	49	11	882.460000000000036
+24	62	6	986.919999999999959
+10	98	16	537.950000000000045
+19	49	2	700.120000000000005
+12	19	3	357.680000000000007
+2	60	8	762.909999999999968
+23	57	20	79.0400000000000063
+9	36	5	14.8900000000000006
+5	70	2	534.769999999999982
+20	84	10	329
+2	64	17	521.75
+19	16	5	19.3599999999999994
+14	24	0	124.420000000000002
+24	81	3	705.460000000000036
+14	62	17	904.870000000000005
+16	28	2	431.899999999999977
+2	20	12	176.52000000000001
+12	56	10	451.75
+12	71	20	706.990000000000009
+24	49	13	303.29000000000002
+25	62	15	418.45999999999998
+24	48	6	230.530000000000001
+2	26	9	779.17999999999995
+4	10	1	509.810000000000002
+6	71	17	131.090000000000003
+4	90	2	118.299999999999997
+15	18	15	127.819999999999993
+20	78	3	644.399999999999977
+13	55	7	607
+13	33	3	412.269999999999982
+6	10	1	436.410000000000025
+15	29	19	457.490000000000009
+24	94	9	533.57000000000005
+17	16	1	676.279999999999973
+12	11	17	95.730000000000004
+15	70	13	375.430000000000007
+19	52	11	355.310000000000002
+22	4	4	451.779999999999973
+23	63	2	496.310000000000002
+13	99	6	796.419999999999959
+19	29	16	247.400000000000006
+9	74	17	243.599999999999994
+7	81	14	571.860000000000014
+14	56	5	506.139999999999986
+13	91	16	600.169999999999959
+6	18	20	471.180000000000007
+10	62	16	494.199999999999989
+16	60	18	704.269999999999982
+22	66	17	623.789999999999964
+15	14	16	258.629999999999995
+12	33	10	262.170000000000016
+10	51	17	301.920000000000016
+19	57	0	864.539999999999964
+22	14	6	245.740000000000009
+2	91	11	74.4000000000000057
+4	53	4	458.670000000000016
+5	26	3	503.839999999999975
+25	22	17	21.879999999999999
+22	70	10	493.29000000000002
+5	36	16	115.040000000000006
+19	25	5	821.200000000000045
+3	54	20	973.700000000000045
+18	43	0	635.289999999999964
+5	91	15	864.600000000000023
+12	73	4	996.07000000000005
+12	95	17	274.699999999999989
+24	9	11	540.529999999999973
+15	34	13	552.970000000000027
+20	92	1	882.759999999999991
+25	25	4	827.190000000000055
+16	83	7	820.600000000000023
+4	84	17	818.330000000000041
+5	97	4	373.600000000000023
+12	60	13	899.470000000000027
+22	59	20	121.219999999999999
+15	44	12	548.659999999999968
+25	70	2	320.029999999999973
+3	48	8	838.440000000000055
+18	47	0	121.090000000000003
+25	58	0	711.730000000000018
+5	84	2	959.889999999999986
+7	98	15	165.340000000000003
+2	51	1	350.019999999999982
+12	97	6	343.220000000000027
+4	61	16	113.450000000000003
+24	47	8	108.310000000000002
+8	75	11	229.870000000000005
+4	100	3	231.780000000000001
+17	58	13	699.659999999999968
+17	57	18	44.75
+13	76	20	978.850000000000023
+1	32	4	684.019999999999982
+21	97	0	689.190000000000055
+24	71	6	865.120000000000005
+23	20	7	477.180000000000007
+21	48	4	804.240000000000009
+8	36	9	368.170000000000016
+24	56	3	414.850000000000023
+25	92	14	954.200000000000045
+11	71	19	755.720000000000027
+10	84	12	361.610000000000014
+4	41	7	642.230000000000018
+8	28	20	965.059999999999945
+8	30	14	65.1599999999999966
+23	22	4	327.860000000000014
+5	80	3	804.720000000000027
+7	73	10	194.409999999999997
+19	86	2	551.360000000000014
+23	35	16	55.2299999999999969
+20	51	20	284.240000000000009
+18	12	1	606.82000000000005
+18	10	11	759.17999999999995
+9	33	13	471.930000000000007
+18	29	8	790.460000000000036
+24	26	15	498.879999999999995
+21	60	8	344.800000000000011
+5	45	10	378.449999999999989
+13	79	20	989.879999999999995
+11	87	12	721.639999999999986
+21	56	20	761
+18	36	8	958.720000000000027
+17	35	18	248.990000000000009
+9	86	20	684.460000000000036
+18	11	14	83.3900000000000006
+17	12	9	848.769999999999982
+7	86	3	72.5999999999999943
+5	74	0	79.5400000000000063
+14	33	6	985.059999999999945
+6	69	8	813.610000000000014
+6	80	1	266.730000000000018
+20	8	11	571.490000000000009
+5	33	3	88.2600000000000051
+15	99	10	177.039999999999992
+22	15	14	797.269999999999982
+7	12	13	689.25
+18	76	19	720.230000000000018
+17	5	5	258.980000000000018
+24	98	3	584.690000000000055
+13	97	8	932.580000000000041
+25	76	1	365.910000000000025
+18	1	0	47.3800000000000026
+17	81	12	197.169999999999987
+7	19	6	32.6099999999999994
+1	80	20	844.379999999999995
+2	27	4	589.850000000000023
+6	6	17	475.629999999999995
+13	34	7	550.970000000000027
+10	48	19	265.449999999999989
+25	33	1	115.599999999999994
+19	93	4	676.279999999999973
+24	27	14	331.199999999999989
+15	3	0	680.039999999999964
+9	100	9	46.5200000000000031
+20	46	16	379.620000000000005
+5	44	8	716.149999999999977
+9	6	6	993.590000000000032
+3	63	5	468.129999999999995
+18	16	0	236.689999999999998
+25	23	7	257.019999999999982
+7	53	6	598.450000000000045
+21	84	9	819.860000000000014
+23	92	16	99.1700000000000017
+6	57	20	677.990000000000009
+14	58	6	532.32000000000005
+5	37	0	519.299999999999955
+17	63	13	383.399999999999977
+1	54	17	367.160000000000025
+23	19	8	166.990000000000009
+5	1	1	331.949999999999989
+1	90	8	486.360000000000014
+24	36	4	826.700000000000045
+15	26	8	65.7800000000000011
+3	79	16	599.529999999999973
+12	1	16	695.279999999999973
+23	5	4	267.480000000000018
+2	82	1	173.080000000000013
+4	51	5	53.6400000000000006
+3	90	2	887.840000000000032
+5	90	6	967.740000000000009
+5	79	19	413.579999999999984
+13	44	1	893.509999999999991
+5	18	8	219.460000000000008
+5	73	14	137.169999999999987
+8	87	20	32.8900000000000006
+3	16	12	545.059999999999945
+9	88	3	312.060000000000002
+25	97	12	763.899999999999977
+22	88	4	881.470000000000027
+18	45	9	846.580000000000041
+1	61	3	707.259999999999991
+1	15	11	43.1899999999999977
+15	13	18	728.899999999999977
+25	48	8	609.289999999999964
+12	63	3	942.529999999999973
+2	89	3	516.009999999999991
+16	72	10	141.539999999999992
+19	89	9	714.669999999999959
+22	48	11	971.220000000000027
+15	85	17	894.620000000000005
+12	13	17	678.480000000000018
+5	8	13	700.039999999999964
+24	2	7	195.620000000000005
+25	42	7	41.740000000000002
+17	88	13	992.200000000000045
+8	64	9	688.730000000000018
+4	45	6	251.25
+21	89	7	902.950000000000045
+3	40	14	745.919999999999959
+17	9	8	96.4399999999999977
+4	89	19	819.950000000000045
+18	97	4	700.559999999999945
+25	18	18	868.17999999999995
+23	69	18	726.539999999999964
+7	44	6	356.04000000000002
+17	54	9	983.730000000000018
+15	43	13	269.569999999999993
+16	34	16	115.329999999999998
+16	100	10	287.029999999999973
+11	10	0	388.389999999999986
+9	80	20	634.519999999999982
+21	19	20	65.2600000000000051
+1	65	15	803.67999999999995
+1	57	2	307.879999999999995
+1	6	12	224.740000000000009
+10	93	7	797.360000000000014
+1	68	4	335.680000000000007
+8	8	19	235.52000000000001
+18	77	3	577.389999999999986
+25	37	0	812.629999999999995
+11	74	8	898.440000000000055
+3	14	8	439.329999999999984
+25	15	0	892.549999999999955
+2	35	3	674.710000000000036
+20	6	15	812.549999999999955
+23	74	20	129.819999999999993
+22	39	4	508.439999999999998
+9	72	20	560.379999999999995
+15	48	8	110.150000000000006
+16	55	16	480.689999999999998
+14	27	4	617.230000000000018
+12	65	12	878.07000000000005
+15	87	18	391.600000000000023
+22	97	12	126.239999999999995
+17	91	5	279.089999999999975
+13	69	2	293.899999999999977
+4	34	7	435.240000000000009
+23	6	14	668.57000000000005
+18	34	17	334.509999999999991
+20	73	20	921.620000000000005
+15	20	18	71.0100000000000051
+18	54	0	969.879999999999995
+3	76	6	334.509999999999991
+2	52	19	255.449999999999989
+8	42	18	795.32000000000005
+12	22	8	268.230000000000018
+3	3	5	17.7600000000000016
+5	87	9	743.139999999999986
+17	87	10	629.509999999999991
+12	92	16	602.419999999999959
+14	19	9	478.029999999999973
+5	7	15	553.940000000000055
+14	2	9	848.259999999999991
+13	30	6	138.800000000000011
+22	44	18	319.45999999999998
+18	90	13	368.610000000000014
+23	15	19	780.889999999999986
+13	63	9	424
+10	13	15	99.0999999999999943
+19	82	9	966.169999999999959
+19	21	13	824.470000000000027
+6	70	9	95.6700000000000017
+8	78	0	738.129999999999995
+19	8	6	948.029999999999973
+11	66	10	937.809999999999945
+18	42	11	284.279999999999973
+12	78	16	703.809999999999945
+10	57	20	670.600000000000023
+12	20	11	196.72999999999999
+6	65	12	388.480000000000018
+13	77	8	474.990000000000009
+1	26	7	167.629999999999995
+12	80	7	897.610000000000014
+5	11	17	846.059999999999945
+25	68	3	61.240000000000002
+16	89	10	17.4299999999999997
+8	6	3	564.600000000000023
+16	43	4	678.82000000000005
+11	67	7	736.5
+9	93	9	929.450000000000045
+21	40	20	913.759999999999991
+15	17	13	405.769999999999982
+4	15	16	297.470000000000027
+13	40	5	200.150000000000006
+24	17	1	17.1099999999999994
+23	67	16	328.529999999999973
+9	84	13	681.029999999999973
+22	81	13	941.559999999999945
+15	24	14	91.25
+10	63	6	435.79000000000002
+22	57	17	584.409999999999968
+15	1	6	446.45999999999998
+13	2	5	675.17999999999995
+8	34	5	327.25
+14	98	13	91.0999999999999943
+5	31	16	760.090000000000032
+21	75	1	880.909999999999968
+17	74	13	492.899999999999977
+1	18	8	105.769999999999996
+23	2	20	672.82000000000005
+19	58	5	982.269999999999982
+11	14	6	392.100000000000023
+7	94	8	16.8900000000000006
+25	75	2	464.360000000000014
+18	58	3	654.740000000000009
+3	22	20	193.75
+9	40	19	204.960000000000008
+18	28	0	393.649999999999977
+11	9	19	476.79000000000002
+9	55	4	150.199999999999989
+23	10	4	510.699999999999989
+20	50	17	236.669999999999987
+7	29	20	707.259999999999991
+25	59	5	978.210000000000036
+16	6	6	168.370000000000005
+2	49	5	570.490000000000009
+25	45	0	957.32000000000005
+7	59	17	377.470000000000027
+16	63	7	890.029999999999973
+23	65	13	171.259999999999991
+14	8	1	946.490000000000009
+10	68	20	147.150000000000006
+4	40	9	717.350000000000023
+6	85	5	620.889999999999986
+15	100	18	226.639999999999986
+21	38	15	592.919999999999959
+2	88	12	714.07000000000005
+18	33	9	690.110000000000014
+15	22	14	140.780000000000001
+18	18	6	367.910000000000025
+24	18	18	325.769999999999982
+14	10	2	234.490000000000009
+17	76	3	349.610000000000014
+8	16	12	581.259999999999991
+2	53	12	80.6200000000000045
+20	70	1	116.280000000000001
+11	64	2	162.050000000000011
+22	61	13	707.07000000000005
+21	98	18	809.399999999999977
+16	40	5	630.159999999999968
+22	42	6	478.949999999999989
+6	87	16	106.120000000000005
+23	42	13	255.090000000000003
+22	73	7	906.769999999999982
+10	37	15	746.32000000000005
+21	99	11	538.240000000000009
+7	84	18	141.789999999999992
+12	69	16	840.190000000000055
+22	87	15	974.730000000000018
+5	32	4	974.919999999999959
+16	31	16	915.019999999999982
+2	41	6	973.82000000000005
+18	60	0	130.199999999999989
+19	38	16	301.199999999999989
+3	94	20	575.200000000000045
+6	79	13	690.090000000000032
+19	80	3	108.950000000000003
+2	90	14	32.9399999999999977
+14	46	5	671.370000000000005
+23	18	7	828.799999999999955
+14	95	15	405.069999999999993
+4	11	16	823.419999999999959
+6	39	11	255.879999999999995
+20	20	7	864.850000000000023
+17	50	20	579.440000000000055
+15	11	17	626.200000000000045
+21	17	0	772.799999999999955
+11	79	20	617.120000000000005
+18	69	17	437.20999999999998
+8	57	12	196.340000000000003
+1	49	18	424.899999999999977
+8	96	20	304.899999999999977
+5	95	8	567.190000000000055
+21	70	19	857.25
+1	71	19	859.220000000000027
+17	100	20	66.9599999999999937
+14	63	5	782.399999999999977
+3	17	20	190.169999999999987
+24	53	1	965.169999999999959
+16	42	6	496.740000000000009
+5	9	5	52.1199999999999974
+8	68	14	643.090000000000032
+1	14	5	645.850000000000023
+9	41	3	712.75
+12	55	16	779.980000000000018
+9	38	17	825.990000000000009
+19	34	14	363.899999999999977
+6	1	17	408.589999999999975
+14	53	7	768.549999999999955
+6	60	18	449.95999999999998
+10	80	14	419.689999999999998
+23	7	8	182.379999999999995
+4	94	0	649.090000000000032
+16	1	17	218.02000000000001
+14	7	17	827.590000000000032
+20	7	10	208.379999999999995
+12	30	2	55.240000000000002
+25	24	1	935.789999999999964
+24	25	16	396.089999999999975
+16	77	18	485.519999999999982
+4	48	15	506.649999999999977
+21	45	4	557.919999999999959
+1	83	19	959.129999999999995
+7	47	1	807.299999999999955
+18	17	10	91.5900000000000034
+18	14	7	188.969999999999999
+2	97	19	303.939999999999998
+17	2	14	40.1599999999999966
+20	17	18	307.240000000000009
+20	25	4	655.490000000000009
+12	42	6	137.639999999999986
+25	47	14	883.620000000000005
+25	21	10	109.829999999999998
+20	64	5	134.009999999999991
+25	80	1	746.419999999999959
+23	89	3	827.860000000000014
+4	49	17	499.949999999999989
+13	39	7	383.620000000000005
+1	37	13	510.889999999999986
+12	6	0	576.269999999999982
+9	25	12	152.639999999999986
+2	55	20	350.509999999999991
+13	17	18	543.279999999999973
+25	99	7	582.019999999999982
+14	88	10	931.32000000000005
+21	34	4	927.470000000000027
+8	82	3	653.840000000000032
+18	37	3	290.04000000000002
+17	40	16	954.600000000000023
+21	86	9	178.219999999999999
+21	82	8	163.129999999999995
+20	39	17	740.529999999999973
+23	41	14	557.940000000000055
+17	37	0	87.6200000000000045
+13	90	16	478.060000000000002
+23	76	1	968.360000000000014
+20	16	7	750.799999999999955
+24	12	19	577.17999999999995
+4	44	8	619.42999999999995
+22	43	12	883.779999999999973
+1	47	15	530.490000000000009
+13	36	12	462.160000000000025
+11	46	13	421.420000000000016
+18	79	2	690.200000000000045
+1	56	16	971.610000000000014
+18	6	18	275.009999999999991
+14	97	5	196.110000000000014
+13	26	18	470.79000000000002
+9	83	17	245.080000000000013
+24	96	2	603.149999999999977
+2	21	18	490.730000000000018
+12	34	0	829.620000000000005
+21	72	6	879
+2	73	3	293.449999999999989
+23	56	10	199.289999999999992
+15	72	15	680.700000000000045
+22	5	5	676.870000000000005
+20	33	3	642.539999999999964
+17	47	9	256.639999999999986
+11	94	17	436.029999999999973
+6	8	19	101.120000000000005
+4	76	8	37.6599999999999966
+8	83	16	920.129999999999995
+6	48	18	903.889999999999986
+3	20	16	985.649999999999977
+5	76	5	948.970000000000027
+6	33	1	645.830000000000041
+4	5	3	632.799999999999955
+11	7	5	542.919999999999959
+7	91	17	713.779999999999973
+12	99	20	744.990000000000009
+5	65	20	770.889999999999986
+14	72	19	784.149999999999977
+13	61	2	155.189999999999998
+5	100	0	558.67999999999995
+16	38	13	263.089999999999975
+9	59	20	667.629999999999995
+19	5	10	640.940000000000055
+1	50	18	954.75
+11	73	12	263.430000000000007
+10	71	15	379.579999999999984
+9	47	15	492.600000000000023
+15	12	6	155.27000000000001
+4	38	7	129.669999999999987
+24	33	4	680.080000000000041
+24	61	8	861.529999999999973
+7	87	12	593.360000000000014
+8	23	5	647.700000000000045
+19	12	19	51.0900000000000034
+10	40	19	293.800000000000011
+10	14	2	282.629999999999995
+15	37	15	158.340000000000003
+7	68	14	547.120000000000005
+18	21	20	582.279999999999973
+19	36	20	941.200000000000045
+25	57	12	732.039999999999964
+3	51	10	288.110000000000014
+4	20	3	278.860000000000014
+20	81	9	750.740000000000009
+16	98	8	173.650000000000006
+23	16	13	419.420000000000016
+10	41	5	387.170000000000016
+1	81	3	354.100000000000023
+22	35	18	580.789999999999964
+6	29	12	313.180000000000007
+20	100	0	603.690000000000055
+2	10	16	379.339999999999975
+18	8	15	845.450000000000045
+9	95	20	951.690000000000055
+23	97	4	869.330000000000041
+5	38	19	254.210000000000008
+15	49	12	113.459999999999994
+21	85	12	986.110000000000014
+6	32	14	558.159999999999968
+9	60	1	747.259999999999991
+19	1	0	452.740000000000009
+10	30	16	391.160000000000025
+23	68	1	691.299999999999955
+17	62	11	377.990000000000009
+12	91	11	888.870000000000005
+5	25	13	982.899999999999977
+15	59	15	678.309999999999945
+19	28	13	14.9299999999999997
+24	80	11	589.710000000000036
+11	36	20	506.019999999999982
+5	98	4	731.590000000000032
+14	81	8	734.759999999999991
+4	98	18	878.340000000000032
+21	57	13	387.79000000000002
+4	50	8	925.009999999999991
+23	71	1	636.259999999999991
+25	13	5	490.240000000000009
+2	30	18	688.740000000000009
+22	90	9	775.269999999999982
+6	36	10	108.950000000000003
+10	23	1	242.509999999999991
+4	54	13	547.330000000000041
+4	47	14	310.579999999999984
+7	61	19	310.310000000000002
+4	31	0	449.660000000000025
+4	13	8	17.1600000000000001
+13	94	17	492.089999999999975
+23	98	17	86.4699999999999989
+3	10	15	388.329999999999984
+23	50	0	360.939999999999998
+9	96	19	74.2999999999999972
+24	54	20	599.940000000000055
+9	82	17	928.590000000000032
+17	22	14	487.860000000000014
+9	31	5	322.079999999999984
+17	3	9	162.590000000000003
+3	60	12	809.100000000000023
+17	49	20	334.20999999999998
+20	10	2	463.720000000000027
+22	41	2	697.269999999999982
+6	7	15	371.279999999999973
+3	65	14	641.519999999999982
+22	46	4	329.069999999999993
+15	66	10	76.3199999999999932
+11	40	15	621.090000000000032
+1	98	14	864.57000000000005
+23	91	8	806.42999999999995
+16	45	6	257.70999999999998
+16	74	14	457.360000000000014
+9	16	10	774.720000000000027
+10	16	0	90.4000000000000057
+13	6	16	934.57000000000005
+11	81	3	934.480000000000018
+15	21	8	417.129999999999995
+15	36	9	744.549999999999955
+2	42	6	39.490000000000002
+10	72	10	596.220000000000027
+11	33	9	837.32000000000005
+13	29	15	586.899999999999977
+11	89	11	73.2999999999999972
+17	68	11	109.400000000000006
+23	47	8	694.340000000000032
+23	48	13	215.389999999999986
+2	45	8	801.25
+18	94	11	734.769999999999982
+24	75	19	255.699999999999989
+10	74	9	727.899999999999977
+6	21	20	582.620000000000005
+8	52	7	748.779999999999973
+1	51	6	973.210000000000036
+19	50	2	286.689999999999998
+8	21	20	471.050000000000011
+23	95	8	962.259999999999991
+18	53	13	558.360000000000014
+18	67	15	302.980000000000018
+24	15	15	599.139999999999986
+5	75	9	970.919999999999959
+12	86	10	209.599999999999994
+21	30	5	163.659999999999997
+24	95	5	84.2600000000000051
+7	37	17	61.4200000000000017
+22	96	2	959.860000000000014
+13	84	6	550.840000000000032
+18	26	3	206.710000000000008
+13	48	10	102.909999999999997
+17	89	13	429.819999999999993
+17	44	14	119.390000000000001
+10	87	11	904.389999999999986
+22	67	4	101.870000000000005
+22	11	8	753.580000000000041
+20	34	18	386.600000000000023
+18	32	8	20.4100000000000001
+15	28	10	31.6799999999999997
+21	92	6	424.759999999999991
+13	15	11	537.309999999999945
+19	6	16	877.539999999999964
+21	10	16	565.049999999999955
+12	85	1	144.300000000000011
+8	2	1	107.799999999999997
+7	51	8	82.7999999999999972
+17	72	0	959.559999999999945
+\.
+
+
+--
+-- Data for Name: catalogue_workshop; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.catalogue_workshop (workshop_id, car_part_id, amount_of_available, cost) FROM stdin;
+17	40	15	362.129999999999995
+26	59	20	438.310000000000002
+11	11	12	211.620000000000005
+10	95	15	749.75
+14	17	1	491.339999999999975
+19	63	4	372.339999999999975
+14	40	5	122.689999999999998
+3	93	3	151.150000000000006
+26	73	17	222.379999999999995
+9	44	6	940.990000000000009
+13	90	6	549.860000000000014
+9	76	4	308.410000000000025
+18	61	3	404.730000000000018
+2	10	13	757.350000000000023
+5	54	4	276.269999999999982
+3	97	20	322.639999999999986
+5	55	18	708.740000000000009
+9	13	16	214.560000000000002
+15	62	4	773.870000000000005
+28	41	16	735.389999999999986
+24	40	18	90.7199999999999989
+27	56	3	119.510000000000005
+12	65	12	112.049999999999997
+27	74	7	162.349999999999994
+16	31	8	296.379999999999995
+25	16	17	502.660000000000025
+24	13	15	655.529999999999973
+8	3	12	875.32000000000005
+21	7	2	566.190000000000055
+21	68	18	473.920000000000016
+21	96	19	389.110000000000014
+29	87	16	38.8500000000000014
+3	10	1	950.710000000000036
+13	95	20	493.5
+17	58	7	83.6299999999999955
+24	79	11	779.039999999999964
+26	24	7	627.220000000000027
+20	20	12	244.590000000000003
+29	4	11	82.7000000000000028
+25	90	8	502.180000000000007
+8	61	4	134.27000000000001
+10	60	6	318.160000000000025
+24	39	17	772.139999999999986
+17	15	2	876.850000000000023
+5	80	6	365.509999999999991
+13	76	6	210.210000000000008
+27	37	8	351.980000000000018
+20	85	6	231.460000000000008
+1	81	7	751
+19	20	10	241.300000000000011
+12	48	18	379.420000000000016
+15	65	19	99.0799999999999983
+22	13	0	146.569999999999993
+17	81	11	554.769999999999982
+4	87	9	730.730000000000018
+18	76	15	395.550000000000011
+16	73	12	679.970000000000027
+9	1	11	244.189999999999998
+4	24	11	871.340000000000032
+21	97	13	958.200000000000045
+23	79	15	167.740000000000009
+19	98	1	114.680000000000007
+14	11	2	685.480000000000018
+20	92	15	684.559999999999945
+27	39	20	872.409999999999968
+13	56	17	749.149999999999977
+8	5	20	263.009999999999991
+24	42	2	536.57000000000005
+29	47	1	568.330000000000041
+13	20	17	249.830000000000013
+14	94	0	862.120000000000005
+23	71	4	212.840000000000003
+22	29	7	766.629999999999995
+23	45	11	648.860000000000014
+9	27	10	91.9200000000000017
+3	20	5	841.799999999999955
+3	6	0	330.050000000000011
+27	43	9	320.449999999999989
+16	81	12	388.430000000000007
+10	62	17	620.659999999999968
+14	51	17	751.07000000000005
+22	62	19	20.25
+22	18	9	510.029999999999973
+19	68	0	922.159999999999968
+27	35	11	725.909999999999968
+7	91	16	671.730000000000018
+29	34	20	768.110000000000014
+6	31	1	598.379999999999995
+16	29	11	857.57000000000005
+26	63	13	818.970000000000027
+16	16	20	104.439999999999998
+27	90	15	356.069999999999993
+22	52	0	484.009999999999991
+6	78	11	830.029999999999973
+7	46	10	569.700000000000045
+29	23	3	410.610000000000014
+3	37	19	597.629999999999995
+1	39	10	244.129999999999995
+22	44	18	291.550000000000011
+8	50	5	213.090000000000003
+23	38	20	900.75
+1	82	14	592.580000000000041
+21	77	16	562.850000000000023
+1	4	19	390.720000000000027
+24	43	3	523.590000000000032
+7	20	16	55.7100000000000009
+11	67	1	578.700000000000045
+7	53	0	471.990000000000009
+18	72	16	767.210000000000036
+7	98	16	387.240000000000009
+7	86	16	98.8400000000000034
+20	33	13	790.149999999999977
+2	16	12	235.560000000000002
+27	22	8	590.100000000000023
+16	10	5	480.509999999999991
+8	39	8	402.600000000000023
+15	43	0	909.460000000000036
+15	34	19	43.9699999999999989
+11	16	7	621.07000000000005
+10	84	2	948.370000000000005
+17	57	5	685.909999999999968
+9	4	10	989.230000000000018
+9	30	9	355.5
+24	68	14	388.569999999999993
+1	20	13	982.870000000000005
+28	44	8	94.4000000000000057
+23	89	8	183.400000000000006
+23	48	10	816.940000000000055
+27	70	11	21.4699999999999989
+27	92	9	699.92999999999995
+22	89	12	545.669999999999959
+26	23	6	412.54000000000002
+12	45	4	590.92999999999995
+28	53	19	129.719999999999999
+28	57	2	788.480000000000018
+4	94	5	516.960000000000036
+13	59	7	88.5900000000000034
+11	35	18	510.069999999999993
+1	67	4	13.6699999999999999
+19	27	9	364.399999999999977
+14	41	16	669.519999999999982
+27	91	11	250.099999999999994
+15	90	19	586.049999999999955
+3	56	17	869.82000000000005
+1	61	9	303.230000000000018
+19	83	1	519.139999999999986
+22	74	4	743.980000000000018
+2	24	15	980.25
+20	70	6	369.45999999999998
+21	29	20	376.399999999999977
+9	100	2	759.539999999999964
+15	7	11	942.669999999999959
+20	81	19	705.269999999999982
+1	83	14	113.060000000000002
+14	84	19	91.019999999999996
+11	69	0	237.199999999999989
+30	26	15	863.75
+14	48	12	519.889999999999986
+22	66	8	419.009999999999991
+8	44	6	897.490000000000009
+15	3	6	972.879999999999995
+12	71	9	610.620000000000005
+17	11	18	60.9399999999999977
+3	25	9	358.160000000000025
+15	26	4	564.980000000000018
+25	69	5	773.799999999999955
+9	28	19	530.940000000000055
+19	36	16	37.5200000000000031
+12	2	19	786.740000000000009
+23	16	17	866.029999999999973
+22	86	18	845.200000000000045
+9	34	16	816.649999999999977
+24	59	8	930.480000000000018
+5	49	3	774.529999999999973
+20	37	12	520.149999999999977
+29	78	18	607.779999999999973
+17	84	20	181.840000000000003
+8	54	15	228.449999999999989
+15	96	15	80.5400000000000063
+22	55	2	675.75
+15	30	18	298.899999999999977
+11	28	4	950.110000000000014
+22	53	16	319.79000000000002
+10	15	1	740.669999999999959
+4	88	20	894.460000000000036
+7	65	1	892.120000000000005
+4	36	4	277.300000000000011
+16	33	18	363.829999999999984
+26	97	13	496.740000000000009
+8	59	20	691.17999999999995
+21	19	16	65.3599999999999994
+9	20	13	901.720000000000027
+15	9	15	583.529999999999973
+17	61	3	466.529999999999973
+22	26	1	154.289999999999992
+24	28	12	526.669999999999959
+19	76	9	485.620000000000005
+7	24	15	81.0900000000000034
+4	14	11	538.370000000000005
+21	38	16	424.740000000000009
+24	15	0	832.669999999999959
+16	4	2	753.710000000000036
+9	91	16	827.769999999999982
+15	29	6	660.919999999999959
+11	3	3	645.450000000000045
+28	38	12	855.100000000000023
+11	84	1	156.840000000000003
+20	98	7	585.340000000000032
+1	77	15	159.870000000000005
+19	97	18	739.82000000000005
+28	24	6	81.8100000000000023
+16	100	2	674.460000000000036
+9	71	20	99.1700000000000017
+10	11	10	160.550000000000011
+27	33	17	660.909999999999968
+24	98	19	402.569999999999993
+2	7	16	813.870000000000005
+6	69	17	196.240000000000009
+11	79	15	555.809999999999945
+3	43	14	541.029999999999973
+3	7	8	778.440000000000055
+2	36	12	451.54000000000002
+17	59	0	280.230000000000018
+14	36	1	372.360000000000014
+2	54	4	250.599999999999994
+23	33	8	852.210000000000036
+2	71	20	569.840000000000032
+29	45	15	342.100000000000023
+23	64	15	370.920000000000016
+12	31	11	404.649999999999977
+20	87	13	696.360000000000014
+19	49	20	188.289999999999992
+10	50	11	869.049999999999955
+7	75	5	86.519999999999996
+20	47	8	924.730000000000018
+22	54	18	234.539999999999992
+14	39	16	933.169999999999959
+8	47	5	526.139999999999986
+17	92	17	538.639999999999986
+9	52	13	371.620000000000005
+29	2	2	249.189999999999998
+11	78	17	124.459999999999994
+5	77	3	832.350000000000023
+21	23	15	376.740000000000009
+21	72	16	280.329999999999984
+11	24	15	512.889999999999986
+4	39	3	103.939999999999998
+18	29	1	481.740000000000009
+4	73	11	778.779999999999973
+22	50	19	324.569999999999993
+23	27	13	75.2000000000000028
+2	89	7	117.870000000000005
+17	28	5	430.75
+11	1	16	87.2099999999999937
+30	87	1	253.530000000000001
+3	72	9	804.159999999999968
+18	26	2	36.0200000000000031
+28	5	11	941.870000000000005
+9	22	15	150.449999999999989
+19	73	1	285.079999999999984
+18	41	6	934.529999999999973
+25	67	6	751.92999999999995
+26	71	8	934.75
+23	3	10	797.649999999999977
+26	95	17	269.329999999999984
+22	31	19	863.480000000000018
+11	29	12	506.389999999999986
+22	81	18	610.379999999999995
+18	8	6	498.430000000000007
+11	23	13	655.340000000000032
+19	90	20	335.170000000000016
+28	30	17	652.440000000000055
+29	6	16	600.049999999999955
+21	13	19	763.840000000000032
+2	23	2	308.79000000000002
+10	53	6	354.220000000000027
+4	78	20	486.420000000000016
+9	79	13	979.340000000000032
+9	32	7	510.660000000000025
+21	57	2	152.099999999999994
+21	76	6	592.690000000000055
+25	50	14	417.829999999999984
+18	99	18	289.5
+3	67	17	90.1500000000000057
+11	86	2	149.189999999999998
+14	55	9	904.809999999999945
+16	40	1	398.939999999999998
+29	99	20	262.490000000000009
+26	5	1	599.879999999999995
+15	45	8	69.9200000000000017
+12	47	14	785.480000000000018
+11	58	1	696.240000000000009
+2	38	15	232.289999999999992
+7	14	5	389.660000000000025
+27	93	2	451.220000000000027
+7	1	10	204.280000000000001
+3	61	16	593.580000000000041
+20	28	10	700.779999999999973
+2	48	13	300.360000000000014
+24	37	5	241.47999999999999
+7	67	7	586.690000000000055
+19	69	3	48.7899999999999991
+1	7	13	553.789999999999964
+5	59	14	985.830000000000041
+18	45	19	798.740000000000009
+24	29	13	262.779999999999973
+27	69	7	372.529999999999973
+21	50	3	817.039999999999964
+24	12	16	97.3499999999999943
+28	43	4	900.350000000000023
+14	2	17	911.330000000000041
+6	52	6	459.509999999999991
+2	43	19	336.339999999999975
+22	22	14	312.310000000000002
+2	97	10	506.439999999999998
+17	10	17	192.830000000000013
+10	65	6	307.199999999999989
+15	50	19	812.139999999999986
+28	25	15	655.049999999999955
+5	88	11	41.009999999999998
+1	37	2	818.309999999999945
+10	78	11	463.139999999999986
+1	2	14	711.990000000000009
+13	2	20	127.069999999999993
+27	20	9	936.080000000000041
+17	5	18	148.97999999999999
+7	10	9	555.740000000000009
+22	43	8	683.269999999999982
+16	47	20	584.529999999999973
+16	58	14	44.3900000000000006
+20	90	0	948.419999999999959
+13	12	2	975.230000000000018
+21	47	8	680.799999999999955
+11	71	17	652.100000000000023
+14	4	7	980.110000000000014
+25	40	10	194.939999999999998
+25	29	14	341.620000000000005
+28	81	18	32.2899999999999991
+5	68	20	955.32000000000005
+13	85	8	465.529999999999973
+20	80	12	756.67999999999995
+29	26	10	672.82000000000005
+21	91	6	919.690000000000055
+9	78	6	575.980000000000018
+20	49	6	486.740000000000009
+24	32	7	627
+24	47	3	727.509999999999991
+29	10	8	198.280000000000001
+16	53	12	50.75
+11	98	6	187.150000000000006
+2	44	7	367.439999999999998
+17	74	10	248.590000000000003
+30	61	13	801.669999999999959
+13	5	7	406.050000000000011
+18	28	2	809.17999999999995
+9	5	14	74.9099999999999966
+18	78	2	812.830000000000041
+19	61	18	290.120000000000005
+12	98	10	719.519999999999982
+23	2	15	745.450000000000045
+29	40	18	634.899999999999977
+13	92	18	435.740000000000009
+30	27	16	231.129999999999995
+13	71	9	963.789999999999964
+20	13	0	74.8100000000000023
+20	96	14	967.509999999999991
+29	66	7	433.850000000000023
+20	62	3	486.089999999999975
+27	5	9	133.080000000000013
+1	14	6	550.559999999999945
+26	38	18	660.919999999999959
+17	79	11	37.5700000000000003
+19	54	3	342.220000000000027
+28	74	5	486.45999999999998
+13	49	19	477.509999999999991
+5	29	6	545.789999999999964
+10	48	7	558.100000000000023
+25	57	2	977.389999999999986
+5	46	17	798.590000000000032
+1	25	4	874.879999999999995
+4	49	17	304.160000000000025
+19	47	19	77.8299999999999983
+18	89	14	998.100000000000023
+3	22	8	387.360000000000014
+14	83	7	670.029999999999973
+11	77	9	929.850000000000023
+5	87	20	361.350000000000023
+30	81	8	862.860000000000014
+8	72	8	706.07000000000005
+12	22	19	694.960000000000036
+23	84	4	806.799999999999955
+8	82	19	226.620000000000005
+5	83	3	761.419999999999959
+25	32	7	713.950000000000045
+23	98	11	459.04000000000002
+2	3	17	989.649999999999977
+18	37	8	377.29000000000002
+22	21	5	14.4700000000000006
+16	55	12	653.870000000000005
+20	11	2	516.120000000000005
+24	61	14	705.049999999999955
+21	75	20	741.82000000000005
+4	80	16	752.240000000000009
+26	28	12	128.069999999999993
+3	12	2	586.960000000000036
+26	86	5	813.120000000000005
+16	20	12	579.159999999999968
+22	40	9	623.049999999999955
+17	39	3	800.230000000000018
+16	77	8	662.419999999999959
+19	7	18	637.990000000000009
+28	31	10	660.25
+20	24	13	559.740000000000009
+30	85	8	198.060000000000002
+21	28	14	831.720000000000027
+12	70	5	311.180000000000007
+15	2	11	864.5
+29	82	9	823.909999999999968
+26	44	4	236.650000000000006
+10	68	8	728.919999999999959
+28	29	18	667.519999999999982
+18	80	9	490.759999999999991
+27	8	4	150.810000000000002
+10	38	3	951.990000000000009
+13	75	10	631.730000000000018
+5	75	6	40.1499999999999986
+26	11	4	23.4899999999999984
+17	50	4	698.470000000000027
+2	65	15	944.610000000000014
+29	69	17	480.910000000000025
+21	66	17	523.559999999999945
+13	61	5	36.1499999999999986
+8	77	6	18.1999999999999993
+11	17	16	124.099999999999994
+18	22	13	214.310000000000002
+11	40	2	499.810000000000002
+26	2	4	51.2199999999999989
+22	65	4	747.830000000000041
+26	57	13	29.629999999999999
+2	90	8	596.370000000000005
+9	51	3	730.990000000000009
+25	22	13	635.669999999999959
+24	62	20	845.120000000000005
+25	45	10	842.399999999999977
+23	49	11	68.1599999999999966
+18	25	20	156.430000000000007
+25	46	9	443.009999999999991
+19	95	6	213.610000000000014
+12	55	20	682.389999999999986
+12	50	16	266.54000000000002
+13	79	11	743.470000000000027
+11	85	8	392.009999999999991
+7	73	20	403.769999999999982
+6	49	18	687.909999999999968
+13	86	20	857.240000000000009
+1	17	17	412.019999999999982
+19	24	1	468.490000000000009
+6	61	20	10.0899999999999999
+6	40	14	91.2900000000000063
+26	49	13	179.780000000000001
+11	87	10	627.799999999999955
+4	31	9	91.4399999999999977
+4	30	4	189.219999999999999
+1	78	16	532.809999999999945
+26	41	4	734.409999999999968
+24	90	8	720.870000000000005
+3	24	0	501.420000000000016
+6	37	3	49.3599999999999994
+21	11	16	322.269999999999982
+26	77	0	709.690000000000055
+4	83	17	721.67999999999995
+29	51	10	566.539999999999964
+24	96	10	441.149999999999977
+17	13	12	222.349999999999994
+10	58	14	101.540000000000006
+2	32	16	876.92999999999995
+17	96	10	720.350000000000023
+20	34	2	857.419999999999959
+7	100	14	80.0400000000000063
+11	45	13	602.830000000000041
+5	44	5	729.850000000000023
+17	88	7	564.990000000000009
+27	65	14	616.799999999999955
+4	97	10	805.100000000000023
+21	87	17	423.5
+18	13	11	336.259999999999991
+24	75	17	675.289999999999964
+19	58	9	368.439999999999998
+1	34	19	834.830000000000041
+4	68	5	316.839999999999975
+4	18	10	772.240000000000009
+23	54	8	895.080000000000041
+17	89	3	590.629999999999995
+17	45	17	522.350000000000023
+1	50	3	769.370000000000005
+28	64	17	248.129999999999995
+17	86	4	277.639999999999986
+1	27	16	988.019999999999982
+4	72	5	738.549999999999955
+21	21	19	436.720000000000027
+5	12	6	427.410000000000025
+27	4	2	930.870000000000005
+8	85	15	161.539999999999992
+7	59	8	34.9699999999999989
+6	51	3	860.169999999999959
+17	80	14	380.389999999999986
+18	98	2	60.8299999999999983
+9	47	2	580.519999999999982
+19	26	0	675.299999999999955
+8	32	6	441.740000000000009
+29	84	17	160.580000000000013
+26	84	4	595.610000000000014
+20	72	6	189.5
+22	6	15	917.409999999999968
+12	74	15	947.149999999999977
+28	32	4	176.5
+6	89	19	861.460000000000036
+10	63	10	183.789999999999992
+27	64	2	869.009999999999991
+27	7	5	15.9700000000000006
+18	93	7	293.410000000000025
+14	43	1	397.769999999999982
+24	64	2	298.550000000000011
+24	19	8	946.509999999999991
+13	54	9	549.019999999999982
+29	49	2	709.659999999999968
+16	18	18	395.939999999999998
+29	48	7	747.779999999999973
+15	51	19	814.529999999999973
+30	12	16	690.82000000000005
+5	6	13	651.730000000000018
+14	35	5	120.700000000000003
+14	73	0	583.970000000000027
+22	1	17	306.730000000000018
+15	22	8	776.330000000000041
+1	73	10	29.6000000000000014
+17	87	11	173.120000000000005
+28	83	16	908.809999999999945
+5	53	19	293.949999999999989
+26	20	18	82.9300000000000068
+22	39	5	536.82000000000005
+11	31	15	347.120000000000005
+11	97	9	148.110000000000014
+6	92	17	364.759999999999991
+27	36	4	31.1999999999999993
+9	48	0	796.67999999999995
+30	84	20	338.189999999999998
+27	17	18	392.120000000000005
+26	89	3	67.5100000000000051
+13	27	13	899.980000000000018
+28	93	9	902.019999999999982
+13	44	2	693.690000000000055
+22	48	6	589.789999999999964
+10	32	18	868.059999999999945
+2	68	16	123.730000000000004
+30	89	0	597.110000000000014
+29	11	19	258.300000000000011
+11	100	12	544.340000000000032
+8	28	12	404.25
+26	43	8	688.899999999999977
+25	14	11	339.550000000000011
+11	7	20	790.470000000000027
+20	31	15	136.370000000000005
+7	32	11	220.300000000000011
+9	69	4	914.57000000000005
+22	90	19	602.139999999999986
+26	74	19	623.149999999999977
+18	70	16	314.509999999999991
+18	88	14	359.589999999999975
+18	7	5	359.579999999999984
+7	27	0	565.899999999999977
+13	63	0	524.600000000000023
+11	48	0	354.560000000000002
+19	44	15	390.220000000000027
+11	99	0	54.9099999999999966
+8	36	7	496.410000000000025
+4	2	12	919.600000000000023
+10	39	20	502.470000000000027
+9	82	5	162.900000000000006
+20	18	12	284.509999999999991
+15	11	18	631.169999999999959
+4	81	17	984.169999999999959
+27	28	6	109.359999999999999
+11	2	15	735.379999999999995
+7	84	3	495.089999999999975
+8	35	12	208.590000000000003
+23	51	12	887.080000000000041
+8	22	8	94.6899999999999977
+1	23	17	116.790000000000006
+10	4	0	442.629999999999995
+28	87	2	390.399999999999977
+7	78	10	397.04000000000002
+13	33	11	92.2999999999999972
+23	76	14	395.800000000000011
+12	4	6	938.940000000000055
+29	1	2	256.910000000000025
+30	62	6	802.240000000000009
+22	51	4	626.950000000000045
+23	90	13	173.340000000000003
+6	24	15	25.6400000000000006
+13	31	12	476.20999999999998
+13	21	4	963.450000000000045
+7	81	12	187.849999999999994
+1	42	15	605.950000000000045
+30	14	5	31.7800000000000011
+26	100	5	662.340000000000032
+2	70	9	399.100000000000023
+6	53	0	953.159999999999968
+9	25	3	620.110000000000014
+8	97	8	28.9200000000000017
+18	67	5	801.240000000000009
+20	17	20	762.909999999999968
+5	48	19	777.610000000000014
+2	64	18	547.240000000000009
+6	8	15	271.120000000000005
+30	37	10	447.629999999999995
+9	96	15	796.25
+15	10	19	767.129999999999995
+4	100	15	380.980000000000018
+13	62	16	295.300000000000011
+8	46	2	220.039999999999992
+29	31	0	267.430000000000007
+21	34	6	863.269999999999982
+3	31	10	955.990000000000009
+17	3	1	347.5
+28	73	9	648.92999999999995
+24	14	4	815.799999999999955
+5	57	8	187.099999999999994
+24	83	9	262.430000000000007
+18	23	14	468.180000000000007
+12	87	11	244.430000000000007
+14	25	1	49.5900000000000034
+28	75	4	153.860000000000014
+13	48	14	818.080000000000041
+25	73	14	198.949999999999989
+22	72	5	698.120000000000005
+9	6	17	106.269999999999996
+17	83	16	317.019999999999982
+21	89	11	194.75
+5	45	6	746.279999999999973
+5	72	9	917.659999999999968
+3	83	2	478.680000000000007
+14	85	10	668.75
+2	40	19	382.639999999999986
+12	30	4	32.8800000000000026
+30	16	0	419.860000000000014
+20	22	0	795.879999999999995
+1	65	11	69.2000000000000028
+3	88	14	901.080000000000041
+2	31	15	933.519999999999982
+30	29	4	131.360000000000014
+6	64	6	212.699999999999989
+13	39	17	38.6000000000000014
+14	65	13	60.6799999999999997
+20	32	14	22.1400000000000006
+1	66	15	669.970000000000027
+26	40	3	266.689999999999998
+25	92	19	294.009999999999991
+3	73	13	636.549999999999955
+6	33	14	57.1400000000000006
+1	99	10	354.75
+8	91	10	766.730000000000018
+30	21	14	29.5
+1	41	18	253.900000000000006
+26	54	18	508.54000000000002
+5	10	14	38.4600000000000009
+15	23	4	822.090000000000032
+2	50	12	111.109999999999999
+2	33	12	304.730000000000018
+21	88	4	920.480000000000018
+23	75	3	678.289999999999964
+5	73	12	746.889999999999986
+22	38	16	980.830000000000041
+23	7	16	513.950000000000045
+3	64	17	249.590000000000003
+16	98	8	735.32000000000005
+30	75	17	288.430000000000007
+28	6	20	212.469999999999999
+24	71	16	104.670000000000002
+30	71	6	87.5
+20	35	10	477.720000000000027
+1	32	10	71.3299999999999983
+18	84	18	875.450000000000045
+23	35	18	437.189999999999998
+10	85	6	92.25
+29	12	7	181.530000000000001
+16	36	18	155.150000000000006
+10	5	18	147.02000000000001
+30	35	6	101.459999999999994
+8	25	7	593.710000000000036
+21	20	14	844.399999999999977
+25	51	17	12.5299999999999994
+28	56	18	679.909999999999968
+19	99	17	313
+3	46	6	961.25
+4	45	5	510.339999999999975
+20	42	16	278.120000000000005
+28	8	0	126.510000000000005
+11	75	2	244.280000000000001
+4	21	18	45.4500000000000028
+17	64	11	350.769999999999982
+6	68	1	227.349999999999994
+2	98	12	729.529999999999973
+16	92	5	537.370000000000005
+11	43	17	963.879999999999995
+10	54	5	987.940000000000055
+13	70	5	408.939999999999998
+19	21	4	91.9599999999999937
+29	21	12	193.439999999999998
+7	41	11	488.819999999999993
+15	67	11	699.690000000000055
+12	13	10	793.379999999999995
+29	59	3	272.019999999999982
+25	72	0	597.210000000000036
+20	65	8	171.590000000000003
+8	73	2	53.9299999999999997
+4	64	11	409.009999999999991
+13	11	3	785.629999999999995
+10	18	15	947.710000000000036
+25	89	2	602.799999999999955
+30	9	2	803.200000000000045
+14	88	2	467.95999999999998
+26	88	3	954.879999999999995
+15	48	8	354.730000000000018
+6	16	4	577.129999999999995
+17	26	10	103.739999999999995
+24	94	19	336.120000000000005
+2	96	14	130.22999999999999
+14	79	10	435.449999999999989
+28	94	5	397.680000000000007
+21	99	5	510.139999999999986
+17	51	11	103.219999999999999
+5	26	8	830.809999999999945
+30	18	0	61.8900000000000006
+1	80	11	719.259999999999991
+19	2	11	15.2100000000000009
+22	16	6	193.330000000000013
+17	67	2	983.210000000000036
+4	32	16	81.4200000000000017
+23	92	1	62.6599999999999966
+5	27	2	612.309999999999945
+9	56	11	586.789999999999964
+24	17	12	650.659999999999968
+17	78	4	444.550000000000011
+29	95	0	188.419999999999987
+24	81	14	517.92999999999995
+8	33	20	879.67999999999995
+7	7	8	943.169999999999959
+22	37	4	488.45999999999998
+4	1	5	515.919999999999959
+18	33	14	421.949999999999989
+29	75	8	625.870000000000005
+9	65	16	468.170000000000016
+16	9	14	138.009999999999991
+20	26	14	837.340000000000032
+16	72	16	194.110000000000014
+7	85	4	752.009999999999991
+20	48	19	707.460000000000036
+26	16	16	352.589999999999975
+8	75	17	72.8299999999999983
+13	58	18	359.779999999999973
+30	72	1	681.779999999999973
+20	53	5	588.610000000000014
+6	87	6	746.700000000000045
+20	68	6	342.139999999999986
+6	88	8	770.100000000000023
+14	64	11	873.470000000000027
+26	17	20	537.980000000000018
+18	39	5	652.740000000000009
+10	52	8	958.370000000000005
+27	50	16	169.330000000000013
+8	79	18	145.169999999999987
+12	44	15	696.620000000000005
+11	61	9	64.8299999999999983
+9	66	3	129.430000000000007
+18	75	13	802.860000000000014
+6	48	17	424.889999999999986
+25	23	9	127.629999999999995
+3	4	1	807.080000000000041
+9	11	15	802.139999999999986
+15	27	15	192
+15	72	6	383.850000000000023
+12	60	1	406.639999999999986
+14	8	13	617.17999999999995
+12	92	17	496.680000000000007
+18	46	7	755.309999999999945
+23	52	13	321.259999999999991
+5	37	9	138.509999999999991
+26	4	6	28.3099999999999987
+23	68	6	511.180000000000007
+25	88	5	98.980000000000004
+6	66	12	677.67999999999995
+21	3	4	194.419999999999987
+8	95	9	771.450000000000045
+16	32	11	249.370000000000005
+14	78	9	123.340000000000003
+25	9	6	858.950000000000045
+13	55	19	29.2600000000000016
+3	3	15	705.529999999999973
+15	63	3	262.819999999999993
+26	51	8	253.879999999999995
+16	60	9	109.730000000000004
+12	68	18	722.840000000000032
+21	6	8	453.04000000000002
+20	51	11	618.059999999999945
+8	76	17	539.720000000000027
+1	85	11	174.330000000000013
+5	90	19	889.67999999999995
+1	76	2	424.420000000000016
+26	13	12	655.129999999999995
+8	11	11	498.050000000000011
+7	49	9	556.889999999999986
+13	34	12	111.5
+5	85	14	201.469999999999999
+23	14	8	411.819999999999993
+1	19	3	351.910000000000025
+4	76	2	847.649999999999977
+10	27	16	519.659999999999968
+15	80	1	806.549999999999955
+26	72	5	479
+13	22	10	497.600000000000023
+23	47	18	433.370000000000005
+25	44	3	700.700000000000045
+21	49	10	277.20999999999998
+27	82	18	217.620000000000005
+6	14	16	385.439999999999998
+21	8	1	357.079999999999984
+29	37	6	419.110000000000014
+24	38	17	233.22999999999999
+30	66	5	452.279999999999973
+3	39	12	88.4699999999999989
+22	77	0	812.289999999999964
+21	35	2	352.019999999999982
+10	94	15	219.759999999999991
+4	54	5	782.450000000000045
+23	29	2	448.449999999999989
+30	30	9	425.660000000000025
+9	93	8	380.379999999999995
+19	72	2	922.370000000000005
+27	29	3	424.180000000000007
+5	20	4	254.120000000000005
+6	26	1	279.680000000000007
+12	94	13	723.610000000000014
+13	67	19	263.5
+25	81	7	964.440000000000055
+1	22	5	804.909999999999968
+5	5	17	940.370000000000005
+24	69	19	784.190000000000055
+14	59	13	928.75
+18	19	19	801.049999999999955
+10	59	2	242.530000000000001
+2	21	9	334.519999999999982
+23	65	7	958.42999999999995
+14	98	3	312.199999999999989
+13	68	20	92.8299999999999983
+2	5	1	997.700000000000045
+25	31	2	16.3000000000000007
+23	95	13	678.149999999999977
+21	55	1	371.350000000000023
+18	56	19	20.6400000000000006
+26	19	0	517.629999999999995
+26	64	3	868.07000000000005
+7	26	12	975.220000000000027
+2	1	13	659.940000000000055
+9	68	19	148.460000000000008
+23	91	10	479.089999999999975
+22	92	8	187.120000000000005
+11	88	11	212.870000000000005
+5	78	7	172.789999999999992
+23	81	1	731.919999999999959
+7	33	5	347.480000000000018
+5	15	13	391.509999999999991
+2	8	12	178.77000000000001
+6	91	12	852.950000000000045
+12	57	12	571.259999999999991
+23	6	15	916.240000000000009
+12	28	6	933.090000000000032
+9	60	2	45.1899999999999977
+1	46	16	670.710000000000036
+9	58	14	17.5799999999999983
+1	74	6	830.529999999999973
+5	82	8	357.430000000000007
+17	99	11	31.2800000000000011
+18	100	15	741.080000000000041
+25	28	17	360.980000000000018
+27	80	13	293.930000000000007
+26	42	19	908.580000000000041
+18	49	18	91.0900000000000034
+9	41	17	587.830000000000041
+8	21	18	699.029999999999973
+9	73	7	296.110000000000014
+21	2	12	126.730000000000004
+21	95	14	932.919999999999959
+4	84	1	759.830000000000041
+11	14	11	860
+24	27	4	891.690000000000055
+6	98	8	576.889999999999986
+4	75	14	650.549999999999955
+2	66	4	758.330000000000041
+12	15	11	606.169999999999959
+21	100	19	120.030000000000001
+26	96	12	428.029999999999973
+29	73	9	743.92999999999995
+14	6	7	107.780000000000001
+1	90	13	797.840000000000032
+17	46	17	664.75
+25	65	5	189.210000000000008
+27	46	12	429.810000000000002
+17	43	13	78.6700000000000017
+29	39	7	554.67999999999995
+17	90	1	756.909999999999968
+23	8	9	483.269999999999982
+4	92	4	946.350000000000023
+1	44	0	564.279999999999973
+27	61	2	263.019999999999982
+17	8	6	591.460000000000036
+25	7	11	744.690000000000055
+25	17	0	215.639999999999986
+6	12	5	836.039999999999964
+14	92	3	814.419999999999959
+4	35	5	144.620000000000005
+9	15	13	837.700000000000045
+10	8	18	781.879999999999995
+23	4	11	596.559999999999945
+30	64	2	586.799999999999955
+13	1	6	702.129999999999995
+3	94	6	958.539999999999964
+28	17	18	484.509999999999991
+3	44	11	696.970000000000027
+11	36	12	654.299999999999955
+24	97	18	587.17999999999995
+22	94	4	794.759999999999991
+26	92	15	98.7800000000000011
+10	64	13	560.309999999999945
+21	53	19	87.9099999999999966
+13	74	13	828.559999999999945
+20	3	16	122.060000000000002
+30	8	4	997.370000000000005
+14	18	17	404.329999999999984
+5	11	1	930.049999999999955
+11	33	13	986.710000000000036
+15	13	10	795
+15	53	13	330.980000000000018
+3	36	14	965.809999999999945
+5	4	14	906.210000000000036
+9	72	3	36.6700000000000017
+5	98	1	687.269999999999982
+15	44	14	122.129999999999995
+6	10	3	784.049999999999955
+19	23	11	149.800000000000011
+20	12	0	578.049999999999955
+12	32	16	236.490000000000009
+3	48	17	656.669999999999959
+14	75	10	257.629999999999995
+14	81	14	188.780000000000001
+24	2	3	588.32000000000005
+25	66	7	901.75
+16	21	2	893.580000000000041
+9	80	3	546.82000000000005
+9	42	0	694
+3	16	15	897.799999999999955
+27	14	15	200.870000000000005
+11	18	5	718.870000000000005
+9	97	8	158.569999999999993
+25	24	13	748.009999999999991
+28	68	4	869
+19	31	1	867.970000000000027
+13	24	14	538.379999999999995
+24	24	17	361.920000000000016
+9	77	10	450.490000000000009
+7	23	18	194.719999999999999
+19	37	3	448.829999999999984
+22	100	11	926.240000000000009
+25	75	9	827.100000000000023
+23	57	0	982.399999999999977
+25	55	9	435.839999999999975
+7	5	10	663.07000000000005
+30	86	8	835.330000000000041
+28	51	6	358.050000000000011
+27	26	13	175.569999999999993
+18	77	16	89.9500000000000028
+29	38	0	496.759999999999991
+26	6	3	798.350000000000023
+17	14	16	88.3199999999999932
+12	11	14	669.730000000000018
+23	36	7	695.330000000000041
+29	16	8	893.559999999999945
+11	91	10	494.189999999999998
+6	86	19	961.740000000000009
+19	5	9	297.569999999999993
+6	42	1	173.039999999999992
+10	69	7	100.159999999999997
+20	27	6	431.45999999999998
+29	57	1	368.910000000000025
+18	30	16	346.470000000000027
+20	16	13	222.139999999999986
+30	96	2	421.970000000000027
+11	10	6	256.620000000000005
+20	23	2	41.2100000000000009
+16	87	11	949.889999999999986
+29	53	3	688.240000000000009
+20	56	0	626.659999999999968
+11	70	1	853
+13	13	16	583.75
+30	90	3	224.289999999999992
+3	2	1	272.649999999999977
+12	81	13	87.7099999999999937
+1	91	6	934.230000000000018
+10	42	7	245.939999999999998
+8	62	19	440.910000000000025
+20	71	11	930.639999999999986
+29	44	3	585.120000000000005
+16	7	19	88.9899999999999949
+19	30	12	751.980000000000018
+2	58	12	547.529999999999973
+17	31	1	491.509999999999991
+24	66	13	555.710000000000036
+27	87	10	421.660000000000025
+6	23	11	441.20999999999998
+20	60	11	896.129999999999995
+29	67	4	270.45999999999998
+17	85	3	90.6899999999999977
+24	48	2	896.870000000000005
+10	98	19	441.639999999999986
+14	12	5	98.6599999999999966
+14	91	20	802.799999999999955
+11	4	18	410.329999999999984
+25	83	2	349.089999999999975
+26	52	0	939.159999999999968
+9	59	3	879.710000000000036
+4	79	7	301.860000000000014
+28	59	15	35.5499999999999972
+23	93	4	166.930000000000007
+27	83	15	574.129999999999995
+19	28	4	971.490000000000009
+19	17	6	822.370000000000005
+25	47	18	818.169999999999959
+10	30	5	912.409999999999968
+8	71	13	648.549999999999955
+3	90	10	177.620000000000005
+3	29	2	371.069999999999993
+28	20	7	563.07000000000005
+8	45	3	213.030000000000001
+19	11	11	256.189999999999998
+1	68	20	878.740000000000009
+16	65	19	192.889999999999986
+28	27	0	717.269999999999982
+17	18	12	399.819999999999993
+27	54	10	97.769999999999996
+2	61	10	473.009999999999991
+3	17	15	522.029999999999973
+25	91	2	873.419999999999959
+10	37	15	381.879999999999995
+24	100	13	946.559999999999945
+15	66	20	73.5
+12	76	14	483.870000000000005
+28	37	9	373.850000000000023
+24	49	2	741.389999999999986
+7	42	4	678.860000000000014
+14	3	15	817.019999999999982
+20	88	17	426.939999999999998
+10	6	0	466.490000000000009
+17	21	17	87.3599999999999994
+13	69	2	516.059999999999945
+2	51	11	306.300000000000011
+5	8	3	912.110000000000014
+11	64	0	671.360000000000014
+22	25	5	925.269999999999982
+28	11	11	536.289999999999964
+13	94	0	274.449999999999989
+1	47	11	548.230000000000018
+6	59	2	822.970000000000027
+4	59	20	219.25
+9	39	9	848.470000000000027
+19	39	18	371.379999999999995
+27	3	14	358.939999999999998
+19	64	19	246.430000000000007
+2	28	0	291.79000000000002
+7	57	0	385.70999999999998
+17	24	5	704.730000000000018
+19	77	3	123.329999999999998
+5	65	11	105.579999999999998
+17	32	4	890.32000000000005
+7	6	2	521.230000000000018
+3	52	5	400.509999999999991
+12	9	8	337.930000000000007
+23	96	14	58.8699999999999974
+16	30	10	391.279999999999973
+9	64	1	290.95999999999998
+7	36	3	70.269999999999996
+22	2	9	408.360000000000014
+6	94	13	56.1199999999999974
+27	76	5	623.769999999999982
+11	25	13	661.509999999999991
+1	43	19	850.460000000000036
+17	19	11	729.419999999999959
+11	80	10	413.889999999999986
+18	36	0	636.980000000000018
+12	58	0	426.949999999999989
+13	78	4	465.370000000000005
+4	65	13	613.720000000000027
+12	52	3	443.089999999999975
+26	67	14	874.470000000000027
+9	8	10	346.610000000000014
+2	15	11	421.720000000000027
+27	95	7	397.990000000000009
+28	88	8	703.639999999999986
+16	63	3	250.960000000000008
+30	10	17	843.019999999999982
+26	91	19	225.090000000000003
+15	16	10	106.219999999999999
+12	23	9	665.990000000000009
+29	41	1	509.970000000000027
+24	50	1	322.629999999999995
+26	48	2	153.490000000000009
+13	14	15	853.919999999999959
+22	80	12	503.75
+19	74	18	613.909999999999968
+21	81	13	651.340000000000032
+28	9	5	879.789999999999964
+6	47	20	609.909999999999968
+17	20	13	872.559999999999945
+30	46	0	293.45999999999998
+15	70	16	495.470000000000027
+19	8	9	425.089999999999975
+4	58	12	215.960000000000008
+17	82	18	444.870000000000005
+7	92	0	695.029999999999973
+16	41	19	396.839999999999975
+22	56	10	256.329999999999984
+12	86	0	503.5
+18	68	17	102.349999999999994
+9	16	0	632.019999999999982
+9	9	12	331.199999999999989
+19	43	15	983.379999999999995
+26	18	3	468.970000000000027
+22	12	7	508.529999999999973
+25	26	1	795.860000000000014
+23	67	4	746.440000000000055
+16	94	0	468.410000000000025
+6	56	2	974.080000000000041
+19	48	12	415
+11	41	19	893.299999999999955
+1	70	0	130.02000000000001
+2	22	10	872.549999999999955
+12	89	13	261.370000000000005
+9	85	4	372.930000000000007
+19	40	16	200.210000000000008
+21	56	9	341.610000000000014
+5	52	15	368.560000000000002
+18	58	20	989.240000000000009
+13	51	4	336.120000000000005
+19	41	10	293.54000000000002
+23	26	4	536.039999999999964
+23	55	12	701.07000000000005
+21	84	4	739.049999999999955
+1	26	19	737.32000000000005
+1	40	15	928.240000000000009
+17	72	4	611.799999999999955
+27	85	6	101.489999999999995
+12	33	2	709.610000000000014
+4	20	13	390.350000000000023
+25	13	14	81.5400000000000063
+15	36	13	61.4699999999999989
+23	74	11	179.319999999999993
+9	12	1	40.2700000000000031
+3	75	10	193.939999999999998
+25	41	17	91.3199999999999932
+29	42	15	883.710000000000036
+28	67	4	947.950000000000045
+2	83	20	886.840000000000032
+3	76	2	171.800000000000011
+2	60	20	503.980000000000018
+20	57	14	424.310000000000002
+21	62	13	709.909999999999968
+14	19	7	421.470000000000027
+17	68	20	176.449999999999989
+21	26	17	788.059999999999945
+6	80	1	455.889999999999986
+30	36	19	249.409999999999997
+9	17	2	285.509999999999991
+1	51	13	965
+27	12	14	491.04000000000002
+30	19	20	622.029999999999973
+7	61	11	39.1700000000000017
+29	56	0	483.310000000000002
+10	96	13	360.139999999999986
+3	85	16	925
+10	97	11	301.199999999999989
+8	89	13	264.95999999999998
+26	61	9	272.180000000000007
+27	51	10	376.589999999999975
+20	7	11	626.799999999999955
+24	25	8	131.77000000000001
+14	96	8	656.610000000000014
+10	16	15	786.82000000000005
+16	25	17	486.050000000000011
+9	37	12	500.110000000000014
+19	56	4	682.289999999999964
+23	22	17	649.799999999999955
+24	46	18	336.319999999999993
+11	66	6	619.509999999999991
+9	3	12	334.379999999999995
+20	97	0	824.67999999999995
+4	48	7	889.169999999999959
+11	13	10	937
+18	10	20	87.2199999999999989
+23	58	9	710.07000000000005
+10	17	6	496.839999999999975
+15	59	13	238.930000000000007
+27	84	8	631.370000000000005
+30	32	0	979.450000000000045
+12	77	13	647.759999999999991
+10	45	19	806.799999999999955
+12	12	18	334.970000000000027
+12	40	14	450.740000000000009
+16	26	14	882.629999999999995
+21	94	15	568.740000000000009
+21	1	8	692.139999999999986
+10	99	5	344.980000000000018
+29	43	1	914.299999999999955
+17	77	15	567.460000000000036
+12	54	20	42.3699999999999974
+21	39	20	134.189999999999998
+10	46	8	438.660000000000025
+28	16	20	327.70999999999998
+7	13	5	989.200000000000045
+26	78	7	313.810000000000002
+5	56	8	24.5300000000000011
+21	10	11	807.940000000000055
+28	86	14	621.07000000000005
+7	62	10	484.160000000000025
+7	88	18	476.670000000000016
+3	13	18	688.509999999999991
+2	72	19	998.139999999999986
+8	20	19	63.0200000000000031
+16	69	4	670.190000000000055
+5	47	5	807.080000000000041
+19	45	6	459.180000000000007
+18	79	14	452.850000000000023
+2	84	1	810.610000000000014
+4	29	13	679.75
+11	6	13	717.700000000000045
+20	2	7	386.220000000000027
+30	11	19	838.830000000000041
+1	53	6	528.509999999999991
+14	21	2	234.689999999999998
+4	95	2	679.740000000000009
+8	67	0	184.5
+8	18	17	792.389999999999986
+13	77	15	666.279999999999973
+2	100	20	714.299999999999955
+3	8	9	485.490000000000009
+27	100	17	368.240000000000009
+18	5	20	265.29000000000002
+25	61	20	333.720000000000027
+18	64	6	299.939999999999998
+5	13	14	81.4899999999999949
+23	77	18	492.970000000000027
+4	69	12	576.490000000000009
+14	32	0	938.440000000000055
+16	17	7	803.659999999999968
+4	5	18	59.5300000000000011
+22	3	20	549.149999999999977
+20	61	4	130.689999999999998
+27	68	15	225.509999999999991
+14	47	7	404.759999999999991
+12	51	5	529.799999999999955
+21	16	12	877.519999999999982
+15	37	16	51.6099999999999994
+5	67	15	753.120000000000005
+25	87	16	751.889999999999986
+20	66	20	551.309999999999945
+29	3	9	168.969999999999999
+2	74	2	487.410000000000025
+23	1	13	125.469999999999999
+30	31	11	69.6800000000000068
+13	100	16	152.219999999999999
+15	84	3	517.419999999999959
+30	51	12	117.709999999999994
+30	83	6	967.100000000000023
+1	36	2	753.559999999999945
+22	76	12	517.210000000000036
+22	47	4	72.8199999999999932
+25	63	12	494.970000000000027
+8	1	15	745.289999999999964
+6	65	7	791.659999999999968
+3	91	9	694.860000000000014
+18	11	13	85.2800000000000011
+10	67	10	841.360000000000014
+13	97	4	901.110000000000014
+21	9	20	915.779999999999973
+26	26	13	585.519999999999982
+3	32	13	434.879999999999995
+6	77	10	432.879999999999995
+28	58	14	145.319999999999993
+12	83	5	272.800000000000011
+3	60	12	514.490000000000009
+26	90	9	938.42999999999995
+27	72	20	195.689999999999998
+20	40	14	237.240000000000009
+1	55	17	845.730000000000018
+1	63	0	384.899999999999977
+8	52	19	995.279999999999973
+20	58	1	896.299999999999955
+2	25	9	331.839999999999975
+3	49	11	423.319999999999993
+10	25	12	949.32000000000005
+1	8	19	507.629999999999995
+7	19	1	243.460000000000008
+30	7	8	317.550000000000011
+12	75	18	604.580000000000041
+29	8	2	370.569999999999993
+26	7	17	365.139999999999986
+19	79	1	56.1099999999999994
+8	12	9	584.580000000000041
+11	15	19	105.060000000000002
+2	30	17	553.039999999999964
+23	99	15	761.82000000000005
+23	70	16	266.29000000000002
+14	99	17	918.440000000000055
+30	53	12	201.97999999999999
+17	75	12	899.460000000000036
+11	95	6	826.669999999999959
+15	1	0	997.519999999999982
+30	56	0	564.350000000000023
+18	15	16	161.180000000000007
+3	63	13	319.720000000000027
+13	84	10	351.410000000000025
+24	53	9	450.04000000000002
+26	8	13	278.579999999999984
+26	37	9	758.659999999999968
+4	34	1	301.860000000000014
+19	14	14	802.470000000000027
+10	3	3	718.899999999999977
+7	79	12	916.490000000000009
+8	40	14	856.840000000000032
+1	30	6	445.600000000000023
+3	86	17	411.639999999999986
+13	93	12	65.0400000000000063
+22	85	5	698.039999999999964
+5	86	7	544.860000000000014
+30	68	20	74.5799999999999983
+28	12	11	528.240000000000009
+1	57	1	819.370000000000005
+7	11	13	760.289999999999964
+17	12	10	696.639999999999986
+14	69	10	153.889999999999986
+29	17	17	387.25
+18	27	8	131.949999999999989
+9	45	10	909.970000000000027
+14	53	4	783.879999999999995
+24	1	15	670.57000000000005
+7	83	20	314.399999999999977
+6	55	9	485.649999999999977
+2	6	17	719.269999999999982
+24	95	3	810.029999999999973
+23	13	9	276.5
+7	31	8	780.529999999999973
+16	50	20	87.5900000000000034
+26	9	4	354.45999999999998
+23	28	18	91.3799999999999955
+14	50	11	334.129999999999995
+6	70	8	992.769999999999982
+3	45	7	619.809999999999945
+10	77	17	16.7399999999999984
+20	59	12	115.5
+16	52	10	456.600000000000023
+22	49	16	87.9699999999999989
+23	87	19	755.360000000000014
+18	3	20	282.180000000000007
+12	96	4	755.559999999999945
+12	53	8	944.710000000000036
+18	40	13	450.970000000000027
+22	19	17	478.990000000000009
+26	53	10	665.980000000000018
+29	20	10	852.700000000000045
+5	19	12	18.4800000000000004
+28	2	10	485.939999999999998
+28	35	3	99.8900000000000006
+7	9	17	772.230000000000018
+13	88	0	848.720000000000027
+18	32	10	82.4699999999999989
+1	11	5	129.560000000000002
+17	71	14	373.970000000000027
+26	87	1	90.4300000000000068
+4	13	20	204.409999999999997
+28	96	16	461.730000000000018
+22	98	3	634.970000000000027
+23	43	4	973.759999999999991
+9	95	5	386.810000000000002
+18	91	18	481.990000000000009
+28	70	20	800.799999999999955
+8	74	19	985.259999999999991
+25	12	2	329.25
+21	45	20	972.32000000000005
+7	35	10	323.449999999999989
+19	19	2	293.449999999999989
+8	84	2	976.17999999999995
+17	70	20	370.529999999999973
+12	10	14	992.25
+4	56	14	148.370000000000005
+25	35	20	662.309999999999945
+9	63	5	695.480000000000018
+1	69	2	548.509999999999991
+8	24	18	997.370000000000005
+22	96	5	180.610000000000014
+2	20	1	507.699999999999989
+2	62	14	597.07000000000005
+27	98	4	345.870000000000005
+19	53	18	974.190000000000055
+30	15	16	647.799999999999955
+10	66	3	56.490000000000002
+26	85	15	65.6599999999999966
+3	1	10	479.110000000000014
+28	48	13	312.889999999999986
+11	73	0	249.960000000000008
+30	67	1	631.710000000000036
+12	99	8	112.459999999999994
+5	76	17	39.1199999999999974
+29	89	1	393.600000000000023
+15	49	17	394.009999999999991
+17	97	15	28.620000000000001
+23	40	15	217.449999999999989
+28	90	10	486.199999999999989
+22	24	0	158.169999999999987
+25	77	15	881.159999999999968
+6	90	15	94.4500000000000028
+12	35	5	980.450000000000045
+6	2	16	249.629999999999995
+18	73	11	735.940000000000055
+23	60	1	828.169999999999959
+22	64	11	955.809999999999945
+4	16	19	875.639999999999986
+3	58	15	353.720000000000027
+26	36	19	680.129999999999995
+10	26	6	754.840000000000032
+14	22	16	20.8599999999999994
+20	1	11	306.079999999999984
+15	82	4	249.319999999999993
+15	5	1	205.52000000000001
+24	26	4	805.730000000000018
+7	89	16	153.050000000000011
+22	97	3	872.669999999999959
+2	11	6	526.230000000000018
+28	63	14	13.6199999999999992
+7	70	12	913.409999999999968
+1	58	2	190.360000000000014
+3	69	1	519.960000000000036
+18	65	11	120.189999999999998
+12	18	20	796.75
+7	3	3	312.269999999999982
+1	49	3	568.590000000000032
+16	45	3	977.659999999999968
+8	90	15	521.809999999999945
+28	71	18	988.450000000000045
+8	99	7	455.45999999999998
+12	29	1	558.370000000000005
+2	34	1	275.529999999999973
+8	49	15	380.649999999999977
+13	64	14	216.349999999999994
+13	46	11	905.139999999999986
+22	46	16	465.509999999999991
+13	25	14	596.289999999999964
+13	80	3	457.329999999999984
+23	20	8	921.629999999999995
+2	42	13	688.019999999999982
+20	10	0	275.129999999999995
+6	29	7	36.7299999999999969
+4	44	2	774.870000000000005
+28	3	17	964.029999999999973
+6	100	6	720.07000000000005
+6	99	3	482.089999999999975
+6	5	1	334.769999999999982
+4	3	0	30.2699999999999996
+6	76	8	312.70999999999998
+28	92	11	830.860000000000014
+13	43	5	914.220000000000027
+12	95	4	707.07000000000005
+10	82	14	776.200000000000045
+28	13	13	998.210000000000036
+16	56	18	376.410000000000025
+6	46	18	92.0799999999999983
+26	55	11	344.470000000000027
+11	68	19	918.110000000000014
+25	27	11	154.129999999999995
+13	35	0	58.1700000000000017
+10	86	10	184.650000000000006
+14	67	19	707.279999999999973
+18	71	5	910.779999999999973
+10	22	12	18.6099999999999994
+3	40	1	949.509999999999991
+18	4	11	583.240000000000009
+8	65	16	295.509999999999991
+13	38	2	200.169999999999987
+2	93	19	859.5
+30	60	4	379.329999999999984
+2	39	15	219.080000000000013
+7	72	16	237.639999999999986
+12	46	9	782.700000000000045
+5	50	18	838.940000000000055
+6	28	19	871.480000000000018
+14	68	8	777.32000000000005
+17	36	1	403.819999999999993
+22	28	14	515.980000000000018
+14	93	13	598.330000000000041
+5	95	0	71.6200000000000045
+4	50	2	840.519999999999982
+4	26	14	785.480000000000018
+28	98	7	810.049999999999955
+14	16	0	568.629999999999995
+5	2	15	822.269999999999982
+4	85	9	382.829999999999984
+26	75	10	921.659999999999968
+27	49	16	337.949999999999989
+26	1	8	385.720000000000027
+21	59	9	710.779999999999973
+2	12	17	882.669999999999959
+10	13	13	541.759999999999991
+18	87	0	796.389999999999986
+28	78	7	273.430000000000007
+30	1	15	718.419999999999959
+29	92	0	154.580000000000013
+6	7	18	379.350000000000023
+13	8	20	919.309999999999945
+10	89	0	245.97999999999999
+20	46	18	809.200000000000045
+23	86	3	914.350000000000023
+14	23	3	494.019999999999982
+4	90	4	330.490000000000009
+10	51	2	771.029999999999973
+23	12	8	625.039999999999964
+24	57	14	456.860000000000014
+18	44	8	99
+2	4	16	642.32000000000005
+18	97	14	634.139999999999986
+18	1	15	812.240000000000009
+21	36	5	887.17999999999995
+5	35	8	119.170000000000002
+9	81	2	17.3900000000000006
+19	16	1	787.730000000000018
+13	37	2	488.899999999999977
+5	69	17	904.720000000000027
+15	56	0	989.330000000000041
+16	37	5	656.259999999999991
+26	80	10	952.919999999999959
+6	73	4	746.309999999999945
+8	2	9	933.610000000000014
+30	63	3	462.970000000000027
+3	18	0	954.100000000000023
+29	76	13	361.819999999999993
+30	49	7	180.419999999999987
+2	26	10	322.230000000000018
+12	59	18	304.45999999999998
+22	33	16	82.3299999999999983
+23	73	5	89.5600000000000023
+22	8	16	469.149999999999977
+10	91	11	994.759999999999991
+12	34	14	631.990000000000009
+2	87	5	963.059999999999945
+16	39	7	194.159999999999997
+8	26	1	364.360000000000014
+17	63	3	55.3999999999999986
+13	96	7	230.560000000000002
+12	69	16	133.969999999999999
+8	17	20	307.850000000000023
+28	46	7	583.059999999999945
+11	57	19	254.939999999999998
+17	33	11	270.600000000000023
+30	92	13	400.240000000000009
+26	34	19	692
+9	50	19	523.639999999999986
+28	77	2	110.989999999999995
+7	66	9	966.659999999999968
+20	29	15	661.059999999999945
+18	86	5	424.04000000000002
+24	52	14	658.25
+9	10	17	752.659999999999968
+22	71	4	723.690000000000055
+28	65	20	438.370000000000005
+16	42	13	648.17999999999995
+24	86	1	701.700000000000045
+26	39	12	458.560000000000002
+24	23	9	364.569999999999993
+9	7	19	487.95999999999998
+19	3	17	483.149999999999977
+28	80	16	551.970000000000027
+30	25	8	598.409999999999968
+3	28	1	119.280000000000001
+6	96	10	520.32000000000005
+16	28	15	561.809999999999945
+30	38	2	935.600000000000023
+7	28	0	523.549999999999955
+25	34	13	172.460000000000008
+26	47	10	118.629999999999995
+24	11	17	683.17999999999995
+5	63	4	459.5
+25	10	12	950.080000000000041
+4	77	4	589.559999999999945
+4	11	8	894.860000000000014
+14	66	4	744.519999999999982
+3	79	2	928.799999999999955
+25	18	3	841.059999999999945
+6	67	17	95.6299999999999955
+10	90	3	612.210000000000036
+3	66	4	177.319999999999993
+28	99	1	918.279999999999973
+4	19	4	213.710000000000008
+9	24	3	472.449999999999989
+16	75	15	705.360000000000014
+12	19	2	646.559999999999945
+27	66	7	707.75
+6	17	3	535.450000000000045
+23	19	6	155.349999999999994
+6	44	2	302.269999999999982
+28	72	15	96.3700000000000045
+12	21	12	369.449999999999989
+6	39	3	714.220000000000027
+24	92	14	60.0799999999999983
+7	48	6	749.700000000000045
+29	80	4	573.460000000000036
+17	42	4	541
+9	86	10	257.720000000000027
+20	45	14	314.620000000000005
+23	85	20	831.610000000000014
+17	65	17	764.409999999999968
+16	89	1	444.569999999999993
+19	81	16	36.3200000000000003
+26	31	1	384.420000000000016
+24	87	5	602.779999999999973
+10	10	8	540.470000000000027
+15	21	10	795.440000000000055
+3	27	6	755.529999999999973
+27	38	3	865.639999999999986
+25	97	15	609.840000000000032
+12	6	6	215.960000000000008
+7	44	9	138.099999999999994
+14	71	10	659.529999999999973
+25	19	17	237.300000000000011
+27	16	13	767.379999999999995
+25	54	2	839.879999999999995
+5	91	14	351.699999999999989
+12	41	6	993.039999999999964
+17	48	2	444.980000000000018
+26	56	14	159.620000000000005
+5	92	18	386.839999999999975
+29	90	3	698.370000000000005
+30	82	3	998.57000000000005
+16	54	0	398.730000000000018
+10	21	17	49
+17	93	15	922.440000000000055
+19	71	15	380.589999999999975
+20	21	2	78.2900000000000063
+2	95	16	760.399999999999977
+29	81	9	40.0700000000000003
+1	29	0	880.159999999999968
+15	79	16	832.789999999999964
+28	62	12	529.470000000000027
+11	21	8	487.95999999999998
+22	88	10	492.379999999999995
+10	72	1	897.120000000000005
+29	30	13	24.9600000000000009
+12	97	0	977.990000000000009
+28	1	7	486.180000000000007
+2	13	0	683.509999999999991
+16	76	20	228.530000000000001
+26	35	10	597.159999999999968
+24	8	8	686.720000000000027
+15	4	11	976.759999999999991
+12	67	11	271.439999999999998
+12	84	11	531.690000000000055
+25	98	7	659.129999999999995
+22	63	18	660.759999999999991
+3	68	10	129.699999999999989
+3	53	11	396.480000000000018
+4	96	5	841.039999999999964
+7	69	2	794.440000000000055
+8	96	8	324.769999999999982
+10	49	9	117.719999999999999
+8	93	12	197.830000000000013
+15	39	12	117.859999999999999
+16	97	20	841.600000000000023
+28	36	12	374.089999999999975
+4	98	5	830.259999999999991
+10	14	17	381.629999999999995
+13	81	13	260.850000000000023
+15	85	12	929.019999999999982
+29	33	19	855.919999999999959
+14	72	2	694.769999999999982
+26	50	16	974.82000000000005
+20	25	19	567.960000000000036
+7	16	13	316.350000000000023
+6	45	8	705.960000000000036
+20	36	20	19.629999999999999
+5	25	6	452.720000000000027
+22	61	1	168.560000000000002
+29	14	19	363.360000000000014
+30	40	16	629.5
+21	42	10	12.6999999999999993
+7	87	13	541.960000000000036
+6	32	6	962.289999999999964
+8	78	7	826.659999999999968
+9	70	2	692.269999999999982
+12	78	5	28.3399999999999999
+12	61	16	463.100000000000023
+19	1	4	728.5
+23	78	9	586.580000000000041
+3	26	19	896.690000000000055
+29	72	18	426.189999999999998
+8	41	17	951.919999999999959
+14	90	4	757.460000000000036
+5	34	9	26.6799999999999997
+14	7	6	695.799999999999955
+28	19	1	577.789999999999964
+24	30	4	484.910000000000025
+6	50	5	165.669999999999987
+11	51	11	310.439999999999998
+15	98	11	116.659999999999997
+28	22	9	759.200000000000045
+21	30	5	570.480000000000018
+24	77	15	405.20999999999998
+10	20	15	942.169999999999959
+27	53	18	128.039999999999992
+4	22	1	168.599999999999994
+25	33	18	360.779999999999973
+6	1	15	361.240000000000009
+22	32	8	512.720000000000027
+11	92	0	178.939999999999998
+18	31	15	93.7600000000000051
+27	75	15	849.220000000000027
+28	60	4	830.460000000000036
+24	41	6	178.330000000000013
+8	70	17	459.649999999999977
+17	94	8	286.230000000000018
+8	68	10	155.370000000000005
+21	17	19	749.019999999999982
+14	24	2	180.669999999999987
+12	42	11	786.450000000000045
+21	40	9	916.330000000000041
+17	23	2	585.259999999999991
+19	12	19	434.800000000000011
+21	14	0	225.919999999999987
+29	50	2	878.82000000000005
+14	74	3	661.350000000000023
+15	25	1	470.870000000000005
+18	20	12	273.930000000000007
+1	31	15	627.899999999999977
+29	70	15	769.5
+8	98	2	419.899999999999977
+25	42	20	855.009999999999991
+6	3	4	312.129999999999995
+24	58	13	47.0300000000000011
+7	47	7	987.450000000000045
+15	88	15	29.4200000000000017
+30	41	2	271.069999999999993
+18	63	4	790.720000000000027
+26	99	19	909.850000000000023
+7	38	6	10.4100000000000001
+19	38	17	587.67999999999995
+6	35	17	574.950000000000045
+22	45	17	707.120000000000005
+14	34	6	207.219999999999999
+9	14	1	962.519999999999982
+30	100	14	389.490000000000009
+14	9	15	810.580000000000041
+16	95	18	36.0600000000000023
+12	80	6	121.319999999999993
+12	90	5	370.329999999999984
+21	48	13	310.170000000000016
+9	33	12	638.799999999999955
+26	68	11	268.050000000000011
+15	54	12	381.810000000000002
+9	83	4	680.230000000000018
+1	97	20	542.299999999999955
+14	62	7	34.490000000000002
+5	41	18	150.97999999999999
+17	4	9	898.610000000000014
+9	92	5	381.970000000000027
+8	38	13	552.889999999999986
+12	37	17	317.25
+17	62	16	743.149999999999977
+6	74	3	293.389999999999986
+5	16	10	319.110000000000014
+18	83	12	97.2600000000000051
+10	100	5	738.360000000000014
+10	56	2	765.139999999999986
+7	71	0	815.710000000000036
+26	69	10	287.990000000000009
+11	55	12	518.42999999999995
+2	91	18	236.050000000000011
+2	85	8	436.79000000000002
+11	5	2	360.310000000000002
+13	89	17	654.350000000000023
+27	32	7	725.840000000000032
+2	73	3	528.649999999999977
+7	25	17	604.080000000000041
+21	64	11	848.100000000000023
+17	25	11	649.32000000000005
+29	58	13	207.27000000000001
+20	15	0	880.32000000000005
+5	33	14	708.039999999999964
+28	100	13	509.949999999999989
+10	24	9	745.639999999999986
+21	63	8	798.32000000000005
+2	29	3	174.310000000000002
+6	4	15	209.469999999999999
+29	65	0	670.019999999999982
+3	77	13	509.740000000000009
+9	26	19	419.240000000000009
+16	82	20	154.830000000000013
+8	7	0	549.5
+14	52	9	56.2299999999999969
+8	57	4	585.92999999999995
+25	96	8	964.5
+10	31	3	432.990000000000009
+25	60	5	672.210000000000036
+12	5	0	452.470000000000027
+21	54	1	757.440000000000055
+10	79	2	69.2099999999999937
+25	78	20	400.680000000000007
+18	14	4	220.919999999999987
+4	93	13	415.629999999999995
+18	21	5	461.639999999999986
+20	67	16	662.139999999999986
+7	15	18	74.1800000000000068
+28	14	15	71.5400000000000063
+24	36	12	203.719999999999999
+13	87	10	249.930000000000007
+15	15	8	873.92999999999995
+4	60	12	203.379999999999995
+15	41	15	709.870000000000005
+8	31	6	14.8499999999999996
+3	70	3	692
+2	52	19	160.530000000000001
+16	23	18	625.350000000000023
+2	81	6	661.470000000000027
+6	85	4	713.700000000000045
+8	63	13	556.700000000000045
+26	10	15	143.870000000000005
+12	82	15	644.990000000000009
+19	18	7	845.980000000000018
+8	56	17	711.360000000000014
+24	88	18	748.730000000000018
+1	93	15	946.350000000000023
+5	40	1	763.779999999999973
+14	28	11	695.740000000000009
+9	18	14	51.5300000000000011
+11	53	15	286.129999999999995
+19	88	15	115.680000000000007
+21	22	3	582.5
+27	89	17	535.080000000000041
+1	21	14	681.549999999999955
+5	31	2	854.970000000000027
+24	76	15	107.219999999999999
+2	56	13	14.4700000000000006
+29	22	2	183.610000000000014
+24	4	6	254.150000000000006
+15	57	7	645.269999999999982
+1	54	5	589.370000000000005
+5	43	20	136.490000000000009
+1	38	7	853.690000000000055
+30	57	20	161.349999999999994
+21	25	14	399.180000000000007
+28	42	4	993.259999999999991
+21	98	3	996.57000000000005
+27	59	6	84.1700000000000017
+8	51	7	876.289999999999964
+6	20	16	454.519999999999982
+14	70	8	38.7299999999999969
+22	78	6	378.100000000000023
+13	99	2	225.27000000000001
+24	74	5	701.509999999999991
+15	42	1	537.470000000000027
+15	31	5	260.009999999999991
+1	13	1	592.480000000000018
+24	80	12	603.980000000000018
+27	63	0	690.899999999999977
+6	75	20	768.549999999999955
+25	84	16	251.810000000000002
+30	50	19	469.610000000000014
+14	5	16	853.940000000000055
+25	30	2	937.690000000000055
+25	74	3	729.299999999999955
+27	45	8	948.419999999999959
+29	63	14	294.420000000000016
+10	92	14	638.830000000000041
+19	89	4	105.900000000000006
+16	67	0	125.390000000000001
+2	77	6	145.900000000000006
+23	88	15	98.9500000000000028
+13	18	2	578.840000000000032
+25	68	11	17.7100000000000009
+13	98	4	782.480000000000018
+11	59	0	674.590000000000032
+16	43	15	167.800000000000011
+20	93	12	16.6700000000000017
+19	96	6	372.490000000000009
+21	69	20	799.309999999999945
+27	34	9	237.830000000000013
+22	10	2	651.549999999999955
+2	2	5	952.42999999999995
+9	2	3	672.850000000000023
+8	48	18	272.689999999999998
+20	75	20	769.509999999999991
+3	11	7	933.340000000000032
+25	52	16	763.610000000000014
+1	75	9	400.04000000000002
+7	12	15	760.330000000000041
+26	94	14	24.5700000000000003
+22	11	1	33.5200000000000031
+17	56	18	737.419999999999959
+23	31	12	889.42999999999995
+23	50	10	178.629999999999995
+13	36	15	98.9500000000000028
+5	84	12	471.5
+18	17	19	344.199999999999989
+1	33	5	104.659999999999997
+27	52	2	546.57000000000005
+19	100	19	969.399999999999977
+3	59	11	15.8699999999999992
+20	54	3	233.47999999999999
+9	98	2	672.980000000000018
+9	87	2	496.569999999999993
+23	17	20	129.75
+10	2	17	493.379999999999995
+29	36	5	841.32000000000005
+24	91	12	907.169999999999959
+22	17	10	481.910000000000025
+22	79	16	482.079999999999984
+30	48	4	321.220000000000027
+16	84	5	781.669999999999959
+24	73	20	402.430000000000007
+3	23	20	35.8900000000000006
+1	15	10	400.740000000000009
+20	91	13	90.0400000000000063
+14	95	20	505.720000000000027
+27	15	10	254.349999999999994
+29	29	12	196.789999999999992
+24	21	2	31.8299999999999983
+28	76	4	749.919999999999959
+29	27	0	818.919999999999959
+19	33	16	791.950000000000045
+12	3	17	31.1600000000000001
+13	6	16	567.110000000000014
+29	97	0	959.710000000000036
+7	45	9	15.6799999999999997
+7	94	8	247.780000000000001
+30	80	8	893.330000000000041
+6	83	18	384.129999999999995
+13	15	17	332.019999999999982
+28	4	15	880.960000000000036
+4	63	14	273.730000000000018
+21	71	4	738.649999999999977
+8	55	12	866.57000000000005
+9	89	4	136.240000000000009
+24	31	5	456.639999999999986
+24	89	12	570.049999999999955
+17	91	7	656.460000000000036
+18	55	20	942.710000000000036
+27	44	14	698.309999999999945
+27	42	3	384.220000000000027
+2	19	11	468.300000000000011
+19	62	18	743.299999999999955
+15	46	3	912.159999999999968
+24	34	8	813.899999999999977
+12	20	18	875.080000000000041
+21	85	7	382.680000000000007
+4	37	13	445.120000000000005
+5	3	14	862.850000000000023
+21	73	8	551.730000000000018
+26	82	16	866.299999999999955
+7	34	15	701.700000000000045
+14	63	12	571.980000000000018
+18	69	16	614.669999999999959
+4	71	19	117.709999999999994
+7	21	13	222.97999999999999
+3	74	15	540.07000000000005
+15	94	0	962.67999999999995
+27	78	10	618.110000000000014
+27	79	19	510.939999999999998
+11	81	8	144.5
+18	62	18	591.580000000000041
+3	62	14	922.659999999999968
+12	39	20	638.330000000000041
+17	9	11	955.259999999999991
+12	24	4	94.2199999999999989
+6	11	17	242.240000000000009
+30	91	14	337.610000000000014
+25	76	20	658.340000000000032
+15	100	10	130.189999999999998
+19	34	15	931.110000000000014
+29	7	20	872.080000000000041
+18	74	5	814.289999999999964
+26	29	6	145.819999999999993
+11	42	4	41.1499999999999986
+8	4	3	667.840000000000032
+20	69	11	352.649999999999977
+9	74	0	425.279999999999973
+14	86	1	343.310000000000002
+5	94	8	37.7100000000000009
+11	76	11	382.779999999999973
+8	53	10	317.720000000000027
+27	1	20	104.180000000000007
+1	64	17	436.199999999999989
+26	22	2	43.8200000000000003
+1	59	20	96.1099999999999994
+12	73	4	683.980000000000018
+15	47	11	237.810000000000002
+26	79	5	377.75
+6	34	18	970.309999999999945
+7	77	3	237.430000000000007
+2	59	15	370.329999999999984
+29	61	0	316.279999999999973
+11	8	18	115.25
+7	68	15	717.419999999999959
+10	80	2	770.970000000000027
+8	9	17	234.379999999999995
+2	35	5	317.930000000000007
+25	85	20	674.210000000000036
+5	14	16	994.649999999999977
+22	67	5	742.950000000000045
+10	81	15	672.379999999999995
+5	99	14	122.120000000000005
+24	82	0	409.889999999999986
+17	95	2	731.649999999999977
+6	84	5	992.490000000000009
+25	2	7	584.840000000000032
+16	1	1	468.569999999999993
+5	79	1	567.220000000000027
+21	58	5	885.759999999999991
+25	99	18	674.620000000000005
+25	11	17	185.300000000000011
+10	28	11	102.719999999999999
+5	74	15	671.149999999999977
+7	39	18	464.730000000000018
+28	95	7	372.079999999999984
+1	10	12	553.019999999999982
+6	62	1	615.600000000000023
+16	5	7	782.129999999999995
+18	47	7	342.810000000000002
+18	95	7	787.019999999999982
+4	6	2	594.379999999999995
+12	7	14	667.110000000000014
+7	56	8	926.159999999999968
+15	89	3	170.349999999999994
+11	22	15	535.970000000000027
+17	100	7	742.220000000000027
+9	35	17	147.139999999999986
+16	6	2	725.299999999999955
+23	5	14	439.879999999999995
+24	3	10	912.919999999999959
+3	5	19	746.710000000000036
+9	54	5	783.779999999999973
+18	48	12	512.82000000000005
+10	1	8	296.199999999999989
+15	61	17	591.840000000000032
+27	13	9	964.440000000000055
+19	42	4	443.910000000000025
+26	60	11	297.839999999999975
+10	36	4	662.529999999999973
+20	77	13	140.219999999999999
+28	28	12	303.70999999999998
+10	57	10	756.330000000000041
+17	49	5	297.860000000000014
+12	93	11	37.3800000000000026
+9	29	7	83.7199999999999989
+13	30	11	218.139999999999986
+11	47	0	845.759999999999991
+27	94	16	860.580000000000041
+17	52	13	380.339999999999975
+16	64	5	553.490000000000009
+10	33	16	784.460000000000036
+2	17	9	699.710000000000036
+28	45	0	874.440000000000055
+3	78	11	599.75
+22	69	9	538.360000000000014
+13	9	8	739.200000000000045
+19	85	8	204.639999999999986
+9	67	18	458.370000000000005
+14	33	17	256.25
+5	23	9	709.610000000000014
+3	87	3	473.069999999999993
+16	38	11	795.049999999999955
+18	85	16	426.769999999999982
+20	19	5	680.169999999999959
+25	71	6	245.960000000000008
+16	68	14	982.32000000000005
+30	13	20	527.379999999999995
+12	63	16	129.210000000000008
+13	72	13	324.139999999999986
+27	11	15	255.840000000000003
+18	18	14	640.539999999999964
+2	18	20	337.069999999999993
+2	69	3	786.330000000000041
+11	82	14	927.899999999999977
+26	15	5	475.480000000000018
+9	31	15	690.009999999999991
+24	45	19	914.840000000000032
+3	80	7	742.940000000000055
+2	94	12	822.559999999999945
+16	90	15	784.690000000000055
+23	94	0	997.330000000000041
+29	9	15	700.690000000000055
+15	18	6	522.460000000000036
+28	21	3	372.670000000000016
+20	38	3	636.67999999999995
+2	57	10	542.67999999999995
+28	91	20	698.830000000000041
+16	85	14	42.3299999999999983
+27	19	5	539.100000000000023
+23	10	0	835.039999999999964
+16	71	14	536.100000000000023
+13	53	1	744.700000000000045
+25	94	6	43.1000000000000014
+10	61	10	575.940000000000055
+22	60	6	87.9300000000000068
+5	89	20	373.019999999999982
+10	76	7	466.199999999999989
+16	27	20	541.730000000000018
+9	53	13	684.590000000000032
+5	32	9	535.370000000000005
+16	86	3	951.309999999999945
+29	55	9	259.269999999999982
+22	93	19	627.67999999999995
+4	17	8	152.310000000000002
+29	15	13	642.830000000000041
+22	30	3	194.060000000000002
+1	86	2	791.149999999999977
+23	21	20	750.07000000000005
+19	4	7	523.399999999999977
+23	15	16	88.8400000000000034
+27	81	15	649.639999999999986
+25	56	2	370.25
+8	86	15	177.189999999999998
+30	4	18	662.879999999999995
+18	2	14	759.75
+24	18	12	258.889999999999986
+15	86	8	318.100000000000023
+9	62	11	784.210000000000036
+29	96	5	136.719999999999999
+6	93	14	46.7100000000000009
+5	21	9	285.769999999999982
+2	67	12	478.230000000000018
+30	39	16	163.02000000000001
+24	63	7	749.970000000000027
+30	43	0	394.730000000000018
+24	51	2	344.189999999999998
+14	100	4	481.04000000000002
+18	34	0	161.219999999999999
+7	22	11	915.370000000000005
+9	49	16	319.399999999999977
+5	62	6	771.190000000000055
+10	7	15	118.739999999999995
+2	86	3	542.389999999999986
+16	2	18	111.019999999999996
+10	70	10	679.470000000000027
+20	99	11	829.25
+1	89	3	495.279999999999973
+27	18	1	677.799999999999955
+27	27	6	884.059999999999945
+22	23	0	293.5
+11	49	1	848.149999999999977
+1	1	2	802.07000000000005
+1	71	12	873.509999999999991
+3	41	18	690.490000000000009
+7	40	12	307.420000000000016
+19	67	20	600.309999999999945
+13	23	15	604.399999999999977
+30	73	4	22.379999999999999
+7	63	14	358.639999999999986
+24	54	11	777.059999999999945
+6	71	0	620.419999999999959
+7	64	3	696.230000000000018
+29	32	2	859.899999999999977
+5	28	1	281.699999999999989
+26	3	15	983.110000000000014
+7	80	6	796.269999999999982
+27	31	10	547.809999999999945
+26	93	11	105.390000000000001
+19	25	8	996.620000000000005
+24	20	9	993.700000000000045
+5	39	2	778.330000000000041
+28	55	11	672.659999999999968
+14	58	5	940.080000000000041
+26	66	11	683.220000000000027
+4	25	4	986.940000000000055
+17	16	18	518.860000000000014
+29	86	0	230.449999999999989
+4	62	17	704.67999999999995
+30	44	16	135.590000000000003
+15	52	15	602.830000000000041
+16	46	4	202.039999999999992
+28	15	4	674.25
+8	87	20	771.32000000000005
+27	97	6	601.559999999999945
+6	21	13	564.480000000000018
+11	46	10	15.25
+11	94	8	773.259999999999991
+5	38	5	625.159999999999968
+29	85	2	873.590000000000032
+22	58	8	315.230000000000018
+28	49	2	928.269999999999982
+16	14	10	866.580000000000041
+28	50	20	940.840000000000032
+26	32	10	83.7099999999999937
+2	41	17	771.32000000000005
+26	12	7	941.82000000000005
+23	25	19	876.409999999999968
+29	91	20	273.70999999999998
+13	4	4	744.019999999999982
+5	1	7	74.3700000000000045
+19	52	17	498.579999999999984
+3	33	5	755.519999999999982
+12	88	16	82.5100000000000051
+13	52	16	358.069999999999993
+2	80	7	155.52000000000001
+23	100	5	75.6200000000000045
+30	95	19	476.800000000000011
+5	81	13	835.200000000000045
+4	38	7	140.349999999999994
+29	93	7	118.859999999999999
+11	26	9	65.7199999999999989
+29	19	7	317.199999999999989
+27	24	17	545.309999999999945
+12	16	20	675.490000000000009
+27	58	9	283.480000000000018
+2	92	2	754.100000000000023
+7	54	2	179.509999999999991
+28	39	19	406.189999999999998
+7	58	20	599.399999999999977
+13	26	8	256.839999999999975
+4	27	7	479.050000000000011
+5	22	17	238.539999999999992
+21	5	11	443.899999999999977
+2	75	0	157.400000000000006
+14	27	3	283.720000000000027
+27	47	18	416.189999999999998
+24	84	9	358.339999999999975
+7	43	15	977.039999999999964
+21	4	4	714.57000000000005
+3	30	19	735.799999999999955
+12	100	19	962.259999999999991
+30	88	18	897.549999999999955
+19	35	0	303.660000000000025
+28	40	0	175.629999999999995
+27	62	3	295.139999999999986
+9	43	14	153.150000000000006
+10	44	11	267.470000000000027
+9	99	9	212.810000000000002
+16	66	13	565.649999999999977
+2	88	5	70.9099999999999966
+1	52	19	175.370000000000005
+25	86	4	936.92999999999995
+7	51	0	46.6499999999999986
+1	96	12	778.970000000000027
+14	97	10	664.700000000000045
+16	59	9	163.580000000000013
+15	97	8	690.580000000000041
+30	2	4	802.350000000000023
+15	91	7	838.32000000000005
+22	84	20	423.04000000000002
+17	27	9	141.110000000000014
+2	14	19	86.7900000000000063
+21	46	18	709.159999999999968
+21	33	1	635.629999999999995
+16	83	3	671.649999999999977
+11	65	5	651.139999999999986
+17	76	7	462.050000000000011
+5	7	16	398.699999999999989
+30	33	17	979.730000000000018
+1	35	13	834.17999999999995
+20	43	19	894.649999999999977
+17	53	3	107.530000000000001
+25	4	5	753.710000000000036
+8	23	3	244.879999999999995
+18	54	19	53.8800000000000026
+16	61	8	613.580000000000041
+5	36	4	277.350000000000023
+22	7	17	912.990000000000009
+30	6	8	249.530000000000001
+19	82	8	641.840000000000032
+10	9	18	244.639999999999986
+10	41	9	279.949999999999989
+5	71	6	947.639999999999986
+15	95	14	218.949999999999989
+22	82	16	369.800000000000011
+11	83	9	186.189999999999998
+10	73	5	792.269999999999982
+15	8	18	731.019999999999982
+22	70	20	349.779999999999973
+13	57	1	225.129999999999995
+13	17	7	857.110000000000014
+6	95	10	467.75
+20	39	11	106.040000000000006
+15	12	20	33.0700000000000003
+8	58	4	407.75
+10	83	6	459.089999999999975
+25	70	3	72.9300000000000068
+23	11	11	840.470000000000027
+20	55	0	267.560000000000002
+30	77	18	278.720000000000027
+14	20	14	266.370000000000005
+21	80	4	860.730000000000018
+27	10	17	533.340000000000032
+24	33	18	799.649999999999977
+1	72	15	812.25
+7	37	4	913.240000000000009
+28	18	9	842.529999999999973
+16	80	3	854.990000000000009
+25	100	11	891.889999999999986
+24	10	2	690.200000000000045
+21	60	13	22.2800000000000011
+24	99	18	850.889999999999986
+11	38	9	543.360000000000014
+19	78	17	635.240000000000009
+8	42	12	902.970000000000027
+16	93	11	270.75
+27	55	20	268.300000000000011
+22	73	15	936.580000000000041
+11	90	4	59.6799999999999997
+10	87	2	710.700000000000045
+19	51	11	544.440000000000055
+11	96	11	385.870000000000005
+1	62	8	816.539999999999964
+7	55	2	491.360000000000014
+24	67	15	47.6899999999999977
+10	29	13	330.329999999999984
+11	34	4	489.870000000000005
+26	25	11	684.389999999999986
+26	62	3	451.009999999999991
+8	14	2	258.529999999999973
+9	94	3	43.6400000000000006
+7	99	14	227.639999999999986
+13	3	8	313.95999999999998
+6	38	4	149.240000000000009
+15	76	8	630.259999999999991
+23	97	0	261.240000000000009
+25	15	12	696.529999999999973
+13	16	3	193.099999999999994
+7	96	11	290.490000000000009
+10	43	13	790.870000000000005
+25	6	0	569.009999999999991
+25	43	12	472.019999999999982
+14	31	17	379.379999999999995
+28	79	18	755.230000000000018
+3	95	5	718.740000000000009
+7	82	1	52.9500000000000028
+30	52	1	33
+14	76	7	537.340000000000032
+30	97	4	184.830000000000013
+3	55	17	966.82000000000005
+29	71	6	201.349999999999994
+4	89	19	168.319999999999993
+24	16	13	578.100000000000023
+7	76	15	344.240000000000009
+13	73	11	563.850000000000023
+23	34	17	533.340000000000032
+12	14	6	255.27000000000001
+15	74	7	409.45999999999998
+10	55	16	457.029999999999973
+5	66	1	797.5
+21	43	1	995.480000000000018
+7	8	2	576.440000000000055
+8	34	6	943.779999999999973
+15	75	14	631.299999999999955
+3	57	19	36.0399999999999991
+14	49	4	752.269999999999982
+13	60	6	230.639999999999986
+8	69	10	518.379999999999995
+14	56	12	612.460000000000036
+4	4	17	643.169999999999959
+28	26	11	126.689999999999998
+28	61	16	92.25
+30	47	0	693.629999999999995
+23	41	3	705.850000000000023
+27	9	2	244.490000000000009
+6	54	11	681.220000000000027
+23	32	8	649.039999999999964
+4	86	13	253.72999999999999
+8	80	12	722.590000000000032
+19	93	6	500.819999999999993
+6	72	16	219.180000000000007
+20	8	19	73.1700000000000017
+3	42	7	501.620000000000005
+29	100	20	554.860000000000014
+12	56	3	229.110000000000014
+14	54	2	829.259999999999991
+23	80	3	692.909999999999968
+26	76	7	977.82000000000005
+2	37	19	41.259999999999998
+1	94	15	107.790000000000006
+7	60	9	242.689999999999998
+15	77	19	420.100000000000023
+19	50	20	104.219999999999999
+8	27	0	833.019999999999982
+27	25	16	22.8299999999999983
+20	30	20	969.809999999999945
+21	61	19	292.389999999999986
+16	8	11	211.689999999999998
+6	41	10	318.54000000000002
+28	97	9	760.690000000000055
+7	90	9	112.709999999999994
+5	60	15	883.080000000000041
+15	14	4	696.129999999999995
+5	42	14	221.780000000000001
+14	77	1	447.5
+1	98	4	133.050000000000011
+24	7	15	515.440000000000055
+25	95	17	606.07000000000005
+28	69	15	677.649999999999977
+14	87	17	305.680000000000007
+20	9	13	874.389999999999986
+29	60	13	81.5400000000000063
+1	79	1	944.080000000000041
+27	88	10	104.480000000000004
+19	10	13	766.850000000000023
+18	9	16	851.960000000000036
+17	41	14	700.909999999999968
+10	34	17	63.1799999999999997
+15	38	7	17.7399999999999984
+2	49	16	837.139999999999986
+2	47	17	246.120000000000005
+29	25	8	163.599999999999994
+8	13	7	749.32000000000005
+3	50	0	123.230000000000004
+23	23	9	285.410000000000025
+17	22	3	242.289999999999992
+23	9	2	384.829999999999984
+13	29	2	630.669999999999959
+13	28	8	599.92999999999995
+3	98	7	44.1199999999999974
+15	93	11	857.279999999999973
+19	15	0	604.200000000000045
+5	17	5	347.569999999999993
+18	38	16	389.389999999999986
+4	52	20	610.279999999999973
+22	95	18	572.970000000000027
+22	35	2	414.810000000000002
+19	65	15	332.350000000000023
+13	7	10	450.370000000000005
+18	16	15	347.740000000000009
+4	66	1	766.149999999999977
+22	4	7	125.849999999999994
+8	29	8	612.450000000000045
+26	46	15	588.470000000000027
+7	52	2	473.360000000000014
+27	40	10	727.470000000000027
+15	78	10	959.350000000000023
+26	70	18	552.25
+12	36	0	554.879999999999995
+1	87	14	470.319999999999993
+4	43	16	384.029999999999973
+25	49	5	283.420000000000016
+29	18	5	75.5900000000000034
+29	88	4	599.110000000000014
+30	59	20	328.009999999999991
+16	48	10	511.319999999999993
+30	65	8	867.850000000000023
+13	83	19	144.370000000000005
+28	10	11	814.799999999999955
+26	58	3	819.870000000000005
+4	41	19	961.470000000000027
+11	93	2	801.17999999999995
+30	54	0	773.57000000000005
+23	72	10	284.350000000000023
+13	45	16	293.350000000000023
+19	92	0	947.809999999999945
+16	79	7	742.529999999999973
+23	66	0	425.399999999999977
+21	86	18	869.309999999999945
+6	36	19	273.75
+20	95	12	785.470000000000027
+22	34	1	963.259999999999991
+12	79	19	970.889999999999986
+20	73	20	736.700000000000045
+20	64	12	590.059999999999945
+5	51	7	498.259999999999991
+7	4	4	876.370000000000005
+2	76	8	970.610000000000014
+15	81	3	921.940000000000055
+4	67	13	69.0699999999999932
+27	77	1	663.850000000000023
+21	79	12	948.960000000000036
+10	19	1	37.4099999999999966
+19	84	13	635.92999999999995
+19	59	10	741.350000000000023
+25	1	13	654.17999999999995
+11	32	20	436.990000000000009
+25	53	7	279.470000000000027
+13	42	18	159.939999999999998
+9	19	9	611.710000000000036
+17	30	9	869.5
+4	61	11	583.639999999999986
+15	69	6	149.580000000000013
+4	99	3	710.32000000000005
+30	24	6	24.6799999999999997
+20	50	13	735.950000000000045
+23	18	15	427.139999999999986
+21	83	0	948.269999999999982
+15	19	18	528.230000000000018
+25	58	15	112.530000000000001
+1	6	3	832.360000000000014
+4	46	15	907.659999999999968
+24	56	15	885.57000000000005
+11	30	4	217.75
+4	47	19	506.399999999999977
+4	28	3	199.830000000000013
+21	24	12	497.490000000000009
+17	38	1	499.350000000000023
+11	63	3	315.519999999999982
+14	57	18	402.420000000000016
+21	90	19	921.519999999999982
+29	24	4	923.950000000000045
+22	41	16	615.309999999999945
+17	17	16	947.07000000000005
+21	92	11	453.300000000000011
+1	12	11	365.680000000000007
+15	28	14	955.470000000000027
+3	21	19	347.920000000000016
+21	32	9	638.240000000000009
+17	44	7	532.289999999999964
+14	42	13	882.580000000000041
+25	39	6	732.080000000000041
+4	15	19	668.669999999999959
+19	86	8	542.190000000000055
+18	66	8	962.350000000000023
+28	89	18	748.990000000000009
+20	6	3	781.769999999999982
+22	83	20	782.970000000000027
+6	30	6	471.600000000000023
+27	73	13	445.490000000000009
+8	43	1	474.480000000000018
+15	32	15	242.22999999999999
+19	13	4	252.620000000000005
+19	94	10	354.050000000000011
+30	94	8	176.539999999999992
+24	35	9	911.299999999999955
+27	71	14	913.620000000000005
+15	83	12	717.309999999999945
+19	57	14	707.669999999999959
+15	55	13	457.230000000000018
+8	16	7	388.129999999999995
+7	18	9	152.02000000000001
+6	79	2	223.889999999999986
+21	67	3	696.460000000000036
+28	85	5	699.830000000000041
+27	60	0	341.579999999999984
+5	24	0	197.439999999999998
+23	61	11	443.04000000000002
+17	7	6	768.669999999999959
+15	33	19	98.0900000000000034
+30	5	19	146.02000000000001
+15	68	2	425.149999999999977
+13	47	13	114.609999999999999
+21	93	14	122.390000000000001
+12	66	2	649.950000000000045
+14	14	0	915.610000000000014
+26	83	11	809.440000000000055
+5	70	9	403.300000000000011
+6	81	20	631.25
+13	82	13	613.580000000000041
+6	13	16	106.599999999999994
+4	7	2	880.389999999999986
+3	81	7	929.409999999999968
+14	10	8	364.550000000000011
+3	99	1	935.42999999999995
+27	30	5	126.980000000000004
+29	94	17	103.680000000000007
+16	74	8	581.309999999999945
+28	82	18	737.580000000000041
+30	55	2	120.159999999999997
+11	20	3	389.160000000000025
+16	96	4	139.669999999999987
+5	64	17	699.649999999999977
+22	68	15	226.509999999999991
+18	96	8	674.360000000000014
+21	44	7	388.199999999999989
+9	46	4	517.600000000000023
+14	1	9	365.180000000000007
+6	60	17	21.3299999999999983
+16	12	2	318.350000000000023
+25	82	17	73.75
+26	27	9	694.059999999999945
+18	51	4	315.759999999999991
+30	74	10	237.159999999999997
+1	48	12	302.180000000000007
+13	32	12	556.259999999999991
+30	99	11	142.349999999999994
+13	19	5	403.610000000000014
+10	12	0	439.560000000000002
+20	82	20	93.2199999999999989
+17	29	6	603.870000000000005
+18	12	8	430.110000000000014
+4	74	8	824.580000000000041
+29	54	13	253.490000000000009
+19	60	18	691.75
+30	78	6	416.060000000000002
+19	32	2	671.759999999999991
+26	81	10	820.480000000000018
+18	42	7	686.960000000000036
+17	2	4	221.659999999999997
+16	78	1	974.580000000000041
+4	53	18	530.370000000000005
+20	79	8	314.899999999999977
+20	44	0	256.04000000000002
+22	99	19	230
+22	91	15	65.1299999999999955
+10	40	2	621.629999999999995
+5	61	10	650.720000000000027
+17	6	20	734.379999999999995
+26	21	0	646.059999999999945
+4	40	0	828.67999999999995
+21	27	5	83.5600000000000023
+23	42	6	658.730000000000018
+25	36	18	802.950000000000045
+5	96	6	517.259999999999991
+9	57	3	810.059999999999945
+13	91	9	350.189999999999998
+16	19	15	702.460000000000036
+30	3	14	174.219999999999999
+15	64	3	888.659999999999968
+21	41	10	313.060000000000002
+29	77	11	460.420000000000016
+11	50	9	358.050000000000011
+4	82	11	422.600000000000023
+3	84	7	26.2899999999999991
+29	83	7	72
+24	5	9	348.529999999999973
+12	85	16	566.590000000000032
+24	6	9	883.25
+27	96	4	20.9699999999999989
+18	57	1	799.059999999999945
+12	62	6	809.830000000000041
+6	82	12	823.730000000000018
+17	47	16	727.700000000000045
+13	40	10	758.149999999999977
+22	27	5	773.25
+16	88	6	624.139999999999986
+3	51	0	977.17999999999995
+30	58	15	412.139999999999986
+18	24	0	927.240000000000009
+23	30	2	392.95999999999998
+20	89	18	592.889999999999986
+16	13	14	917.059999999999945
+7	2	2	358.670000000000016
+17	34	10	764.629999999999995
+7	95	0	443.589999999999975
+11	19	19	272.410000000000025
+12	43	18	299.629999999999995
+30	69	8	508.490000000000009
+29	68	20	907.539999999999964
+30	93	3	745.600000000000023
+29	28	2	650.509999999999991
+13	65	1	739.129999999999995
+4	51	10	182.699999999999989
+14	61	8	89.6599999999999966
+14	46	19	995.17999999999995
+10	93	10	96.7999999999999972
+23	69	20	182.030000000000001
+26	98	3	396.180000000000007
+19	46	9	670.710000000000036
+17	1	7	584.129999999999995
+28	66	1	613.350000000000023
+8	66	13	589.559999999999945
+4	23	5	83.9399999999999977
+11	60	9	56.3699999999999974
+13	50	16	468.480000000000018
+7	30	8	786.009999999999991
+8	83	14	469.160000000000025
+19	70	2	612.480000000000018
+23	56	12	889.789999999999964
+27	48	0	627.980000000000018
+24	70	14	825.490000000000009
+25	59	4	787
+8	6	20	11.8599999999999994
+14	45	13	360.899999999999977
+1	5	1	379.120000000000005
+15	17	0	46.4699999999999989
+3	19	12	133.460000000000008
+17	60	4	40.7899999999999991
+18	82	3	317.069999999999993
+27	6	15	908.590000000000032
+3	35	8	59.1499999999999986
+23	63	0	450.339999999999975
+12	1	2	671.980000000000018
+4	42	4	964.169999999999959
+7	93	20	628.840000000000032
+3	15	15	272.829999999999984
+22	36	12	391.560000000000002
+26	33	3	874.379999999999995
+21	82	5	843.379999999999995
+6	25	9	921.639999999999986
+26	30	18	451.149999999999977
+30	28	20	290.439999999999998
+3	71	14	705.659999999999968
+4	9	0	258.800000000000011
+7	17	4	440.160000000000025
+21	74	2	350.649999999999977
+24	60	4	724.990000000000009
+18	94	18	235.039999999999992
+9	23	3	422.829999999999984
+22	59	5	496.009999999999991
+7	50	14	419.509999999999991
+25	62	19	969.120000000000005
+5	58	4	330.819999999999993
+5	100	19	244.780000000000001
+1	100	18	313.600000000000023
+23	39	20	988.049999999999955
+22	87	14	500.129999999999995
+18	59	9	738.450000000000045
+23	24	6	189.969999999999999
+2	79	6	950.720000000000027
+20	14	17	243.530000000000001
+25	93	14	384.930000000000007
+16	62	16	998.029999999999973
+28	33	0	464.089999999999975
+24	22	13	410.899999999999977
+4	57	14	89.2900000000000063
+16	99	6	779.200000000000045
+1	45	13	883.220000000000027
+16	70	19	947.019999999999982
+28	54	11	206.909999999999997
+12	8	9	160.810000000000002
+12	72	18	894.799999999999955
+27	2	0	350.699999999999989
+23	53	7	59.7000000000000028
+29	64	8	593.67999999999995
+12	38	6	634.220000000000027
+24	85	12	676.240000000000009
+27	67	0	133.280000000000001
+24	93	12	256.910000000000025
+28	23	15	885.019999999999982
+21	70	19	810.710000000000036
+11	56	17	796.690000000000055
+22	9	2	718.529999999999973
+26	65	9	523.909999999999968
+11	9	18	287.300000000000011
+11	72	8	874.769999999999982
+25	25	14	401.110000000000014
+21	12	16	514.620000000000005
+8	60	4	38.4299999999999997
+11	39	1	826.830000000000041
+11	37	8	41.9799999999999969
+2	27	7	860.789999999999964
+5	18	2	690.659999999999968
+15	6	3	179.22999999999999
+20	100	7	556.460000000000036
+15	87	19	588.830000000000041
+9	38	9	903.350000000000023
+14	82	5	225.129999999999995
+5	97	9	409.889999999999986
+8	15	11	453.579999999999984
+15	40	11	580.080000000000041
+15	73	19	203.909999999999997
+30	22	8	872.440000000000055
+16	44	13	196.469999999999999
+13	41	3	205.650000000000006
+22	20	16	83.8499999999999943
+25	21	18	819.210000000000036
+15	35	12	632.42999999999995
+4	10	11	697.029999999999973
+23	46	5	195.900000000000006
+6	63	18	274.680000000000007
+6	57	15	276.670000000000016
+19	22	11	759.230000000000018
+25	38	13	585.960000000000036
+22	75	0	741.909999999999968
+23	44	1	396.490000000000009
+19	6	6	671.809999999999945
+16	35	0	66.5
+19	29	11	457.189999999999998
+3	38	15	141.009999999999991
+24	44	2	339.930000000000007
+4	91	14	171.960000000000008
+3	96	16	976.259999999999991
+28	84	2	275.970000000000027
+25	20	18	836.120000000000005
+20	76	15	663.399999999999977
+3	54	9	211.550000000000011
+12	91	3	855.629999999999995
+17	55	18	384.629999999999995
+6	18	17	802.059999999999945
+12	27	20	823.649999999999977
+20	5	13	691.549999999999955
+1	9	1	493.569999999999993
+18	81	15	286.339999999999975
+23	62	17	691.870000000000005
+18	53	19	964.220000000000027
+17	98	1	115.890000000000001
+20	84	12	51.1599999999999966
+14	89	7	411.310000000000002
+11	12	12	630.129999999999995
+4	8	2	298.970000000000027
+2	53	1	654.779999999999973
+17	37	19	115.170000000000002
+8	64	0	278.689999999999998
+4	33	8	266.629999999999995
+27	23	2	464.279999999999973
+12	26	1	309.20999999999998
+30	20	6	805.049999999999955
+1	92	9	138.330000000000013
+15	24	1	213.879999999999995
+22	42	1	151.800000000000011
+6	15	20	706.970000000000027
+13	10	18	422.410000000000025
+6	27	15	665.019999999999982
+3	89	16	355.009999999999991
+30	34	17	649.600000000000023
+9	84	17	773.340000000000032
+20	63	14	802.720000000000027
+5	30	16	878.490000000000009
+8	88	5	108.290000000000006
+21	52	2	912.370000000000005
+8	30	12	411.990000000000009
+2	45	19	247.199999999999989
+6	9	1	336.120000000000005
+20	41	1	819.879999999999995
+29	13	11	896.57000000000005
+4	55	5	302.259999999999991
+14	80	10	373.279999999999973
+15	99	6	535.659999999999968
+11	89	3	69.7999999999999972
+27	57	8	297.430000000000007
+9	55	7	600.210000000000036
+28	47	15	320.259999999999991
+29	74	10	111.890000000000001
+12	49	18	869.889999999999986
+14	13	13	769.159999999999968
+24	55	7	736.600000000000023
+15	71	2	598.490000000000009
+22	5	1	741.590000000000032
+19	55	4	976.970000000000027
+23	59	13	589.159999999999968
+14	29	7	814.049999999999955
+25	37	1	137.719999999999999
+14	30	20	261.420000000000016
+5	93	5	89.0900000000000034
+23	37	6	630.210000000000036
+21	31	3	801.860000000000014
+10	35	0	440.439999999999998
+21	15	5	198.960000000000008
+23	82	20	629.32000000000005
+2	78	16	295.04000000000002
+26	45	19	23.3099999999999987
+30	98	2	660.580000000000041
+8	37	14	172.439999999999998
+30	45	14	603.230000000000018
+10	88	9	38.4500000000000028
+16	34	14	848.399999999999977
+1	3	17	395.360000000000014
+28	34	4	615.659999999999968
+3	82	15	167.719999999999999
+9	40	15	637.57000000000005
+27	21	5	623.279999999999973
+9	36	7	36.2700000000000031
+27	99	8	784.059999999999945
+20	4	6	234.669999999999987
+16	51	13	295.149999999999977
+26	14	4	185.580000000000013
+9	88	19	469.389999999999986
+17	73	4	812.840000000000032
+25	64	14	110.5
+1	16	6	939.470000000000027
+25	80	4	811.720000000000027
+6	97	16	290.579999999999984
+8	10	7	122.489999999999995
+6	19	19	314.75
+25	5	2	599.769999999999982
+24	78	20	478.620000000000005
+20	86	10	530.549999999999955
+25	8	8	276.329999999999984
+12	64	6	318.509999999999991
+21	65	18	992.129999999999995
+22	57	14	650.190000000000055
+18	43	3	931.220000000000027
+8	8	8	364.550000000000011
+7	97	3	481.930000000000007
+18	60	8	481.990000000000009
+27	86	1	684.919999999999959
+14	15	1	194.740000000000009
+19	9	10	348.110000000000014
+17	66	14	388.370000000000005
+2	63	11	874.75
+6	58	9	374.600000000000023
+9	90	1	443.089999999999975
+3	14	16	238.740000000000009
+3	47	4	529.240000000000009
+25	3	9	592.279999999999973
+20	78	2	751.029999999999973
+18	35	10	982.659999999999968
+10	23	19	499.29000000000002
+30	23	16	41.2100000000000009
+3	100	6	865.559999999999945
+2	82	7	833.789999999999964
+21	51	16	977.649999999999977
+9	61	17	201.669999999999987
+\.
+
+
+--
+-- Data for Name: charging_station; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.charging_station (charging_station_id, price, latitide, longitude) FROM stdin;
+1	2	60.1689999999999969	30.1859999999999999
+2	5	59.9680000000000035	29.8099999999999987
+3	5	59.546999999999997	30.2779999999999987
+4	4	59.5549999999999997	30.1170000000000009
+5	5	59.8740000000000023	30.2360000000000007
+6	2	59.8170000000000002	29.8530000000000015
+7	4	59.9680000000000035	30.4170000000000016
+8	4	59.6319999999999979	30.1580000000000013
+9	2	59.7439999999999998	30.4009999999999998
+10	4	60.0510000000000019	30.3359999999999985
+\.
+
+
+--
+-- Data for Name: charging_station_plug; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.charging_station_plug (charging_station_id, plug_id, amount_of_available) FROM stdin;
+1	3	3
+1	4	5
+2	10	4
+2	4	4
+2	6	3
+3	4	5
+3	9	5
+4	10	5
+4	9	3
+4	8	5
+5	3	2
+5	6	4
+5	4	2
+6	9	3
+6	3	3
+6	6	4
+7	2	2
+7	3	4
+8	6	3
+8	8	4
+9	4	3
+9	8	5
+10	8	3
+10	10	3
+\.
+
+
+--
+-- Data for Name: customer; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.customer (phone_number, home_latitide, home_longitude, username) FROM stdin;
+40806624144	59.8320000000000007	29.588000000000001	kevinnuno
+31622733450	60.2740000000000009	29.6400000000000006	sabrinacoss
+38728729846	59.8740000000000023	30.2360000000000007	quentindelacruz
+60553797666	59.6259999999999977	29.5889999999999986	chungcottone
+50424577477	59.8170000000000002	29.8530000000000015	cedricguilford
+74213428035	60.222999999999999	30.3500000000000014	nathanaelpaylor
+04156224744	59.6289999999999978	29.6780000000000008	jerrodlupo
+59901744057	59.7560000000000002	30.4310000000000009	hershelsmullen
+33056000486	60.2349999999999994	30.3249999999999993	consuelotokarz
+77816574249	59.7539999999999978	29.9490000000000016	alexacory
+70631328441	59.546999999999997	30.2779999999999987	latinaphenix
+20874255931	59.5670000000000002	29.7360000000000007	springsergio
+38698320336	60.1779999999999973	29.8569999999999993	donniemaskell
+79169872287	60.3639999999999972	29.9089999999999989	pameliacavitt
+73316392827	59.6319999999999979	30.1580000000000013	normangreb
+88783659632	59.7340000000000018	30.463000000000001	madelainesing
+69534677774	59.6910000000000025	29.9200000000000017	lillythorton
+96307537486	59.6910000000000025	29.9200000000000017	taneshastruthers
+95071480328	60.2349999999999994	30.3249999999999993	eugenesacks
+89088872567	60.2730000000000032	29.5990000000000002	ozelladay
+62993676425	59.6259999999999977	29.5889999999999986	valrieburr
+83444518210	59.6319999999999979	29.7600000000000016	kathlyndotts
+53918044284	59.8870000000000005	29.5850000000000009	nathanielgibb
+51881122970	60.2530000000000001	30.0229999999999997	mitsuemcconico
+\.
+
+
+--
+-- Data for Name: customer_issues; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.customer_issues (issue_id, status, creating_time, customer_username, manager_username) FROM stdin;
+\.
+
+
+--
+-- Data for Name: location; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.location (latitide, longitude, country, city, street, zip_code) FROM stdin;
+59.5670000000000002	29.7360000000000007	Russia	Saint-Petersburg	Alexander Nevsky Street	192241
+59.9549999999999983	29.6080000000000005	Russia	Saint-Petersburg	1st Duck Street	191180
+59.7040000000000006	29.7330000000000005	Russia	Saint-Petersburg	Admiralty Kronstadt	194156
+59.8870000000000005	29.5850000000000009	Russia	Saint-Petersburg	2nd Nikitinskaya Street	197110
+59.6319999999999979	30.1580000000000013	Russia	Saint-Petersburg	Agricultural lane	190031
+59.5060000000000002	29.7040000000000006	Russia	Saint-Petersburg	5th Line Sestroretsk	196606
+60.222999999999999	30.3500000000000014	Russia	Saint-Petersburg	Azov lane	195009
+60.3840000000000003	29.9649999999999999	Russia	Saint-Petersburg	2nd Red Army Street	192174
+59.8089999999999975	29.9349999999999987	Russia	Saint-Petersburg	Academician Konstantinov Street	195256
+60.4440000000000026	29.5249999999999986	Russia	Saint-Petersburg	Academic ave Pushkin	195276
+59.8250000000000028	30.1980000000000004	Russia	Saint-Petersburg	25 October ave Mozhaisk	195248
+60.4390000000000001	30.2250000000000014	Russia	Saint-Petersburg	Avrova Street Peterhof	196631
+60.1760000000000019	29.6409999999999982	Russia	Saint-Petersburg	4 Line IN	195199
+59.7520000000000024	29.8150000000000013	Russia	Saint-Petersburg	5th Line Sestroretsk	191086
+59.6049999999999969	30.3270000000000017	Russia	Saint-Petersburg	1st Birch Alley	195298
+60.0840000000000032	29.5899999999999999	Russia	Saint-Petersburg	2nd Meadow Street Sestroretsk	191036
+59.546999999999997	30.2779999999999987	Russia	Saint-Petersburg	Average pr VO	195199
+60.357999999999997	29.6729999999999983	Russia	Saint-Petersburg	Antonov-Ovseenko Street	196604
+59.7680000000000007	30.3200000000000003	Russia	Saint-Petersburg	Altai Str	192290
+59.8320000000000007	29.588000000000001	Russia	Saint-Petersburg	2nd Nikitinskaya Street	196655
+59.6259999999999977	29.5889999999999986	Russia	Saint-Petersburg	Academician Baykova Street	196158
+59.9859999999999971	30.1559999999999988	Russia	Saint-Petersburg	20 Line IN	188501
+59.7340000000000018	30.463000000000001	Russia	Saint-Petersburg	3 Line IN	196601
+59.9680000000000035	29.8099999999999987	Russia	Saint-Petersburg	Akkuratova Street	195257
+59.7539999999999978	29.9490000000000016	Russia	Saint-Petersburg	5th Line Sestroretsk	196070
+59.703000000000003	29.6750000000000007	Russia	Saint-Petersburg	Antonov-Ovseenko Street	196631
+60.4969999999999999	29.9959999999999987	Russia	Saint-Petersburg	Akhmatova Street Pushkin	188320
+59.6769999999999996	30.1829999999999998	Russia	Saint-Petersburg	3rd Sovetskaya str	195275
+59.722999999999999	30.4160000000000004	Russia	Saint-Petersburg	1st of May Street Sestroretsk	193079
+59.6319999999999979	29.7600000000000016	Russia	Saint-Petersburg	25 October ave Mozhaisk	191025
+59.7419999999999973	30.2439999999999998	Russia	Saint-Petersburg	2nd line Sestroretsk	196602
+59.9059999999999988	30.2729999999999997	Russia	Saint-Petersburg	Arsenal Embankment	196643
+60.017000000000003	30.2850000000000001	Russia	Saint-Petersburg	Amur Str	195276
+60.2530000000000001	30.0229999999999997	Russia	Saint-Petersburg	9th Red Army Street	190031
+59.884999999999998	29.7390000000000008	Russia	Saint-Petersburg	Afanasyevskaya Street	194044
+59.5549999999999997	30.1170000000000009	Russia	Saint-Petersburg	3rd line Sestroretsk	192159
+59.9680000000000035	30.4170000000000016	Russia	Saint-Petersburg	Alexander Nevsky Square	192012
+60.1670000000000016	29.5609999999999999	Russia	Saint-Petersburg	Alexander Street Lomonosov	188662
+59.7280000000000015	30.4710000000000001	Russia	Saint-Petersburg	Academician Komarova Str Komarovo	193232
+60.3639999999999972	29.9089999999999989	Russia	Saint-Petersburg	Admiralty nabk	191167
+60.3930000000000007	29.6000000000000014	Russia	Saint-Petersburg	2nd Red Army Street	195252
+59.9870000000000019	30.2970000000000006	Russia	Saint-Petersburg	Academic Lebedev Str	192236
+59.8059999999999974	29.8730000000000011	Russia	Saint-Petersburg	Afanasyevskaya Street	193079
+59.7560000000000002	30.4310000000000009	Russia	Saint-Petersburg	Academician Komarova Str Komarovo	196084
+59.5940000000000012	29.8760000000000012	Russia	Saint-Petersburg	Alexander Matrosov Street	196189
+60.2730000000000032	29.5990000000000002	Russia	Saint-Petersburg	Akademika Krylova Street	194021
+59.7079999999999984	29.6479999999999997	Russia	Saint-Petersburg	3rd Zhernovskaya Street	194021
+59.9260000000000019	29.9009999999999998	Russia	Saint-Petersburg	3rd Cavalry Lahti	192241
+59.9819999999999993	29.5809999999999995	Russia	Saint-Petersburg	Artillery Street Pushkin	192007
+59.8170000000000002	29.8530000000000015	Russia	Saint-Petersburg	Afanasyevskaya Street	196605
+60.2740000000000009	29.6400000000000006	Russia	Saint-Petersburg	6th top lane	195067
+59.9849999999999994	30.222999999999999	Russia	Saint-Petersburg	5th Upper Lane	193079
+60.1289999999999978	30.4110000000000014	Russia	Saint-Petersburg	4th Tarhovskaya Street Sestroretsk	194361
+60.2439999999999998	29.9899999999999984	Russia	Saint-Petersburg	Academician Komarova Str Komarovo	196621
+59.9560000000000031	30.2519999999999989	Russia	Saint-Petersburg	5th Predportovy fare	195253
+59.8740000000000023	30.2360000000000007	Russia	Saint-Petersburg	Austrian square	191124
+60.2010000000000005	29.6460000000000008	Russia	Saint-Petersburg	Alexei Lebedev Str Kronstadt	192212
+60.1030000000000015	29.9540000000000006	Russia	Saint-Petersburg	Apraksin Lane	197137
+60.4949999999999974	29.6119999999999983	Russia	Saint-Petersburg	Academician Szymanski Street	195269
+60.1199999999999974	30.254999999999999	Russia	Saint-Petersburg	1st Alekseevskaya Street	193312
+60.3569999999999993	30.338000000000001	Russia	Saint-Petersburg	1st of May Street Peterhof	196607
+59.7359999999999971	29.6469999999999985	Russia	Saint-Petersburg	1st Duck Street	191086
+60.0159999999999982	30.4849999999999994	Russia	Saint-Petersburg	1st of May Street Sestroretsk	195275
+60.1000000000000014	29.9540000000000006	Russia	Saint-Petersburg	2nd Rabfakovsky lane	187021
+59.865000000000002	30.1849999999999987	Russia	Saint-Petersburg	2nd Rabfakovsky lane	192236
+60.2349999999999994	30.3249999999999993	Russia	Saint-Petersburg	2nd Rabfakovsky lane	194300
+59.9099999999999966	30	Russia	Saint-Petersburg	Academician Komarova Str Komarovo	193079
+59.6989999999999981	30.375	Russia	Saint-Petersburg	Astrakhan street	191317
+59.8440000000000012	30.3120000000000012	Russia	Saint-Petersburg	Average Koltovskaya Street	192171
+60.1779999999999973	29.8569999999999993	Russia	Saint-Petersburg	9th Line VO	196643
+59.7439999999999998	30.4009999999999998	Russia	Saint-Petersburg	1st of May Street Pargolovo	192029
+59.9450000000000003	30.1119999999999983	Russia	Saint-Petersburg	5th Red Army Street	196650
+59.8200000000000003	30.3520000000000003	Russia	Saint-Petersburg	7-ya Sovetskaya Street	194064
+60.4549999999999983	29.5169999999999995	Russia	Saint-Petersburg	Artillery Street	196654
+59.5189999999999984	30.2280000000000015	Russia	Saint-Petersburg	1st Rabfakovsky lane	191181
+60.4050000000000011	29.8590000000000018	Russia	Saint-Petersburg	Alexander Matrosov Street	196084
+59.6910000000000025	29.9200000000000017	Russia	Saint-Petersburg	Andreev Str Sestroretsk	195251
+59.5309999999999988	29.7059999999999995	Russia	Saint-Petersburg	2nd Red Army Street	196105
+59.6159999999999997	30.4229999999999983	Russia	Saint-Petersburg	2nd Borova Str Solar	193091
+60.2700000000000031	30.2590000000000003	Russia	Saint-Petersburg	9th Red Army Street	196601
+59.6289999999999978	29.6780000000000008	Russia	Saint-Petersburg	Alexander Nevsky Square	195279
+60.3659999999999997	30.3440000000000012	Russia	Saint-Petersburg	1st Duck Street	197101
+60.3140000000000001	29.9059999999999988	Russia	Saint-Petersburg	Artillery Street Pavlovsk	196211
+60.1000000000000014	30.4289999999999985	Russia	Saint-Petersburg	Afanasyevskaya Street	194100
+59.5739999999999981	29.9860000000000007	Russia	Saint-Petersburg	Arsenal Embankment	194295
+60.4510000000000005	29.7890000000000015	Russia	Saint-Petersburg	1st Line IN	195279
+59.5240000000000009	30.411999999999999	Russia	Saint-Petersburg	Avrova Street Peterhof	194156
+59.6540000000000035	30.2199999999999989	Russia	Saint-Petersburg	1st of May Street Pavlovsk	197082
+60.4080000000000013	29.625	Russia	Saint-Petersburg	3rd Sovetskaya str	196189
+60.1310000000000002	30.3219999999999992	Russia	Saint-Petersburg	Admiralty Embankment	193315
+59.7629999999999981	30.3230000000000004	Russia	Saint-Petersburg	Admiralty nabk	192239
+59.8629999999999995	30.1000000000000014	Russia	Saint-Petersburg	5th Upper Lane	191015
+60.1340000000000003	30.338000000000001	Russia	Saint-Petersburg	1st Krasnoflotskaya Street Pavlovsk	192241
+60.3100000000000023	29.7560000000000002	Russia	Saint-Petersburg	Artillery Lane	197198
+60.4669999999999987	30.4989999999999988	Russia	Saint-Petersburg	6th Sovetskaya Street	192007
+59.7659999999999982	29.7689999999999984	Russia	Saint-Petersburg	3rd Cavalry Lahti	195112
+60.1689999999999969	30.1859999999999999	Russia	Saint-Petersburg	3rd Zhernovskaya Street	196189
+60.0510000000000019	30.3359999999999985	Russia	Saint-Petersburg	6th Red Army Street	192012
+60.2409999999999997	29.5749999999999993	Russia	Saint-Petersburg	Apraksin Dvor	192284
+60.4189999999999969	29.5549999999999997	Russia	Saint-Petersburg	1st Duck Street	191002
+\.
+
+
+--
+-- Data for Name: manager; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.manager (username) FROM stdin;
+kashacallen
+marcellusmagana
+shamekalachance
+judithvillareal
+lettybruner
+kenyarumore
+timikanims
+lerabreed
+beewommack
+ceolafazio
+sierragingras
+joleenjefferis
+wilburjustiniano
+danillewhiteside
+kevenschuller
+julioned
+essiehempel
+elfriededittmer
+masonmardis
+vimilani
+louisalucio
+shaynacropp
+sigridenger
+debrahdeland
+chiamurphey
+fidelshimkus
+\.
+
+
+--
+-- Data for Name: payment; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.payment (payment_id, car_order_id) FROM stdin;
+1	1
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+11	11
+12	12
+13	13
+14	14
+15	15
+16	16
+17	17
+18	18
+19	19
+20	20
+21	21
+22	22
+23	23
+24	24
+25	25
+26	26
+27	27
+28	28
+29	29
+30	30
+31	31
+32	32
+33	33
+34	34
+35	35
+36	36
+37	37
+38	38
+39	39
+40	40
+41	41
+42	42
+43	43
+44	44
+45	45
+46	46
+47	47
+48	48
+49	49
+50	50
+51	51
+52	52
+53	53
+54	54
+55	55
+56	56
+57	57
+58	58
+59	59
+60	60
+61	61
+62	62
+63	63
+64	64
+65	65
+66	66
+67	67
+68	68
+69	69
+70	70
+71	71
+72	72
+73	73
+74	74
+75	75
+76	76
+77	77
+78	78
+79	79
+80	80
+81	81
+82	82
+83	83
+84	84
+85	85
+86	86
+87	87
+88	88
+89	89
+90	90
+91	91
+92	92
+93	93
+94	94
+95	95
+96	96
+97	97
+98	98
+99	99
+100	100
+101	101
+102	102
+103	103
+104	104
+105	105
+106	106
+107	107
+108	108
+109	109
+110	110
+111	111
+112	112
+113	113
+114	114
+115	115
+116	116
+117	117
+118	118
+119	119
+120	120
+121	121
+122	122
+123	123
+124	124
+125	125
+126	126
+127	127
+128	128
+129	129
+130	130
+131	131
+132	132
+133	133
+134	134
+135	135
+136	136
+137	137
+138	138
+139	139
+140	140
+141	141
+142	142
+143	143
+144	144
+145	145
+146	146
+147	147
+148	148
+149	149
+150	150
+151	151
+152	152
+153	153
+154	154
+155	155
+156	156
+157	157
+158	158
+159	159
+160	160
+161	161
+162	162
+163	163
+164	164
+165	165
+166	166
+167	167
+168	168
+169	169
+170	170
+171	171
+172	172
+173	173
+174	174
+175	175
+176	176
+177	177
+178	178
+179	179
+180	180
+181	181
+182	182
+183	183
+184	184
+185	185
+186	186
+187	187
+188	188
+189	189
+190	190
+191	191
+192	192
+193	193
+194	194
+195	195
+196	196
+197	197
+198	198
+199	199
+200	200
+201	201
+202	202
+203	203
+204	204
+205	205
+206	206
+207	207
+208	208
+209	209
+210	210
+211	211
+212	212
+213	213
+214	214
+215	215
+216	216
+217	217
+218	218
+219	219
+220	220
+221	221
+222	222
+223	223
+224	224
+225	225
+226	226
+227	227
+228	228
+229	229
+230	230
+231	231
+232	232
+233	233
+234	234
+235	235
+236	236
+237	237
+238	238
+239	239
+240	240
+241	241
+242	242
+243	243
+244	244
+245	245
+246	246
+247	247
+248	248
+249	249
+250	250
+251	251
+252	252
+253	253
+254	254
+255	255
+256	256
+257	257
+258	258
+259	259
+260	260
+261	261
+262	262
+263	263
+264	264
+265	265
+266	266
+267	267
+268	268
+269	269
+270	270
+271	271
+272	272
+273	273
+274	274
+275	275
+276	276
+277	277
+278	278
+279	279
+280	280
+281	281
+282	282
+283	283
+284	284
+285	285
+286	286
+287	287
+288	288
+289	289
+290	290
+291	291
+292	292
+293	293
+294	294
+295	295
+296	296
+297	297
+298	298
+299	299
+300	300
+301	301
+302	302
+303	303
+304	304
+305	305
+306	306
+307	307
+308	308
+309	309
+310	310
+311	311
+312	312
+313	313
+314	314
+315	315
+316	316
+317	317
+318	318
+319	319
+320	320
+321	321
+322	322
+323	323
+324	324
+325	325
+326	326
+327	327
+328	328
+329	329
+330	330
+331	331
+332	332
+333	333
+334	334
+335	335
+336	336
+337	337
+338	338
+339	339
+340	340
+341	341
+342	342
+343	343
+344	344
+345	345
+346	346
+347	347
+348	348
+349	349
+350	350
+351	351
+352	352
+353	353
+354	354
+355	355
+356	356
+357	357
+358	358
+359	359
+360	360
+361	361
+362	362
+363	363
+364	364
+365	365
+366	366
+367	367
+368	368
+369	369
+370	370
+371	371
+372	372
+373	373
+374	374
+375	375
+376	376
+377	377
+378	378
+379	379
+380	380
+381	381
+382	382
+383	383
+384	384
+385	385
+386	386
+387	387
+388	388
+389	389
+390	390
+391	391
+392	392
+393	393
+394	394
+395	395
+396	396
+397	397
+398	398
+399	399
+400	400
+401	401
+402	402
+403	403
+404	404
+405	405
+406	406
+407	407
+408	408
+409	409
+410	410
+411	411
+412	412
+413	413
+414	414
+415	415
+416	416
+417	417
+418	418
+419	419
+420	420
+421	421
+422	422
+423	423
+424	424
+425	425
+426	426
+427	427
+428	428
+429	429
+430	430
+431	431
+432	432
+433	433
+434	434
+435	435
+436	436
+437	437
+438	438
+439	439
+440	440
+441	441
+442	442
+443	443
+444	444
+445	445
+446	446
+447	447
+448	448
+449	449
+450	450
+451	451
+452	452
+453	453
+454	454
+455	455
+456	456
+457	457
+458	458
+459	459
+460	460
+461	461
+462	462
+463	463
+464	464
+465	465
+466	466
+467	467
+468	468
+469	469
+470	470
+471	471
+472	472
+473	473
+474	474
+475	475
+476	476
+477	477
+478	478
+479	479
+480	480
+481	481
+482	482
+483	483
+484	484
+485	485
+486	486
+487	487
+488	488
+489	489
+490	490
+491	491
+492	492
+493	493
+494	494
+495	495
+496	496
+497	497
+498	498
+499	499
+500	500
+501	501
+502	502
+503	503
+504	504
+505	505
+506	506
+507	507
+508	508
+509	509
+510	510
+511	511
+512	512
+513	513
+514	514
+515	515
+516	516
+517	517
+518	518
+519	519
+520	520
+521	521
+522	522
+523	523
+524	524
+525	525
+526	526
+527	527
+528	528
+529	529
+530	530
+531	531
+532	532
+533	533
+534	534
+535	535
+536	536
+537	537
+538	538
+539	539
+540	540
+541	541
+542	542
+543	543
+544	544
+545	545
+546	546
+547	547
+548	548
+549	549
+550	550
+551	551
+552	552
+553	553
+554	554
+555	555
+556	556
+557	557
+558	558
+559	559
+560	560
+561	561
+562	562
+563	563
+564	564
+565	565
+566	566
+567	567
+568	568
+569	569
+570	570
+571	571
+572	572
+573	573
+574	574
+575	575
+576	576
+577	577
+578	578
+579	579
+580	580
+581	581
+582	582
+583	583
+584	584
+585	585
+586	586
+587	587
+588	588
+589	589
+590	590
+591	591
+592	592
+593	593
+594	594
+595	595
+596	596
+597	597
+598	598
+599	599
+600	600
+601	601
+602	602
+603	603
+604	604
+605	605
+606	606
+607	607
+608	608
+609	609
+610	610
+611	611
+612	612
+613	613
+614	614
+615	615
+616	616
+617	617
+618	618
+619	619
+620	620
+621	621
+622	622
+623	623
+624	624
+625	625
+626	626
+627	627
+628	628
+629	629
+630	630
+631	631
+632	632
+633	633
+634	634
+635	635
+636	636
+637	637
+638	638
+639	639
+640	640
+641	641
+642	642
+643	643
+644	644
+645	645
+646	646
+647	647
+648	648
+649	649
+650	650
+651	651
+652	652
+653	653
+654	654
+655	655
+656	656
+657	657
+658	658
+659	659
+660	660
+661	661
+662	662
+663	663
+664	664
+665	665
+666	666
+667	667
+668	668
+669	669
+670	670
+671	671
+672	672
+673	673
+674	674
+675	675
+676	676
+677	677
+678	678
+679	679
+680	680
+681	681
+682	682
+683	683
+684	684
+685	685
+686	686
+687	687
+688	688
+689	689
+690	690
+691	691
+692	692
+693	693
+694	694
+695	695
+696	696
+697	697
+698	698
+699	699
+700	700
+701	701
+702	702
+703	703
+704	704
+705	705
+706	706
+707	707
+708	708
+709	709
+710	710
+711	711
+712	712
+713	713
+714	714
+715	715
+716	716
+717	717
+718	718
+719	719
+720	720
+721	721
+722	722
+723	723
+724	724
+725	725
+726	726
+727	727
+728	728
+729	729
+730	730
+731	731
+732	732
+733	733
+734	734
+735	735
+736	736
+737	737
+738	738
+739	739
+740	740
+741	741
+742	742
+743	743
+744	744
+745	745
+746	746
+747	747
+748	748
+749	749
+750	750
+751	751
+752	752
+753	753
+754	754
+755	755
+756	756
+757	757
+758	758
+759	759
+760	760
+761	761
+762	762
+763	763
+764	764
+765	765
+766	766
+767	767
+768	768
+769	769
+770	770
+771	771
+772	772
+773	773
+774	774
+775	775
+776	776
+777	777
+778	778
+779	779
+780	780
+781	781
+782	782
+783	783
+784	784
+785	785
+786	786
+787	787
+788	788
+789	789
+790	790
+791	791
+792	792
+793	793
+794	794
+795	795
+796	796
+797	797
+798	798
+799	799
+800	800
+801	801
+802	802
+803	803
+804	804
+805	805
+806	806
+807	807
+808	808
+809	809
+810	810
+811	811
+812	812
+813	813
+814	814
+815	815
+816	816
+817	817
+818	818
+819	819
+820	820
+821	821
+822	822
+823	823
+824	824
+825	825
+826	826
+827	827
+828	828
+829	829
+830	830
+831	831
+832	832
+833	833
+834	834
+835	835
+836	836
+837	837
+838	838
+839	839
+840	840
+841	841
+842	842
+843	843
+844	844
+845	845
+846	846
+847	847
+848	848
+849	849
+850	850
+851	851
+852	852
+853	853
+854	854
+855	855
+856	856
+857	857
+858	858
+859	859
+860	860
+861	861
+862	862
+863	863
+864	864
+865	865
+866	866
+867	867
+868	868
+869	869
+870	870
+871	871
+872	872
+873	873
+874	874
+875	875
+876	876
+877	877
+878	878
+879	879
+880	880
+881	881
+882	882
+883	883
+884	884
+885	885
+886	886
+887	887
+888	888
+889	889
+890	890
+891	891
+892	892
+893	893
+894	894
+895	895
+896	896
+897	897
+898	898
+899	899
+900	900
+901	901
+902	902
+903	903
+904	904
+905	905
+906	906
+907	907
+908	908
+909	909
+910	910
+911	911
+912	912
+913	913
+914	914
+915	915
+916	916
+917	917
+918	918
+919	919
+920	920
+921	921
+922	922
+923	923
+924	924
+925	986
+926	925
+927	926
+928	927
+929	928
+930	929
+931	930
+932	931
+933	932
+934	933
+935	934
+936	935
+937	936
+938	937
+939	938
+940	939
+941	940
+942	941
+943	942
+944	943
+945	944
+946	945
+947	946
+948	947
+949	948
+950	949
+951	950
+952	951
+953	952
+954	953
+955	954
+956	955
+957	956
+958	957
+959	958
+960	959
+961	960
+962	961
+963	962
+964	963
+965	964
+966	965
+967	966
+968	967
+969	968
+970	969
+971	970
+972	971
+973	972
+974	973
+975	974
+976	975
+977	976
+978	977
+979	978
+980	979
+981	980
+982	981
+983	982
+984	983
+985	984
+986	985
+987	987
+988	988
+989	989
+990	990
+991	991
+992	992
+993	993
+994	994
+995	995
+996	996
+997	997
+998	998
+999	999
+1000	1000
+\.
+
+
+--
+-- Data for Name: plug; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.plug (plug_id, size, shape) FROM stdin;
+1	1	triangle
+2	2	star
+3	2	rectangle
+4	5	triangle
+6	3	star
+8	1	circle
+9	4	star
+10	1	rectangle
+\.
+
+
+--
+-- Data for Name: user_account; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.user_account (username, email, full_name) FROM stdin;
+kashacallen	kashacallen@gmail.com	Kasha Callen\n
+marcellusmagana	marcellusmagana@gmail.com	Marcellus Magana\n
+nathanaelpaylor	nathanaelpaylor@gmail.com	Nathanael Paylor\n
+eugenesacks	eugenesacks@gmail.com	Eugene Sacks\n
+kevinnuno	kevinnuno@gmail.com	Kevin Nuno\n
+shamekalachance	shamekalachance@gmail.com	Shameka Lachance\n
+judithvillareal	judithvillareal@gmail.com	Judith Villareal\n
+kathlyndotts	kathlyndotts@gmail.com	Kathlyn Dotts\n
+springsergio	springsergio@gmail.com	Spring Sergio\n
+quentindelacruz	quentindelacruz@gmail.com	Quentin Delacruz\n
+lettybruner	lettybruner@gmail.com	Letty Bruner\n
+kenyarumore	kenyarumore@gmail.com	Kenya Rumore\n
+normangreb	normangreb@gmail.com	Norman Greb\n
+alexacory	alexacory@gmail.com	Alexa Cory\n
+timikanims	timikanims@gmail.com	Timika Nims\n
+lerabreed	lerabreed@gmail.com	Lera Breed\n
+beewommack	beewommack@gmail.com	Bee Wommack\n
+sabrinacoss	sabrinacoss@gmail.com	Sabrina Coss\n
+ceolafazio	ceolafazio@gmail.com	Ceola Fazio\n
+valrieburr	valrieburr@gmail.com	Valrie Burr\n
+sierragingras	sierragingras@gmail.com	Sierra Gingras\n
+hershelsmullen	hershelsmullen@gmail.com	Hershel Smullen\n
+joleenjefferis	joleenjefferis@gmail.com	Joleen Jefferis\n
+wilburjustiniano	wilburjustiniano@gmail.com	Wilbur Justiniano\n
+danillewhiteside	danillewhiteside@gmail.com	Danille Whiteside\n
+kevenschuller	kevenschuller@gmail.com	Keven Schuller\n
+julioned	julioned@gmail.com	Julio Ned\n
+essiehempel	essiehempel@gmail.com	Essie Hempel\n
+chungcottone	chungcottone@gmail.com	Chung Cottone\n
+mitsuemcconico	mitsuemcconico@gmail.com	Mitsue Mcconico\n
+nathanielgibb	nathanielgibb@gmail.com	Nathaniel Gibb\n
+elfriededittmer	elfriededittmer@gmail.com	Elfriede Dittmer\n
+masonmardis	masonmardis@gmail.com	Mason Mardis\n
+madelainesing	madelainesing@gmail.com	Madelaine Sing\n
+vimilani	vimilani@gmail.com	Vi Milani\n
+louisalucio	louisalucio@gmail.com	Louisa Lucio\n
+jerrodlupo	jerrodlupo@gmail.com	Jerrod Lupo\n
+shaynacropp	shaynacropp@gmail.com	Shayna Cropp\n
+taneshastruthers	taneshastruthers@gmail.com	Tanesha Struthers\n
+consuelotokarz	consuelotokarz@gmail.com	Consuelo Tokarz\n
+latinaphenix	latinaphenix@gmail.com	Latina Phenix\n
+cedricguilford	cedricguilford@gmail.com	Cedric Guilford\n
+sigridenger	sigridenger@gmail.com	Sigrid Enger\n
+debrahdeland	debrahdeland@gmail.com	Debrah Deland\n
+chiamurphey	chiamurphey@gmail.com	Chia Murphey\n
+lillythorton	lillythorton@gmail.com	Lilly Thorton\n
+pameliacavitt	pameliacavitt@gmail.com	Pamelia Cavitt\n
+ozelladay	ozelladay@gmail.com	Ozella Day\n
+donniemaskell	donniemaskell@gmail.com	Donnie Maskell\n
+fidelshimkus	fidelshimkus@gmail.com	Fidel Shimkus
+\.
+
+
+--
+-- Data for Name: workshop; Type: TABLE DATA; Schema: public; Owner: root
+--
+
+COPY public.workshop (workshop_id, open_time, close_time, latitide, longitude) FROM stdin;
+1	09:00:00	22:00:00	59.7439999999999998	30.4009999999999998
+2	09:00:00	22:00:00	60.2730000000000032	29.5990000000000002
+3	09:00:00	22:00:00	60.2349999999999994	30.3249999999999993
+4	09:00:00	22:00:00	60.3639999999999972	29.9089999999999989
+5	09:00:00	22:00:00	59.9859999999999971	30.1559999999999988
+6	09:00:00	22:00:00	60.017000000000003	30.2850000000000001
+7	09:00:00	22:00:00	59.9819999999999993	29.5809999999999995
+8	09:00:00	22:00:00	59.6289999999999978	29.6780000000000008
+9	09:00:00	22:00:00	59.9099999999999966	30
+10	09:00:00	22:00:00	59.8740000000000023	30.2360000000000007
+11	09:00:00	22:00:00	60.222999999999999	30.3500000000000014
+12	09:00:00	22:00:00	59.5549999999999997	30.1170000000000009
+13	09:00:00	22:00:00	59.6319999999999979	30.1580000000000013
+14	09:00:00	22:00:00	60.3930000000000007	29.6000000000000014
+15	09:00:00	22:00:00	60.2700000000000031	30.2590000000000003
+16	09:00:00	22:00:00	59.546999999999997	30.2779999999999987
+17	09:00:00	22:00:00	59.9680000000000035	29.8099999999999987
+18	09:00:00	22:00:00	59.8089999999999975	29.9349999999999987
+19	09:00:00	22:00:00	60.3639999999999972	29.9089999999999989
+20	09:00:00	22:00:00	59.8629999999999995	30.1000000000000014
+21	09:00:00	22:00:00	60.4949999999999974	29.6119999999999983
+22	09:00:00	22:00:00	59.9059999999999988	30.2729999999999997
+23	09:00:00	22:00:00	60.4050000000000011	29.8590000000000018
+24	09:00:00	22:00:00	59.7079999999999984	29.6479999999999997
+25	09:00:00	22:00:00	60.1689999999999969	30.1859999999999999
+26	09:00:00	22:00:00	60.1310000000000002	30.3219999999999992
+27	09:00:00	22:00:00	59.9099999999999966	30
+28	09:00:00	22:00:00	59.8250000000000028	30.1980000000000004
+29	09:00:00	22:00:00	60.4440000000000026	29.5249999999999986
+30	09:00:00	22:00:00	59.7079999999999984	29.6479999999999997
+\.
+
+
+--
+-- Name: car_order_car_order_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.car_order_car_order_id_seq', 1000, true);
+
+
+--
+-- Name: car_part_car_part_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.car_part_car_part_id_seq', 100, true);
+
+
+--
+-- Name: car_parts_order_car_parts_order_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.car_parts_order_car_parts_order_id_seq', 10000, true);
+
+
+--
+-- Name: car_parts_provider_provider_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.car_parts_provider_provider_id_seq', 25, true);
+
+
+--
+-- Name: car_type_car_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.car_type_car_type_id_seq', 10, true);
+
+
+--
+-- Name: charging_station_charging_station_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.charging_station_charging_station_id_seq', 10, true);
+
+
+--
+-- Name: customer_issues_issue_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.customer_issues_issue_id_seq', 1, false);
+
+
+--
+-- Name: payment_payment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.payment_payment_id_seq', 1000, true);
+
+
+--
+-- Name: plug_plug_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.plug_plug_id_seq', 10, true);
+
+
+--
+-- Name: workshop_workshop_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
+--
+
+SELECT pg_catalog.setval('public.workshop_workshop_id_seq', 30, true);
+
+
+--
+-- Name: car_charging_log car_charging_log_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_charging_log
+    ADD CONSTRAINT car_charging_log_pkey PRIMARY KEY (creating_time, car_license_plate);
+
+
+--
+-- Name: car_order car_order_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_order
+    ADD CONSTRAINT car_order_pkey PRIMARY KEY (car_order_id);
+
+
+--
+-- Name: car_part car_part_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_part
+    ADD CONSTRAINT car_part_pkey PRIMARY KEY (car_part_id);
+
+
+--
+-- Name: car_parts_order car_parts_order_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_parts_order
+    ADD CONSTRAINT car_parts_order_pkey PRIMARY KEY (car_parts_order_id);
+
+
+--
+-- Name: car_parts_provider car_parts_provider_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_parts_provider
+    ADD CONSTRAINT car_parts_provider_pkey PRIMARY KEY (provider_id);
+
+
+--
+-- Name: car car_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car
+    ADD CONSTRAINT car_pkey PRIMARY KEY (car_license_plate);
+
+
+--
+-- Name: car_repairing_log car_repairing_log_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_repairing_log
+    ADD CONSTRAINT car_repairing_log_pkey PRIMARY KEY (car_license_plate, broken_car_part_id, date);
+
+
+--
+-- Name: car_type car_type_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_type
+    ADD CONSTRAINT car_type_pkey PRIMARY KEY (car_type_id);
+
+
+--
+-- Name: car car_vin_key; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car
+    ADD CONSTRAINT car_vin_key UNIQUE (vin);
+
+
+--
+-- Name: catalogue_provider catalogue_provider_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.catalogue_provider
+    ADD CONSTRAINT catalogue_provider_pkey PRIMARY KEY (provider_id, car_part_id);
+
+
+--
+-- Name: catalogue_workshop catalogue_workshop_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.catalogue_workshop
+    ADD CONSTRAINT catalogue_workshop_pkey PRIMARY KEY (workshop_id, car_part_id);
+
+
+--
+-- Name: charging_station charging_station_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.charging_station
+    ADD CONSTRAINT charging_station_pkey PRIMARY KEY (charging_station_id);
+
+
+--
+-- Name: charging_station_plug charging_station_plug_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.charging_station_plug
+    ADD CONSTRAINT charging_station_plug_pkey PRIMARY KEY (charging_station_id, plug_id);
+
+
+--
+-- Name: customer_issues customer_issues_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.customer_issues
+    ADD CONSTRAINT customer_issues_pkey PRIMARY KEY (issue_id);
+
+
+--
+-- Name: customer customer_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.customer
+    ADD CONSTRAINT customer_pkey PRIMARY KEY (username);
+
+
+--
+-- Name: location location_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.location
+    ADD CONSTRAINT location_pkey PRIMARY KEY (latitide, longitude);
+
+
+--
+-- Name: manager manager_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.manager
+    ADD CONSTRAINT manager_pkey PRIMARY KEY (username);
+
+
+--
+-- Name: payment payment_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.payment
+    ADD CONSTRAINT payment_pkey PRIMARY KEY (payment_id);
+
+
+--
+-- Name: plug plug_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.plug
+    ADD CONSTRAINT plug_pkey PRIMARY KEY (plug_id);
+
+
+--
+-- Name: user_account user_account_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.user_account
+    ADD CONSTRAINT user_account_pkey PRIMARY KEY (username);
+
+
+--
+-- Name: workshop workshop_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.workshop
+    ADD CONSTRAINT workshop_pkey PRIMARY KEY (workshop_id);
+
+
+--
+-- Name: car car_car_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car
+    ADD CONSTRAINT car_car_type_id_fkey FOREIGN KEY (car_type_id) REFERENCES public.car_type(car_type_id);
+
+
+--
+-- Name: car_charging_log car_charging_log_car_license_plate_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_charging_log
+    ADD CONSTRAINT car_charging_log_car_license_plate_fkey FOREIGN KEY (car_license_plate) REFERENCES public.car(car_license_plate) ON UPDATE CASCADE;
+
+
+--
+-- Name: car_charging_log car_charging_log_charging_station_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_charging_log
+    ADD CONSTRAINT car_charging_log_charging_station_id_fkey FOREIGN KEY (charging_station_id) REFERENCES public.charging_station(charging_station_id);
+
+
+--
+-- Name: car_charging_log car_charging_log_plug_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_charging_log
+    ADD CONSTRAINT car_charging_log_plug_id_fkey FOREIGN KEY (plug_id) REFERENCES public.plug(plug_id);
+
+
+--
+-- Name: car_order car_order_car_license_plate_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_order
+    ADD CONSTRAINT car_order_car_license_plate_fkey FOREIGN KEY (car_license_plate) REFERENCES public.car(car_license_plate) ON UPDATE CASCADE;
+
+
+--
+-- Name: car_order car_order_customer_username_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_order
+    ADD CONSTRAINT car_order_customer_username_fkey FOREIGN KEY (customer_username) REFERENCES public.customer(username);
+
+
+--
+-- Name: car_order car_order_dist_latitide_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_order
+    ADD CONSTRAINT car_order_dist_latitide_fkey FOREIGN KEY (dist_latitide, dist_longitude) REFERENCES public.location(latitide, longitude);
+
+
+--
+-- Name: car_order car_order_manager_username_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_order
+    ADD CONSTRAINT car_order_manager_username_fkey FOREIGN KEY (manager_username) REFERENCES public.manager(username);
+
+
+--
+-- Name: car_order car_order_pick_up_latitide_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_order
+    ADD CONSTRAINT car_order_pick_up_latitide_fkey FOREIGN KEY (pick_up_latitide, pick_up_longitude) REFERENCES public.location(latitide, longitude);
+
+
+--
+-- Name: car_part car_part_car_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_part
+    ADD CONSTRAINT car_part_car_type_id_fkey FOREIGN KEY (car_type_id) REFERENCES public.car_type(car_type_id);
+
+
+--
+-- Name: car_parts_order car_parts_order_car_part_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_parts_order
+    ADD CONSTRAINT car_parts_order_car_part_id_fkey FOREIGN KEY (car_part_id) REFERENCES public.car_part(car_part_id);
+
+
+--
+-- Name: car_parts_order car_parts_order_car_parts_provider_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_parts_order
+    ADD CONSTRAINT car_parts_order_car_parts_provider_id_fkey FOREIGN KEY (car_parts_provider_id) REFERENCES public.car_parts_provider(provider_id);
+
+
+--
+-- Name: car_parts_order car_parts_order_workshop_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_parts_order
+    ADD CONSTRAINT car_parts_order_workshop_id_fkey FOREIGN KEY (workshop_id) REFERENCES public.workshop(workshop_id);
+
+
+--
+-- Name: car_parts_provider car_parts_provider_latitide_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_parts_provider
+    ADD CONSTRAINT car_parts_provider_latitide_fkey FOREIGN KEY (latitide, longitude) REFERENCES public.location(latitide, longitude);
+
+
+--
+-- Name: car_repairing_log car_repairing_log_broken_car_part_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_repairing_log
+    ADD CONSTRAINT car_repairing_log_broken_car_part_id_fkey FOREIGN KEY (broken_car_part_id) REFERENCES public.car_part(car_part_id);
+
+
+--
+-- Name: car_repairing_log car_repairing_log_car_license_plate_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_repairing_log
+    ADD CONSTRAINT car_repairing_log_car_license_plate_fkey FOREIGN KEY (car_license_plate) REFERENCES public.car(car_license_plate) ON UPDATE CASCADE;
+
+
+--
+-- Name: car_repairing_log car_repairing_log_manager_username_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_repairing_log
+    ADD CONSTRAINT car_repairing_log_manager_username_fkey FOREIGN KEY (manager_username) REFERENCES public.manager(username);
+
+
+--
+-- Name: car_repairing_log car_repairing_log_workshop_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.car_repairing_log
+    ADD CONSTRAINT car_repairing_log_workshop_id_fkey FOREIGN KEY (workshop_id) REFERENCES public.workshop(workshop_id);
+
+
+--
+-- Name: catalogue_provider catalogue_provider_car_part_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.catalogue_provider
+    ADD CONSTRAINT catalogue_provider_car_part_id_fkey FOREIGN KEY (car_part_id) REFERENCES public.car_part(car_part_id);
+
+
+--
+-- Name: catalogue_provider catalogue_provider_provider_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.catalogue_provider
+    ADD CONSTRAINT catalogue_provider_provider_id_fkey FOREIGN KEY (provider_id) REFERENCES public.car_parts_provider(provider_id);
+
+
+--
+-- Name: catalogue_workshop catalogue_workshop_car_part_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.catalogue_workshop
+    ADD CONSTRAINT catalogue_workshop_car_part_id_fkey FOREIGN KEY (car_part_id) REFERENCES public.car_part(car_part_id);
+
+
+--
+-- Name: catalogue_workshop catalogue_workshop_workshop_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.catalogue_workshop
+    ADD CONSTRAINT catalogue_workshop_workshop_id_fkey FOREIGN KEY (workshop_id) REFERENCES public.workshop(workshop_id);
+
+
+--
+-- Name: charging_station charging_station_latitide_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.charging_station
+    ADD CONSTRAINT charging_station_latitide_fkey FOREIGN KEY (latitide, longitude) REFERENCES public.location(latitide, longitude);
+
+
+--
+-- Name: charging_station_plug charging_station_plug_charging_station_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.charging_station_plug
+    ADD CONSTRAINT charging_station_plug_charging_station_id_fkey FOREIGN KEY (charging_station_id) REFERENCES public.charging_station(charging_station_id);
+
+
+--
+-- Name: charging_station_plug charging_station_plug_plug_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.charging_station_plug
+    ADD CONSTRAINT charging_station_plug_plug_id_fkey FOREIGN KEY (plug_id) REFERENCES public.plug(plug_id);
+
+
+--
+-- Name: customer customer_home_latitide_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.customer
+    ADD CONSTRAINT customer_home_latitide_fkey FOREIGN KEY (home_latitide, home_longitude) REFERENCES public.location(latitide, longitude);
+
+
+--
+-- Name: customer_issues customer_issues_customer_username_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.customer_issues
+    ADD CONSTRAINT customer_issues_customer_username_fkey FOREIGN KEY (customer_username) REFERENCES public.customer(username);
+
+
+--
+-- Name: customer_issues customer_issues_manager_username_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.customer_issues
+    ADD CONSTRAINT customer_issues_manager_username_fkey FOREIGN KEY (manager_username) REFERENCES public.manager(username);
+
+
+--
+-- Name: customer customer_username_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.customer
+    ADD CONSTRAINT customer_username_fkey FOREIGN KEY (username) REFERENCES public.user_account(username);
+
+
+--
+-- Name: manager manager_username_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.manager
+    ADD CONSTRAINT manager_username_fkey FOREIGN KEY (username) REFERENCES public.user_account(username);
+
+
+--
+-- Name: payment payment_car_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.payment
+    ADD CONSTRAINT payment_car_order_id_fkey FOREIGN KEY (car_order_id) REFERENCES public.car_order(car_order_id);
+
+
+--
+-- Name: workshop workshop_latitide_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.workshop
+    ADD CONSTRAINT workshop_latitide_fkey FOREIGN KEY (latitide, longitude) REFERENCES public.location(latitide, longitude);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
