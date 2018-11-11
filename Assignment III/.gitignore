@@ -1,0 +1,5 @@
+/assignmentIII/migrations/
+/.idea/
+*.pyo
+*.pyc
+.DS_Store
