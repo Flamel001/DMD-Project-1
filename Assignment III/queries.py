@@ -18,7 +18,7 @@ def query_1(username, color, plate_pattern, date):
     return [plate[0] for plate in cursor.fetchall()]
 
 
-print(query_1('danillewhiteside', 'red', '%AN%', '2018-01-21'))
+print(query_1('springsergio', 'red', '%AN%', '2018-02-03'))
 
 
 # -----------------------------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ def query_2(date):
     return result
 
 
-print(query_2('2018-01-25'))
+print(query_2('2018-01-31'))
 
 
 # -----------------------------------------------------------------------------------------------------
