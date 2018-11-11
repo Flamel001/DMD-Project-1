@@ -185,7 +185,7 @@ def query_6(request):
 
 @api_view(['GET'])
 def query_7(request):
-    percentage = request.GET.get('percentage', 0.1)
+    percentage = float(request.GET.get('percentage', 0.1))
 
     result = []
     cursor = connection.cursor()
