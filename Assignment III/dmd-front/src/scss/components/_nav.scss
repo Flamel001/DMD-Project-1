@@ -24,14 +24,13 @@ nav {
     flex-shrink: 0;
 
     .logo {
-      width: 80px;
-      height: 80px;
-      margin-right: 10px;
       position: relative;
       display: inline-block;
 
       img {
         margin: 0;
+        width: 25px;
+        height: 25px;
         @include transition(transform .5s ease-out);
       }
     }
@@ -39,9 +38,11 @@ nav {
       color: $primary;
       font-size: 22px;
       line-height: 36px;
+      margin-left: 15px;
       display: inline-block;
       letter-spacing: .7px;
       opacity: .9;
+      font-weight: 500;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       position: relative;
@@ -49,9 +50,6 @@ nav {
       @include transition(opacity .2s ease-in);
     }
     &:hover {
-      img {
-        @include transform(rotate(120deg) scale(1.1));
-      }
       .logo-text {
         opacity: 1;
       }

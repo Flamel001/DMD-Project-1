@@ -5,7 +5,6 @@
 @import "~bootstrap/scss/reboot";
 @import "~bootstrap/scss/type";
 @import "~bootstrap/scss/images";
-@import "~bootstrap/scss/code";
 @import "~bootstrap/scss/grid";
 @import "~bootstrap/scss/forms";
 @import "~bootstrap/scss/buttons";
@@ -24,7 +23,6 @@
 @import "~bootstrap/scss/tooltip";
 @import "~bootstrap/scss/popover";
 @import "~bootstrap/scss/utilities";
-@import "~bootstrap/scss/print";
 @import 'bootstrap.custom';
 
 html, body {
@@ -58,6 +56,11 @@ body.show {
   justify-items: center;
   padding: 120px 0;
 }
+pre {
+  padding: 0 !important;
+  border: 0;
+  background: none;
+}
 
 .content {
   width: 100%;
@@ -66,7 +69,16 @@ body.show {
   flex-direction: column;
   padding: 0 15px;
 }
+code {
+  font-size: $code-font-size;
+  color: $code-color;
+  word-break: break-word;
 
+  // Streamline the style when inside anchors to avoid broken underline and more
+  a > & {
+    color: inherit;
+  }
+}
 
 .primary { background-color:  $primary; }
 .primaryDark { background-color:  $primaryDark; }

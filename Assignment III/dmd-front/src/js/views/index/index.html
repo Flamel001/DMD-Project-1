@@ -9,6 +9,9 @@
             document.body.classList.add('show');
         }
     </script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+    <link href="./css/vs.css"/>
     <style rel="stylesheet">body { width: 100vw; min-height: 100vh; background: #F7F7F7; overflow: hidden } #loading { position: absolute; left: 50%; top: 50%; margin-left: -20px; margin-top: -20px; } .spinner { margin: auto; width: 40px; height: 40px; position: relative; } .cube1, .cube2 { background-color: #8859bf; width: 15px; height: 15px; position: absolute; top: 0; left: 0; -webkit-animation: sk-cubemove 1.8s infinite ease-in-out; animation: sk-cubemove 1.8s infinite ease-in-out; } .cube2 { -webkit-animation-delay: -0.9s; animation-delay: -0.9s; } @-webkit-keyframes sk-cubemove { 25% { -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5) } 50% { -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg) } 75% { -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5) } 100% { -webkit-transform: rotate(-360deg) } } @keyframes sk-cubemove { 25% { transform: translateX(42px) rotate(-90deg) scale(0.5); -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5); } 50% { transform: translateX(42px) translateY(42px) rotate(-179deg); -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg); } 50.1% { transform: translateX(42px) translateY(42px) rotate(-180deg); -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg); } 75% { transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5); -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5); } 100% { transform: rotate(-360deg); -webkit-transform: rotate(-360deg); } }</style>
 </head>
 <body>
@@ -24,9 +27,9 @@
             <div class="container">
                 <a class="navbar-brand" href="/">
                   <span class="logo">
-                    <img class="logo-light svg" src="/images/network.svg">
+                    <img src="/images/network.svg">
                   </span>
-                    Assignment III
+                <span class="logo-text">Assignment III</span>
                 </a>
                 <div class="collapse navbar-collapse">
                     <div class="navbar-nav">
@@ -43,10 +46,122 @@
             <div class="row">
                 <div class="content">
                     <h3 style="margin-top: 50px">Queries</h3>
+
+                    <div id="accordion">
+                        <div class="card">
+                            <div class="card-header" id="queryTitle-1" data-toggle="collapse" data-target="#query-1" aria-expanded="true" aria-controls="query-1">
+                                <h5 class="mb-0">
+                                    Find the car in which customer forgot a bag
+                                </h5>
+                                <small class="text-muted">Query 1</small>
+                            </div>
+
+                            <div id="query-1" class="collapse show" aria-labelledby="queryTitle-1" data-parent="#accordion">
+                                <div class="card-body">
+                                    <p>A customer claims she forgot her bag in a car and asks to help. She was using cars several
+                                    times this day, but she believes the right car was red and its plate starts with “AN”. Find all
+                                    possible cars that match the description.</p>
+
+                                    <pre>
+                                        <code class="python sql">
+result = []
+cursor.execute('SELECT DISTINCT car.car_license_plate '
+               'FROM customer, car, car_order '
+               'WHERE car_order.car_license_plate = car.car_license_plate AND '
+               'car_order.customer_username = customer.username AND '
+               'car.color = %s AND customer.username = %s AND '
+               'car.car_license_plate LIKE %s AND '
+               'car_order.creating_time::date = %s', [color, username, plate_pattern, date])
+result = [plate[0] for plate in cursor.fetchall()]
+                                        </code>
+                                    </pre>
+                                    <strong class="text-muted">Specify the query params</strong>
+                                    <form class="form-inline row" onsubmit="window.runQuery1(window.event)">
+                                        <div class="form-group">
+                                            <input type="text" id="q1-color" class="form-control" placeholder="red" value="red">
+                                            <label>Color</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" id="q1-plate" class="form-control" placeholder="Plate" value="%AN%">
+                                            <label>Plate</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" id="q1-date" class="form-control" placeholder="yyyy-mm-dd" value="2018-02-03">
+                                            <label>Date</label>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Run query</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="queryTitle-2" data-toggle="collapse" data-target="#query-2" aria-expanded="true" aria-controls="query-2">
+                                <h5 class="mb-0">
+
+                                </h5>
+                                <small class="text-muted">Query 2</small>
+                            </div>
+
+                            <div id="query-2" class="collapse" aria-labelledby="queryTitle-2" data-parent="#accordion">
+                                <div class="card-body">
+                                    <p>Company management wants to get a statistics on the efficiency of charging stations
+                                    utilization. Given a date, compute how many sockets were occupied each hour.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="queryTitle-3" data-toggle="collapse" data-target="#query-3" aria-expanded="true" aria-controls="query-3">
+                                <h5 class="mb-0">
+
+                                </h5>
+                                <small class="text-muted">Query 3</small>
+                            </div>
+
+                            <div id="query-3" class="collapse" aria-labelledby="queryTitle-3" data-parent="#accordion">
+                                <div class="card-body">
+                                    <p></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="queryTitle-4" data-toggle="collapse" data-target="#query-4" aria-expanded="true" aria-controls="query-4">
+                                <h5 class="mb-0">
+
+                                </h5>
+                                <small class="text-muted">Query 4</small>
+                            </div>
+
+                            <div id="query-4" class="collapse" aria-labelledby="queryTitle-4" data-parent="#accordion">
+                                <div class="card-body">
+                                    <p></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="queryTitle-5" data-toggle="collapse" data-target="#query-5" aria-expanded="true" aria-controls="query-5">
+                                <h5 class="mb-0">
+
+                                </h5>
+                                <small class="text-muted">Query 5</small>
+                            </div>
+
+                            <div id="query-5" class="collapse" aria-labelledby="queryTitle-5" data-parent="#accordion">
+                                <div class="card-body">
+                                    <p></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+<script src="./js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
