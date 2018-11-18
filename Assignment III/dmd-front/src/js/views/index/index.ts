@@ -194,10 +194,10 @@ export function runQuery5(e: Event) {
             // @ts-ignore
             $('#result-5').bootstrapTable({
                 columns: [{
-                    field: 'Average Distance',
+                    field: 'Average distance',
                     title: 'Average Distance',
                 },{
-                    field: 'Average Duration',
+                    field: 'Average duration',
                     title: 'Average Duration',
                 }],
                 data: [result]
