@@ -53,6 +53,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+
 ROOT_URLCONF = 'dmd_project.urls'
 
 TEMPLATES = [
