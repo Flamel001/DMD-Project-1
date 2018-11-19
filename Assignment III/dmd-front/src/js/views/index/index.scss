@@ -1,0 +1,37 @@
+@import "../../../scss/styles";
+.form-inline {
+  margin-top: -10px;
+  .form-group {
+    padding: 0 10px;
+  }
+
+  .btn {
+    height: 46px;
+    line-height: 26px;
+    margin-top: 18px;
+    margin-left: 10px;
+  }
+}
+pre code {
+  width: 100%;
+}
+
+pre {
+  display: flex;
+  width: 100%;
+}
+
+.bootstrap-table {
+  width: 80%;
+  margin: 50px -4px;
+}
+
+.fixed-table-container {
+  border-radius: 2px;
+  border-bottom: 0;
+}
+.nothing-found {
+  margin-top: 10px;
+  font-weight: 600;
+  color: #840023;
+}
