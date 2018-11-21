@@ -56,7 +56,7 @@
                                 <small class="text-muted">Query 1</small>
                             </div>
 
-                            <div id="query-1" class="collapse show show" aria-labelledby="queryTitle-1" data-parent="#accordion">
+                            <div id="query-1" class="collapse show" aria-labelledby="queryTitle-1" data-parent="#accordion">
                                 <div class="card-body">
                                     <p>A customer claims she forgot her bag in a car and asks to help. She was using cars several
                                     times this day, but she believes the right car was red and its plate starts with “AN”. Find all
@@ -106,7 +106,7 @@ result = []
                                 <small class="text-muted">Query 2</small>
                             </div>
 
-                            <div id="query-2" class="collapse show" aria-labelledby="queryTitle-2" data-parent="#accordion">
+                            <div id="query-2" class="collapse" aria-labelledby="queryTitle-2" data-parent="#accordion">
                                 <div class="card-body">
                                     <p>Company management wants to get a statistics on the efficiency of charging stations
                                     utilization. Given a date, compute how many sockets were occupied each hour.</p>
@@ -144,7 +144,7 @@ for hour in range(0, 24):
                                 <small class="text-muted">Query 3</small>
                             </div>
 
-                            <div id="query-3" class="collapse show" aria-labelledby="queryTitle-3" data-parent="#accordion">
+                            <div id="query-3" class="collapse" aria-labelledby="queryTitle-3" data-parent="#accordion">
                                 <div class="card-body">
                                     <p>Company management considers using price increasing coefficients. They need to gather
                                         statistics for one week on how many cars are busy (% to the total amount of taxis) during the
@@ -205,7 +205,7 @@ def query_3(start_date, end_date):
                                 <small class="text-muted">Query 4</small>
                             </div>
 
-                            <div id="query-4" class="collapse show" aria-labelledby="queryTitle-4" data-parent="#accordion">
+                            <div id="query-4" class="collapse" aria-labelledby="queryTitle-4" data-parent="#accordion">
                                 <div class="card-body">
                                     <p>A customer claims that he was charged twice for the trip, but he can’t say exactly what day it
                                         happened (he deleted notification from his phone and he is too lazy to ask the bank), so you
@@ -251,7 +251,7 @@ result = cursor.fetchall()
                                 <small class="text-muted">Query 5</small>
                             </div>
 
-                            <div id="query-5" class="collapse show" aria-labelledby="queryTitle-5" data-parent="#accordion">
+                            <div id="query-5" class="collapse" aria-labelledby="queryTitle-5" data-parent="#accordion">
                                 <div class="card-body">
                                     <p>The department of development has requested the following statistics:
                                         - Average distance a car has to travel per day to customer’s order location
@@ -288,7 +288,7 @@ result = {'Average distance': round(float(buf[0]), 2),
                                 <small class="text-muted">Query 6</small>
                             </div>
 
-                            <div id="query-6" class="collapse show" aria-labelledby="queryTitle-6" data-parent="#accordion">
+                            <div id="query-6" class="collapse" aria-labelledby="queryTitle-6" data-parent="#accordion">
                                 <div class="card-body">
                                     <p>In order to accommodate traveling demand, the company decided to distribute cars according
                                         to demand locations. Your task is to compute top-3 most popular pick-up locations and travel
@@ -325,7 +325,7 @@ result = cursor.fetchall()
                                 <small class="text-muted">Query 7</small>
                             </div>
 
-                            <div id="query-7" class="collapse show" aria-labelledby="queryTitle-7" data-parent="#accordion">
+                            <div id="query-7" class="collapse" aria-labelledby="queryTitle-7" data-parent="#accordion">
                                 <div class="card-body">
                                     <p>Despite the wise management, the company is going through hard times and can’t afford
                                         anymore to maintain the current amount of self-driving cars. The management decided to stop
@@ -339,14 +339,14 @@ cursor.execute('SELECT car_order.car_license_plate, count(*) as counter '
    'ORDER BY counter ASC '
    'LIMIT %s * (SELECT count(*) FROM car)', [percentage])
 
-    result = cursor.fetchall()
+result = cursor.fetchall()
                                         </code>
                                     </pre>
                                     <strong class="text-muted">Specify the query params</strong>
                                     <form class="form-inline row" onsubmit="window.runQuery7(window.event)">
                                         <div class="form-group">
-                                            <input type="text" id="q7-percent" class="form-control" placeholder="yyyy-mm-dd" value="2018-01-01">
-                                            <label>Start Date</label>
+                                            <input type="number" step="0.1" id="q7-percent" class="form-control" placeholder="0.1" value="0.1">
+                                            <label>Percent</label>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Run query</button>
                                     </form>
@@ -361,7 +361,7 @@ cursor.execute('SELECT car_order.car_license_plate, count(*) as counter '
                                 <small class="text-muted">Query 8</small>
                             </div>
 
-                            <div id="query-8" class="collapse show" aria-labelledby="queryTitle-8" data-parent="#accordion">
+                            <div id="query-8" class="collapse" aria-labelledby="queryTitle-8" data-parent="#accordion">
                                 <div class="card-body">
                                     <p>The company management decided to participate in the research on “does customer location
                                         of residence depend on how many charging station the self-driving cars was using the same
@@ -369,7 +369,14 @@ cursor.execute('SELECT car_order.car_license_plate, count(*) as counter '
                                         for each day within one month and then sum them up.</p>
                                     <pre>
                                         <code class="python sql">
-
+cursor.execute('SELECT count(*) '
+               'FROM car_order, car_charging_log '
+               'WHERE car_order.car_license_plate = car_charging_log.car_license_plate AND '
+               'car_order.creating_time::date = car_charging_log.creating_time::date AND '
+               'car_charging_log.creating_time::date >= %s AND '
+               'car_charging_log.creating_time::date <= %s AND '
+               'car_order.customer_username = %s', [start_date, end_date, username])
+return cursor.fetchall()[0][0]
                                         </code>
                                     </pre>
                                     <strong class="text-muted">Specify the query params</strong>
@@ -395,14 +402,21 @@ cursor.execute('SELECT car_order.car_license_plate, count(*) as counter '
                                 <small class="text-muted">Query 9</small>
                             </div>
 
-                            <div id="query-9" class="collapse show" aria-labelledby="queryTitle-9" data-parent="#accordion">
+                            <div id="query-9" class="collapse" aria-labelledby="queryTitle-9" data-parent="#accordion">
                                 <div class="card-body">
                                     <p>The company management decided to optimize repair costs by buying parts in bulks from
                                         providers for every workshop. Help them decide which parts are used the most every week by
                                         every workshop and compute the necessary amount of parts to order.</p>
                                     <pre>
                                         <code class="python sql">
-
+cursor.execute('SELECT car_parts_order.car_part_id, sum(car_parts_order.amount) as amount '
+               'FROM car_parts_order '
+               'WHERE workshop_id = %s AND '
+               'car_parts_order.creating_time >= %s AND '
+               'car_parts_order.creating_time <= %s '
+               'GROUP BY car_parts_order.workshop_id, car_parts_order.car_part_id '
+               'ORDER BY car_parts_order.workshop_id, amount DESC LIMIT 1', [workshop_id, start_date, end_date])
+return cursor.fetchall()[0]
                                         </code>
                                     </pre>
                                     <strong class="text-muted">Specify the query params</strong>
@@ -428,7 +442,7 @@ cursor.execute('SELECT car_order.car_license_plate, count(*) as counter '
                                 <small class="text-muted">Query 10</small>
                             </div>
 
-                            <div id="query-10" class="collapse show" aria-labelledby="queryTitle-10" data-parent="#accordion">
+                            <div id="query-10" class="collapse" aria-labelledby="queryTitle-10" data-parent="#accordion">
                                 <div class="card-body">
                                     <p>The company management decided to cut costs by getting rid of the most expensive car to
                                         maintain. Find out which car type has had the highest average (per day) cost of repairs and

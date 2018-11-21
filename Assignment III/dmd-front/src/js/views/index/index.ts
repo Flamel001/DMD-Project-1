@@ -185,7 +185,6 @@ export function runQuery5(e: Event) {
     e.preventDefault();
     const date = $('#q5-date').val();
 
-
     fetch(`http://142.93.136.40:8000/assigmentIII/query_5/?date=${date}`).then((response) => {
         response.json().then((result) => {
 
@@ -217,6 +216,47 @@ export function runQuery5(e: Event) {
 
 export function runQuery6(e: Event) {
     e.preventDefault();
+    fetch(`http://142.93.136.40:8000/assigmentIII/query_6/`).then((response) => {
+        response.json().then((result) => {
+            const data = [];
+            for (const prop in result) {
+                for (const el of result[prop]) {
+                    data.push({
+                        ...el,
+                        time_of_the_day: prop,
+                    });
+                }
+            }
+            $('<table id="result-6"></table>').insertAfter('#query-6 form');
+            clearResults();
+            // @ts-ignore
+            $('#result-6').bootstrapTable({
+                columns: [{
+                    field: 'time_of_the_day',
+                    title: 'Time of the day'
+                }, {
+                    field: 'City:',
+                    title: 'City',
+                },{
+                    field: 'Counter:',
+                    title: 'Counter',
+                },{
+                    field: 'Street',
+                    title: 'Street',
+                },{
+                    field: 'ZIP-Code',
+                    title: 'ZIP-Code',
+                }],
+                data,
+            });
+
+        }).catch(() => {
+            clearResults();
+            $('<div class="nothing-found">Nothing found</div>').insertAfter('#query-6 form');
+        });
+    }).catch(() => {
+        alert('Could not connect to server');
+    });
     return false;
 }
 (window as any).runQuery6 = runQuery6;
@@ -224,6 +264,37 @@ export function runQuery6(e: Event) {
 
 export function runQuery7(e: Event) {
     e.preventDefault();
+
+    const date = $('#q7-percent').val();
+
+    fetch(`http://142.93.136.40:8000/assigmentIII/query_7/?date=${date}`).then((response) => {
+        response.json().then((result) => {
+
+            $('<table id="result-7"></table>').insertAfter('#query-7 form');
+            clearResults();
+            // @ts-ignore
+            $('#result-7').bootstrapTable({
+                columns: [{
+                    field: 'Car license plate',
+                    title: 'Car license plate',
+                },{
+                    field: 'Car type:',
+                    title: 'Car type',
+                },{
+                    field: 'Order counter',
+                    title: 'Order counter',
+                }],
+                data: result
+            });
+
+        }).catch(() => {
+            clearResults();
+            $('<div class="nothing-found">Nothing found</div>').insertAfter('#query-7 form');
+        });
+    }).catch(() => {
+        alert('Could not connect to server');
+    });
+
     return false;
 }
 (window as any).runQuery7 = runQuery7;
@@ -231,6 +302,39 @@ export function runQuery7(e: Event) {
 
 export function runQuery8(e: Event) {
     e.preventDefault();
+    const start_date = $('#q8-start-date').val();
+    const end_date = $('#q8-end-date').val();
+
+    fetch(`http://142.93.136.40:8000/assigmentIII/query_8/?start_date=${start_date}&end_date=${end_date}`).then((response) => {
+        response.json().then((result) => {
+            const data = [];
+            for (const prop in result) {
+                data.push({
+                    username: prop,
+                    amount: result[prop],
+                });
+            }
+            $('<table id="result-8"></table>').insertAfter('#query-8 form');
+            clearResults();
+            // @ts-ignore
+            $('#result-8').bootstrapTable({
+                columns: [{
+                    field: 'username',
+                    title: 'Username'
+                }, {
+                    field: 'amount',
+                    title: 'Amount of charging stations'
+                }],
+                data: data
+            });
+
+        }).catch(() => {
+            clearResults();
+            $('<div class="nothing-found">Nothing found</div>').insertAfter('#query-8 form');
+        });
+    }).catch(() => {
+        alert('Could not connect to server');
+    });
     return false;
 }
 (window as any).runQuery8 = runQuery8;
@@ -238,6 +342,35 @@ export function runQuery8(e: Event) {
 
 export function runQuery9(e: Event) {
     e.preventDefault();
+    const start_date = $('#q9-start-date').val();
+    const end_date = $('#q9-end-date').val();
+
+    fetch(`http://142.93.136.40:8000/assigmentIII/query_9/?start_date=${start_date}&end_date=${end_date}`).then((response) => {
+        response.json().then((result) => {
+            $('<table id="result-9"></table>').insertAfter('#query-9 form');
+            clearResults();
+            // @ts-ignore
+            $('#result-9').bootstrapTable({
+                columns: [{
+                    field: 'Workshop_id',
+                    title: 'Workshop id'
+                }, {
+                    field: 'Part_name',
+                    title: 'Part name'
+                }, {
+                    field: 'Average_per_week',
+                    title: 'Average per week'
+                }],
+                data: result
+            });
+
+        }).catch(() => {
+            clearResults();
+            $('<div class="nothing-found">Nothing found</div>').insertAfter('#query-9 form');
+        });
+    }).catch(() => {
+        alert('Could not connect to server');
+    });
     return false;
 }
 (window as any).runQuery9 = runQuery9;
@@ -245,6 +378,34 @@ export function runQuery9(e: Event) {
 
 export function runQuery10(e: Event) {
     e.preventDefault();
+
+    const start_date = $('#q10-start-date').val();
+    const end_date = $('#q10-end-date').val();
+
+    fetch(`http://142.93.136.40:8000/assigmentIII/query_10/?start_date=${start_date}&end_date=${end_date}`).then((response) => {
+        response.json().then((result) => {
+            $('<table id="result-10"></table>').insertAfter('#query-10 form');
+            clearResults();
+            // @ts-ignore
+            $('#result-10').bootstrapTable({
+                columns: [{
+                    field: 'Car type',
+                    title: 'Car type'
+                }, {
+                    field: 'Cost_per_week',
+                    title: 'Cost per week'
+                }],
+                data: result
+            });
+
+        }).catch(() => {
+            clearResults();
+            $('<div class="nothing-found">Nothing found</div>').insertAfter('#query-10 form');
+        });
+    }).catch(() => {
+        alert('Could not connect to server');
+    });
+
     return false;
 }
 (window as any).runQuery10 = runQuery10;
